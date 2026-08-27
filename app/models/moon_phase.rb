@@ -2,12 +2,13 @@
 #
 # 차오르는 달.
 #
-#   phase = (최근 28일 중 쉼이 기록된 날의 수) / 28
+#   phase = (최근 28일 중 쉼이 기록되었거나 앉은 날의 수) / 28
 #
 # 연속기록이 아니다. 하루 빠뜨려도 "끊겼다"는 개념이 없고,
 # 창에서 밀려나며 조용히 이지러질 뿐이다(SPIRIT 제6조).
-# 하루에 몇 번을 기록하든 그 날은 1로 센다. 어떤 결도, 어떤 길이도
-# 다른 것보다 무겁지 않다.
+# 하루에 몇 번을 기록하든, 몇 번을 앉든 그 날은 1로 센다.
+# 어떤 결도, 어떤 길이도, 쉼이든 앉음이든 다른 것보다 무겁지 않다.
+# 달은 두 곳을 함께 볼 뿐, 앉음을 쉼으로 환산하지 않는다.
 class MoonPhase
   WINDOW_DAYS = 28
 
@@ -16,8 +17,11 @@ class MoonPhase
   def self.for(user, today: nil)
     today ||= user.today
     window = (today - (WINDOW_DAYS - 1))..today
-    rested = user.rests.where(rested_on: window).distinct.pluck(:rested_on).to_set
-    new(window.to_a.map { |date| Day.new(date, rested.include?(date)) })
+    quiet = user.rests.where(rested_on: window).distinct.pluck(:rested_on) +
+            user.sittings.where(sat_on: window).distinct.pluck(:sat_on)
+    quiet = quiet.to_set
+
+    new(window.to_a.map { |date| Day.new(date, quiet.include?(date)) })
   end
 
   Day = Struct.new(:date, :rested) do

@@ -1,0 +1,42 @@
+<%# 앉기. 길이는 글자로만 적는다 — 숫자는 화면에 없다. %>
+<h1 class="title"><%= t("sittings.new.title") %></h1>
+
+<%= form_with url: sittings_path, scope: :sitting do |f| %>
+  <ul class="choices">
+    <% SittingLength::NAMES.each do |name| %>
+      <li>
+        <%= f.label "length_#{name}" do %>
+          <%= f.radio_button :length, name, checked: name == SittingLength::DEFAULT %>
+          <%= t("sittings.lengths.#{name}") %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul class="choices">
+    <li>
+      <%= f.label :bell do %>
+        <%= f.check_box :bell, checked: true %>
+        <%= t("sittings.new.bell") %>
+      <% end %>
+    </li>
+  </ul>
+
+  <p style="margin-top:2.5rem"><%= f.submit t("sittings.new.submit") %></p>
+<% end %>
+
+<hr class="rule">
+
+<%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있다. %>
+<%= form_with url: nothing_path do %>
+  <ul class="choices">
+    <li>
+      <%= label_tag :bell do %>
+        <%= check_box_tag :bell, "1", false %>
+        <%= t("sittings.new.nothing_bell") %>
+      <% end %>
+    </li>
+  </ul>
+
+  <p><button type="submit" class="quiet"><%= t("sittings.new.nothing") %></button></p>
+<% end %>

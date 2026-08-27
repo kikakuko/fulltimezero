@@ -3,6 +3,7 @@
 # 제4조는 "게이트를 우회하는 경로는 코드에 존재할 수 없다"고 적혀 있다.
 # 이 파일은 그 문장을 소스 트리에서 검사한다. 규율이 아니라 자물쇠다.
 require "test_helper"
+require "tmpdir"
 
 class SilenceTest < ActionDispatch::IntegrationTest
   GATE = "app/models/silence_gate.rb"
@@ -32,6 +33,70 @@ class SilenceTest < ActionDispatch::IntegrationTest
     def whisper(user)
       mail to: user.email_address, subject: "돌아오세요", body: ""
     end
+  end
+
+  # ── 종성 ──────────────────────────────────────────────────────────
+
+  test "종성의 여운은 스무 초 아래로 내려가지 않는다" do
+    tail = bell_source[/const TAIL = (\d+)/, 1]&.to_i
+
+    assert tail, "종성 재생기에 여운 길이가 없다"
+    assert_operator tail, :>=, 20,
+      "여운이 짧다. 기준은 전자 알림음이 아니라 종의 여운이다."
+  end
+
+  test "종성은 정수배가 아닌 배음으로 합성한다 — 사인파는 종이 아니다" do
+    ratios = bell_source.scan(/ratio: ([\d.]+)/).flatten.map(&:to_f)
+
+    assert_operator ratios.size, :>=, 3, "부분음이 모자라 사인파에 가깝다"
+    refute ratios.all? { |ratio| (ratio % 1).zero? },
+      "배음이 정수배다. 싱잉볼이 아니라 알림음이 된다."
+  end
+
+  test "여운을 뚝 끊지 않는다" do
+    assert_match(/linearRampToValueAtTime\(0,/, bell_source,
+      "소리를 0으로 데려가는 마지막 기울기가 없다. 여운이 잘린다.")
+  end
+
+  test "파일이 있으면 파일이 먼저고, 없으면 합성음으로 운다" do
+    helper = Object.new.extend(BellHelper)
+
+    Dir.mktmpdir do |dir|
+      sounds = Pathname(dir)
+
+      assert_nil helper.bell_file(:start, dir: sounds), "없는 파일을 찾았다"
+
+      FileUtils.touch(sounds.join("bell-start.ogg"))
+      assert_equal "bell-start.ogg", helper.bell_file(:start, dir: sounds)
+    end
+  end
+
+  test "음원 자리는 비어 있고, 지금은 합성음으로 운다" do
+    assert_nil Object.new.extend(BellHelper).bell_file(:start),
+      "음원 파일이 들어왔다. docs/SOURCES.md 에 출처와 라이선스를 적어라."
+  end
+
+  test "무위는 기본으로 종을 울리지 않는다" do
+    sign_in_as users(:one)
+
+    post nothing_path
+    follow_redirect!
+    assert_select ".void[data-bell-enabled-value=false]"
+
+    post nothing_path, params: { bell: "1" }
+    follow_redirect!
+    assert_select ".void[data-bell-enabled-value=true]"
+  end
+
+  test "울릴지 말지는 화면이 아니라 게이트가 정한다" do
+    sign_in_as users(:one)
+
+    stubbing(SilenceGate, :allow?, false) do
+      post sittings_path, params: { sitting: { length: "tea", bell: "1" } }
+      follow_redirect!
+    end
+
+    assert_select ".night[data-bell-enabled-value=false]"
   end
 
   test "게이트에 밝히지 않은 메일러는 실제 발송에서 죽는다" do
@@ -85,6 +150,8 @@ class SilenceTest < ActionDispatch::IntegrationTest
   end
 
   private
+    def bell_source = Rails.root.join(BELL).read
+
     def sources(glob)
       %w[app lib config].flat_map { |dir| Rails.root.join(dir).glob(glob) }.select(&:file?)
     end

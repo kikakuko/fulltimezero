@@ -1,0 +1,14 @@
+<%# 무위에서 나오는 길. 한 번만 묻고, 다시 붙잡지 않는다. %>
+<% content_for :no_chrome, true %>
+<% content_for :no_locales, true %>
+
+<div class="center">
+  <p class="lead"><%= t("nothing.keep_question") %></p>
+
+  <p><%= link_to t("nothing.keep"),
+                 new_rest_path(duration: "time_fell_away"), class: "action" %></p>
+
+  <p class="tiny" style="margin-top:3rem">
+    <%= link_to t("nothing.just_leave"), today_path, class: "soft" %>
+  </p>
+</div>

@@ -1,0 +1,9 @@
+<%# 앉음을 마쳤다. 이 화면에는 할 일이 없다. %>
+<% content_for :no_chrome, true %>
+<% content_for :no_locales, true %>
+
+<div class="center">
+  <%= moon_svg(@moon.fraction) %>
+  <p class="lead"><%= t("sittings.done") %></p>
+  <p class="lead"><%= t("today.done") %></p>
+</div>

@@ -36,6 +36,8 @@ ko:
 
   today:
     question: 오늘 쉬었는가.
+    already_quiet: 오늘은 이미 고요했다. 더 남길 쉼이 있는가.
+    sit: 앉는다
     rested: 쉬었다
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기
@@ -87,6 +89,32 @@ ko:
       sitting: 앉은 쉼 — 좌선과 호흡
       waking: 깨어 있는 쉼
       complete_rest: 온전한 쉼 — 무위와 선정
+
+  sittings:
+    new:
+      title: 앉는다
+      submit: 앉는다
+      bell: 종성
+      nothing: 아무것도 하지 않는다
+      nothing_bell: 들어갈 때 종성
+    # 향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다.
+    # 쉼의 길이(rests.durations)와 낱말이 겹치지 않게 둔다.
+    lengths:
+      short: 짧게 앉기
+      tea: 차 한 잔의 앉음
+      incense: 향 한 대의 앉음
+      long: 긴 앉음
+      open: 정함 없이
+    sitting: 앉는 중
+    finish: 마친다
+    done: 앉았다. 달이 조금 찼다.
+
+  nothing:
+    line: 아무것도 하지 않아도 된다.
+    leave: 나간다
+    keep_question: 쉼으로 남기겠는가.
+    keep: 남긴다
+    just_leave: 그냥 나간다
 
   privacy:
     title: 개인정보 처리방침

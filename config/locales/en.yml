@@ -36,6 +36,8 @@ en:
 
   today:
     question: Have you rested today?
+    already_quiet: Today has already been quiet. Is there more rest to keep?
+    sit: Sit
     rested: I rested
     done: Today's share is done. Now rest.
     record_again: Record once more
@@ -87,6 +89,32 @@ en:
       sitting: Sitting rest — zazen and the breath
       waking: Rest while awake
       complete_rest: Complete rest — doing nothing, and stillness
+
+  sittings:
+    new:
+      title: Sit
+      submit: Sit
+      bell: Bell
+      nothing: Do nothing
+      nothing_bell: A bell on the way in
+    # A stick of incense and a cup of tea were how time was measured
+    # before clocks. They keep their own words, apart from rests.durations.
+    lengths:
+      short: a short sit
+      tea: a cup of tea
+      incense: one stick of incense
+      long: a long sit
+      open: open-ended
+    sitting: Sitting
+    finish: Finish
+    done: You sat. The moon is a little fuller.
+
+  nothing:
+    line: You don't have to do anything.
+    leave: Leave
+    keep_question: Would you like to keep this as rest?
+    keep: Keep it
+    just_leave: Just leave
 
   privacy:
     title: Privacy

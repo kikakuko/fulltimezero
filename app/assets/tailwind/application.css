@@ -112,3 +112,49 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 @media (prefers-reduced-motion: no-preference) {
   a, button, .action { transition: border-color 400ms ease, text-decoration-color 400ms ease; }
 }
+
+/* ── 앉음 ───────────────────────────────────────────────────────────
+   앉는 자리는 시스템이 밝든 어둡든 언제나 밤이다.
+   타이머의 어둠에는 달이 있고, 무위의 어둠에는 아무것도 없다.
+   두 어둠은 결이 다르다 — 무위 쪽이 더 깊고, 더 천천히 잠긴다. */
+
+.night, .void {
+  position: fixed; inset: 0; z-index: 10;
+  display: grid; place-items: center;
+}
+
+.night { background: #0b0a08; color: #cfc7b6; }
+.night .moon path { fill: #cfc7b6; }
+.night .moon circle { stroke: #1e1b16; }
+
+.void { background: #14120f; color: #4a463f; }
+.void-line { font-family: var(--serif); font-size: 1.25rem; text-align: center; padding: 0 1.5rem; }
+
+.leave { position: fixed; right: 1.5rem; bottom: 1.5rem; }
+.leave .quiet {
+  border: 0; padding: 0; background: transparent; cursor: pointer;
+  font-family: var(--sans); font-size: 0.75rem; color: #3f3a33;
+  text-decoration: underline; text-underline-offset: 0.35em;
+  text-decoration-color: #2a2620;
+}
+.leave.veiled { opacity: 0; pointer-events: none; }
+.leave { transition: opacity 900ms ease; }
+
+/* 무위로 가는 길. 권하지 않으므로 버튼이 아니다. */
+button.quiet {
+  border: 0; padding: 0; background: transparent;
+  font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft);
+  text-decoration: underline; text-underline-offset: 0.35em;
+  text-decoration-color: var(--rule); cursor: pointer;
+}
+
+/* 달은 숨 쉬고, 어둠은 잠긴다. 모두 아주 느리게. */
+@media (prefers-reduced-motion: no-preference) {
+  .night .moon { animation: breath 10s ease-in-out infinite; }
+  .void { animation: deepen 40s ease-in forwards; }
+  .void-line { animation: fade-away 14s ease-in forwards; }
+}
+
+@keyframes breath { 0%, 100% { opacity: 0.72 } 50% { opacity: 1 } }
+@keyframes deepen { to { background: #050505; } }
+@keyframes fade-away { 0%, 35% { opacity: 1 } 100% { opacity: 0 } }

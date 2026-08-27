@@ -1,0 +1,16 @@
+<%# 무위. 달마저 잠든다. 진행도, 끝도, 알림도 없다. %>
+<% content_for :no_chrome, true %>
+<% content_for :no_locales, true %>
+
+<div class="void"
+     data-controller="bell nothing"
+     data-action="click->nothing#reveal bell:open->bell#opening"
+     data-bell-enabled-value="<%= @bell %>"
+     data-bell-start-url-value="<%= bell_source(:start) %>">
+
+  <p class="void-line"><%= t("nothing.line") %></p>
+
+  <%= button_to t("nothing.leave"), sitting_path(@sitting), method: :patch,
+                class: "quiet",
+                form: { class: "leave veiled", data: { nothing_target: "leave" } } %>
+</div>

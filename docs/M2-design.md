@@ -83,27 +83,30 @@ KINDS = {
 ## 3. 데이터 모델
 
 ```
-Sitting                      ← 앉음 한 자리
+Sitting                      ← 앉음 한 자리. 남는 것은 날짜뿐이다.
   user
   mode:string       # sitting(타이머) | nothing(무위)
-  length:string     # 타이머만: three|ten|twenty|thirty|open. 무위는 nil
-  bell:boolean      # 종성 여부. 타이머 기본 켬, 무위 기본 끔
-  started_on:date   # 사용자 시간대 기준 날짜 (달이 이 날짜를 센다)
-  started_at:datetime
+  sat_on:date       # 사용자 시간대 기준 날짜. 달이 이 날짜를 센다
   ended_at:datetime # nil 이면 앉는 중
-  index [user_id, started_on]
+  index [user_id, sat_on]
 ```
 
-**분을 저장하지 않는다.** `length` 는 이름이고, 분은 코드 안의 상수다.
+**길이도, 분도, 종성 여부도 저장하지 않는다.** 그것들은 그 자리의
+설정이지 기록이 아니다. 길이는 `SittingLength` 값 객체가 쥐고 있고,
+주소에만 실려 다니다 사라진다.
 
 ```ruby
-LENGTHS = { three: 3, ten: 10, twenty: 20, thirty: 30, open: nil }  # 분
+# app/models/sitting_length.rb — 저장되지 않는다.
+MINUTES = { "short" => 3, "tea" => 10, "incense" => 20, "long" => 30, "open" => nil }
 ```
 
-`Sitting` 에도 점수·품질·완주 여부로 읽힐 컬럼을 두지 않는다.
+`Sitting` 에 점수·품질·완주 여부로 읽힐 컬럼을 두지 않는다.
 중간에 나가도 그것은 실패가 아니다 — `ended_at` 은 끝난 시각일 뿐,
-`completed` 같은 이름을 쓰지 않는다(제3조).
+`completed` 같은 이름을 쓰지 않고 시작과의 차를 재는 코드도 없다(제3조).
 `test/models/sitting_test.rb` 가 컬럼 목록을 통째로 못박는다.
+
+앉음은 스스로 잊힌다. 무위에는 정해진 끝이 없으므로, 네 시간이 지난
+자리는 끝난 것으로 본다 — 그러지 않으면 게이트가 영영 침묵한다.
 
 ---
 
@@ -159,11 +162,16 @@ phase = (최근 28일 중 쉼을 기록했거나 앉은 날의 수) / 28
 
 | 값 | ko | en |
 |---|---|---|
-| three | 삼 분 | three minutes |
-| ten | 십 분 | ten minutes |
-| twenty | 이십 분 | twenty minutes |
-| thirty | 삼십 분 | thirty minutes |
-| open | 자유 | open |
+| short | 짧게 앉기 | a short sit |
+| tea | 차 한 잔의 앉음 | a cup of tea |
+| incense | 향 한 대의 앉음 | one stick of incense |
+| long | 긴 앉음 | a long sit |
+| open | 정함 없이 | open-ended |
+
+향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다 — 숫자 없이
+길이를 말하는 법을 전통이 이미 발명해 두었다. 쉼의 길이(한 호흡·잠깐·
+한동안·오래·시간을 잊었다)와 낱말이 겹치지 않게 두어, 환산으로 읽힐
+여지를 없앤다.
 
 이렇게 하면 `spirit_test` 의 "어느 화면에도 숫자가 없다"를 **예외 없이**
 지킬 수 있다. 예외를 하나 열면 다음 예외를 막을 근거가 없어진다.
@@ -189,9 +197,15 @@ phase = (최근 28일 중 쉼을 기록했거나 앉은 날의 수) / 28
    싱잉볼의 비조화 배음(1 : 2.76 : 5.40 : 8.93)을 겹치고 아주 살짝
    어긋난 두 벌을 더해 울림을 만든다. 파일 0바이트, 제3자 0,
    라이선스 문제 0 — 바깥을 부르지 않는다는 원칙에 가장 가깝다.
-2. **나중**: 진짜 CC0 싱잉볼 파일을 받으면 `app/assets/audio/` 에 넣고
-   `docs/SOURCES.md` 에 **원문 제목·출처 URL·라이선스·확인한 날짜**를
-   적는다. 게이트와 재생 경로는 그대로다. 바뀌는 것은 음원뿐이다.
+2. **나중**: 진짜 CC0 싱잉볼 파일을 받으면 `app/assets/sounds/` 에
+   `bell-start.*` · `bell-end.*` 로 넣고 `docs/SOURCES.md` 에
+   **원문 제목·출처 URL·라이선스·확인한 날짜**를 적는다.
+   재생기는 **파일이 먼저다** — 파일이 있으면 그것으로 울고 없으면
+   합성음으로 운다. 코드를 고치지 않고 갈아 끼워진다.
+
+품질 기준: 단순 사인파 금지. 기본음 · 약 2.7배 · 5.4배의 비조화 배음과
+스무 초 이상의 긴 지수 감쇠. 마지막에 0으로 데려가는 완만한 기울기를
+두어 여운을 뚝 끊지 않는다. `silence_test` 가 이 셋을 모두 검사한다.
 
 ---
 
@@ -202,16 +216,17 @@ phase = (최근 28일 중 쉼을 기록했거나 앉은 날의 수) / 28
 ```
 ┌─────────────────────────────────────┐
 │  앉는다                              │
-│    ○ 삼 분                           │
-│    ○ 십 분                           │
-│    ○ 이십 분                         │
-│    ○ 삼십 분                         │
-│    ○ 자유                            │
+│    ○ 짧게 앉기                        │
+│    ○ 차 한 잔의 앉음                   │
+│    ○ 향 한 대의 앉음                   │
+│    ○ 긴 앉음                          │
+│    ○ 정함 없이                        │
 │                                     │
 │  ☑ 종성                              │
 │                                     │
 │  [ 앉는다 ]                          │
-│                                     │
+│  ───────────────                    │
+│  ☐ 들어갈 때 종성                     │   ← 무위는 기본으로 꺼져 있다
 │  아무것도 하지 않는다                  │   ← 무위로 가는 작은 링크
 └─────────────────────────────────────┘
 ```
@@ -248,8 +263,24 @@ phase = (최근 28일 중 쉼을 기록했거나 앉은 날의 수) / 28
 ```
 
 문장이 사라진 뒤에는 아무것도 없다. 끝을 알리지 않는다.
-브라우저를 닫는 것이 끝이다. (나가는 길은 화면 어디를 눌러도 나온다 —
-보이지는 않는다.)
+나가는 길은 보이지 않지만 화면 어디를 눌러도 잠시 나타난다.
+
+나가는 그 순간, 한 번만 조용히 묻는다.
+
+```
+┌─────────────────────────────────────┐
+│                                     │
+│        쉼으로 남기겠는가.             │
+│                                     │
+│           [ 남긴다 ]                 │
+│                                     │
+│          그냥 나간다                  │
+└─────────────────────────────────────┘
+```
+
+남기면 「시간을 잊었다」가 미리 골라진 기록 화면으로 간다 —
+무위는 정의상 재지 않은 시간이므로. 거절하면 흔적이 없다.
+같은 자리를 다시 열어도 물음은 되풀이되지 않는다.
 
 ### (4) 앉음을 마친 뒤
 
@@ -273,9 +304,11 @@ M1의 「오늘 몫 끝」 화면과 같은 자리로 간다.
 
 ```ruby
 resources :sittings, only: %i[new create show update]   # update = 마친다
-get "nothing" => "nothing#show", as: :nothing
-post "nothing" => "nothing#create"
+post "nothing" => "sittings#nothing", as: :nothing      # 무위도 같은 자리다
 ```
+
+`show` 는 갈래에 따라 다른 화면을 그린다 — 앉는 중 · 무위 · 마친 뒤 ·
+무위에서 나가며 한 번 묻는 자리.
 
 ## 9. 파일 구조 (신규)
 
@@ -283,11 +316,12 @@ post "nothing" => "nothing#create"
 app/models/silence_gate.rb            # 게이트 본체
 app/models/silence_gate/interceptor.rb
 app/models/sitting.rb
-app/controllers/{sittings,nothing}_controller.rb
-app/javascript/controllers/{sitting,bell}_controller.js
-app/views/sittings/{new,show,done}.html.erb
-app/views/nothing/show.html.erb
-app/helpers/moon_helper.rb            # 기우는 달 추가
+app/models/sitting_length.rb          # 값 객체. 저장되지 않는다
+app/controllers/sittings_controller.rb
+app/javascript/controllers/{sitting,bell,nothing}_controller.js
+app/views/sittings/{new,sitting,nothing,done,leaving}.html.erb
+app/helpers/{moon,bell}_helper.rb     # 기우는 달 · 음원 자리
+app/assets/sounds/                    # 비어 있다. 지금은 합성음
 db/migrate/*_create_sittings.rb
 test/models/{silence_gate,sitting}_test.rb
 test/integration/silence_test.rb      # 우회 경로 부재 검사
@@ -315,13 +349,53 @@ test/integration/sitting_flow_test.rb
 | `moon_phase_test` | 쉼과 앉음의 합집합 · 같은 날 둘 다여도 1 |
 | `spirit_test` | 앉기·앉는 중·무위 화면 추가. 숫자 0 · 외부 호스트 0 |
 
-## 12. 승인이 필요한 갈래
+## 12. 승인 후 반영된 변경
 
-1. **무위에 길이를 두지 않는다** (권장) — 길이를 고르는 순간 그것은
-   과업이 되고, 끝을 기다리는 마음이 생긴다. 대안: 길이는 고르되
-   화면에 아무것도 보이지 않게 한다.
-2. **앉음을 `Rest` 로 자동 기록하지 않고 달이 두 곳을 본다** (권장) —
-   분을 쉼의 길이 이름으로 환산하지 않기 위해서다.
-3. **종성은 우선 합성음** — 진짜 CC0 파일을 주시면 갈아 끼운다(6절).
-4. **길이 표기를 글자로** (삼 분 · 십 분 …) — 숫자 금지에 예외를
-   만들지 않기 위해서다.
+네 갈래 모두 권장안으로 확정되었고, 아래가 덧붙었다.
+
+1. **무위에 길이를 두지 않는다.** 들어가면 어둠뿐이고 나가는 것은
+   사용자가 정한다. 종성을 켜면 들어갈 때 한 번만, 마침종은 없다.
+   더하여 — **나가는 순간 "쉼으로 남길까"를 한 번만 조용히 묻는다.**
+   남기면 `duration` 에 「시간을 잊었다」가 미리 골라진 기록 화면으로
+   간다(무위는 정의상 재지 않은 시간이므로 데이터와 체험이 맞물린다).
+   거절하면 흔적이 없다 — 자동 생성이 아니라 사용자가 남기는 것이다.
+   물음이 되풀이되지 않도록 flash 로 한 번만 띄운다.
+
+2. **달이 두 곳을 본다.** `MoonPhase` 가 쉼 기록과 앉음의 합집합으로
+   그 날의 하나를 센다. 앉음 → `Rest` 자동 생성은 하지 않는다 —
+   "향 한 대 = 한동안" 같은 환산표는 제3조가 금한 가짜 정밀도의
+   부활이다. 더하여 — **`Sitting` 은 `sat_on`(날짜)만 남긴다.**
+   분도, 길이 이름도, 종성 여부도 저장하지 않는다. 그것들은 그 자리의
+   설정이지 기록이 아니므로 주소에만 실려 다닌다.
+   오늘 화면의 물음도 조정한다: 그 날 쉼이나 앉음이 이미 있으면
+   「오늘 쉬었는가」 대신 「오늘은 이미 고요했다. 더 남길 쉼이 있는가.」
+   「오늘 몫은 끝났다」는 기록한 그 자리에서만 말한다 —
+   나중에 다시 열었을 때 되풀이하면 그것은 조름이 된다.
+
+3. **종성은 우선 합성음.** 조건 둘이 붙는다.
+   (가) 단순 사인파 금지 — 비조화 배음(기본음 · 약 2.7배 · 5.4배)과
+   스무 초 이상의 긴 지수 감쇠. 여운이 뚝 끊기면 실패다.
+   (나) 교체 가능 구조 — 재생기는 **파일이 먼저다.**
+   `app/assets/sounds/bell-start` · `bell-end` 가 있으면 그것으로 울고,
+   없으면 합성음으로 운다. 라이선스 기록 규약은 `docs/SOURCES.md`.
+   `silence_test` 가 여운 길이·배음의 비정수성·파일 우선을 검사한다.
+
+4. **길이는 글자로, 그리고 쉼의 길이와 겹치지 않는 낱말로.**
+
+   | 값 | ko | en |
+   |---|---|---|
+   | short | 짧게 앉기 | a short sit |
+   | tea | 차 한 잔의 앉음 | a cup of tea |
+   | incense | 향 한 대의 앉음 | one stick of incense |
+   | long | 긴 앉음 | a long sit |
+   | open | 정함 없이 | open-ended |
+
+   향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다 —
+   숫자 없이 길이를 말하는 법을 전통이 이미 발명해 두었다.
+   `rests.durations`(한 호흡·잠깐·한동안·오래·시간을 잊었다)와 낱말이
+   겹치지 않게 두어, 환산으로 읽힐 여지를 없앤다.
+   분은 `SittingLength::MINUTES` 안에만 있고, 브라우저에 초로 한 번
+   건네질 뿐이다. 화면·저장·스크린리더 어디에도 숫자가 없다.
+
+5. **외부 스킬 정책**은 [CLAUDE.md](../CLAUDE.md) 에 적었다.
+   핵심 기능(쉼·달·명상·무위·안내·화두)에는 외부 스킬을 쓰지 않는다.

@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :rests, dependent: :destroy
+  has_many :sittings, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -23,8 +24,13 @@ class User < ApplicationRecord
   end
 
   # 앉아 있는 동안 앱은 침묵한다(SPIRIT 제4조).
-  # M2에서 Sitting 이 들어오면 끝나지 않은 자리를 본다.
-  def sitting? = false
+  def sitting? = sittings.ongoing.exists?
+
+  def sat_today? = sittings.exists?(sat_on: today)
+
+  # 오늘 이미 쉼이 있었거나 앉은 자리가 있었다.
+  # 물음이 조름이 되지 않도록, 이 날의 화면은 다르게 묻는다.
+  def quiet_today? = rested_today? || sat_today?
 
   def moon
     MoonPhase.for(self)

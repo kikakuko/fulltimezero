@@ -5,7 +5,7 @@ require "test_helper"
 
 class SpiritTest < ActionDispatch::IntegrationTest
   OPEN_PAGES = %i[gate_path new_user_path new_session_path new_password_path guide_path privacy_path].freeze
-  SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path].freeze
+  SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path new_sitting_path].freeze
 
   # 화면에 숫자·퍼센트·분·"n일째"가 없어야 한다.
   test "어느 화면에도 숫자나 지표가 보이지 않는다" do
@@ -16,6 +16,47 @@ class SpiritTest < ActionDispatch::IntegrationTest
       assert_no_match(/%/, text, "#{page}(#{locale}) 화면에 퍼센트가 보인다")
       assert_no_match(/일째|days?\b.*streak|streak/i, text, "#{page}(#{locale}) 화면에 연속기록이 보인다")
       assert_no_match(/\d\s*(분|minutes?|mins?)\b/i, text, "#{page}(#{locale}) 화면에 분이 보인다")
+    end
+  end
+
+  # 앉는 중과 무위는 기록이 있어야 열리므로 따로 연다.
+  test "앉는 중에도 무위에도 숫자가 없고, 바깥을 부르지 않는다" do
+    user = users(:one)
+    sign_in_as user
+
+    %i[ko en].each do |locale|
+      post sittings_path(locale: locale), params: { sitting: { length: "incense", bell: "1" } }
+      follow_redirect!
+      assert_quiet_screen "앉는 중", locale
+
+      post nothing_path(locale: locale), params: { bell: "1" }
+      follow_redirect!
+      assert_quiet_screen "무위", locale
+    end
+  end
+
+  # 남은 시간을 스크린리더에게만 숫자로 알려주지 않는다.
+  # 보이는 사람도 모르는 것을 들리는 사람에게만 알려주는 것은 형평이 아니다.
+  test "앉는 중 화면은 스크린리더에게도 남은 시간을 말하지 않는다" do
+    sign_in_as users(:one)
+    post sittings_path, params: { sitting: { length: "long" } }
+    follow_redirect!
+
+    labels = Nokogiri::HTML(response.body).css("[aria-label], title").map(&:text).join(" ")
+
+    assert_no_match(/\d/, labels, "접근성 텍스트에 숫자가 있다")
+    assert_no_match(/분|minutes?|remaining|남은/i, labels)
+  end
+
+  # 카피는 전량 로케일 파일에 있다. 그 안에 숫자가 하나도 없어야
+  # 화면에 숫자가 없다는 말이 우연이 아니게 된다.
+  test "카피 어디에도 숫자가 없다" do
+    %w[ko en].each do |locale|
+      copy = YAML.load_file(Rails.root.join("config/locales/#{locale}.yml")).fetch(locale)
+
+      flatten_copy(copy).each do |line|
+        assert_no_match(/\d/, line, "#{locale} 카피에 숫자가 있다: #{line.inspect}")
+      end
     end
   end
 
@@ -70,6 +111,17 @@ class SpiritTest < ActionDispatch::IntegrationTest
   end
 
   private
+    def assert_quiet_screen(name, locale)
+      assert_response :success, "#{name}(#{locale}) 이 열리지 않는다"
+
+      text = visible_text
+      assert_no_match(/\d/, text, "#{name}(#{locale}) 화면에 숫자가 보인다")
+      assert_no_match(/\d\s*(분|minutes?|mins?)\b/i, text, "#{name}(#{locale}) 화면에 분이 보인다")
+
+      hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+      assert_empty hosts, "#{name}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
+    end
+
     def flatten_copy(node)
       case node
       when Hash then node.values.flat_map { |v| flatten_copy(v) }

@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     resources :rests, only: %i[new create]
     get "moon" => "moon#show", as: :moon
 
+    # 앉음 — 명상 타이머와 무위의 시간.
+    resources :sittings, only: %i[new create show update]
+    post "nothing" => "sittings#nothing", as: :nothing
+
     get   "settings" => "settings#show", as: :settings
     patch "settings" => "settings#update"
     delete "account" => "settings#destroy", as: :account

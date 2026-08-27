@@ -1,0 +1,21 @@
+<%# 앉는 중. 달이 기울고, 숨 쉰다. 숫자도, 막대도, 문구도 없다. %>
+<% content_for :no_chrome, true %>
+<% content_for :no_locales, true %>
+
+<div class="night"
+     data-controller="bell sitting"
+     data-action="bell:open->bell#opening bell:close->bell#closing"
+     data-bell-enabled-value="<%= @bell %>"
+     data-bell-start-url-value="<%= bell_source(:start) %>"
+     data-bell-end-url-value="<%= bell_source(:end) %>"
+     data-sitting-seconds-value="<%= @seconds %>"
+     data-sitting-open-value="<%= @length.open? %>"
+     data-sitting-size-value="200">
+
+  <%= moon_svg(1.0, size: 200, title: t("sittings.sitting"),
+               data: { sitting_target: "moon" }) %>
+
+  <%= button_to t("sittings.finish"), sitting_path(@sitting), method: :patch,
+                class: "quiet",
+                form: { class: "leave", data: { sitting_target: "form" } } %>
+</div>
