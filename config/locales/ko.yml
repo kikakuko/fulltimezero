@@ -9,6 +9,8 @@ ko:
     en: English
 
   nav:
+    today: "오늘"
+    guide: "쉼의 안내"
     days: 날들
     moon: 달의 자취
     settings: 설정
@@ -64,6 +66,7 @@ ko:
       other: 그 밖
 
   moon:
+    full: 달이 찼다.
     title: 달
     trail_label: 지난 스물여드레의 자취
     window: 지난 스물여드레.
@@ -82,14 +85,95 @@ ko:
       note: 쉼 기록은 당신의 것이다. 내려받기는 곧 열린다.
 
   guide:
-    title: 쉼의 안내
-    not_open: 아직 열리지 않았다.
+    back: "안내로 돌아간다"
+    marks: ["一", "二", "三", "四", "五"]
+    title: "쉼의 안내"
+    not_open: "아직 열리지 않았다."
     chapters:
-      body: 몸의 쉼
-      walking: 걷는 쉼 — 경행
-      sitting: 앉은 쉼 — 좌선과 호흡
-      waking: 깨어 있는 쉼
-      complete_rest: 온전한 쉼 — 무위와 선정
+      body: "몸의 쉼"
+      walking: "걷는 쉼 — 경행"
+      sitting: "앉은 쉼 — 좌선과 호흡"
+      waking: "깨어 있는 쉼 — 알아차림"
+      complete_rest: "온전한 쉼 — 무위와 선정"
+    body:
+      body:
+        - text: "눕는 것에는 이상하게 죄책감이 붙어 있다. 앉아 있으면 무언가 하는 것 같고 걸으면 움직이는 것 같은데, 누우면 무너진 것 같다. 낮에 눕는 일은 특히 그렇다."
+        - text: "그런데 몸은 눕고 싶어 한다. 하루 종일 세워 둔 등뼈는 눕지 않으면 풀리지 않는다. 눕는 것은 게으름의 자세가 아니라 몸이 제 무게를 바닥에 넘기는 자세다. 넘겨 놓아야 풀린다."
+        - text: "옛 수행자들의 하루에도 눕는 시간이 있었다. 숨겨 둔 것이 아니라 자세와 함께 적혀 있다."
+        - quote: "「In the middle watch, we will lie down in the lion’s posture—on the right side, placing one foot on top of the other—mindful and aware, and focused on the time of getting up.」"
+          from: "맛지마 니까야 서른아홉째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/mn39/en/sujato"
+        - text: "오른쪽으로 눕고 발을 포개는 자세를 사자의 자세라 불렀다. 눕는 데에도 자세가 있다는 말은, 눕는 일이 수행 밖으로 밀려나 있지 않았다는 뜻이다."
+        - text: "죄책감 없이 눕는 법은 간단하다. 눕기로 정하고 눕는 것이다. 몰래 눕지 않고, 잠깐만이라고 스스로를 달래지 않고, 무너지듯 눕지 않는다. 정한 다음에 눕는 몸은 같은 자세라도 다르게 쉰다."
+        - text: "얼마나 누워 있어야 하는지는 정해져 있지 않다. 한 호흡만큼 누웠어도 누운 것이다."
+        - aside: "누웠던 일을 남겨 두고 싶다면, 쉼의 결 가운데 몸을 뉘었다는 항목이 있다."
+          to: "rest"
+        - text: "오늘 하루 가운데 잠깐 누울 만한 자리가 어디에 있는지, 문득 궁금해질 수도 있다."
+      walking:
+        - text: "걷기에는 대개 목적지가 있다. 어디로 가려고 걷는다. 목적지를 지우면 걷기는 다른 것이 된다."
+        - text: "경행(經行)은 그렇게 걷는 일을 부르는 오래된 이름이다. 방 안이든 마당이든 열 걸음 남짓한 길을 하나 정해 두고, 끝에 닿으면 돌아서 다시 걷는다. 어디에도 도착하지 않는다."
+        - text: "도착하지 않으므로 남는 것은 걷는 일 자체다. 발바닥이 바닥에 닿았다가 떨어지는 것, 무게가 한쪽에서 다른 쪽으로 옮겨 가는 것. 살필 것이 그것 말고는 없다."
+        - text: "옛 기록은 이 걸음을 대단하게 말하지 않았다."
+        - quote: "「You get fit for traveling, fit for striving in meditation, and healthy. What’s eaten, drunk, chewed, and tasted is properly digested. And immersion gained while walking lasts long.」"
+          from: "앙굿따라 니까야 다섯의 모음, 스물아홉째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/an5.29/en/sujato"
+        - text: "소화가 잘 된다는 대목이 좋다. 걷는 쉼은 신비한 일이 아니라 몸에 좋은 일로도 적혀 있었다. 대단하지 않아도 되는 일이다."
+        - text: "빠르기는 정해져 있지 않다. 느리게 걸으면 발바닥이 더 잘 느껴지고 보통 속도로 걸으면 덜 느껴진다. 둘 다 걷는 쉼이다. 걸음을 세지는 않는다 — 세기 시작하면 걸음이 아니라 숫자를 보게 된다."
+        - aside: "걸었던 일을 남겨 두고 싶다면, 쉼의 결 가운데 걸었다는 항목이 있다."
+          to: "rest"
+        - text: "다음에 어딘가로 걸어갈 일이 있을 때, 마지막 스무 걸음쯤을 목적지 없이 걸어 보고 싶어질 수도 있다."
+      sitting:
+        - text: "앉는 것은 가장 오해받는 자세다. 앉으면 무언가를 해내야 할 것 같기 때문이다. 앉은 쉼에서 하는 일은 하나뿐인데도 그렇다. 숨을 느끼는 것이다."
+        - text: "세는 것이 아니다. 숫자를 붙이기 시작하면 숨이 아니라 숫자를 보게 된다. 고르는 것도 아니다. 숨을 다스리려 들면 숨은 곧 뻣뻣해진다. 지금 들어오는 숨이 긴지 짧은지 아는 것, 그것이 전부다."
+        - text: "초기 경전이 적어 둔 자세는 이렇다."
+        - quote: "「It’s when a mendicant—gone to a wilderness, or to the root of a tree, or to an empty hut—sits down cross-legged, sets their body straight, and brings mindfulness to the present.」"
+          from: "맛지마 니까야 백열여덟째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/mn118/en/sujato"
+        - text: "그리고 숨에 대해서는 이렇게 이어진다."
+        - quote: "「They practice like this: ‘I’ll breathe in experiencing the whole body.’ They practice like this: ‘I’ll breathe out experiencing the whole body.’」"
+          from: "맛지마 니까야 백열여덟째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/mn118/en/sujato"
+        - text: "숨을 세라는 말이 없다. 몸으로 겪으라는 말만 있다. 코끝이든 가슴이든 배든, 숨이 느껴지는 자리는 사람마다 다르고 날마다 다르다. 미리 찾아 두려 하지 않아도 어딘가에서는 느껴진다."
+        - text: "마음이 딴 데 가 있는 것을 알아차렸다면 그때 이미 돌아온 것이다. 딴 데 갔다는 사실은 앉기에 실패했다는 표시가 아니라 앉아 있다는 표시다."
+        - aside: "앉을 자리는 이 앱에도 있다. 길이를 고르면 종이 한 번 울리고 화면이 어두워진다."
+          to: "sit"
+        - text: "다리가 아프면 의자여도 된다. 방석도 종도 없이, 등만 세우고 앉아 볼 마음이 드는 날이 올지도 모른다."
+      waking:
+        - text: "쉰다고 하면 흔히 흐려지는 것을 떠올린다. 멍해지는 것, 아무 생각도 없어지는 것. 그런데 옛사람들이 말한 쉼은 흐려지는 쉼이 아니었다. 또렷한 쉼이었다."
+        - text: "사티(sati)는 알아차림으로 옮겨진다. 본디 기억한다는 말에서 왔다. 지금 무엇이 일어나고 있는지를 놓치지 않고 있는 상태다."
+        - quote: "「It’s when a mendicant meditates by observing an aspect of the body—keen, aware, and mindful, rid of covetousness and displeasure for the world.」"
+          from: "맛지마 니까야 열째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/mn10/en/sujato"
+        - text: "열심하고 또렷하고 잊지 않는 상태로 몸을 살핀다고 적혀 있다. 쉬는 이야기치고는 깨어 있는 말들이다."
+        - text: "알아차림과 쉼은 반대가 아니다. 오히려 짝이다. 흐려진 상태에서는 쉬고 있다는 것조차 모르고 지나간다. 나중에 돌아보면 시간만 없어져 있다."
+        - text: "알아차림은 무언가를 더 하는 일이 아니다. 이미 일어나고 있는 일을 놓치지 않는 것뿐이다. 그래서 애쓸 일도, 잘하고 못하고도 없다."
+        - text: "설거지를 하면서도, 버스에서도, 물이 끓기를 기다리면서도 된다. 자리를 따로 마련하지 않아도 되는 것이 이 쉼의 성질이다."
+        - aside: "아무것도 하지 않으면서 깨어 있는 시간을 이 앱은 무위의 시간이라 부른다. 앉는 화면 아래에 있고, 어두운 화면과 한 줄 말고는 아무것도 없다."
+          to: "sit"
+        - text: "다음에 무언가를 기다리게 되면 — 신호등이든 물이 끓기를이든 — 그 사이에 무엇이 일어나고 있는지 궁금해질 수도 있다."
+      complete_rest:
+        - text: "몸을 쉬고, 걸음을 쉬고, 앉음을 쉬고 나면 마지막으로 남는 것이 있다. 쉬려는 마음이다."
+        - text: "잘 쉬려고 애쓰는 것도 애쓰는 일이다. 오늘은 제대로 쉬었는지 헤아리는 것도 헤아리는 일이다. 그 마지막 한 겹을 어떻게 하는지에 대해 옛사람들은 두 갈래로 말했다."
+        - text: "하나는 덜어 내는 쪽이다."
+        - quote: "「為學日益，為道日損。損之又損，以至於無為。」"
+          from: "노자 마흔여덟째 장"
+          link: "https://ctext.org/dao-de-jing"
+        - text: "배움은 날마다 더하는 일이고, 도는 날마다 더는 일이다. 덜고 또 덜어 마침내 함이 없음에 이른다."
+        - text: "무위는 게으름이 아니다. 아무것도 하지 않는 것과 억지로 하지 않는 것은 다르다. 덜어 낸다는 말은 손을 놓는다는 뜻이 아니라 밀어붙이던 손을 거둔다는 뜻이다. 쉼을 과제로 삼는 순간 쉼은 다시 일이 된다. 그 마지막 과제까지 내려놓은 자리를 무위라 불렀다."
+        - text: "다른 하나는 고요해지는 쪽이다. 초기 경전은 앉은 쉼이 여러 겹으로 깊어진다고 보았다. 아래는 그 겹들을 다 지나온 끝자리, 넷째 자리에 대한 서술이다. 앞의 겹들을 이어받은 대목이라 문장이 이어 붙이는 말로 시작한다."
+        - quote: "「Furthermore, with the giving up of pleasure and pain and the disappearance of former happiness and sadness, a mendicant enters and remains in the fourth absorption, without pleasure or pain, with pure equanimity and mindfulness.」"
+          from: "맛지마 니까야 서른아홉째 경 · 수자토 옮김"
+          link: "https://suttacentral.net/mn39/en/sujato"
+        - text: "즐거움을 괴로움과 함께 내려놓고, 앞서의 기쁨과 슬픔도 사라진 자리. 즐겁지도 괴롭지도 않은, 맑은 평정과 또렷함만 남은 자리."
+        - text: "눈여겨볼 것은 즐거움까지 내려놓았다는 대목이다. 고요는 좋은 기분이 아니다. 좋은 기분은 여전히 무언가 일어나고 있는 상태다. 온전한 쉼은 기분이 좋아지는 일이 아니라, 좋고 나쁨이 함께 잦아드는 일이다."
+        - text: "무위와 선정은 서로 다른 전통의 말이지만 가리키는 방향이 겹친다. 덜어 내다 보면 고요해지고, 고요해지면 덜어 낼 것이 줄어든다. 둘 다 무엇을 얻는 이야기가 아니라 무엇이 줄어드는 이야기다."
+        - text: "이 장에는 이어지는 화면이 없다."
+        - text: "무위도 선정도 앱이 줄 수 있는 것이 아니기 때문이다. 화면을 열고 기록을 남기고 종을 울리는 일은 앞의 네 장까지다. 여기서부터는 앱이 할 수 있는 일이 없다."
+        - text: "더 알고 싶어지면, 이 앱보다는 옛글과 그것을 오래 해 온 사람들이 나은 길동무다."
+        - text: "이 앱이 바라는 마지막은 당신이 이 앱을 잊는 것이다. 강을 건넜으면 뗏목은 두고 간다."
+    go:
+      rest: "쉼을 기록한다"
+      sit: "앉는다"
 
   sittings:
     new:

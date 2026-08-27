@@ -28,8 +28,9 @@ Rails.application.routes.draw do
     patch "settings" => "settings#update"
     delete "account" => "settings#destroy", as: :account
 
-    # M3 「쉼의 안내」 — 지금은 스텁.
+    # 「쉼의 안내」 — 한 번에 한 장씩. 다음 장으로 미는 고리는 두지 않는다.
     get "guide" => "guide#show", as: :guide
+    get "guide/:chapter" => "guide#chapter", as: :guide_chapter
 
     get "privacy" => "pages#privacy", as: :privacy
   end

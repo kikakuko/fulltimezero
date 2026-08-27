@@ -9,6 +9,8 @@ en:
     en: English
 
   nav:
+    today: "Today"
+    guide: "The guide"
     days: Days
     moon: The moon's trail
     settings: Settings
@@ -64,6 +66,7 @@ en:
       other: something else
 
   moon:
+    full: The moon is full.
     title: The moon
     trail_label: The trail of the last four weeks
     window: The last four weeks.
@@ -82,14 +85,95 @@ en:
       note: Your rest is yours. Downloading opens soon.
 
   guide:
-    title: A Guide to Rest
-    not_open: Not open yet.
+    back: "Back to the guide"
+    marks: ["I", "II", "III", "IV", "V"]
+    title: "A Guide to Rest"
+    not_open: "Not open yet."
     chapters:
-      body: The body's rest
-      walking: Walking rest — kinhin
-      sitting: Sitting rest — zazen and the breath
-      waking: Rest while awake
-      complete_rest: Complete rest — doing nothing, and stillness
+      body: "The body's rest"
+      walking: "Walking rest — kinhin"
+      sitting: "Sitting rest — zazen and the breath"
+      waking: "Rest while awake — mindfulness"
+      complete_rest: "Complete rest — doing nothing, and stillness"
+    body:
+      body:
+        - text: "Lying down carries a strange guilt. Sitting looks like doing something, walking looks like moving, but lying down looks like collapse. In the middle of the day it looks worse."
+        - text: "The body, meanwhile, wants to lie down. A spine held upright all day does not unwind until it is horizontal. Lying down is not the posture of laziness; it is the posture in which the body hands its weight to the floor. It has to be handed over before anything loosens."
+        - text: "The old practitioners had a time for lying down too. It was not hidden away; it was written down along with the posture."
+        - quote: "「In the middle watch, we will lie down in the lion’s posture—on the right side, placing one foot on top of the other—mindful and aware, and focused on the time of getting up.」"
+          from: "Majjhima Nikāya, discourse thirty-nine · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/mn39/en/sujato"
+        - text: "Lying on the right side with one foot on the other was called the lion's posture. That lying down has a posture at all means it was never pushed outside of practice."
+        - text: "Lying down without guilt is simple enough. One decides to lie down, and then lies down. Not sneaking into it, not bargaining that it is only for a minute, not collapsing into it. A body that lies down after deciding to rests differently in the same position."
+        - text: "There is no rule about how long. A single breath spent lying down still counts as lying down."
+        - aside: "If you would like to keep a note of it, one of the textures of rest is lying down."
+          to: "rest"
+        - text: "Somewhere in today there may be a place to lie down for a moment, and you may find yourself curious where it is."
+      walking:
+        - text: "Walking usually has a destination. One walks in order to get somewhere. Erase the destination and walking turns into something else."
+        - text: "Kinhin is an old name for walking that way. Indoors or in a yard, a path of ten paces or so is settled on, and at the end of it one turns and walks back. Nowhere is ever arrived at."
+        - text: "Because nothing is arrived at, what is left is the walking itself. The sole of the foot meeting the floor and leaving it, the weight moving from one side to the other. There is nothing else to attend to."
+        - text: "The old records did not make it sound grand."
+        - quote: "「You get fit for traveling, fit for striving in meditation, and healthy. What’s eaten, drunk, chewed, and tasted is properly digested. And immersion gained while walking lasts long.」"
+          from: "Aṅguttara Nikāya, Book of Fives, discourse twenty-nine · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/an5.29/en/sujato"
+        - text: "The line about digestion is the good one. Walking rest was written down as something plainly good for the body, not as something mysterious. It is allowed to be unremarkable."
+        - text: "There is no correct speed. Slow walking makes the soles easier to feel, ordinary walking makes them harder to feel, and both are walking rest. The paces are not counted — once counting starts, one watches numbers instead of steps."
+        - aside: "If you would like to keep a note of it, one of the textures of rest is walking."
+          to: "rest"
+        - text: "Next time there is somewhere to walk to, the last twenty paces might be walked with no destination, if that sounds worth trying."
+      sitting:
+        - text: "Sitting is the most misunderstood of the postures, because sitting down looks like it demands an accomplishment. Even though there is only one thing to do in sitting rest. Feel the breath."
+        - text: "Not count it. Once numbers are attached, one watches the numbers instead of the breath. Not regulate it either. Breath that is managed goes stiff almost at once. Knowing whether the breath coming in now is long or short is the whole of it."
+        - text: "The posture the early discourses set down is this."
+        - quote: "「It’s when a mendicant—gone to a wilderness, or to the root of a tree, or to an empty hut—sits down cross-legged, sets their body straight, and brings mindfulness to the present.」"
+          from: "Majjhima Nikāya, discourse one hundred eighteen · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/mn118/en/sujato"
+        - text: "And about the breath it continues like this."
+        - quote: "「They practice like this: ‘I’ll breathe in experiencing the whole body.’ They practice like this: ‘I’ll breathe out experiencing the whole body.’」"
+          from: "Majjhima Nikāya, discourse one hundred eighteen · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/mn118/en/sujato"
+        - text: "There is no instruction to count. Only to experience it with the body. At the nostrils, the chest, the belly — where the breath is felt differs between people and between days. It turns up somewhere without being hunted for in advance."
+        - text: "Noticing that the mind has wandered off is already the return. Having wandered is not a mark of having failed at sitting; it is a mark of sitting."
+        - aside: "There is a place to sit in this app too. Choose a length and a bell sounds once as the screen goes dark."
+          to: "sit"
+        - text: "A chair is fine if the legs hurt. Some day there may be an inclination to sit with no cushion and no bell, just the back upright."
+      waking:
+        - text: "Rest is usually pictured as going dim. Blanking out, thinking nothing. But the rest the old traditions spoke of was not the dim kind. It was the clear kind."
+        - text: "Sati is usually rendered as mindfulness. It comes from a word for remembering. It is the state of not losing track of what is happening now."
+        - quote: "「It’s when a mendicant meditates by observing an aspect of the body—keen, aware, and mindful, rid of covetousness and displeasure for the world.」"
+          from: "Majjhima Nikāya, discourse ten · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/mn10/en/sujato"
+        - text: "Keen, aware, mindful, observing the body. For a passage about resting, those are wide-awake words."
+        - text: "Mindfulness and rest are not opposites. They are a pair. In the dim state one does not even know one is resting; looking back later, only the time is gone."
+        - text: "Mindfulness is not one more thing to do. It is only not losing track of what is already happening. So there is nothing to strain at, and no doing it well or badly."
+        - text: "It works while washing dishes, on a bus, waiting for water to boil. Needing no arrangements of its own is the nature of this rest."
+        - aside: "Being awake while doing nothing is what this app calls the time of doing nothing. It sits below the sitting screen, and holds nothing but a dark screen and one line."
+          to: "sit"
+        - text: "Next time there is a wait — a traffic light, a kettle — you may find yourself curious about what is going on in the meantime."
+      complete_rest:
+        - text: "When the body has rested, and the walking has rested, and the sitting has rested, one thing is left over. The wish to rest."
+        - text: "Trying to rest well is still trying. Checking whether today counted as real rest is still checking. About that last layer, the old traditions said two things."
+        - text: "The first is subtraction."
+        - quote: "「為學日益，為道日損。損之又損，以至於無為。」"
+          from: "Laozi, chapter forty-eight"
+          link: "https://ctext.org/dao-de-jing"
+        - text: "Learning adds something every day; the way takes something away every day. One takes away, and takes away again, until arriving at doing nothing."
+        - text: "Doing nothing is not laziness. There is a difference between doing nothing and not forcing anything. To subtract is not to let go of the rope; it is to stop pulling on it. The moment rest becomes a task, it is work again. What remains when even that last task is set down was called wu wei."
+        - text: "The second is stillness. The early discourses saw sitting deepen through several layers. What follows describes the last of them, the fourth, once the earlier layers have been passed through. It carries on from those layers, which is why it begins mid-series."
+        - quote: "「Furthermore, with the giving up of pleasure and pain and the disappearance of former happiness and sadness, a mendicant enters and remains in the fourth absorption, without pleasure or pain, with pure equanimity and mindfulness.」"
+          from: "Majjhima Nikāya, discourse thirty-nine · translated by Bhikkhu Sujato"
+          link: "https://suttacentral.net/mn39/en/sujato"
+        - text: "Pleasure set down along with pain. The earlier gladness and sorrow gone as well. Neither pleasant nor unpleasant, only a clear evenness, and being awake to it."
+        - text: "The part worth noticing is that pleasure is set down too. Stillness is not a good mood. A good mood is still something happening. Complete rest is not feeling better; it is good and bad subsiding together."
+        - text: "Wu wei and stillness come from different traditions, but they point the same way. Subtract long enough and things go quiet; go quiet and there is less left to subtract. Neither is a story about gaining something. Both are stories about something growing smaller."
+        - text: "There is no screen after this chapter."
+        - text: "Neither doing nothing nor stillness is something an app can hand over. Opening a screen, keeping a record, ringing a bell, that is what the first four chapters are for. From here there is nothing an app can do."
+        - text: "If you find yourself wanting to know more, the old texts and the people who have practiced them for a long time are better company than this app."
+        - text: "What this app hopes for, in the end, is that you forget it. Once the river is crossed, the raft is left behind."
+    go:
+      rest: "Keep a note of it"
+      sit: "Sit"
 
   sittings:
     new:

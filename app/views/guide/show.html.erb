@@ -1,9 +1,11 @@
-<%# M3 「쉼의 안내」 — 스텁. 본문은 아직 없다. %>
+<%# 다섯 장. 번호는 글자로 적는다 — 숫자는 화면에 두지 않는다. %>
 <h1 class="title"><%= t("guide.title") %></h1>
-<p class="lead"><%= t("guide.not_open") %></p>
 
-<ol class="tiny">
-  <% %w[body walking sitting waking complete_rest].each do |chapter| %>
-    <li><%= t("guide.chapters.#{chapter}") %></li>
+<ul class="chapters">
+  <% @chapters.each_with_index do |key, index| %>
+    <li>
+      <span class="mark soft"><%= t("guide.marks")[index] %></span>
+      <%= link_to t("guide.chapters.#{key}"), guide_chapter_path(key) %>
+    </li>
   <% end %>
-</ol>
+</ul>

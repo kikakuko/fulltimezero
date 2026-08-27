@@ -1,0 +1,31 @@
+<%# 한 장. 인용에는 출전을 한 줄로 붙인다 — 독자에게도 보여야 한다.
+    출전은 원문으로 나가는 문일 뿐이다. 눌러야만 열린다 —
+    미리 불러오지도, 미리 연결하지도 않는다(제6조). %>
+<h1 class="title"><%= t("guide.chapters.#{@chapter}") %></h1>
+
+<div class="guide">
+  <% @body.each do |item| %>
+    <% if item[:quote] %>
+      <blockquote>
+        <p><%= item[:quote] %></p>
+        <p class="source">
+          <%= link_to item[:from], item[:link], class: "outward",
+                      target: "_blank", rel: "noopener noreferrer",
+                      data: { turbo: false, turbo_prefetch: false } %>
+        </p>
+      </blockquote>
+    <% elsif item[:aside] %>
+      <p class="aside">
+        <%= item[:aside] %>
+        <%= link_to t("guide.go.#{item[:to]}"),
+                    item[:to] == "rest" ? new_rest_path : new_sitting_path %>
+      </p>
+    <% else %>
+      <p><%= item[:text] %></p>
+    <% end %>
+  <% end %>
+</div>
+
+<p class="tiny" style="margin-top:4rem">
+  <%= link_to t("guide.back"), guide_path, class: "soft" %>
+</p>

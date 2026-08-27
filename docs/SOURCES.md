@@ -37,27 +37,154 @@ app/assets/sounds/bell-end.{ogg,mp3,wav,m4a}     마침종
 
 ## 인용문
 
-### 확인한 출처 — SuttaCentral / 수자토 스님 영역
+인용은 **CC0 원문 또는 저작권이 소멸한 원문만.** 번역·주석·편곡에
+저작권이 있는 판본은 쓰지 않는다. 한국어는 인용하지 않고 자체 산문으로
+쓴다 — 현대 한글 번역본에는 저작권이 있다.
 
-- **확인 문구(원문 그대로)**:
-  "All translations created in Bilara and supported by SuttaCentral are
-  dedicated to the Public Domain by means of the Creative Commons Public
-  Domain (CC0) license."
-- **출처**: https://github.com/suttacentral/bilara-data — `LICENSE.md`
-  (SuttaCentral 번역 원본 저장소)
-- **보조 확인**: `bilara-data` README — "Note that all translations
-  supported by SuttaCentral must use CC0 licence."
-- **라이선스**: CC0 1.0 (퍼블릭 도메인 헌정)
-- **확인한 날짜**: 2026-08-27
+### 주의 — 출처는 사이트가 아니라 역자다
 
-한국어는 인용하지 않고 **자체 산문으로 쓴다.** 현대 한글 번역본에는
-저작권이 있으므로 옮겨 오지 않는다. 한문 원문(공유 저작물)과 위 CC0
-영역만이 인용의 대상이다.
+SuttaCentral 에는 **저작권이 살아 있는 역본도 함께 실려 있다**
+(비구 보디 등). "SuttaCentral 에서 받았다"는 기록은 근거가 되지 못한다.
+받아 온 문장 하나하나가 **수자토(Bhikkhu Sujato) 역본인지**를
+파일 경로와 역자 표기로 확인해 아래에 남긴다.
+역자 표기가 없는 원문은 **쓰지 않는다.**
+
+### 라이선스 확인 — SuttaCentral / 수자토 역본
+
+| | |
+|---|---|
+| 확인한 URL | https://github.com/suttacentral/bilara-data — `LICENSE.md` |
+| 원문 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/master/LICENSE.md |
+| 라이선스 | CC0 1.0 (퍼블릭 도메인 헌정) |
+| 확인 일자 | 2026-08-27 |
+
+라이선스 문구 원문 그대로:
+
+> "All translations created in Bilara and supported by SuttaCentral are
+> dedicated to the Public Domain by means of the Creative Commons Public
+> Domain (CC0) license."
+
+같은 저장소 README 의 보조 문구:
+
+> "Note that all translations supported by SuttaCentral must use CC0 licence."
+
+---
 
 ### 들인 인용문
 
-- (아직 없음)
+#### 하나 — 제사선(第四禪)
 
-## 원문 코스
+원문 그대로:
 
-- (M4) 반야심경 260자 — 한문 원문은 공유 저작물.
+> "Furthermore, with the giving up of pleasure and pain and the disappearance
+> of former happiness and sadness, a mendicant enters and remains in the
+> fourth absorption, without pleasure or pain, with pure equanimity and
+> mindfulness."
+
+| | |
+|---|---|
+| 출전 | Majjhima Nikāya 39 (Mahā-assapurasutta), 구절 `mn39:18.1` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/mn/mn39_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/mn/mn39_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 끝의 공백 한 칸을 지운 것 외에 없다 |
+
+#### 둘 — 무위(無爲)
+
+원문 그대로:
+
+> 為學日益，為道日損。損之又損，以至於無為。
+
+| | |
+|---|---|
+| 출전 | 도덕경(道德經) 제48장 첫 대목 |
+| 라이선스 | 저작권 소멸 — 기원전 성립, 공유 저작물 |
+| 대조한 URL | https://ctext.org/dao-de-jing (Chinese Text Project · 원문에 글자가 있는 것을 직접 확인) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 없다. 48장 전문 중 앞 네 구를 그대로 끊어 왔다 |
+
+한문 원문 자체는 저작권이 소멸한 공유 저작물이다. 위 URL 은 라이선스를
+주는 곳이 아니라 **글자를 대조한 증거**일 뿐이다. 이어지는 우리말은
+번역 인용이 아니라 **자체 산문**이다.
+
+#### 셋 — 눕는 자세
+
+원문 그대로:
+
+> In the middle watch, we will lie down in the lion’s posture—on the right side, placing one foot on top of the other—mindful and aware, and focused on the time of getting up.
+
+| | |
+|---|---|
+| 출전 | Majjhima Nikāya 39 (Mahā-assapurasutta), 구절 `mn39:10.4` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/mn/mn39_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/mn/mn39_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 앞뒤 공백을 지운 것 외에 없다 |
+
+#### 넷 — 걷는 쉼
+
+원문 그대로:
+
+> You get fit for traveling, fit for striving in meditation, and healthy. What’s eaten, drunk, chewed, and tasted is properly digested. And immersion gained while walking lasts long.
+
+| | |
+|---|---|
+| 출전 | Aṅguttara Nikāya 5.29 (Caṅkamasutta), 구절 `an5.29:1.3` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/an/an5/an5.29_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/an/an5/an5.29_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 앞뒤 공백을 지운 것 외에 없다 |
+
+#### 다섯 — 앉는 자세
+
+원문 그대로:
+
+> It’s when a mendicant—gone to a wilderness, or to the root of a tree, or to an empty hut—sits down cross-legged, sets their body straight, and brings mindfulness to the present.
+
+| | |
+|---|---|
+| 출전 | Majjhima Nikāya 118 (Ānāpānassatisutta), 구절 `mn118:17.1` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/mn/mn118_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/mn/mn118_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 앞뒤 공백을 지운 것 외에 없다 |
+
+#### 여섯 — 숨을 몸으로 겪는다
+
+원문 그대로:
+
+> They practice like this: ‘I’ll breathe in experiencing the whole body.’ They practice like this: ‘I’ll breathe out experiencing the whole body.’
+
+| | |
+|---|---|
+| 출전 | Majjhima Nikāya 118 (Ānāpānassatisutta), 구절 `mn118:18.3` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/mn/mn118_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/mn/mn118_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 앞뒤 공백을 지운 것 외에 없다 |
+
+#### 일곱 — 알아차림
+
+원문 그대로:
+
+> It’s when a mendicant meditates by observing an aspect of the body—keen, aware, and mindful, rid of covetousness and displeasure for the world.
+
+| | |
+|---|---|
+| 출전 | Majjhima Nikāya 10 (Satipaṭṭhānasutta), 구절 `mn10:3.2` |
+| 역자 | **Bhikkhu Sujato** |
+| 역자 확인 근거 | 파일 경로에 역자가 박혀 있다: `translation/en/**sujato**/sutta/mn/mn10_translation-en-**sujato**.json` |
+| 받은 URL | https://raw.githubusercontent.com/suttacentral/bilara-data/published/translation/en/sujato/sutta/mn/mn10_translation-en-sujato.json (HTTP 200) |
+| 라이선스 | CC0 1.0 (위 확인 참조) |
+| 확인 일자 | 2026-08-27 |
+| 손댄 곳 | 원문 앞뒤 공백을 지운 것 외에 없다 |
