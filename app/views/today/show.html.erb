@@ -8,9 +8,10 @@
     <p class="lead"><%= t("today.done") %></p>
   </div>
 <% else %>
-  <div class="center">
-    <% if @greeting %>
-      <p class="tiny"><%= t("greetings.#{@greeting}") %></p>
+  <div class="center<%= " cleared" if @cleared_morning %>">
+    <%# 한 줄까지만. 오늘의 말이 있으면 그것이 계절의 인사보다 앞선다. %>
+    <% if @day_line || @greeting %>
+      <p class="tiny"><%= t(@day_line || "greetings.#{@greeting}") %></p>
     <% end %>
 
     <%= moon_svg(@moon.fraction) %>

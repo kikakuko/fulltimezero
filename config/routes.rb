@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     resources :sittings, only: %i[new create show update]
     post "nothing" => "sittings#nothing", as: :nothing
 
+    # 날들 — 빈 일정. 달력의 날짜 숫자만이 이 앱에서 허용되는 숫자다.
+    get   "days" => "days#index", as: :days
+    get   "days/:date" => "days#show", as: :day
+    patch "days/:date" => "days#update"
+    resources :plans, only: %i[create destroy]
+
     get   "settings" => "settings#show", as: :settings
     patch "settings" => "settings#update"
     delete "account" => "settings#destroy", as: :account

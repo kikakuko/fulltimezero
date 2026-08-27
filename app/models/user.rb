@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :rests, dependent: :destroy
   has_many :sittings, dependent: :destroy
+  has_many :plans, dependent: :destroy
+  has_many :clearings, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -28,6 +30,14 @@ class User < ApplicationRecord
 
   def sat_today? = sittings.exists?(sat_on: today)
 
+  # 오늘 일정이 하나도 없다. 개수는 세지 않는다 — 있고 없음뿐이다.
+  def empty_today? = !plans.exists?(planned_on: today)
+
+  def cleared_today? = clearings.exists?(cleared_on: today)
+
+  def morning? = (5...11).cover?(hour_now)
+  def evening? = hour_now >= 18
+
   # 오늘 이미 쉼이 있었거나 앉은 자리가 있었다.
   # 물음이 조름이 되지 않도록, 이 날의 화면은 다르게 묻는다.
   def quiet_today? = rested_today? || sat_today?
@@ -37,6 +47,8 @@ class User < ApplicationRecord
   end
 
   private
+    def hour_now = Time.current.in_time_zone(time_zone).hour
+
     def time_zone_must_exist
       errors.add(:time_zone, :inclusion) if ActiveSupport::TimeZone[time_zone.to_s].nil?
     end

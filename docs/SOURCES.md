@@ -37,6 +37,25 @@ app/assets/sounds/bell-end.{ogg,mp3,wav,m4a}     마침종
 
 ## 인용문
 
+### 확인한 출처 — SuttaCentral / 수자토 스님 영역
+
+- **확인 문구(원문 그대로)**:
+  "All translations created in Bilara and supported by SuttaCentral are
+  dedicated to the Public Domain by means of the Creative Commons Public
+  Domain (CC0) license."
+- **출처**: https://github.com/suttacentral/bilara-data — `LICENSE.md`
+  (SuttaCentral 번역 원본 저장소)
+- **보조 확인**: `bilara-data` README — "Note that all translations
+  supported by SuttaCentral must use CC0 licence."
+- **라이선스**: CC0 1.0 (퍼블릭 도메인 헌정)
+- **확인한 날짜**: 2026-08-27
+
+한국어는 인용하지 않고 **자체 산문으로 쓴다.** 현대 한글 번역본에는
+저작권이 있으므로 옮겨 오지 않는다. 한문 원문(공유 저작물)과 위 CC0
+영역만이 인용의 대상이다.
+
+### 들인 인용문
+
 - (아직 없음)
 
 ## 원문 코스

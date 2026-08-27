@@ -207,3 +207,50 @@ button:active, input[type="submit"]:active, .action:active {
     transition: transform 150ms ease, box-shadow 150ms ease, border-color 400ms ease;
   }
 }
+
+/* ── 날들 ───────────────────────────────────────────────────────────
+   달력의 날짜 숫자는 이 앱에서 허용되는 유일한 숫자다. 본질상
+   불가피하기 때문이며, 그마저 .date 안에만 있다.
+   일정의 개수는 세지 않는다 — 먹점 하나로 있고 없음만 말한다. */
+
+.months { display: flex; justify-content: space-between; margin-bottom: 2rem; }
+
+.calendar {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem; margin: 1.5rem 0 2.5rem;
+}
+
+.calendar .weekday {
+  font-size: 0.6875rem; color: var(--ink-soft);
+  text-align: center; padding-bottom: 0.6rem;
+}
+
+.calendar .day {
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  padding: 0.6rem 0 0.7rem; text-decoration: none; border-radius: 0.5rem;
+}
+.calendar .day:hover { background: color-mix(in srgb, var(--rule) 35%, transparent); }
+.calendar .day.today { border: 1px solid var(--rule); }
+.calendar .outside { visibility: hidden; }
+
+.calendar .date { font-size: 0.8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.calendar .day.today .date { color: var(--ink); }
+
+/* 일정이 있는 날 · 비워 둔 날 · 그 밖. 셋 다 같은 크기다. */
+.calendar .kept, .calendar .clear, .calendar .bare {
+  width: 0.375rem; height: 0.375rem; border-radius: 50%;
+}
+.calendar .kept { background: var(--ink); }
+.calendar .clear { border: 1px solid var(--rule); }
+
+.plans { list-style: none; padding: 0; margin: 1rem 0 2.5rem; }
+.plans li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: 0.7rem 0; border-bottom: 1px solid var(--rule);
+}
+.plans form { margin: 0; }
+
+input[type="text"] {
+  width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0; color: var(--ink); font-size: 1rem; border-radius: 0;
+}

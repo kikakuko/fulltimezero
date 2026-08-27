@@ -9,6 +9,7 @@ en:
     en: English
 
   nav:
+    days: Days
     moon: The moon's trail
     settings: Settings
 
@@ -131,6 +132,43 @@ en:
     deep_winter: Deep winter. Sleeping through it is not laziness.
     year_end: The year is closing. What is left can stay left.
     new_year: A new year. Nothing has to begin.
+
+  days:
+    title: Days
+    legend: An ink dot marks a day with something on it. A faint ring marks a day kept clear.
+    previous: Last month
+    next: Next month
+    back: Back to the month
+    day_empty: This day is empty.
+    cleared: Kept clear.
+    clear: Keep this day clear
+    unclear: Let it go
+    add: What is there
+    save: Write it
+    remove: Erase
+    empty_today: Today is empty. You cleared it well.
+    evening: It was a busy day. You can put it down now.
+    months:
+      january: January
+      february: February
+      march: March
+      april: April
+      may: May
+      june: June
+      july: July
+      august: August
+      september: September
+      october: October
+      november: November
+      december: December
+    weekdays:
+      sunday: Sun
+      monday: Mon
+      tuesday: Tue
+      wednesday: Wed
+      thursday: Thu
+      friday: Fri
+      saturday: Sat
 
   privacy:
     title: Privacy

@@ -1,0 +1,38 @@
+<%# 하루. 적고 지우는 것 말고 할 일이 없다. %>
+<%# 날짜 숫자는 언제나 .date 안에만 있다. 화면의 다른 어디에도 숫자는 없다. %>
+<h1 class="title">
+  <%= month_name(@date) %>
+  <span class="date"><%= @date.day %></span>
+  <span class="soft"><%= weekday_name(@date.wday) %></span>
+</h1>
+
+<% if @plans.any? %>
+  <ul class="plans">
+    <% @plans.each do |plan| %>
+      <li>
+        <span><%= plan.what %></span>
+        <%= button_to t("days.remove"), plan_path(plan), method: :delete, class: "quiet" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="lead"><%= @cleared ? t("days.cleared") : t("days.day_empty") %></p>
+<% end %>
+
+<%= form_with model: Plan.new, url: plans_path do |f| %>
+  <%= f.hidden_field :planned_on, value: @date.iso8601 %>
+  <div class="field">
+    <%= f.label :what, t("days.add") %>
+    <%= f.text_field :what, maxlength: Plan::MOST, autocomplete: "off" %>
+  </div>
+  <p><%= f.submit t("days.save") %></p>
+<% end %>
+
+<hr class="rule">
+
+<%= button_to @cleared ? t("days.unclear") : t("days.clear"),
+              day_path(@date), method: :patch, class: "quiet" %>
+
+<p class="tiny" style="margin-top:2.5rem">
+  <%= link_to t("days.back"), days_path(month: @date.strftime("%Y-%m")), class: "soft" %>
+</p>

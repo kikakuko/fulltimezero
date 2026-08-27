@@ -9,6 +9,7 @@ ko:
     en: English
 
   nav:
+    days: 날들
     moon: 달의 자취
     settings: 설정
 
@@ -131,6 +132,43 @@ ko:
     deep_winter: 깊은 겨울이다. 겨울잠은 게으름이 아니다.
     year_end: 한 해가 저문다. 남은 일은 남겨 두어도 된다.
     new_year: 새해다. 아무것도 새로 시작하지 않아도 된다.
+
+  days:
+    title: 날들
+    legend: 먹점은 일정이 있는 날, 옅은 원은 미리 비워 둔 날.
+    previous: 지난달
+    next: 다음달
+    back: 달력으로
+    day_empty: 이 날은 비어 있다.
+    cleared: 비워 두었다.
+    clear: 이 날을 비워 둔다
+    unclear: 비움을 거둔다
+    add: 무엇이 있는가
+    save: 적는다
+    remove: 지운다
+    empty_today: 오늘은 비어 있다. 잘 비웠다.
+    evening: 바쁜 하루였다. 이제 내려놓아도 된다.
+    months:
+      january: 일월
+      february: 이월
+      march: 삼월
+      april: 사월
+      may: 오월
+      june: 유월
+      july: 칠월
+      august: 팔월
+      september: 구월
+      october: 시월
+      november: 십일월
+      december: 십이월
+    weekdays:
+      sunday: 일
+      monday: 월
+      tuesday: 화
+      wednesday: 수
+      thursday: 목
+      friday: 금
+      saturday: 토
 
   privacy:
     title: 개인정보 처리방침

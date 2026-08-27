@@ -24,6 +24,8 @@
         <%= link_to t("app.name"), authenticated? ? today_path : gate_path %>
         <% if authenticated? %>
           <nav>
+            <%= link_to t("nav.days"), days_path %>
+            &nbsp;
             <%= link_to t("nav.moon"), moon_path %>
             &nbsp;
             <%= link_to t("nav.settings"), settings_path %>

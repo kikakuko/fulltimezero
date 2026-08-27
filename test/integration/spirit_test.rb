@@ -85,6 +85,48 @@ class SpiritTest < ActionDispatch::IntegrationTest
     assert_select ".smile", false, "아무 날에나 웃는다"
   end
 
+  # 숫자 금지의 유일한 예외: 달력의 날짜.
+  # 본질상 불가피하므로 허용하되, .date 안에 가둔다. 그 밖으로
+  # 한 자리라도 새어 나오면 — 특히 일정의 개수로 — 검사가 깨진다.
+  test "날들 화면의 숫자는 달력의 날짜뿐이다" do
+    user = users(:one)
+    # 사용자가 손으로 적은 말은 사용자의 것이다. 검사하는 것은 앱이
+    # 스스로 화면에 두는 숫자뿐이므로, 여기서는 앱의 말만 남긴다.
+    %w[치과 회의 저녁 약속 장보기].each { |what| user.plans.create!(planned_on: user.today, what: what) }
+    user.clearings.create!(cleared_on: user.today + 1)
+
+    %i[ko en].each do |locale|
+      sign_in_as user
+
+      [ days_path(locale: locale), day_path(user.today, locale: locale) ].each do |page|
+        get page
+        assert_response :success, "#{page} 가 열리지 않는다"
+
+        text = text_outside_dates
+        assert_no_match(/\d/, text, "#{page} 의 달력 밖에 숫자가 있다")
+        assert_no_match(/!/, text, "#{page} 에 느낌표가 있다")
+        assert_no_match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/, text, "#{page} 에 이모지가 있다")
+
+        hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+        assert_empty hosts, "#{page} 가 바깥을 부른다: #{hosts.inspect}"
+      end
+
+      sign_out
+    end
+  end
+
+  test "날짜 숫자는 언제나 제자리에 갇혀 있다" do
+    sign_in_as users(:one)
+    get days_path
+
+    # 제 몫의 글자만 본다. 자식이 지닌 숫자까지 세면 조상이 모두 걸린다.
+    loose = Nokogiri::HTML(response.body).css("body *").reject { |node| node.matches?(".date") }
+      .select { |node| node.xpath("text()").map(&:text).join[/\d/] }
+
+    assert_empty loose.map { |node| node.to_s.truncate(60) },
+      "날짜 숫자가 .date 밖으로 새어 나왔다"
+  end
+
   # 남은 시간을 스크린리더에게만 숫자로 알려주지 않는다.
   # 보이는 사람도 모르는 것을 들리는 사람에게만 알려주는 것은 형평이 아니다.
   test "앉는 중 화면은 스크린리더에게도 남은 시간을 말하지 않는다" do
@@ -175,6 +217,12 @@ class SpiritTest < ActionDispatch::IntegrationTest
     def sources
       %w[app lib config docs test].flat_map { |dir| Rails.root.join(dir).glob("**/*") }
         .select { |path| path.file? && path.extname.in?(%w[.rb .erb .js .css .md .yml]) }
+    end
+
+    def text_outside_dates
+      page = Nokogiri::HTML(response.body)
+      page.css(".date").each(&:remove)
+      page.css("body").text.gsub(/\s+/, " ")
     end
 
     def flatten_copy(node)

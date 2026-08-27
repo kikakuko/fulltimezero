@@ -1,0 +1,27 @@
+<%# 달력. 일정이 있는 날엔 먹점 하나, 비워 둔 날엔 옅은 원.
+    개수도 배지도 두지 않는다 — 있고 없음뿐이다. %>
+<h1 class="title"><%= month_name(@calendar.month) %></h1>
+
+<nav class="months tiny">
+  <%= link_to t("days.previous"), days_path(month: @calendar.previous.strftime("%Y-%m")) %>
+  <%= link_to t("days.next"), days_path(month: @calendar.following.strftime("%Y-%m")) %>
+</nav>
+
+<div class="calendar">
+  <% Calendar::WEEK.times do |index| %>
+    <span class="weekday"><%= weekday_name(index) %></span>
+  <% end %>
+
+  <% @calendar.days.each do |day| %>
+    <% if day.inside? %>
+      <%= link_to day_path(day.date), class: class_names("day", today: day.today?) do %>
+        <span class="date"><%= day.date.day %></span>
+        <span class="<%= day.planned? ? "kept" : (day.cleared? ? "clear" : "bare") %>"></span>
+      <% end %>
+    <% else %>
+      <span class="day outside"></span>
+    <% end %>
+  <% end %>
+</div>
+
+<p class="tiny"><%= t("days.legend") %></p>

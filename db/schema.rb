@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_27_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_27_130000) do
+  create_table "clearings", force: :cascade do |t|
+    t.date "cleared_on", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id", "cleared_on"], name: "index_clearings_on_user_id_and_cleared_on", unique: true
+    t.index ["user_id"], name: "index_clearings_on_user_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "planned_on", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.string "what", null: false
+    t.index ["user_id", "planned_on"], name: "index_plans_on_user_id_and_planned_on"
+    t.index ["user_id"], name: "index_plans_on_user_id"
+  end
+
   create_table "rests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "duration", null: false
@@ -53,6 +72,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_120000) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "clearings", "users"
+  add_foreign_key "plans", "users"
   add_foreign_key "rests", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "sittings", "users"
