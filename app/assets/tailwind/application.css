@@ -155,22 +155,28 @@ button.quiet {
 
 /* 오 초에 한 번만 다시 재고, 그 사이는 브라우저가 이어 붙인다.
    계단처럼 뚝뚝 끊기지 않게 하려는 것이지 움직임을 보이려는 것이 아니다. */
+/* 죽비 뒤에 입정이 온다.
+   탭과 함께 화면이 어두워지기 시작하고, 어둠이 완성될 즈음 종이
+   울리고(bell_controller 의 ENTERING), 여운이 잦아드는 그 시간이
+   좌정이 된다. 달은 종보다 늦게 떠오른다 — 소리가 먼저다. */
 @media (prefers-reduced-motion: no-preference) {
+  .night { animation: falling-dark 1.3s ease-in both; }
   .night .moon ellipse.terminator { transition: rx 5s linear; }
 
   /* 입정 응답 — 시작되었다는 확인. 한 번 또렷이 숨 쉬고,
      그 뒤로는 알아채기 어려울 만큼 완만한 리듬으로. */
-  .night .moon { animation: greet 4s ease-out both, breath 40s ease-in-out 4s infinite; }
+  .night .moon { animation: greet 4s ease-out 1.2s both, breath 40s ease-in-out 5.2s infinite; }
 
   .void { animation: deepen 40s ease-in forwards; }
   .void-line { animation: fade-away 14s ease-in forwards; }
-  .hint { animation: fade-away 12s ease-in forwards; }
+  .hint { animation: fade-away 12s ease-in 1.2s forwards; }
 
   /* 잠들었던 달이 옅게 다시 떠오른다. */
   .waking .moon { animation: waking 3.5s ease-out both; }
 }
 
-@keyframes greet { 0% { opacity: 0.3 } 30% { opacity: 1 } 100% { opacity: 0.78 } }
+@keyframes falling-dark { 0% { background: var(--paper) } 100% { background: #0b0a08 } }
+@keyframes greet { 0% { opacity: 0 } 30% { opacity: 1 } 100% { opacity: 0.78 } }
 @keyframes breath { 0%, 100% { opacity: 0.78 } 50% { opacity: 0.9 } }
 @keyframes deepen { to { background: #050505; } }
 @keyframes fade-away { 0%, 35% { opacity: 1 } 100% { opacity: 0 } }
@@ -180,14 +186,30 @@ button.quiet {
    캐릭터도 마스코트도 이모지도 더하지 않는다. 이미 있는 것에
    드물게 표정을 준다. 온기는 빈도가 낮을수록 진하다. */
 
-/* 달의 미소 — 선 두 획. 떠올랐다 이내 사라진다. */
-.smile { opacity: 0; }
+/* 월광(月光) — 보름에 닿은 그 순간에만.
+   달에 눈도 입도 그리지 않는다. 호선 둘을 얹으면 그것은 미소 띤 달이
+   아니라 얼굴이 되고, 얼굴이 되는 순간 의인화가 된다.
+   달은 표정이 아니라 빛으로 말한다.
+
+   빛무리는 어두운 바탕에서만 그린다. 빛무리는 어두운 바탕에서만
+   성립하는 물리다 — 낮하늘의 보름달에는 광배가 없다.
+   밝은 바탕에는 달 몸체의 밝아짐과 「달이 찼다」 한 줄만 남는다. */
 
 @media (prefers-reduced-motion: no-preference) {
-  .smile { animation: smiling 3s ease-in-out 0.6s both; }
+  .moonlight .disc { animation: moonlight-disc 3s ease-out both; }
 }
 
-@keyframes smiling { 0% { opacity: 0 } 25%, 65% { opacity: 0.9 } 100% { opacity: 0 } }
+@media (prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference) {
+  .moon.moonlight { animation: moonlight-halo 3s ease-out both; }
+}
+
+@keyframes moonlight-disc { 0% { opacity: 0.82 } 30% { opacity: 1 } 100% { opacity: 1 } }
+
+@keyframes moonlight-halo {
+  0% { filter: drop-shadow(0 0 0 transparent) }
+  30%, 55% { filter: drop-shadow(0 0 1.75rem color-mix(in srgb, var(--ink) 42%, transparent)) }
+  100% { filter: drop-shadow(0 0 0.5rem color-mix(in srgb, var(--ink) 12%, transparent)) }
+}
 
 /* 비운 날 아침 — 달이 살짝 크게 한 번 숨 쉰다. */
 @media (prefers-reduced-motion: no-preference) {
@@ -254,3 +276,54 @@ input[type="text"] {
   width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--rule);
   padding: 0.5rem 0; color: var(--ink); font-size: 1rem; border-radius: 0;
 }
+
+/* ── 쉼의 안내 ──────────────────────────────────────────────────────
+   여기는 카피가 아니라 산문이다. 두 문장 규정은 여기에 걸리지 않지만
+   느낌표도 이모지도 숫자도 여기에는 없다.
+   아래 규칙은 모두 안내 화면 안으로만 적용된다. */
+
+.chapters { list-style: none; padding: 0; margin: 2rem 0; }
+.chapters li { display: flex; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
+.chapters .mark { font-family: var(--serif); }
+
+.guide { margin-top: 2.5rem; }
+.guide p { margin: 1.6rem 0; }
+
+.guide blockquote {
+  margin: 2.5rem 0; padding-left: 1.25rem;
+  border-left: 1px solid var(--rule);
+}
+.guide blockquote p { font-family: var(--serif); line-height: 2; margin: 0; }
+.guide .source {
+  font-family: var(--sans); font-size: 0.75rem; color: var(--ink-soft);
+  margin-top: 0.75rem; line-height: 1.7;
+}
+
+/* 기능으로 이어지는 자리. 권하지 않으므로 본문보다 작고 옅다. */
+.guide .aside { font-size: 0.8125rem; color: var(--ink-soft); margin: 2.5rem 0; }
+
+/* 바깥으로 나가는 문. 밑줄 점선으로만 표가 난다. */
+.guide .outward {
+  text-decoration-style: dotted;
+  text-decoration-color: var(--rule);
+}
+
+/* ── 네 개의 문 ─────────────────────────────────────────────────────
+   화면 아래에 낮고 조용하게. 아이콘도 이모지도 없이 글자만.
+   지금 서 있는 자리만 조금 진하다. */
+
+.doors {
+  position: fixed; inset-inline: 0; bottom: 0;
+  display: flex; justify-content: center; gap: 1.75rem;
+  padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom));
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  font-size: 0.75rem;
+}
+
+.doors .door { color: var(--ink-soft); text-decoration: none; }
+.doors .door.here { color: var(--ink); }
+.doors .door:hover { color: var(--ink); }
+
+/* 문이 본문을 가리지 않도록 아래를 비워 둔다. */
+body:has(.doors) .sheet { padding-bottom: 8rem; }

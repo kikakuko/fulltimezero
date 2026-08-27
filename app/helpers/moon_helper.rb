@@ -11,18 +11,23 @@
 # 붙여 계단 없이 차오를 수 있다.
 module MoonHelper
   # phase: 0.0(그믐) … 1.0(보름). 오른쪽에서 차오른다.
-  def moon_svg(phase, size: 160, title: t("moon.title"), smile: false, **shade_options)
+  # moonlight: 보름에 닿은 그 순간에만 참이 된다.
+  # 달 몸체가 한 겹 또렷해지고, 어두운 바탕에서는 둘레에 옅은 빛무리가
+  # 피었다가 잔광을 남기며 내려앉는다. 빛무리는 CSS 가 그린다 —
+  # 밝은 바탕에서는 아예 그리지 않기 위해서다(형상 원칙 참조).
+  def moon_svg(phase, size: 160, title: t("moon.title"), moonlight: false, **shade_options)
     r = size / 2.0
     id = "moon-#{@moon_seq = @moon_seq.to_i + 1}"
 
     tag.svg(viewBox: "0 0 #{size} #{size}", width: size, height: size,
-            class: "moon", role: "img", "aria-label": title) do
+            class: class_names("moon", moonlight: moonlight),
+            role: "img", "aria-label": title) do
       concat tag.title(title)
       concat tag.circle(cx: r, cy: r, r: r - 0.5, fill: "none",
                         stroke: "var(--rule)", "stroke-width": 1)
       concat moon_shade(id, phase, size, **shade_options)
-      concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)", mask: "url(##{id})")
-      concat moon_smile(size) if smile
+      concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)",
+                        mask: "url(##{id})", class: "disc")
     end
   end
 
@@ -37,24 +42,6 @@ module MoonHelper
         concat tag.rect(x: r, y: 0, width: r, height: size, fill: "white")
         concat tag.ellipse(cx: r, cy: r, rx: (r * (1 - 2 * f).abs).round(2), ry: r,
                            fill: f < 0.5 ? "black" : "white", **options)
-      end
-    end
-
-    # 달의 미소. 감은 눈 같은 선 두 획, 그 이상은 그리지 않는다.
-    # 드물게만 떠오르고 이내 사라진다 — 온기는 빈도가 낮을수록 진하다.
-    def moon_smile(size)
-      r = size / 2.0
-      span = size * 0.12
-      lift = size * 0.05
-
-      tag.g(class: "smile", "aria-hidden": true, fill: "none",
-            stroke: "var(--paper)", "stroke-width": (size * 0.014).round(2),
-            "stroke-linecap": "round") do
-        [ -1, 1 ].each do |side|
-          cx = r + side * size * 0.19
-          concat tag.path(d: "M #{(cx - span / 2).round(2)} #{(r - lift).round(2)} " \
-                             "q #{(span / 2).round(2)} #{-lift} #{span.round(2)} 0")
-        end
       end
     end
 end

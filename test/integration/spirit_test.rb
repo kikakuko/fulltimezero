@@ -35,6 +35,42 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 다섯 기둥 가운데 하나가 라우트로만 존재하면 없는 기능이다.
+  # 문 넷은 늘 아래에 있되, 몰입 화면에는 없다.
+  test "네 개의 문이 늘 아래에 있다" do
+    sign_in_as users(:one)
+
+    [ today_path, moon_path, days_path, guide_path ].each do |page|
+      get page
+
+      assert_select "nav.doors a.door", count: 4, message: "#{page} 에 문이 넷이 아니다"
+      assert_select "nav.doors a.door.here", count: 1, message: "#{page} 에서 선 자리가 하나가 아니다"
+    end
+  end
+
+  test "몰입 화면은 성역이다 — 문이 없다" do
+    user = users(:one)
+    sign_in_as user
+
+    post sittings_path, params: { sitting: { length: "tea" } }
+    follow_redirect!
+    assert_select "nav.doors", false, "앉는 중에 문이 서 있다"
+
+    post nothing_path
+    follow_redirect!
+    assert_select "nav.doors", false, "무위에 문이 서 있다"
+
+    post rests_path, params: { rest: { duration: "a_while" } }
+    follow_redirect!
+    assert_select "nav.doors", false, "오늘 몫이 끝난 자리에 문이 서 있다"
+  end
+
+  test "들어오기 전에는 문이 보이지 않는다" do
+    get gate_path
+
+    assert_select "nav.doors", false
+  end
+
   # 달은 언제나 차오른다. 스물여드레의 달도, 앉음의 달도.
   # 시간의 소진이 아니라 고요의 익어감이 이 앱의 문법이다.
   test "달이 기운다는 말이 코드에도 문서에도 남아 있지 않다" do
@@ -57,32 +93,63 @@ class SpiritTest < ActionDispatch::IntegrationTest
     assert_equal "100.0", shade["rx"], "어둠이 원 전체를 덮고 있지 않다"
   end
 
-  # 온기는 빈도가 낮을수록 진하다. 표정은 정해진 순간에만 떠오른다.
-  test "달의 미소는 선 두 획을 넘지 않는다" do
-    sign_in_as users(:one)
-    post rests_path, params: { rest: { duration: "a_while" } }
-    28.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_moment") }
-    follow_redirect!
+  # 달에는 이목구비가 없다. 호선 둘을 얹는 순간 그것은 미소 띤 달이
+  # 아니라 얼굴이 되고, 얼굴이 되는 순간 의인화가 된다.
+  # 달은 표정이 아니라 빛으로 말한다.
+  test "달에 얼굴을 그리지 않는다" do
+    # 주석은 왜 그리지 않는지를 적은 자리이므로 걷어내고, 코드만 본다.
+    faces = /\bsmile\b|moon_smile|\bface\b|\beyes?\b|\bmouth\b|눈매|입매/i
 
-    assert_select ".smile path", count: 2, message: "미소가 선 두 획을 넘는다"
+    offenders = sources.reject { |path| path == Pathname(__FILE__) }
+                       .select { |path| strip_comments(path).match?(faces) }
+
+    assert_empty offenders.map { |path| path.relative_path_from(Rails.root).to_s },
+      "달에 표정을 그리는 코드가 남아 있다"
   end
 
-  test "명상 화면은 성역이다 — 앉는 중에는 표정이 없다" do
-    sign_in_as users(:one)
-    28.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_moment") }
+  # 온기는 빈도가 낮을수록 진하다. 월광은 정해진 순간에만 핀다.
+  test "월광은 보름에 닿은 그 순간에만 핀다" do
+    user = users(:one)
+    sign_in_as user
+
+    post rests_path, params: { rest: { duration: "a_while" } }
+    follow_redirect!
+    assert_select ".moonlight", false, "아무 날에나 빛이 핀다"
+
+    27.times { |i| user.rests.create!(rested_on: user.today - (i + 1), duration: "a_moment") }
+    post rests_path, params: { rest: { duration: "a_while" } }
+    follow_redirect!
+
+    assert_select ".moon.moonlight", count: 1, message: "보름에 닿았는데 빛이 없다"
+    assert_match I18n.t("moon.full"), visible_text
+  end
+
+  # 빛무리는 어두운 바탕에서만 성립하는 물리다 — 낮하늘의 보름달에는
+  # 광배가 없다. 그래서 도상에 두지 않고 CSS 로만 그린다.
+  test "빛무리는 도상에 없고 어두운 바탕에만 있다" do
+    user = users(:one)
+    sign_in_as user
+    27.times { |i| user.rests.create!(rested_on: user.today - (i + 1), duration: "a_moment") }
+    post rests_path, params: { rest: { duration: "a_while" } }
+    follow_redirect!
+
+    assert_select ".halo", false, "빛무리가 도상에 박혀 있어 밝은 바탕에서도 그려진다"
+
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    halo = css[/@media \(prefers-color-scheme: dark\)[^{]*\{[^}]*moonlight-halo/m]
+
+    assert halo, "빛무리가 어두운 바탕 안에 갇혀 있지 않다"
+  end
+
+  test "명상 화면은 성역이다 — 앉는 중에는 빛도 표정도 없다" do
+    user = users(:one)
+    sign_in_as user
+    28.times { |i| user.rests.create!(rested_on: user.today - i, duration: "a_moment") }
 
     post sittings_path, params: { sitting: { length: "tea" } }
     follow_redirect!
 
-    assert_select ".night .smile", false, "앉는 중에 달이 표정을 지었다"
-  end
-
-  test "보름에 닿지 않은 날에는 웃지 않는다" do
-    sign_in_as users(:one)
-    post rests_path, params: { rest: { duration: "a_while" } }
-    follow_redirect!
-
-    assert_select ".smile", false, "아무 날에나 웃는다"
+    assert_select ".night .moonlight", false, "앉는 중에 빛이 피었다"
   end
 
   # 숫자 금지의 유일한 예외: 달력의 날짜.
@@ -142,6 +209,10 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
   # 카피는 전량 로케일 파일에 있다. 그 안에 숫자가 하나도 없어야
   # 화면에 숫자가 없다는 말이 우연이 아니게 된다.
+  # 주소는 카피가 아니다 — 읽히는 글이 아니라 눌러서 나가는 문의
+  # 손잡이다. 화면에 글자로 나타나는 것에만 숫자 금지가 걸린다.
+  ADDRESSES = %w[link].freeze
+
   test "카피 어디에도 숫자가 없다" do
     %w[ko en].each do |locale|
       copy = YAML.load_file(Rails.root.join("config/locales/#{locale}.yml")).fetch(locale)
@@ -160,11 +231,34 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 화면이 스스로 바깥을 부르지 않는다.
+  #
+  # 링크 하나는 요청이 아니다 — 사용자가 눌러야만 열리는 문이다.
+  # 그러나 자동으로 실려 오는 것(그림·글꼴·스크립트)과 미리 이어 두는
+  # 것(preconnect·prefetch·preload)은 사용자가 부르지 않았는데도
+  # 나가는 요청이므로 하나도 둘 수 없다.
   test "어느 화면도 제3자에게 요청을 보내지 않는다" do
-    each_page do |page, locale|
-      hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
-      assert_empty hosts, "#{page}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
+    each_page { |page, locale| assert_no_outward_requests(page, locale) }
+  end
+
+  test "바깥으로 나가는 문은 눌러야만 열린다" do
+    outward = false
+
+    %i[ko en].each do |locale|
+      GuideController::CHAPTERS.each do |chapter|
+        get guide_chapter_path(chapter, locale: locale)
+        assert_no_outward_requests("guide/#{chapter}", locale)
+
+        Nokogiri::HTML(response.body).css("a[href^='http']").each do |door|
+          outward = true
+          assert_equal "_blank", door["target"], "바깥 문이 이 창을 덮어쓴다: #{door["href"]}"
+          assert_includes door["rel"].to_s, "noopener", "바깥 문에 noopener 가 없다"
+          assert_equal "false", door["data-turbo"], "터보가 바깥 문을 미리 당겨 온다"
+        end
+      end
     end
+
+    assert outward, "출전이 원문으로 이어지지 않는다"
   end
 
   test "쉼을 기록해도 알림은 한 통도 나가지 않는다" do
@@ -196,13 +290,46 @@ class SpiritTest < ActionDispatch::IntegrationTest
     copy = %i[ko en].flat_map { |l| flatten_copy(I18n.t("guide", locale: l)) }.join(" ")
     quotations = copy.scan(/[“「『]([^”」』]+)[”」』]/).flatten
 
+    # 출처 문서에서는 긴 인용문이 여러 줄로 접혀 있다. 줄바꿈이 출처
+    # 확인을 무력화해서는 안 되므로 양쪽의 공백을 고르고 견준다.
+    haystack = flatten_spaces(sources.gsub(/^\s*>\s?/, ""))
+
     quotations.each do |quotation|
-      assert_includes sources, quotation.strip,
+      assert_includes haystack, flatten_spaces(quotation),
         "인용문 #{quotation.inspect} 의 출처가 docs/SOURCES.md 에 없다"
     end
   end
 
   private
+    # 링크의 href 는 문이므로 세지 않는다. 그 밖에 바깥 주소가 실려
+    # 있으면 — src 든 미리 잇는 태그든 — 그것은 부르지 않은 요청이다.
+    def assert_no_outward_requests(page, locale)
+      page_html = Nokogiri::HTML(response.body)
+      page_html.css("a[href]").each { |link| link.remove_attribute("href") }
+
+      hosts = page_html.to_s.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+      assert_empty hosts, "#{page}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
+
+      # 임포트맵이 제 파일을 미리 잇는 것은 바깥이 아니다. 바깥 주소를
+      # 미리 잇는 것만 막는다.
+      hints = %w[preconnect dns-prefetch prefetch preload modulepreload]
+      early = Nokogiri::HTML(response.body).css("link[rel]").select do |link|
+        link["rel"].to_s.split.intersect?(hints) && link["href"].to_s.start_with?("http")
+      end
+
+      assert_empty early.map { |link| link["href"] },
+        "#{page}(#{locale}) 가 바깥을 미리 잇는다"
+    end
+
+    def flatten_spaces(text) = text.gsub(/\s+/, " ").strip
+
+    def strip_comments(path)
+      path.read
+          .gsub(%r{/\*.*?\*/}m, "")            # css
+          .gsub(%r{^\s*(#|//).*$}, "")          # ruby · js
+          .gsub(%r{<%#.*?%>}m, "")              # erb
+    end
+
     def assert_quiet_screen(name, locale)
       assert_response :success, "#{name}(#{locale}) 이 열리지 않는다"
 
@@ -227,7 +354,8 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
     def flatten_copy(node)
       case node
-      when Hash then node.values.flat_map { |v| flatten_copy(v) }
+      when Hash
+        node.reject { |key, _| key.to_s.in?(ADDRESSES) }.values.flat_map { |v| flatten_copy(v) }
       when Array then node.flat_map { |v| flatten_copy(v) }
       else [ node.to_s ]
       end

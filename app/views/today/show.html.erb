@@ -4,7 +4,10 @@
   <% content_for :no_chrome, true %>
   <% content_for :no_locales, true %>
   <div class="center">
-    <%= moon_svg(@moon.fraction, smile: @moon.full_moon?) %>
+    <%= moon_svg(@moon.fraction, moonlight: @moon.full_moon?) %>
+    <% if @moon.full_moon? %>
+      <p class="lead"><%= t("moon.full") %></p>
+    <% end %>
     <p class="lead"><%= t("today.done") %></p>
   </div>
 <% else %>
