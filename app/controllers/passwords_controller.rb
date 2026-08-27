@@ -13,7 +13,8 @@ class PasswordsController < ApplicationController
 
   def create
     if user = User.find_by(email_address: params[:email_address])
-      PasswordsMailer.reset(user).deliver_later
+      # 편지는 게이트를 지나서만 나간다. 여기서 직접 부치지 않는다.
+      SilenceGate.deliver(:password_reset, user: user) { PasswordsMailer.reset(user) }
     end
 
     redirect_to new_session_path, notice: t("passwords.sent")

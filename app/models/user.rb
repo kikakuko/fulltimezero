@@ -22,6 +22,10 @@ class User < ApplicationRecord
     rests.exists?(rested_on: today)
   end
 
+  # 앉아 있는 동안 앱은 침묵한다(SPIRIT 제4조).
+  # M2에서 Sitting 이 들어오면 끝나지 않은 자리를 본다.
+  def sitting? = false
+
   def moon
     MoonPhase.for(self)
   end
