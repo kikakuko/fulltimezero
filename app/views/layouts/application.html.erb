@@ -23,13 +23,7 @@
       <header class="chrome">
         <%= link_to t("app.name"), authenticated? ? today_path : gate_path %>
         <% if authenticated? %>
-          <nav>
-            <%= link_to t("nav.days"), days_path %>
-            &nbsp;
-            <%= link_to t("nav.moon"), moon_path %>
-            &nbsp;
-            <%= link_to t("nav.settings"), settings_path %>
-          </nav>
+          <nav><%= link_to t("nav.settings"), settings_path %></nav>
         <% end %>
       </header>
     <% end %>
@@ -49,5 +43,18 @@
         </p>
       <% end %>
     </main>
+
+    <%# 네 개의 문. 낮고 조용하게 아래에 둔다 — 주인공은 달과 물음이고
+        문들은 그 밑에 선다. 몰입 화면(앉는 중 · 무위 · 기록 직후)에는
+        내비가 없다. 성역에는 나가는 길만 있으면 된다. %>
+    <% if authenticated? && !content_for?(:no_chrome) %>
+      <nav class="doors">
+        <% { today: today_path, moon: moon_path,
+             days: days_path, guide: guide_path }.each do |name, path| %>
+          <%= link_to t("nav.#{name}"), path,
+                      class: class_names("door", here: current_page?(path)) %>
+        <% end %>
+      </nav>
+    <% end %>
   </body>
 </html>
