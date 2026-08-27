@@ -1,0 +1,151 @@
+# This app is a raft. — 이 앱도 뗏목이다.
+# 카피 규정: 두 문장 이내, 담담하게. 느낌표·이모지·숫자 지표를 쓰지 않는다.
+ko:
+  app:
+    name: fulltimezero
+
+  locales:
+    ko: 한국어
+    en: English
+
+  nav:
+    moon: 달의 자취
+    settings: 설정
+
+  gate:
+    line: 쉼은 배우는 것이 아니라 되찾는 것이다.
+    enter: 들어가기
+    sign_in: 이미 계정이 있다
+
+  users:
+    email: 이메일
+    password: 비밀번호
+    password_confirmation: 비밀번호 확인
+    new:
+      title: 시작하기
+      only_email: 이메일 외에는 아무것도 묻지 않는다.
+      submit: 시작
+      have_account: 이미 계정이 있다
+
+  sessions:
+    new:
+      title: 돌아오기
+      submit: 들어가기
+      no_account: 아직 계정이 없다
+      forgot: 비밀번호를 잊었다
+
+  today:
+    question: 오늘 쉬었는가.
+    rested: 쉬었다
+    done: 오늘 몫은 끝났다. 이제 쉬어라.
+    record_again: 한 번 더 기록하기
+
+  rests:
+    recorded: 기록되었다. 달이 조금 찼다.
+    new:
+      duration_question: 얼마나 쉬었는가
+      texture_question: 쉼의 결
+      texture_optional: 고르지 않아도 된다.
+      submit: 기록
+    durations:
+      one_breath: 한 호흡
+      a_moment: 잠깐
+      a_while: 한동안
+      a_long_while: 오래
+      time_fell_away: 시간을 잊었다
+    textures:
+      lay_down: 몸을 뉘었다
+      walked: 걸었다
+      sat_still: 고요히 앉았다
+      did_nothing: 아무것도 하지 않았다
+      other: 그 밖
+
+  moon:
+    title: 달
+    trail_label: 지난 스물여드레의 자취
+    window: 지난 스물여드레.
+
+  settings:
+    title: 설정
+    language: 언어
+    time_zone: 시간대
+    save: 저장
+    privacy: 개인정보 처리방침
+    sign_out: 나가기
+    delete_account: 계정 지우기
+    delete_confirm: 계정과 모든 기록을 지운다. 되돌릴 수 없다.
+    export:
+      title: 내보내기
+      note: 쉼 기록은 당신의 것이다. 내려받기는 곧 열린다.
+
+  guide:
+    title: 쉼의 안내
+    not_open: 아직 열리지 않았다.
+    chapters:
+      body: 몸의 쉼
+      walking: 걷는 쉼 — 경행
+      sitting: 앉은 쉼 — 좌선과 호흡
+      waking: 깨어 있는 쉼
+      complete_rest: 온전한 쉼 — 무위와 선정
+
+  privacy:
+    title: 개인정보 처리방침
+    collect: 우리는 이메일 하나만 받는다. 그 밖에 어떤 개인정보도 모으지 않는다.
+    own: 쉼 기록은 당신의 것이다. 우리는 그것을 팔지도, 넘기지도 않는다.
+    export: 기록은 언제든 통째로 내려받을 수 있다.
+    delete: 계정을 지우면 기록도 함께 즉시 사라진다.
+    third_party: 광고도, 추적기도 없다. 바깥의 어떤 분석 도구도 두지 않는다.
+
+  passwords:
+    sent: 그 이메일로 계정이 있다면 재설정 편지를 보냈다.
+    reset: 비밀번호를 바꾸었다.
+    mismatch: 두 비밀번호가 서로 다르다.
+    invalid_link: 이 링크는 이미 지났다.
+    new:
+      title: 비밀번호 다시 세우기
+      submit: 편지 받기
+    edit:
+      title: 새 비밀번호
+      submit: 바꾸기
+    mailer:
+      subject: 비밀번호 다시 세우기
+      body: 아래 링크에서 비밀번호를 다시 세울 수 있다.
+      link: 비밀번호 다시 세우기
+
+  errors:
+    try_later: 잠시 뒤에 다시.
+    sign_in_failed: 이메일이나 비밀번호가 다르다.
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email_address:
+              blank: 이메일을 적어라.
+              taken: 이미 쓰이고 있는 이메일이다.
+              invalid: 이메일 모양이 아니다.
+            password:
+              blank: 비밀번호를 적어라.
+            password_confirmation:
+              confirmation: 두 비밀번호가 서로 다르다.
+            time_zone:
+              inclusion: 알 수 없는 시간대다.
+        rest:
+          attributes:
+            duration:
+              blank: 길이를 하나 고르면 된다.
+              inclusion: 길이를 하나 고르면 된다.
+            note:
+              too_long: 메모가 너무 길다.
+    attributes:
+      user:
+        email_address: 이메일
+        password: 비밀번호
+        password_confirmation: 비밀번호 확인
+        locale: 언어
+        time_zone: 시간대
+      rest:
+        duration: 길이
+        texture: 쉼의 결
+        note: 메모

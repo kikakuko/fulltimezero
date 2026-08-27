@@ -1,0 +1,2 @@
+<p><%= t("passwords.mailer.body") %></p>
+<p><%= link_to t("passwords.mailer.link"), edit_password_url(@user.password_reset_token, locale: @user.locale) %></p>

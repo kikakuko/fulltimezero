@@ -1,0 +1,51 @@
+<%# This app is a raft. — 이 앱도 뗏목이다. %>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= content_for(:title) || t("app.name") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="fulltimezero">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <% unless content_for?(:no_chrome) %>
+      <header class="chrome">
+        <%= link_to t("app.name"), authenticated? ? today_path : gate_path %>
+        <% if authenticated? %>
+          <nav>
+            <%= link_to t("nav.moon"), moon_path %>
+            &nbsp;
+            <%= link_to t("nav.settings"), settings_path %>
+          </nav>
+        <% end %>
+      </header>
+    <% end %>
+
+    <main class="sheet">
+      <% if flash[:notice] || flash[:alert] %>
+        <p class="flash"><%= flash[:notice] || flash[:alert] %></p>
+      <% end %>
+
+      <%= yield %>
+
+      <% unless content_for?(:no_locales) %>
+        <p class="locales">
+          <% User::LOCALES.each_with_index do |l, i| %><%= " · " if i.positive? %><%=
+            l == I18n.locale.to_s ? tag.span(t("locales.#{l}")) : link_to(t("locales.#{l}"), url_for(locale: l))
+          %><% end %>
+        </p>
+      <% end %>
+    </main>
+  </body>
+</html>

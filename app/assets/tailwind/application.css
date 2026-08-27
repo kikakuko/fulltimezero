@@ -1,0 +1,114 @@
+/* This app is a raft. — 이 앱도 뗏목이다. */
+@import "tailwindcss";
+
+/* 미색 바탕 + 먹색. 다크 모드는 먹 바탕.
+   웹폰트를 내려받지 않는다 — 제3자 요청 없음(SPIRIT 제6조). */
+:root {
+  --paper: #f7f2e7;
+  --ink: #1c1a17;
+  --ink-soft: #6b655c;
+  --rule: #e2daca;
+  --serif: "Nanum Myeongjo", "AppleMyungjo", "Noto Serif KR", "Batang", "Songti SC", serif;
+  --sans: system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14120f;
+    --ink: #e8e1d2;
+    --ink-soft: #8a8375;
+    --rule: #2a2620;
+  }
+}
+
+html { background: var(--paper); }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 화면의 대부분은 비어 있어야 한다. */
+.sheet { max-width: 34rem; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+.center { text-align: center; }
+
+.lead {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  line-height: 2.1;
+  margin: 2.75rem 0;
+}
+.title { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 2rem; }
+.tiny { font-size: 0.8125rem; color: var(--ink-soft); }
+.soft { color: var(--ink-soft); }
+
+.moon { display: block; margin: 0 auto; }
+
+a { color: inherit; text-decoration: underline; text-underline-offset: 0.35em;
+    text-decoration-thickness: 1px; text-decoration-color: var(--rule); }
+a:hover { text-decoration-color: var(--ink); }
+
+.action {
+  display: inline-block; font-family: var(--serif); font-size: 1.05rem;
+  padding: 0.7rem 2.25rem; border: 1px solid var(--rule); border-radius: 999px;
+  text-decoration: none;
+}
+.action:hover { border-color: var(--ink); }
+
+.chrome {
+  display: flex; justify-content: space-between; gap: 1rem;
+  max-width: 34rem; margin: 0 auto; padding: 2rem 1.5rem 0;
+  font-size: 0.8125rem; color: var(--ink-soft);
+}
+
+.field { margin: 1.75rem 0; }
+label { display: block; font-size: 0.8125rem; color: var(--ink-soft); margin-bottom: 0.35rem; }
+input[type="email"], input[type="password"], select {
+  width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0; color: var(--ink); font-size: 1rem; border-radius: 0;
+}
+textarea {
+  width: 100%; background: transparent; border: 1px solid var(--rule);
+  padding: 0.6rem; color: var(--ink); font-size: 1rem; line-height: 1.7;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink); }
+
+/* 선택지 사이에 위계는 없다. 모두 같은 크기, 같은 색, 같은 여백. */
+.choices { list-style: none; padding: 0; margin: 1rem 0 2rem; }
+.choices li { margin: 0; }
+.choices label {
+  display: block; font-size: 1rem; color: var(--ink); font-weight: 400;
+  padding: 0.55rem 0.25rem; margin: 0; cursor: pointer;
+}
+.choices input { margin-right: 0.8rem; accent-color: var(--ink); }
+
+button, input[type="submit"] {
+  font-family: var(--serif); font-size: 1rem; background: transparent; color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 0.65rem 2rem; cursor: pointer;
+}
+button:hover { border-color: var(--ink); }
+button.plain { border: 0; padding: 0; text-decoration: underline;
+               text-decoration-color: var(--rule); text-underline-offset: 0.35em;
+               font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
+
+.trail {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 1rem;
+  max-width: 17rem; margin: 3rem auto;
+}
+.trail span { width: 0.5rem; height: 0.5rem; border-radius: 50%; justify-self: center; }
+.trail .on { background: var(--ink); }
+.trail .off { background: var(--rule); }
+
+.flash { text-align: center; font-family: var(--serif); margin-bottom: 2.5rem; }
+.rule { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0; }
+.locales { margin-top: 5rem; text-align: right; font-size: 0.75rem; color: var(--ink-soft); }
+.errors { font-size: 0.8125rem; color: var(--ink-soft); margin-bottom: 1.5rem; }
+.errors li { list-style: none; }
+
+/* 트랜지션은 없거나 느리다. */
+@media (prefers-reduced-motion: no-preference) {
+  a, button, .action { transition: border-color 400ms ease, text-decoration-color 400ms ease; }
+}

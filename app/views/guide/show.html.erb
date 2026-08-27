@@ -1,0 +1,9 @@
+<%# M3 「쉼의 안내」 — 스텁. 본문은 아직 없다. %>
+<h1 class="title"><%= t("guide.title") %></h1>
+<p class="lead"><%= t("guide.not_open") %></p>
+
+<ol class="tiny">
+  <% %w[body walking sitting waking complete_rest].each do |chapter| %>
+    <li><%= t("guide.chapters.#{chapter}") %></li>
+  <% end %>
+</ol>

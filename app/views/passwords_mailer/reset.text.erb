@@ -1,0 +1,3 @@
+<%= t("passwords.mailer.body") %>
+
+<%= edit_password_url(@user.password_reset_token, locale: @user.locale) %>

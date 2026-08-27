@@ -1,0 +1,13 @@
+<h1 class="title"><%= t("passwords.edit.title") %></h1>
+
+<%= form_with url: password_path(params[:token]), method: :put do |f| %>
+  <div class="field">
+    <%= f.label :password, t("users.password") %>
+    <%= f.password_field :password, autofocus: true, autocomplete: "new-password", required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation, t("users.password_confirmation") %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
+  </div>
+  <p style="margin-top:2rem"><%= f.submit t("passwords.edit.submit") %></p>
+<% end %>

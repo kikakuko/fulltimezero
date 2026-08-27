@@ -1,0 +1,29 @@
+<h1 class="title"><%= t("users.new.title") %></h1>
+
+<%= form_with model: @user, url: users_path do |f| %>
+  <%= render "shared/errors", record: @user %>
+
+  <div class="field">
+    <%= f.label :email_address, t("users.email") %>
+    <%= f.email_field :email_address, autofocus: true, autocomplete: "username", required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password, t("users.password") %>
+    <%= f.password_field :password, autocomplete: "new-password", required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, t("users.password_confirmation") %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
+  </div>
+
+  <p class="tiny"><%= t("users.new.only_email") %></p>
+
+  <%= f.hidden_field :time_zone, data: { controller: "time-zone" } %>
+
+  <p style="margin-top:2.5rem"><%= f.submit t("users.new.submit") %></p>
+<% end %>
+
+<hr class="rule">
+<p class="tiny"><%= link_to t("users.new.have_account"), new_session_path %></p>

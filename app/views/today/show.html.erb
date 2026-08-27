@@ -1,0 +1,18 @@
+<% if @done %>
+  <%# 오늘 몫은 끝났다. 이 화면에는 할 일이 없다. %>
+  <% content_for :no_chrome, true %>
+  <% content_for :no_locales, true %>
+  <div class="center">
+    <%= moon_svg(@moon.fraction) %>
+    <p class="lead"><%= t("today.done") %></p>
+    <p class="tiny" style="margin-top:4rem">
+      <%= link_to t("today.record_again"), new_rest_path, class: "soft" %>
+    </p>
+  </div>
+<% else %>
+  <div class="center">
+    <%= moon_svg(@moon.fraction) %>
+    <p class="lead"><%= t("today.question") %></p>
+    <p><%= link_to t("today.rested"), new_rest_path, class: "action" %></p>
+  </div>
+<% end %>

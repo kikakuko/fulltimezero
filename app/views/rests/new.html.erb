@@ -1,0 +1,30 @@
+<%= form_with model: @rest, url: rests_path do |f| %>
+  <%= render "shared/errors", record: @rest %>
+
+  <h1 class="title"><%= t("rests.new.duration_question") %></h1>
+  <ul class="choices">
+    <% Rest::DURATIONS.each do |value| %>
+      <li>
+        <%= f.label "duration_#{value}" do %>
+          <%= f.radio_button :duration, value, required: true %>
+          <%= t("rests.durations.#{value}") %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2 class="title"><%= t("rests.new.texture_question") %></h2>
+  <ul class="choices">
+    <% Rest::TEXTURES.each do |value| %>
+      <li>
+        <%= f.label "texture_#{value}" do %>
+          <%= f.radio_button :texture, value %>
+          <%= t("rests.textures.#{value}") %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <p class="tiny"><%= t("rests.new.texture_optional") %></p>
+
+  <p style="margin-top:3rem"><%= f.submit t("rests.new.submit") %></p>
+<% end %>

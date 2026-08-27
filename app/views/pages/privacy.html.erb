@@ -1,0 +1,4 @@
+<h1 class="title"><%= t("privacy.title") %></h1>
+<% %w[collect own export delete third_party].each do |key| %>
+  <p><%= t("privacy.#{key}") %></p>
+<% end %>

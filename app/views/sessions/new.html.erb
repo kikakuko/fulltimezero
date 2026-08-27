@@ -1,0 +1,22 @@
+<h1 class="title"><%= t("sessions.new.title") %></h1>
+
+<%= form_with url: session_path do |f| %>
+  <div class="field">
+    <%= f.label :email_address, t("users.email") %>
+    <%= f.email_field :email_address, autofocus: true, autocomplete: "username", required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password, t("users.password") %>
+    <%= f.password_field :password, autocomplete: "current-password", required: true %>
+  </div>
+
+  <p style="margin-top:2.5rem"><%= f.submit t("sessions.new.submit") %></p>
+<% end %>
+
+<hr class="rule">
+<p class="tiny">
+  <%= link_to t("sessions.new.no_account"), new_user_path %>
+  &nbsp;·&nbsp;
+  <%= link_to t("sessions.new.forgot"), new_password_path %>
+</p>

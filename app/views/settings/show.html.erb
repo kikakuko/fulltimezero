@@ -1,0 +1,40 @@
+<h1 class="title"><%= t("settings.title") %></h1>
+
+<%= form_with model: @user, url: settings_path, method: :patch do |f| %>
+  <%= render "shared/errors", record: @user %>
+
+  <div class="field">
+    <%= label_tag nil, t("settings.language") %>
+    <ul class="choices">
+      <% User::LOCALES.each do |l| %>
+        <li>
+          <%= f.label "locale_#{l}" do %>
+            <%= f.radio_button :locale, l %>
+            <%= t("locales.#{l}") %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="field">
+    <%= f.label :time_zone, t("settings.time_zone") %>
+    <%= f.select :time_zone, time_zone_choices(@user) %>
+  </div>
+
+  <p style="margin-top:2rem"><%= f.submit t("settings.save") %></p>
+<% end %>
+
+<hr class="rule">
+
+<h2 class="title"><%= t("settings.export.title") %></h2>
+<p class="tiny"><%= t("settings.export.note") %></p>
+
+<hr class="rule">
+
+<p class="tiny"><%= link_to t("settings.privacy"), privacy_path %></p>
+<p class="tiny"><%= button_to t("settings.sign_out"), session_path, method: :delete, class: "plain" %></p>
+<p class="tiny">
+  <%= button_to t("settings.delete_account"), account_path, method: :delete, class: "plain",
+        form: { data: { turbo_confirm: t("settings.delete_confirm") } } %>
+</p>

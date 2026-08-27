@@ -1,0 +1,7 @@
+<% content_for :no_chrome, true %>
+<div class="center">
+  <%= moon_svg(0.5, size: 132) %>
+  <p class="lead"><%= t("gate.line") %></p>
+  <p><%= link_to t("gate.enter"), new_user_path, class: "action" %></p>
+  <p class="tiny" style="margin-top:2.5rem"><%= link_to t("gate.sign_in"), new_session_path %></p>
+</div>

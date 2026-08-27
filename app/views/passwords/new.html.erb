@@ -1,0 +1,9 @@
+<h1 class="title"><%= t("passwords.new.title") %></h1>
+
+<%= form_with url: passwords_path do |f| %>
+  <div class="field">
+    <%= f.label :email_address, t("users.email") %>
+    <%= f.email_field :email_address, autofocus: true, autocomplete: "username", required: true %>
+  </div>
+  <p style="margin-top:2rem"><%= f.submit t("passwords.new.submit") %></p>
+<% end %>

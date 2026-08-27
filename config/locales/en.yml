@@ -1,0 +1,151 @@
+# This app is a raft.
+# Copy rule: two sentences at most, plainly. No exclamation marks, no emoji, no metrics.
+en:
+  app:
+    name: fulltimezero
+
+  locales:
+    ko: 한국어
+    en: English
+
+  nav:
+    moon: The moon's trail
+    settings: Settings
+
+  gate:
+    line: Rest is not learned. It is remembered.
+    enter: Enter
+    sign_in: I already have an account
+
+  users:
+    email: Email
+    password: Password
+    password_confirmation: Password again
+    new:
+      title: Begin
+      only_email: We ask for nothing but an email address.
+      submit: Begin
+      have_account: I already have an account
+
+  sessions:
+    new:
+      title: Come back
+      submit: Enter
+      no_account: I don't have an account yet
+      forgot: I forgot my password
+
+  today:
+    question: Have you rested today?
+    rested: I rested
+    done: Today's share is done. Now rest.
+    record_again: Record once more
+
+  rests:
+    recorded: Recorded. The moon is a little fuller.
+    new:
+      duration_question: How long did you rest
+      texture_question: The texture of the rest
+      texture_optional: You don't have to choose.
+      submit: Record
+    durations:
+      one_breath: one breath
+      a_moment: a moment
+      a_while: a while
+      a_long_while: a long while
+      time_fell_away: time fell away
+    textures:
+      lay_down: lay down
+      walked: walked
+      sat_still: sat still
+      did_nothing: did nothing
+      other: something else
+
+  moon:
+    title: The moon
+    trail_label: The trail of the last four weeks
+    window: The last four weeks.
+
+  settings:
+    title: Settings
+    language: Language
+    time_zone: Time zone
+    save: Save
+    privacy: Privacy
+    sign_out: Sign out
+    delete_account: Delete account
+    delete_confirm: This erases your account and every record. It cannot be undone.
+    export:
+      title: Export
+      note: Your rest is yours. Downloading opens soon.
+
+  guide:
+    title: A Guide to Rest
+    not_open: Not open yet.
+    chapters:
+      body: The body's rest
+      walking: Walking rest — kinhin
+      sitting: Sitting rest — zazen and the breath
+      waking: Rest while awake
+      complete_rest: Complete rest — doing nothing, and stillness
+
+  privacy:
+    title: Privacy
+    collect: We take one email address and nothing else. No other personal data is collected.
+    own: Your rest records are yours. We neither sell them nor hand them on.
+    export: You can download everything you have written, at any time.
+    delete: Delete your account and the records go with it, at once.
+    third_party: No advertising, no trackers, no third-party analytics.
+
+  passwords:
+    sent: If an account exists for that address, a reset letter is on its way.
+    reset: Your password has been changed.
+    mismatch: The two passwords did not match.
+    invalid_link: This link has expired.
+    new:
+      title: Reset your password
+      submit: Send the letter
+    edit:
+      title: A new password
+      submit: Change it
+    mailer:
+      subject: Reset your password
+      body: You can set a new password at the link below.
+      link: Reset your password
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email_address:
+              blank: can't be blank.
+              taken: is already in use.
+              invalid: doesn't look like an email address.
+            password:
+              blank: can't be blank.
+            password_confirmation:
+              confirmation: doesn't match the password.
+            time_zone:
+              inclusion: is not a time zone we know.
+        rest:
+          attributes:
+            duration:
+              blank: needs one choice.
+              inclusion: needs one choice.
+            note:
+              too_long: is too long.
+    attributes:
+      user:
+        email_address: Email
+        password: Password
+        password_confirmation: Password again
+        locale: Language
+        time_zone: Time zone
+      rest:
+        duration: Length
+        texture: Texture
+        note: Note
+
+  errors:
+    try_later: Try again in a while.
+    sign_in_failed: That email address or password did not match.
