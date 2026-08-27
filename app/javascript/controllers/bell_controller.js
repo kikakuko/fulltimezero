@@ -4,16 +4,18 @@
 // 다루는 코드가 있어서는 안 된다(test/integration/silence_test.rb).
 // 울릴지 말지는 서버의 침묵 게이트가 이미 정해서 건네준다.
 //
-// 파일이 먼저다. app/assets/sounds/ 에 종이 있으면 그것으로 울고,
-// 없으면 아래에서 합성한다. 합성음의 기준은 "전자 알림음"이 아니라
-// "종의 여운"이다 — 싱잉볼은 배음이 정수배가 아니고, 여운이 길다.
-// 여운이 뚝 끊기면 실패다.
+// 소리는 사용자가 손을 댄 그 순간에 난다. 죽비가 먼저, 입정이 다음이다.
+// 브라우저는 사용자의 손짓 없이 시작된 소리를 막는다. 그래서
+// 오디오 컨텍스트는 「앉는다」를 누르는 그 손짓 안에서 깨우고,
+// 깨어난 컨텍스트를 문서 전체가 함께 쓴다. Turbo 는 문서를 갈아치우지
+// 않으므로 앉기 화면에서 깨운 것이 앉는 자리까지 살아서 따라온다 —
+// 마침종이 지체 없이 울리는 이유다.
 import { Controller } from "@hotwired/stimulus"
 
 const BASE = 196 // 기본음
 const TAIL = 24 // 여운. 스물넉 초. 스무 초 아래로 내리지 않는다.
 
-// 싱잉볼의 비조화 배음. 정수배가 아니어서 종처럼 들린다.
+// 싱잉볼은 배음이 정수배가 아니다. 그래서 알림음이 아니라 종으로 들린다.
 const PARTIALS = [
   { ratio: 1.0, gain: 1.0, tail: 1.0 },
   { ratio: 2.7, gain: 0.42, tail: 0.55 },
@@ -21,17 +23,63 @@ const PARTIALS = [
   { ratio: 8.93, gain: 0.07, tail: 0.16 }
 ]
 
-export default class extends Controller {
-  static values = { enabled: Boolean, startUrl: String, endUrl: String }
+// 문서 하나에 컨텍스트 하나. Turbo 전환을 건너 살아남는다.
+let shared = null
 
-  opening() { this.ring(this.startUrlValue) }
-  closing() { this.ring(this.endUrlValue) }
+function wake() {
+  const Sound = window.AudioContext || window.webkitAudioContext
+  if (!Sound) return null
+
+  if (!shared) shared = new Sound()
+  if (shared.state !== "running") shared.resume().catch(() => {})
+
+  return shared
+}
+
+export default class extends Controller {
+  static targets = ["switch"]
+  static values = { enabled: Boolean, startUrl: String, endUrl: String, measure: Boolean }
+
+  // 「앉는다」를 누르는 그 손짓 안에서 불린다. 화면이 어두워지기 전이다.
+  open(event) {
+    if (!this.wanted()) return
+
+    this.at = event?.timeStamp
+    this.ring(this.startUrlValue)
+  }
+
+  closing() {
+    if (!this.wanted()) return
+
+    this.at = null
+    this.ring(this.endUrlValue)
+  }
+
+  // 게이트가 열어 두었고, 사용자가 종을 켜 두었을 때만.
+  wanted() {
+    if (!this.enabledValue) return false
+
+    return this.hasSwitchTarget ? this.switchTarget.checked : true
+  }
 
   ring(url) {
-    if (!this.enabledValue) return // 게이트가 막았거나 사용자가 끈 자리다.
+    const ctx = wake()
+    if (!ctx) return
 
+    if (ctx.state === "running") return this.sound(ctx, url)
+
+    // 아직 깨지 않았으면 깬 뒤에 친다. 얼어붙은 시간선에 예약해 두었다가
+    // 한참 뒤에 놀래키지 않는다. 끝내 깨지 못하면 그냥 조용한 것이다.
+    ctx.resume().then(() => this.sound(ctx, url)).catch(() => {})
+  }
+
+  sound(ctx, url) {
     if (url) this.playFile(url)
-    else this.synthesize()
+    else this.synthesize(ctx)
+
+    if (this.measureValue && this.at) {
+      console.debug(`종성: ${Math.round(performance.now() - this.at)}ms`)
+    }
   }
 
   playFile(url) {
@@ -39,10 +87,7 @@ export default class extends Controller {
     audio.play().catch(() => {}) // 브라우저가 막으면 그냥 조용한 것이다.
   }
 
-  synthesize() {
-    const ctx = this.context
-    if (!ctx) return
-
+  synthesize(ctx) {
     const at = ctx.currentTime + 0.02
     const out = ctx.createGain()
     out.gain.value = 0.22
@@ -71,17 +116,5 @@ export default class extends Controller {
     osc.connect(gain).connect(out)
     osc.start(at)
     osc.stop(at + tail + 1)
-  }
-
-  get context() {
-    if (this.ctx) return this.ctx
-
-    const Sound = window.AudioContext || window.webkitAudioContext
-    if (!Sound) return null
-
-    this.ctx = new Sound()
-    if (this.ctx.state === "suspended") this.ctx.resume().catch(() => {})
-
-    return this.ctx
   }
 }

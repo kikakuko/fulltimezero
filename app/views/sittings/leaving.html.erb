@@ -1,8 +1,11 @@
-<%# 무위에서 나오는 길. 한 번만 묻고, 다시 붙잡지 않는다. %>
+<%# 무위에서 나오는 길. 잠들었던 달이 옅게 다시 떠오른다.
+    한 번만 묻고, 다시 붙잡지 않는다. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
 <div class="center">
+  <div class="waking"><%= moon_svg(@moon.fraction, size: 120) %></div>
+
   <p class="lead"><%= t("nothing.keep_question") %></p>
 
   <p><%= link_to t("nothing.keep"),

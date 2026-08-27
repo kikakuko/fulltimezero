@@ -25,16 +25,16 @@ class SittingLength
     @name = NAMES.include?(name.to_s) ? name.to_s : DEFAULT
   end
 
-  # 정함 없이 앉으면 기울 것이 없다.
+  # 정함 없이 앉으면 닿을 목표 시점이 없다.
   def open? = MINUTES[name].nil?
 
   def seconds = MINUTES[name].to_i * 60
 
   # 새로고침해도 앉은 자리가 처음부터 다시 시작하지 않도록,
-  # 남은 만큼만 브라우저에 건넨다.
-  def seconds_left(since)
-    return 0 if open?
+  # 앉은 만큼을 브라우저에 건넨다. 달은 그 자리에서 이어 차오른다.
+  def seconds_done(since)
+    done = (Time.current - since).round
 
-    (seconds - (Time.current - since)).clamp(0, seconds).round
+    open? ? done : done.clamp(0, seconds)
   end
 end

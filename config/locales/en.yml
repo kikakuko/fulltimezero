@@ -106,6 +106,7 @@ en:
       long: a long sit
       open: open-ended
     sitting: Sitting
+    hint: The moon fills slowly. You don't need to watch.
     finish: Finish
     done: You sat. The moon is a little fuller.
 
@@ -115,6 +116,21 @@ en:
     keep_question: Would you like to keep this as rest?
     keep: Keep it
     just_leave: Just leave
+
+  greetings:
+    sunday: It is Sunday. The world rests a little too.
+    saturday: Saturday mornings are allowed to be slow.
+    monday: A new week. It does not have to start in a hurry.
+    spring: The light is getting longer.
+    late_spring: The wind has gone soft.
+    summer: This is the season for shade.
+    deep_summer: You may skip the middle of the day.
+    autumn: The air has cleared.
+    late_autumn: The days are short now. It is fine to end early.
+    winter: On cold days the inside grows wider.
+    deep_winter: Deep winter. Sleeping through it is not laziness.
+    year_end: The year is closing. What is left can stay left.
+    new_year: A new year. Nothing has to begin.
 
   privacy:
     title: Privacy

@@ -1,7 +1,11 @@
-<%# 앉기. 길이는 글자로만 적는다 — 숫자는 화면에 없다. %>
+<%# 앉기. 길이는 글자로만 적는다 — 숫자는 화면에 없다.
+    종성은 「앉는다」를 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
 <h1 class="title"><%= t("sittings.new.title") %></h1>
 
-<%= form_with url: sittings_path, scope: :sitting do |f| %>
+<%= form_with url: sittings_path, scope: :sitting,
+              data: { controller: "bell", bell_enabled_value: @bell,
+                      bell_start_url_value: bell_source(:start),
+                      bell_measure_value: Rails.env.development? } do |f| %>
   <ul class="choices">
     <% SittingLength::NAMES.each do |name| %>
       <li>
@@ -16,27 +20,37 @@
   <ul class="choices">
     <li>
       <%= f.label :bell do %>
-        <%= f.check_box :bell, checked: true %>
+        <%= f.check_box :bell, checked: true, data: { bell_target: "switch" } %>
         <%= t("sittings.new.bell") %>
       <% end %>
     </li>
   </ul>
 
-  <p style="margin-top:2.5rem"><%= f.submit t("sittings.new.submit") %></p>
+  <p style="margin-top:2.5rem">
+    <%= f.submit t("sittings.new.submit"), data: { action: "click->bell#open" } %>
+  </p>
 <% end %>
 
 <hr class="rule">
 
-<%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있다. %>
-<%= form_with url: nothing_path do %>
+<%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있고,
+    켜 두었으면 들어가는 그 손짓에 한 번만 울린다. 마침종은 없다. %>
+<%= form_with url: nothing_path,
+              data: { controller: "bell", bell_enabled_value: @bell,
+                      bell_start_url_value: bell_source(:start),
+                      bell_measure_value: Rails.env.development? } do %>
   <ul class="choices">
     <li>
       <%= label_tag :bell do %>
-        <%= check_box_tag :bell, "1", false %>
+        <%= check_box_tag :bell, "1", false, data: { bell_target: "switch" } %>
         <%= t("sittings.new.nothing_bell") %>
       <% end %>
     </li>
   </ul>
 
-  <p><button type="submit" class="quiet"><%= t("sittings.new.nothing") %></button></p>
+  <p>
+    <button type="submit" class="quiet" data-action="click->bell#open">
+      <%= t("sittings.new.nothing") %>
+    </button>
+  </p>
 <% end %>

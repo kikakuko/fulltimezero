@@ -124,13 +124,19 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 }
 
 .night { background: #0b0a08; color: #cfc7b6; }
-.night .moon path { fill: #cfc7b6; }
+.night .moon circle[mask] { fill: #cfc7b6; }
 .night .moon circle { stroke: #1e1b16; }
 
 .void { background: #14120f; color: #4a463f; }
 .void-line { font-family: var(--serif); font-size: 1.25rem; text-align: center; padding: 0 1.5rem; }
 
-.leave { position: fixed; right: 1.5rem; bottom: 1.5rem; }
+/* 지켜보지 않아도 된다는 말. 잠시 떴다 사라진다. */
+.hint {
+  font-size: 0.8125rem; color: #45403a; text-align: center;
+  margin-top: 3rem; padding: 0 1.5rem;
+}
+
+.leave { position: fixed; right: 1.5rem; bottom: 1.5rem; transition: opacity 900ms ease; }
 .leave .quiet {
   border: 0; padding: 0; background: transparent; cursor: pointer;
   font-family: var(--sans); font-size: 0.75rem; color: #3f3a33;
@@ -138,7 +144,6 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
   text-decoration-color: #2a2620;
 }
 .leave.veiled { opacity: 0; pointer-events: none; }
-.leave { transition: opacity 900ms ease; }
 
 /* 무위로 가는 길. 권하지 않으므로 버튼이 아니다. */
 button.quiet {
@@ -148,13 +153,57 @@ button.quiet {
   text-decoration-color: var(--rule); cursor: pointer;
 }
 
-/* 달은 숨 쉬고, 어둠은 잠긴다. 모두 아주 느리게. */
+/* 오 초에 한 번만 다시 재고, 그 사이는 브라우저가 이어 붙인다.
+   계단처럼 뚝뚝 끊기지 않게 하려는 것이지 움직임을 보이려는 것이 아니다. */
 @media (prefers-reduced-motion: no-preference) {
-  .night .moon { animation: breath 10s ease-in-out infinite; }
+  .night .moon ellipse.terminator { transition: rx 5s linear; }
+
+  /* 입정 응답 — 시작되었다는 확인. 한 번 또렷이 숨 쉬고,
+     그 뒤로는 알아채기 어려울 만큼 완만한 리듬으로. */
+  .night .moon { animation: greet 4s ease-out both, breath 40s ease-in-out 4s infinite; }
+
   .void { animation: deepen 40s ease-in forwards; }
   .void-line { animation: fade-away 14s ease-in forwards; }
+  .hint { animation: fade-away 12s ease-in forwards; }
+
+  /* 잠들었던 달이 옅게 다시 떠오른다. */
+  .waking .moon { animation: waking 3.5s ease-out both; }
 }
 
-@keyframes breath { 0%, 100% { opacity: 0.72 } 50% { opacity: 1 } }
+@keyframes greet { 0% { opacity: 0.3 } 30% { opacity: 1 } 100% { opacity: 0.78 } }
+@keyframes breath { 0%, 100% { opacity: 0.78 } 50% { opacity: 0.9 } }
 @keyframes deepen { to { background: #050505; } }
 @keyframes fade-away { 0%, 35% { opacity: 1 } 100% { opacity: 0 } }
+@keyframes waking { 0% { opacity: 0 } 100% { opacity: 1 } }
+
+/* ── 온기 ───────────────────────────────────────────────────────────
+   캐릭터도 마스코트도 이모지도 더하지 않는다. 이미 있는 것에
+   드물게 표정을 준다. 온기는 빈도가 낮을수록 진하다. */
+
+/* 달의 미소 — 선 두 획. 떠올랐다 이내 사라진다. */
+.smile { opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .smile { animation: smiling 3s ease-in-out 0.6s both; }
+}
+
+@keyframes smiling { 0% { opacity: 0 } 25%, 65% { opacity: 0.9 } 100% { opacity: 0 } }
+
+/* 비운 날 아침 — 달이 살짝 크게 한 번 숨 쉰다. */
+@media (prefers-reduced-motion: no-preference) {
+  .cleared .moon { animation: fuller 5s ease-in-out both; }
+}
+
+@keyframes fuller { 0%, 100% { transform: scale(1) } 45% { transform: scale(1.06) } }
+
+/* 완료의 순간은 어디서나 같은 결로 응답한다. 살짝 눌리고, 은은한 잔광. 무음. */
+button:active, input[type="submit"]:active, .action:active {
+  transform: scale(0.985);
+  box-shadow: 0 0 0 0.4rem color-mix(in srgb, var(--rule) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  button, input[type="submit"], .action {
+    transition: transform 150ms ease, box-shadow 150ms ease, border-color 400ms ease;
+  }
+}

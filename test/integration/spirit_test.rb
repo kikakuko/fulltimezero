@@ -35,6 +35,56 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 달은 언제나 차오른다. 스물여드레의 달도, 앉음의 달도.
+  # 시간의 소진이 아니라 고요의 익어감이 이 앱의 문법이다.
+  test "달이 기운다는 말이 코드에도 문서에도 남아 있지 않다" do
+    leftovers = sources.reject { |path| path == Pathname(__FILE__) }
+                       .select { |path| path.read.match?(/기운다|기욺|기울\s*고/) }
+
+    assert_empty leftovers.map { |path| path.relative_path_from(Rails.root).to_s },
+      "달이 기운다는 서술이 남아 있다"
+  end
+
+  test "앉음의 달은 그믐에서 시작한다" do
+    sign_in_as users(:one)
+    post sittings_path, params: { sitting: { length: "tea", bell: "1" } }
+    follow_redirect!
+
+    shade = Nokogiri::HTML(response.body).css(".night .moon ellipse").first
+
+    assert shade, "앉음의 달에 가리개가 없다"
+    assert_equal "black", shade["fill"], "그믐이 아니라 이미 밝은 채로 시작한다"
+    assert_equal "100.0", shade["rx"], "어둠이 원 전체를 덮고 있지 않다"
+  end
+
+  # 온기는 빈도가 낮을수록 진하다. 표정은 정해진 순간에만 떠오른다.
+  test "달의 미소는 선 두 획을 넘지 않는다" do
+    sign_in_as users(:one)
+    post rests_path, params: { rest: { duration: "a_while" } }
+    28.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_moment") }
+    follow_redirect!
+
+    assert_select ".smile path", count: 2, message: "미소가 선 두 획을 넘는다"
+  end
+
+  test "명상 화면은 성역이다 — 앉는 중에는 표정이 없다" do
+    sign_in_as users(:one)
+    28.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_moment") }
+
+    post sittings_path, params: { sitting: { length: "tea" } }
+    follow_redirect!
+
+    assert_select ".night .smile", false, "앉는 중에 달이 표정을 지었다"
+  end
+
+  test "보름에 닿지 않은 날에는 웃지 않는다" do
+    sign_in_as users(:one)
+    post rests_path, params: { rest: { duration: "a_while" } }
+    follow_redirect!
+
+    assert_select ".smile", false, "아무 날에나 웃는다"
+  end
+
   # 남은 시간을 스크린리더에게만 숫자로 알려주지 않는다.
   # 보이는 사람도 모르는 것을 들리는 사람에게만 알려주는 것은 형평이 아니다.
   test "앉는 중 화면은 스크린리더에게도 남은 시간을 말하지 않는다" do
@@ -120,6 +170,11 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
       hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
       assert_empty hosts, "#{name}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
+    end
+
+    def sources
+      %w[app lib config docs test].flat_map { |dir| Rails.root.join(dir).glob("**/*") }
+        .select { |path| path.file? && path.extname.in?(%w[.rb .erb .js .css .md .yml]) }
     end
 
     def flatten_copy(node)

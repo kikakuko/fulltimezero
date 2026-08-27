@@ -3,7 +3,7 @@
 <% content_for :no_locales, true %>
 
 <div class="center">
-  <%= moon_svg(@moon.fraction) %>
+  <%= moon_svg(@moon.fraction, smile: @moon.full_moon?) %>
   <p class="lead"><%= t("sittings.done") %></p>
   <p class="lead"><%= t("today.done") %></p>
 </div>

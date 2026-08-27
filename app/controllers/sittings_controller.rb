@@ -7,6 +7,7 @@ class SittingsController < ApplicationController
 
   def new
     @length = SittingLength.new(SittingLength::DEFAULT)
+    @bell = SilenceGate.allow?(:bell, user: Current.user)
   end
 
   # 길이와 종성은 그 자리의 설정이므로 저장하지 않고 주소로 지닌다.
@@ -30,12 +31,12 @@ class SittingsController < ApplicationController
 
     if @sitting.ended?
       @moon = Current.user.moon
-      render @sitting.nothing? ? :leaving : :done
+      render(@sitting.nothing? ? :leaving : :done)
     elsif @sitting.nothing?
       render :nothing
     else
       @length = SittingLength.new(params[:length])
-      @seconds = @length.seconds_left(@sitting.created_at)
+      @elapsed = @length.seconds_done(@sitting.created_at)
       render :sitting
     end
   end

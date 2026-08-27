@@ -37,6 +37,49 @@ class SilenceTest < ActionDispatch::IntegrationTest
 
   # ── 종성 ──────────────────────────────────────────────────────────
 
+  # 스티뮬러스의 Controller 는 생성자에서 this.context 를 대입한다.
+  # 컨트롤러가 같은 이름의 접근자를 두면 그 대입이 터지고, 컨트롤러는
+  # 아예 붙지 않는다 — 종이 영영 울리지 않는다. 실제로 그랬다.
+  test "컨트롤러가 스티뮬러스의 이름을 가리지 않는다" do
+    reserved = %w[context element scope identifier application dispatch]
+
+    controllers.each do |path|
+      source = path.read
+
+      reserved.each do |name|
+        assert_no_match(/\b(get|set) #{name}\s*\(/, source,
+          "#{path.basename} 이 스티뮬러스의 #{name} 을 가린다")
+      end
+    end
+  end
+
+  # 소리는 사용자가 손을 댄 그 순간에 난다. 화면이 바뀐 뒤에 나면
+  # 브라우저가 막고, 막힌 소리는 한참 뒤에 엉뚱하게 울린다.
+  test "시작종은 누르는 손짓 안에서 울린다" do
+    sign_in_as users(:one)
+    get new_sitting_path
+
+    assert_select "form[data-controller=bell] [data-action*='click->bell#open']",
+      count: 2, message: "앉기와 무위 모두 손짓 안에서 종을 쳐야 한다"
+  end
+
+  test "앉는 자리에서 시작종을 다시 치지 않는다" do
+    sign_in_as users(:one)
+    post sittings_path, params: { sitting: { length: "tea", bell: "1" } }
+    follow_redirect!
+
+    assert_no_match(/bell:open/, response.body,
+      "이미 울린 시작종을 화면이 바뀐 뒤에 또 친다")
+    assert_select ".night[data-action*='bell:close']"
+  end
+
+  test "잠든 컨텍스트의 얼어붙은 시간선에 소리를 예약해 두지 않는다" do
+    assert_match(/state === "running"/, bell_source,
+      "깨어 있는지 확인하지 않고 소리를 예약한다. 한참 뒤에 울리게 된다.")
+    assert_match(/resume\(\)\.then/, bell_source,
+      "깨운 뒤에 치는 길이 없다")
+  end
+
   test "종성의 여운은 스무 초 아래로 내려가지 않는다" do
     tail = bell_source[/const TAIL = (\d+)/, 1]&.to_i
 
@@ -151,6 +194,8 @@ class SilenceTest < ActionDispatch::IntegrationTest
 
   private
     def bell_source = Rails.root.join(BELL).read
+
+    def controllers = Rails.root.join("app/javascript/controllers").glob("*_controller.js")
 
     def sources(glob)
       %w[app lib config].flat_map { |dir| Rails.root.join(dir).glob(glob) }.select(&:file?)

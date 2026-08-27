@@ -1,6 +1,7 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
-// 무위. 아무것도 주지 않는다.
+// 무위. 아무것도 주지 않는다. 종성은 들어오는 손짓에서 이미 울렸다 —
+// 여기에는 소리도, 달도, 진행도 없다.
 // 나가는 길은 보이지 않지만, 화면 어디를 눌러도 잠시 나타난다.
 import { Controller } from "@hotwired/stimulus"
 
@@ -8,11 +9,6 @@ const SHOWN = 6000
 
 export default class extends Controller {
   static targets = ["leave"]
-
-  connect() {
-    // 켜 두었으면 들어갈 때 한 번만. 마침종은 없다 — 무위에는 끝이 없다.
-    setTimeout(() => this.dispatch("open", { prefix: "bell" }), 0)
-  }
 
   disconnect() { clearTimeout(this.hiding) }
 
