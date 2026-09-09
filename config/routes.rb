@@ -24,6 +24,9 @@ Rails.application.routes.draw do
     patch "days/:date" => "days#update"
     resources :plans, only: %i[create destroy]
 
+    # 기록은 사용자의 것이다. 언제든 통째로 들고 나갈 수 있다(제7조).
+    get "export" => "exports#show", as: :export
+
     get   "settings" => "settings#show", as: :settings
     patch "settings" => "settings#update"
     delete "account" => "settings#destroy", as: :account

@@ -27,8 +27,15 @@
 
 <hr class="rule">
 
+<%# 붙잡는 장치를 두지 않는다 — 확인도, 사유도 묻지 않는다.
+    눌러서 받는다. 그것으로 끝이다(제7조). %>
 <h2 class="title"><%= t("settings.export.title") %></h2>
 <p class="tiny"><%= t("settings.export.note") %></p>
+<p class="tiny">
+  <%= link_to t("settings.export.markdown"), export_path, data: { turbo: false } %>
+  &nbsp;·&nbsp;
+  <%= link_to t("settings.export.json"), export_path(format: :json), data: { turbo: false } %>
+</p>
 
 <hr class="rule">
 

@@ -82,7 +82,14 @@ en:
     delete_confirm: This erases your account and every record. It cannot be undone.
     export:
       title: Export
-      note: Your rest is yours. Downloading opens soon.
+      note: "Your records are yours. You can take all of it with you, at any time."
+      markdown: "As a readable file"
+      json: "As a data file"
+      rests: "Rest"
+      sittings: "Sitting"
+      plans: "Days"
+      taken_on: "Taken on"
+      cleared: "Days kept clear"
 
   guide:
     back: "Back to the guide"

@@ -82,7 +82,14 @@ ko:
     delete_confirm: 계정과 모든 기록을 지운다. 되돌릴 수 없다.
     export:
       title: 내보내기
-      note: 쉼 기록은 당신의 것이다. 내려받기는 곧 열린다.
+      note: "쉼 기록은 당신의 것이다. 언제든 통째로 들고 나갈 수 있다."
+      markdown: "읽는 파일로"
+      json: "데이터 파일로"
+      rests: "쉼"
+      sittings: "앉음"
+      plans: "일정"
+      taken_on: "내려받은 날"
+      cleared: "비워 둔 날"
 
   guide:
     back: "안내로 돌아간다"

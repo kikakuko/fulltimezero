@@ -4,6 +4,10 @@
 require "test_helper"
 
 class SpiritTest < ActionDispatch::IntegrationTest
+  # 금지를 적어 두는 것이 일인 문서는 그 낱말을 불러야 한다.
+  # 규칙을 적은 자리와 규칙을 어긴 자리를 섞지 않기 위해 여기만 뺀다.
+  RULE_BOOKS = %w[test/integration/spirit_test.rb docs/STATUS.md].freeze
+
   OPEN_PAGES = %i[gate_path new_user_path new_session_path new_password_path guide_path privacy_path].freeze
   SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path new_sitting_path].freeze
 
@@ -74,8 +78,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
   # 달은 언제나 차오른다. 스물여드레의 달도, 앉음의 달도.
   # 시간의 소진이 아니라 고요의 익어감이 이 앱의 문법이다.
   test "달이 기운다는 말이 코드에도 문서에도 남아 있지 않다" do
-    leftovers = sources.reject { |path| path == Pathname(__FILE__) }
-                       .select { |path| path.read.match?(/기운다|기욺|기울\s*고/) }
+    leftovers = written.select { |path| path.read.match?(/기운다|기욺|기울\s*고/) }
 
     assert_empty leftovers.map { |path| path.relative_path_from(Rails.root).to_s },
       "달이 기운다는 서술이 남아 있다"
@@ -100,8 +103,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     # 주석은 왜 그리지 않는지를 적은 자리이므로 걷어내고, 코드만 본다.
     faces = /\bsmile\b|moon_smile|\bface\b|\beyes?\b|\bmouth\b|눈매|입매/i
 
-    offenders = sources.reject { |path| path == Pathname(__FILE__) }
-                       .select { |path| strip_comments(path).match?(faces) }
+    offenders = written.select { |path| strip_comments(path).match?(faces) }
 
     assert_empty offenders.map { |path| path.relative_path_from(Rails.root).to_s },
       "달에 표정을 그리는 코드가 남아 있다"
@@ -344,6 +346,11 @@ class SpiritTest < ActionDispatch::IntegrationTest
     def sources
       %w[app lib config docs test].flat_map { |dir| Rails.root.join(dir).glob("**/*") }
         .select { |path| path.file? && path.extname.in?(%w[.rb .erb .js .css .md .yml]) }
+    end
+
+    # 규칙을 적은 자리를 뺀 나머지 — 규칙을 지켜야 하는 자리들.
+    def written
+      sources.reject { |path| path.relative_path_from(Rails.root).to_s.in?(RULE_BOOKS) }
     end
 
     def text_outside_dates
