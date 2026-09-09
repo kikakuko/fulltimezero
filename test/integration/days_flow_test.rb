@@ -67,9 +67,9 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "바쁜 날에는 낮 내내 아무 말도 하지 않는다" do
-    @user.plans.create!(planned_on: @user.today, what: "회의")
-
     travel_to Time.utc(2026, 8, 27, 4, 0) do # 서울 낮 한시
+      # 일정은 여행한 그 날에 있어야 한다. 밖에서 만들면 다른 날의 일이다.
+      @user.plans.create!(planned_on: @user.today, what: "회의")
       get today_path
 
       assert_no_match I18n.t("days.evening"), visible_text
