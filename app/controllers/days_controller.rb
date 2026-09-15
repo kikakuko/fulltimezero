@@ -11,6 +11,10 @@ class DaysController < ApplicationController
     @date = date
     @plans = Current.user.plans.on(@date).chronological
     @cleared = Current.user.clearings.exists?(cleared_on: @date)
+
+    # 그 날 남긴 쉼과 앉음. 지우려면 먼저 보여야 한다.
+    @rests = Current.user.rests.where(rested_on: @date).chronological
+    @sittings = Current.user.sittings.where(sat_on: @date).chronological
   end
 
   # 비움 예약을 걸고 거둔다. 오가는 것뿐이라 물어보지 않는다.

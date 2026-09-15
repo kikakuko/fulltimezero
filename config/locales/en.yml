@@ -237,6 +237,12 @@ en:
     add: What is there
     save: Write it
     remove: Erase
+    kept: "Rest on this day"
+    forget_confirm: "This erases the record. It cannot be undone."
+    not_kept: "It was not kept."
+    kinds:
+      sitting: "Sat"
+      nothing: "Did nothing"
     empty_today: Today is empty. You cleared it well.
     evening: It was a busy day. You can put it down now.
     months:
@@ -300,6 +306,11 @@ en:
               confirmation: doesn't match the password.
             time_zone:
               inclusion: is not a time zone we know.
+        plan:
+          attributes:
+            what:
+              blank: "There was nothing to write down."
+              too_long: "That line is too long."
         rest:
           attributes:
             duration:

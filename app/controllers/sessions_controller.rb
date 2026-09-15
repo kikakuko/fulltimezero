@@ -1,7 +1,7 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 class SessionsController < ApplicationController
   allow_unauthenticated_access only: %i[ new create ]
-  rate_limit to: 10, within: 3.minutes, only: :create,
+  rate_limit to: 10, within: 3.minutes, only: :create, by: :throttle_key,
     with: -> { redirect_to new_session_path, alert: t("errors.try_later") }
 
   def new

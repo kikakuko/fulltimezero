@@ -11,11 +11,11 @@ Rails.application.routes.draw do
     resources :passwords, only: %i[new create edit update], param: :token
 
     get "today" => "today#show", as: :today
-    resources :rests, only: %i[new create]
+    resources :rests, only: %i[new create destroy]
     get "moon" => "moon#show", as: :moon
 
     # 앉음 — 명상 타이머와 무위의 시간.
-    resources :sittings, only: %i[new create show update]
+    resources :sittings, only: %i[new create show update destroy]
     post "nothing" => "sittings#nothing", as: :nothing
 
     # 날들 — 빈 일정. 달력의 날짜 숫자만이 이 앱에서 허용되는 숫자다.

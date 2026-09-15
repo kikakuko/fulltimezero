@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   # 미인증 리다이렉트도 요청한 로케일 경로로 나간다.
   include Localization
   include Authentication
+  include Throttling
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern

@@ -40,7 +40,8 @@ module Authentication
     end
 
     def start_new_session_for(user)
-      user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
+      # 어디서, 무엇으로 들어왔는지는 적지 않는다. 이메일 말고는 모으지 않는다(§4).
+      user.sessions.create!.tap do |session|
         Current.session = session
         cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
       end

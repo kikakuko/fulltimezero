@@ -16,6 +16,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert cookies[:session_id]
   end
 
+  test "들어올 때 어디서 무엇으로 왔는지 적지 않는다" do
+    post session_path, params: { email_address: @user.email_address, password: "password" },
+                       headers: { "User-Agent" => "추적하려는 브라우저", "REMOTE_ADDR" => "203.0.113.7" }
+
+    session = @user.sessions.order(:created_at).last
+    assert_equal %w[created_at id updated_at user_id], session.attributes.keys.sort
+  end
+
   test "create with invalid credentials" do
     post session_path, params: { email_address: @user.email_address, password: "wrong" }
 

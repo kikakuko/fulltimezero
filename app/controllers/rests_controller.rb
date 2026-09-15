@@ -16,6 +16,15 @@ class RestsController < ApplicationController
     end
   end
 
+  # 쉼 기록은 사용자의 것이다(§4). 한 줄씩 지울 수 있어야 한다.
+  # 묻는 것은 화면에서 한 번 — 지운 것은 되돌릴 수 없으므로.
+  def destroy
+    rest = Current.user.rests.find(params[:id])
+    rest.destroy!
+
+    redirect_to day_path(rest.rested_on)
+  end
+
   private
     def rest_params
       params.expect(rest: [ :duration, :texture, :note ])

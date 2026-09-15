@@ -3,7 +3,7 @@
 # 앉음. 타이머와 무위가 같은 자리를 쓰되, 화면은 서로 다르다 —
 # 타이머에는 달이 있고, 무위에는 없다.
 class SittingsController < ApplicationController
-  before_action :set_sitting, only: %i[show update]
+  before_action :set_sitting, only: %i[show update destroy]
 
   def new
     @length = SittingLength.new(SittingLength::DEFAULT)
@@ -50,6 +50,13 @@ class SittingsController < ApplicationController
     else
       redirect_to sitting_path(@sitting)
     end
+  end
+
+  # 앉음도 사용자의 것이다. 지우면 달도 그만큼 덜 찬다 — 그뿐이다.
+  def destroy
+    @sitting.destroy!
+
+    redirect_to day_path(@sitting.sat_on)
   end
 
   private

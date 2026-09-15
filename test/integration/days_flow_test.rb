@@ -28,6 +28,22 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "빈 줄로 적으면 조용히 넘기지 않고 한 줄로 까닭을 말한다" do
+    assert_no_difference -> { @user.plans.count } do
+      post plans_path, params: { plan: { planned_on: @user.today.iso8601, what: "   " } }
+    end
+
+    follow_redirect!
+    assert_select ".flash", text: I18n.t("activerecord.errors.models.plan.attributes.what.blank")
+  end
+
+  test "너무 긴 줄도 까닭을 말한다" do
+    post plans_path, params: { plan: { planned_on: @user.today.iso8601, what: "가" * (Plan::MOST + 1) } }
+    follow_redirect!
+
+    assert_select ".flash", text: I18n.t("activerecord.errors.models.plan.attributes.what.too_long")
+  end
+
   test "일정을 아무리 쌓아도 개수는 어디에도 나타나지 않는다" do
     %w[치과 회의 저녁 약속 장보기 전화].each do |what|
       @user.plans.create!(planned_on: @user.today, what: what)

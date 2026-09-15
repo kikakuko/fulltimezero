@@ -28,6 +28,32 @@
   <p><%= f.submit t("days.save") %></p>
 <% end %>
 
+<%# 그 날 남긴 쉼과 앉음. 쉼 기록은 사용자의 것이므로 한 줄씩 지울 수
+    있다(§4). 지운 것은 되돌릴 수 없으니 한 번만 묻는다. %>
+<% if @rests.any? || @sittings.any? %>
+  <hr class="rule">
+
+  <h2 class="title"><%= t("days.kept") %></h2>
+  <ul class="plans">
+    <% @rests.each do |rest| %>
+      <li>
+        <span><%= [ t("rests.durations.#{rest.duration}"),
+                    (t("rests.textures.#{rest.texture}") if rest.texture) ].compact.join(" · ") %></span>
+        <%= button_to t("days.remove"), rest_path(rest), method: :delete, class: "quiet",
+                      form: { data: { turbo_confirm: t("days.forget_confirm") } } %>
+      </li>
+    <% end %>
+
+    <% @sittings.each do |sitting| %>
+      <li>
+        <span><%= t("days.kinds.#{sitting.mode}") %></span>
+        <%= button_to t("days.remove"), sitting_path(sitting), method: :delete, class: "quiet",
+                      form: { data: { turbo_confirm: t("days.forget_confirm") } } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <hr class="rule">
 
 <%= button_to @cleared ? t("days.unclear") : t("days.clear"),
