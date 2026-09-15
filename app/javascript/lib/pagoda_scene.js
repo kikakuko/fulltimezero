@@ -51,8 +51,10 @@ export async function playScene({ scene, flier, label, reduced, onLand }) {
 }
 
 // 한 자 — 사용자가 쓴 획 그대로. 활자로 대신 채우지 않는다.
+// 방금 올린 자만 주사로 찍힌다(pagoda__fresh) — 하루에 한 번 보이는 붉은색.
 function glyph(cell) {
-  const box = node("svg", { x: cell.x, y: cell.y, width: cell.size, height: cell.size, viewBox: `0 0 ${VIEW} ${VIEW}`, class: "pagoda__ink" })
+  const kind = cell.fresh ? "pagoda__ink pagoda__fresh" : "pagoda__ink"
+  const box = node("svg", { x: cell.x, y: cell.y, width: cell.size, height: cell.size, viewBox: `0 0 ${VIEW} ${VIEW}`, class: kind })
   cell.paths.forEach(points => box.append(node("path", { d: outline(points) })))
   return box
 }

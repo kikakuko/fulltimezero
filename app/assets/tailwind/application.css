@@ -1,24 +1,45 @@
 /* This app is a raft. — 이 앱도 뗏목이다. */
 @import "tailwindcss";
 
-/* 미색 바탕 + 먹색. 다크 모드는 먹 바탕.
+/* ── 색 — 이 파일에서 색은 여기 한 곳에만 있다 ─────────────────────
+   흩어지면 한쪽만 어긋난다. 아래의 모든 규칙은 이 변수만 쓴다
+   (test/integration/palette_test.rb 가 지킨다).
+
+   사찰에서 빌려 온다(SPIRIT §2). 어둠은 문의 것이다 — 처음의 문 셋과
+   몰입 화면만 어둡고 나머지는 밝다. 그래서 기기의 다크 모드를 따라
+   앱 전체를 어둡게 하지 않는다.
    웹폰트를 내려받지 않는다 — 제3자 요청 없음(SPIRIT 제6조). */
 :root {
-  --paper: #f7f2e7;
+  /* 한지 — 사경지, 전각의 벽 */
+  --paper: #f5efe2;
+  /* 먹 */
   --ink: #1c1a17;
   --ink-soft: #6b655c;
-  --rule: #e2daca;
+  --rule: #e0d7c5;
+
+  /* 주사(朱砂) — 탑다라니의 붉은 인쇄. 하루에 한 번만 보인다.
+     버튼 · 링크 · 오류에 쓰지 않는다. */
+  --cinnabar: #b5412e;
+
+  /* 단청 — 청록과 황토. 코끼리 길의 바탕과 이어진다. */
+  --dancheong-green: #2f6b62;
+  --dancheong-ocher: #b88a4a;
+
+  /* 어둠 — 문과 몰입 화면의 것 */
+  --night: #0b0a08;
+  --night-deep: #050505;
+  --night-dusk: #14120f;
+  --night-breath: #3a352d;
+  --night-ink: #cfc7b6;
+  --night-soft: #3f3a33;
+  --night-faint: #45403a;
+  --night-void-ink: #4a463f;
+  --night-rule: #2a2620;
+  --night-line: #1e1b16;
+  --night-focus: #6b655c;
+
   --serif: "Nanum Myeongjo", "AppleMyungjo", "Noto Serif KR", "Batang", "Songti SC", serif;
   --sans: system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #14120f;
-    --ink: #e8e1d2;
-    --ink-soft: #8a8375;
-    --rule: #2a2620;
-  }
 }
 
 html { background: var(--paper); }
@@ -123,25 +144,25 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
   display: grid; place-items: center;
 }
 
-.night { background: #0b0a08; color: #cfc7b6; }
-.night .moon circle[mask] { fill: #cfc7b6; }
-.night .moon circle { stroke: #1e1b16; }
+.night { background: var(--night); color: var(--night-ink); }
+.night .moon circle[mask] { fill: var(--night-ink); }
+.night .moon circle { stroke: var(--night-line); }
 
-.void { background: #14120f; color: #4a463f; }
+.void { background: var(--night-dusk); color: var(--night-void-ink); }
 .void-line { font-family: var(--serif); font-size: 1.25rem; text-align: center; padding: 0 1.5rem; }
 
 /* 지켜보지 않아도 된다는 말. 잠시 떴다 사라진다. */
 .hint {
-  font-size: 0.8125rem; color: #45403a; text-align: center;
+  font-size: 0.8125rem; color: var(--night-faint); text-align: center;
   margin-top: 3rem; padding: 0 1.5rem;
 }
 
 .leave { position: fixed; right: 1.5rem; bottom: 1.5rem; transition: opacity 900ms ease; }
 .leave .quiet {
   border: 0; padding: 0; background: transparent; cursor: pointer;
-  font-family: var(--sans); font-size: 0.75rem; color: #3f3a33;
+  font-family: var(--sans); font-size: 0.75rem; color: var(--night-soft);
   text-decoration: underline; text-underline-offset: 0.35em;
-  text-decoration-color: #2a2620;
+  text-decoration-color: var(--night-rule);
 }
 .leave.veiled { opacity: 0; pointer-events: none; }
 
@@ -175,10 +196,10 @@ button.quiet {
   .waking .moon { animation: waking 3.5s ease-out both; }
 }
 
-@keyframes falling-dark { 0% { background: var(--paper) } 100% { background: #0b0a08 } }
+@keyframes falling-dark { 0% { background: var(--paper) } 100% { background: var(--night) } }
 @keyframes greet { 0% { opacity: 0 } 30% { opacity: 1 } 100% { opacity: 0.78 } }
 @keyframes breath { 0%, 100% { opacity: 0.78 } 50% { opacity: 0.9 } }
-@keyframes deepen { to { background: #050505; } }
+@keyframes deepen { to { background: var(--night-deep); } }
 @keyframes fade-away { 0%, 35% { opacity: 1 } 100% { opacity: 0 } }
 @keyframes waking { 0% { opacity: 0 } 100% { opacity: 1 } }
 
@@ -191,25 +212,17 @@ button.quiet {
    아니라 얼굴이 되고, 얼굴이 되는 순간 의인화가 된다.
    달은 표정이 아니라 빛으로 말한다.
 
-   빛무리는 어두운 바탕에서만 그린다. 빛무리는 어두운 바탕에서만
-   성립하는 물리다 — 낮하늘의 보름달에는 광배가 없다.
-   밝은 바탕에는 달 몸체의 밝아짐과 「달이 찼다」 한 줄만 남는다. */
+   빛무리는 그리지 않는다. 빛무리는 어두운 바탕에서만 성립하는
+   물리다 — 낮하늘의 보름달에는 광배가 없다. 그런데 어두운 바탕은
+   이제 문과 몰입 화면뿐이고, 몰입 화면은 성역이라 빛이 피지 않는다.
+   그래서 월광은 언제나 밝은 바탕에서 — 달 몸체의 밝아짐과
+   「달이 찼다」 한 줄로만 온다. */
 
 @media (prefers-reduced-motion: no-preference) {
   .moonlight .disc { animation: moonlight-disc 3s ease-out both; }
 }
 
-@media (prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference) {
-  .moon.moonlight { animation: moonlight-halo 3s ease-out both; }
-}
-
 @keyframes moonlight-disc { 0% { opacity: 0.82 } 30% { opacity: 1 } 100% { opacity: 1 } }
-
-@keyframes moonlight-halo {
-  0% { filter: drop-shadow(0 0 0 transparent) }
-  30%, 55% { filter: drop-shadow(0 0 1.75rem color-mix(in srgb, var(--ink) 42%, transparent)) }
-  100% { filter: drop-shadow(0 0 0.5rem color-mix(in srgb, var(--ink) 12%, transparent)) }
-}
 
 /* 비운 날 아침 — 달이 살짝 크게 한 번 숨 쉰다. */
 @media (prefers-reduced-motion: no-preference) {
@@ -372,6 +385,12 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda__bell path + path, .pagoda__bell circle { fill: var(--ink-soft); }
 .pagoda__ink path { fill: var(--ink); }
 
+/* 방금 올린 한 자만 주사로 찍힌다 — 탑다라니의 붉은 인쇄처럼.
+   붉은색이 보이는 하루 한 번의 자리다(SPIRIT §2). 다음 날 탑에서는
+   이 자도 먹빛이다. 이 규칙 밖에서 --cinnabar 를 쓰면
+   palette_test 가 깨진다. */
+.pagoda__fresh path { fill: var(--cinnabar); }
+
 .pagoda-flier { position: fixed; z-index: 31; transform-origin: 0 0; pointer-events: none; }
 .pagoda-flier path { fill: var(--ink); }
 
@@ -386,20 +405,20 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   position: fixed; inset: 0; z-index: 10;
   display: grid; place-content: center; justify-items: center; gap: 2.5rem;
   padding: 0 1.75rem; text-align: center;
-  background: #0b0a08; color: #cfc7b6;
+  background: var(--night); color: var(--night-ink);
 }
-.threshold__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: #cfc7b6; }
+.threshold__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--night-ink); }
 .threshold__way { margin: 0; min-height: 3rem; }
-.threshold .action, .threshold input[type="submit"] { color: #cfc7b6; border-color: #2a2620; }
+.threshold .action, .threshold input[type="submit"] { color: var(--night-ink); border-color: var(--night-rule); }
 .threshold__form { display: grid; justify-items: center; gap: 2rem; width: min(22rem, 100%); }
-.threshold__form label { font-size: 1.3rem; color: #cfc7b6; margin: 0; }
+.threshold__form label { font-size: 1.3rem; color: var(--night-ink); margin: 0; }
 .threshold__field {
-  width: 100%; background: transparent; border: 0; border-bottom: 1px solid #2a2620;
-  color: #cfc7b6; font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
+  width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--night-rule);
+  color: var(--night-ink); font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
 }
-.threshold__field:focus { outline: none; border-color: #6b655c; }
+.threshold__field:focus { outline: none; border-color: var(--night-focus); }
 .threshold__later { position: fixed; bottom: 2rem; left: 0; right: 0; text-align: center; }
-.threshold__later .quiet { color: #3f3a33; text-decoration-color: #2a2620; }
+.threshold__later .quiet { color: var(--night-soft); text-decoration-color: var(--night-rule); }
 
 @media (prefers-reduced-motion: no-preference) {
   .arriving { animation: waking 1.6s ease-out both; }
@@ -408,14 +427,29 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 셋째 문 — 손을 얹고 있는 동안 밝아졌다 어두워지기를 세 번. */
 .threshold--breath { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .threshold--breath.breathing { animation: threshold-breath 6s ease-in-out 3; }
-@keyframes threshold-breath { 0%, 100% { background: #0b0a08 } 50% { background: #3a352d } }
+@keyframes threshold-breath { 0%, 100% { background: var(--night) } 50% { background: var(--night-breath) } }
 
-/* 매일 지나는 문 — 숨 한 번의 어둠. */
-.daily-door {
-  position: fixed; inset: 0; z-index: 40; background: #0b0a08;
-  animation: daily-door 0.8s ease-in forwards;
+/* 세 번의 숨이 끝나면 문이 열린다 — 어둠이 한지빛으로 밝아지고, 그
+   빛 그대로 오늘 화면이 이어진다. 끝났다는 말은 하지 않는다. */
+.threshold--breath.opening { animation: threshold-dawn 2.4s ease-in-out forwards; }
+.threshold--breath.opening > * { animation: fade-away 1.2s ease-in forwards; }
+@keyframes threshold-dawn { 0% { background: var(--night) } 100% { background: var(--paper) } }
+
+/* 둘째 문의 양쪽 — 훗날 두 신장(활 든 이 · 창 든 이)이 설 자리.
+   지금은 비어 있다. 자리만 잡고 아무것도 그리지 않는다. */
+.threshold__flank {
+  position: fixed; top: 0; bottom: 0; width: 18vw; max-width: 9rem;
+  pointer-events: none;
 }
-@keyframes daily-door { 0%, 30% { opacity: 1 } 100% { opacity: 0 } }
+.threshold__flank--left { left: 0; }
+.threshold__flank--right { right: 0; }
+
+/* 매일 지나는 문 — 숨 한 번의 어둠. 어두워졌다가 밝아지며 걷힌다. */
+.daily-door {
+  position: fixed; inset: 0; z-index: 40; background: var(--night);
+  opacity: 0; animation: daily-door 0.8s ease-in-out forwards;
+}
+@keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
 
 /* Turbo 의 기본 진행 막대는 파랑이라 이 앱의 먹색과 어긋난다. */
 .turbo-progress-bar { background-color: var(--ink-soft); height: 2px; }

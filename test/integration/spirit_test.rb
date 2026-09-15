@@ -142,8 +142,11 @@ class SpiritTest < ActionDispatch::IntegrationTest
   end
 
   # 빛무리는 어두운 바탕에서만 성립하는 물리다 — 낮하늘의 보름달에는
-  # 광배가 없다. 그래서 도상에 두지 않고 CSS 로만 그린다.
-  test "빛무리는 도상에 없고 어두운 바탕에만 있다" do
+  # 광배가 없다. 어두운 바탕은 문과 몰입 화면뿐이고(SPIRIT §2), 몰입
+  # 화면은 성역이라 빛이 피지 않는다. 그래서 월광은 언제나 밝은 바탕에서
+  # 오고, 빛무리는 어디에도 그려지지 않는다. 훗날 다시 그린다면 어두운
+  # 자리 안에서만.
+  test "빛무리는 도상에 없고, 밝은 바탕에서는 피지 않는다" do
     user = users(:one)
     sign_in_as user
     27.times { |i| user.rests.create!(rested_on: user.today - (i + 1), duration: "a_moment") }
@@ -152,10 +155,14 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
     assert_select ".halo", false, "빛무리가 도상에 박혀 있어 밝은 바탕에서도 그려진다"
 
-    css = Rails.root.join("app/assets/tailwind/application.css").read
-    halo = css[/@media \(prefers-color-scheme: dark\)[^{]*\{[^}]*moonlight-halo/m]
+    css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "")
+    css.scan(/([^{}]+)\{([^{}]*moonlight-halo[^{}]*)\}/).each do |selector, _|
+      next if selector.strip.start_with?("@keyframes")
 
-    assert halo, "빛무리가 어두운 바탕 안에 갇혀 있지 않다"
+      selector.split(",").map(&:strip).each do |one|
+        assert_match(/\A\.(?:night|void|threshold)\b/, one, "빛무리가 밝은 바탕에서 핀다: #{one}")
+      end
+    end
   end
 
   test "명상 화면은 성역이다 — 앉는 중에는 빛도 표정도 없다" do

@@ -4,6 +4,10 @@
 <% content_for :no_locales, true %>
 
 <div class="threshold">
+  <%# 문의 양쪽 — 훗날 두 신장이 설 자리. 지금은 비워 둔다. %>
+  <div class="threshold__flank threshold__flank--left" aria-hidden="true"></div>
+  <div class="threshold__flank threshold__flank--right" aria-hidden="true"></div>
+
   <%= form_with model: Current.user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
     <%= f.label :resting_from, t("threshold.naming.question"), class: "threshold__line" %>
     <%= f.text_field :resting_from, maxlength: User::RESTING_FROM_MOST, autocomplete: "off",

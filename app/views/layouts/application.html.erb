@@ -4,7 +4,8 @@
   <head>
     <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark">
+    <%# 기기의 다크 모드를 따르지 않는다 — 어둠은 문과 몰입 화면의 것이다(SPIRIT §2). %>
+    <meta name="color-scheme" content="light">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="fulltimezero">
     <%= csrf_meta_tags %>

@@ -12,9 +12,8 @@
 module MoonHelper
   # phase: 0.0(그믐) … 1.0(보름). 오른쪽에서 차오른다.
   # moonlight: 보름에 닿은 그 순간에만 참이 된다.
-  # 달 몸체가 한 겹 또렷해지고, 어두운 바탕에서는 둘레에 옅은 빛무리가
-  # 피었다가 잔광을 남기며 내려앉는다. 빛무리는 CSS 가 그린다 —
-  # 밝은 바탕에서는 아예 그리지 않기 위해서다(형상 원칙 참조).
+  # 달 몸체가 한 겹 또렷해진다. 빛무리는 도상에 두지 않는다 — 빛무리는
+  # 어두운 바탕의 물리인데, 월광은 언제나 밝은 바탕에서 핀다(형상 원칙 참조).
   def moon_svg(phase, size: 160, title: t("moon.title"), moonlight: false, **shade_options)
     r = size / 2.0
     id = "moon-#{@moon_seq = @moon_seq.to_i + 1}"
