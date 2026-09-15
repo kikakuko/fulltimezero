@@ -9,8 +9,7 @@
 #     되돌림·초기화·감점을 두지 않는다(§3 쌓인 것은 무너지지 않는다).
 #   - 글씨를 채점하지 않는다. glyph_paths 는 사용자가 그은 획 그대로
 #     남을 뿐, 정답과 견주지 않는다(제3조).
-#   - glyph_paths 가 비어 있으면 종이에 쓴 것이다. 화면에 쓴 자와
-#     똑같이 탑을 쌓는다(§3 화면은 종이로 가는 문).
+#   - 사경은 언제나 쓴 글씨다. 한 획도 없는 사경은 없다.
 class Copying < ApplicationRecord
   # 한 자에 그을 수 있는 획과 점의 끝. 넘치는 입력을 막을 뿐, 잘 썼는지와는 상관없다.
   MOST_STROKES = 64
@@ -26,8 +25,6 @@ class Copying < ApplicationRecord
 
   before_validation :stamp_day, on: :create
 
-  def on_paper? = glyph_paths.nil?
-
   private
     def stamp_day
       self.copied_on ||= user&.today
@@ -40,12 +37,10 @@ class Copying < ApplicationRecord
       errors.add(:sutra_char, :out_of_turn) unless sutra_char == user.pagoda(sutra: sutra_char.sutra).next_char
     end
 
-    # 획이 있다면 획의 목록이어야 한다. 모양이 맞는지만 볼 뿐, 잘 썼는지는 보지 않는다.
+    # 획의 목록이어야 한다. 모양이 맞는지만 볼 뿐, 잘 썼는지는 보지 않는다.
     # 한 획은 점의 목록, 한 점은 [x, y] — 쓰는 자리 안에서의 비율이다.
-    # 빈 목록은 받지 않는다. 한 획도 긋지 않았다면 그것은 화면에 쓴 것이 아니다.
+    # 빈 목록도, 획이 없는 것도 받지 않는다. 한 획도 긋지 않았다면 쓴 것이 아니다.
     def strokes_are_strokes
-      return if glyph_paths.nil?
-
       errors.add(:glyph_paths, :invalid) unless strokes?(glyph_paths)
     end
 

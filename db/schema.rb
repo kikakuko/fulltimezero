@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_15_110100) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_120000) do
   create_table "clearings", force: :cascade do |t|
     t.date "cleared_on", null: false
     t.datetime "created_at", null: false
@@ -23,7 +23,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_110100) do
   create_table "copyings", force: :cascade do |t|
     t.date "copied_on", null: false
     t.datetime "created_at", null: false
-    t.json "glyph_paths"
+    t.json "glyph_paths", null: false
     t.integer "sutra_char_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false

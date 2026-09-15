@@ -91,8 +91,6 @@ ko:
       taken_on: "내려받은 날"
       cleared: "비워 둔 날"
       copyings: "사경"
-      on_paper: "종이에 썼다"
-      on_screen: "화면에 썼다"
 
   guide:
     back: "안내로 돌아간다"
@@ -275,7 +273,6 @@ ko:
     surface: "%{glyph} 자를 따라 쓰는 자리"
     rewrite: "다시 쓴다"
     offer: "올린다"
-    on_paper: "종이에 썼다"
     reading: "훈음"
     sense: "이 자리의 뜻"
     sanskrit: "원어"

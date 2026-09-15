@@ -6,7 +6,8 @@
 module CopyLocks
   # 이 앱은 쉼을 가르치지 않는다 — 쉬는 마음이 형상을 얻게 할 뿐이다(SPIRIT §5).
   TEACHING = {
-    "ko" => /수행|훈련|연습|단계|레벨|달성/,
+    # 정진(精進)은 애쓰는 힘의 말이고, 완료는 달성의 말이다.
+    "ko" => /수행|훈련|연습|정진|단계|레벨|달성|완료/,
     "en" => /\bpracti[cst]|\btraining\b|\bexercis|\bstages?\b|\blevels?\b|\bachiev/i
   }.freeze
 

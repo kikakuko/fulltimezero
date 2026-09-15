@@ -91,8 +91,6 @@ en:
       taken_on: "Taken on"
       cleared: "Days kept clear"
       copyings: "Sutra copying"
-      on_paper: "on paper"
-      on_screen: "on screen"
 
   guide:
     back: "Back to the guide"
@@ -275,7 +273,6 @@ en:
     surface: "A place to trace the character %{glyph}"
     rewrite: "Write again"
     offer: "Offer it"
-    on_paper: "Written on paper"
     reading: "Reading"
     sense: "Meaning here"
     sanskrit: "Sanskrit"

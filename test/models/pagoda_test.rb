@@ -19,7 +19,7 @@ class PagodaTest < ActiveSupport::TestCase
     today = @user.today
     rows = @sutra.chars.map.with_index do |char, i|
       { user_id: @user.id, sutra_char_id: char.id, copied_on: today - (@sutra.total - i),
-        glyph_paths: nil, created_at: Time.current, updated_at: Time.current }
+        glyph_paths: [ [ [ 0.5, 0.5 ] ] ], created_at: Time.current, updated_at: Time.current }
     end
     Copying.insert_all!(rows)
 
@@ -31,7 +31,7 @@ class PagodaTest < ActiveSupport::TestCase
 
   test "남의 사경은 내 탑에 쌓이지 않는다" do
     other = users(:two)
-    other.copyings.create!(sutra_char: other.pagoda.next_char, glyph_paths: nil)
+    other.copyings.create!(sutra_char: other.pagoda.next_char, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
 
     assert_equal 0, @user.pagoda.last_pos
   end

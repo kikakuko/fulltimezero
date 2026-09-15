@@ -50,19 +50,10 @@ export async function playScene({ scene, flier, label, reduced, onLand }) {
   overlay.remove()
 }
 
-// 한 자. 화면에 쓴 자는 쓴 획 그대로, 종이에 쓴 자는 그 자의 활자를 아주 옅게.
+// 한 자 — 사용자가 쓴 획 그대로. 활자로 대신 채우지 않는다.
 function glyph(cell) {
-  const box = node("svg", { x: cell.x, y: cell.y, width: cell.size, height: cell.size, viewBox: `0 0 ${VIEW} ${VIEW}` })
-
-  if (cell.paths) {
-    box.classList.add("pagoda__ink")
-    cell.paths.forEach(points => box.append(node("path", { d: outline(points) })))
-  } else {
-    const type = node("text", { x: VIEW / 2, y: VIEW * 0.54, "text-anchor": "middle", "dominant-baseline": "middle", class: "pagoda__type" })
-    type.textContent = cell.glyph
-    box.append(type)
-  }
-
+  const box = node("svg", { x: cell.x, y: cell.y, width: cell.size, height: cell.size, viewBox: `0 0 ${VIEW} ${VIEW}`, class: "pagoda__ink" })
+  cell.paths.forEach(points => box.append(node("path", { d: outline(points) })))
   return box
 }
 

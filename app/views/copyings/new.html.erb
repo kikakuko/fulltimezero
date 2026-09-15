@@ -12,7 +12,6 @@
   </div>
 <% else %>
   <div class="copying" data-controller="copying"
-       data-copying-glyph-value="<%= @char.glyph %>"
        data-copying-vibrate-value="<%= @vibrate %>"
        data-copying-pagoda-value="<%= t("copyings.pagoda") %>">
     <div class="copy-sheet">
@@ -24,18 +23,13 @@
       </svg>
     </div>
 
-    <p class="copy-tools">
-      <button type="button" class="quiet" data-action="copying#clear"><%= t("copyings.rewrite") %></button>
-    </p>
-
     <div class="copy-offer">
+      <button type="button" class="quiet" data-action="copying#clear"><%= t("copyings.rewrite") %></button>
+
       <%= form_with url: copyings_path, scope: :copying, data: { action: "submit->copying#offer" } do |f| %>
         <%= f.hidden_field :glyph_paths, value: "", data: { copying_target: "field" } %>
         <%= f.submit t("copyings.offer"), disabled: true, data: { copying_target: "offer" } %>
       <% end %>
-
-      <%= button_to t("copyings.on_paper"), copyings_path, params: { on_paper: 1 }, class: "quiet",
-                    form: { data: { action: "submit->copying#offer", paper: true } } %>
     </div>
 
     <dl class="copy-notes">

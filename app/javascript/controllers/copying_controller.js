@@ -9,7 +9,7 @@
 //
 // 올리면 방금 쓴 글씨가 탑의 제 자리로 날아가 앉는다(lib/pagoda_scene).
 import { Controller } from "@hotwired/stimulus"
-import { outline, VIEW } from "lib/brush"
+import { outline } from "lib/brush"
 import { touch } from "lib/haptics"
 import { playScene } from "lib/pagoda_scene"
 
@@ -17,7 +17,7 @@ const LANDING = 30 // 앉는 순간의 짧은 떨림
 
 export default class extends Controller {
   static targets = ["surface", "strokes", "field", "offer"]
-  static values = { glyph: String, vibrate: Boolean, pagoda: String }
+  static values = { vibrate: Boolean, pagoda: String }
 
   connect() {
     this.lines = []
@@ -69,7 +69,7 @@ export default class extends Controller {
     this.store()
   }
 
-  // 올린다 · 종이에 썼다. 받아들여지면 글씨가 탑으로 가는 장면을 틀고,
+  // 올린다. 받아들여지면 글씨가 탑으로 가는 장면을 틀고,
   // 장면이 끝나면 「오늘 몫은 끝났다」로 간다. 무엇이 어긋나면 장면 없이
   // 평소대로 보낸다 — 서버가 까닭을 한 줄로 말해 준다.
   async offer(event) {
@@ -78,7 +78,6 @@ export default class extends Controller {
     this.sending = true
 
     const form = event.target
-    const paper = form.hasAttribute("data-paper")
     const response = await fetch(form.action, {
       method: "POST", body: new FormData(form), headers: { Accept: "application/json" }, credentials: "same-origin"
     }).catch(() => null)
@@ -88,26 +87,13 @@ export default class extends Controller {
     const { scene } = await response.json()
     await playScene({
       scene,
-      flier: this.flier(paper),
+      flier: { rect: this.surfaceTarget.getBoundingClientRect(), content: this.strokesTarget.cloneNode(true) },
       label: this.pagodaValue,
       reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
       onLand: () => touch(LANDING, this.vibrateValue)
     })
 
     window.Turbo ? window.Turbo.visit(location.href, { action: "replace" }) : location.reload()
-  }
-
-  // 날아갈 글씨 — 쓴 획 그대로, 종이에 썼다면 그 자의 활자를 옅게.
-  flier(paper) {
-    const rect = this.surfaceTarget.getBoundingClientRect()
-
-    if (!paper) return { rect, content: this.strokesTarget.cloneNode(true) }
-
-    const type = document.createElementNS("http://www.w3.org/2000/svg", "text")
-    Object.entries({ x: VIEW / 2, y: VIEW * 0.54, "text-anchor": "middle", "dominant-baseline": "middle", class: "pagoda__type" })
-      .forEach(([key, value]) => type.setAttribute(key, value))
-    type.textContent = this.glyphValue
-    return { rect, content: type }
   }
 
   paint() {

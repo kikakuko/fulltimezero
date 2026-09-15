@@ -89,12 +89,11 @@ class Export
       user.clearings.order(:cleared_on).map { |clearing| clearing.cleared_on.iso8601 }
     end
 
-    # 사경한 자. 화면에 쓴 획은 그대로, 종이에 쓴 자는 종이에 썼다고.
+    # 사경한 자 — 쓴 획 그대로.
     def copyings
       copied.map do |copying|
         { copied_on: copying.copied_on.iso8601, pos: copying.sutra_char.pos,
-          glyph: copying.sutra_char.glyph, on_paper: copying.on_paper?,
-          glyph_paths: copying.glyph_paths }
+          glyph: copying.sutra_char.glyph, glyph_paths: copying.glyph_paths }
       end
     end
 
@@ -149,11 +148,7 @@ class Export
     end
 
     def copying_lines
-      copied.map do |copying|
-        where = copying.on_paper? ? t("settings.export.on_paper") : t("settings.export.on_screen")
-
-        "- #{copying.copied_on.iso8601} · #{copying.sutra_char.glyph} · #{where}"
-      end
+      copied.map { |copying| "- #{copying.copied_on.iso8601} · #{copying.sutra_char.glyph}" }
     end
 
     def t(key) = I18n.t(key, locale: user.locale)

@@ -3,7 +3,7 @@
 # 사경 — 하루에 한 자를 쓴다.
 #
 # 채점도, 인식도, 정확도도 없다. 쓰면 그걸로 한 자다(제3조).
-# 화면에 쓴 획이든 종이에 썼다는 한마디든 똑같이 한 자다(§3).
+# 한 자는 언제나 쓴 글씨다 — 쓰지 않았다는 선언으로 한 자가 되지 않는다.
 # 하루 한 자를 이미 썼으면 앱은 문을 닫는다 — 오늘 몫은 끝났다(제2조).
 class CopyingsController < ApplicationController
   def new
@@ -42,10 +42,8 @@ class CopyingsController < ApplicationController
   private
     def written = Current.user.copyings.includes(:sutra_char)
 
-    # 종이에 썼다면 획이 없다. 화면에 썼다면 그은 그대로 받는다.
+    # 그은 그대로 받는다.
     def strokes
-      return if params[:on_paper].present?
-
       JSON.parse(params.dig(:copying, :glyph_paths).to_s)
     rescue JSON::ParserError
       :unreadable

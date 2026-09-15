@@ -113,10 +113,19 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_select "[data-copying-vibrate-value=false]"
   end
 
-  test "종이에 썼다고 하면 획 없이 한 자가 된다" do
-    post copyings_path, params: { on_paper: 1 }
+  # 「종이에 썼다」는 확인할 수 없는 선언이라 누르기만 하면 탑이 서고,
+  # 그 탑은 자기 글씨가 아니라 활자뿐이게 된다. 걷어냈다.
+  test "쓰는 자리에는 「다시 쓴다」와 「올린다」 둘뿐이다" do
+    get new_copying_path
 
-    assert @user.copyings.last.on_paper?
+    assert_select ".copy-offer button, .copy-offer input[type=submit]", count: 2
+    assert_no_match(/on_paper/, response.body)
+  end
+
+  test "쓰지 않았다는 선언으로는 한 자가 되지 않는다" do
+    assert_no_difference -> { @user.copyings.count } do
+      post copyings_path, params: { on_paper: 1 }
+    end
   end
 
   test "하루 한 자를 이미 썼으면 오늘 몫은 끝났다" do
@@ -182,7 +191,7 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
       today = @user.today
       rows = @sutra.chars.where(pos: 1..pos).map do |char|
         { user_id: @user.id, sutra_char_id: char.id, copied_on: today - (pos - char.pos + 1),
-          glyph_paths: nil, created_at: Time.current, updated_at: Time.current }
+          glyph_paths: [ [ [ 0.5, 0.5 ] ] ], created_at: Time.current, updated_at: Time.current }
       end
       Copying.insert_all!(rows)
     end

@@ -47,6 +47,7 @@ class PagodaLayout
     def capacity = cells.size
 
     # 쓴 사경만으로 탑의 장면을 만든다. fresh 는 방금 올린 자.
+    # 칸마다 사용자가 쓴 획이 그대로 실린다.
     def scene(copyings, fresh: nil)
       written = copyings.sort_by { |copying| copying.sutra_char.pos }
       last = written.last&.sutra_char&.pos.to_i

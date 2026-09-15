@@ -37,11 +37,15 @@ class CopyingTest < ActiveSupport::TestCase
     assert ahead.errors.of_kind?(:sutra_char, :out_of_turn)
   end
 
-  test "종이에 쓴 자도 똑같이 탑을 쌓는다" do
-    copying = write(glyph_paths: nil)
+  test "쓰지 않았다는 선언으로는 한 자가 되지 않는다" do
+    copying = @user.copyings.new(sutra_char: @user.pagoda.next_char, glyph_paths: nil)
 
-    assert copying.on_paper?
-    assert_equal 1, @user.pagoda.last_pos
+    refute copying.valid?
+    assert_equal 0, @user.pagoda.last_pos
+  end
+
+  test "데이터베이스도 획 없는 사경을 받지 않는다" do
+    refute Copying.columns_hash["glyph_paths"].null, "획 없는 사경이 데이터베이스에 들어갈 수 있다"
   end
 
   test "화면에 그은 획은 그어진 그대로 남는다" do

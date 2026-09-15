@@ -218,7 +218,7 @@ button.quiet {
 
 @keyframes fuller { 0%, 100% { transform: scale(1) } 45% { transform: scale(1.06) } }
 
-/* 완료의 순간은 어디서나 같은 결로 응답한다. 살짝 눌리고, 은은한 잔광. 무음. */
+/* 기록하고 올리는 순간은 어디서나 같은 결로 응답한다. 살짝 눌리고, 은은한 잔광. 무음. */
 button:active, input[type="submit"]:active, .action:active {
   transform: scale(0.985);
   box-shadow: 0 0 0 0.4rem color-mix(in srgb, var(--rule) 45%, transparent);
@@ -342,7 +342,6 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .copy-model { font-family: var(--serif); font-size: 780px; fill: var(--rule); user-select: none; }
 .copy-strokes path { fill: var(--ink); }
 
-.copy-tools { text-align: center; margin: 0 0 1.5rem; }
 .copy-offer { display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
 .copy-offer form { margin: 0; }
 
@@ -372,7 +371,6 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda__bell path, .pagoda__bell circle { stroke: var(--ink-soft); stroke-width: 0.8; fill: none; opacity: 0.8; }
 .pagoda__bell path + path, .pagoda__bell circle { fill: var(--ink-soft); }
 .pagoda__ink path { fill: var(--ink); }
-.pagoda__type { font-family: var(--serif); font-size: 780px; fill: var(--ink); opacity: 0.16; }
 
 .pagoda-flier { position: fixed; z-index: 31; transform-origin: 0 0; pointer-events: none; }
 .pagoda-flier path { fill: var(--ink); }

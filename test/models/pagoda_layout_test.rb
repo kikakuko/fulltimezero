@@ -46,12 +46,11 @@ class PagodaLayoutTest < ActiveSupport::TestCase
     assert_equal PagodaLayout.floors.size, scene[:eaves].size, "처마는 층마다 하나"
   end
 
-  test "종이에 쓴 칸에는 획이 없다 — 그 자의 활자를 옅게 그린다" do
+  test "탑의 칸에는 사용자가 쓴 획이 그대로 실린다 — 활자로 대신 채우지 않는다" do
     write_through(1)
     cell = PagodaLayout.scene(@user.copyings.includes(:sutra_char))[:cells].first
 
-    assert_nil cell[:paths]
-    assert_equal @sutra.chars.first.glyph, cell[:glyph]
+    assert_equal @user.copyings.first.glyph_paths, cell[:paths]
   end
 
   test "한 층이 차면 처마 끝에 풍경이 하나 걸린다" do
@@ -71,7 +70,7 @@ class PagodaLayoutTest < ActiveSupport::TestCase
       today = @user.today
       rows = @sutra.chars.where(pos: 1..pos).map do |char|
         { user_id: @user.id, sutra_char_id: char.id, copied_on: today - (pos - char.pos + 1),
-          glyph_paths: nil, created_at: Time.current, updated_at: Time.current }
+          glyph_paths: [ [ [ 0.5, 0.5 ] ] ], created_at: Time.current, updated_at: Time.current }
       end
       Copying.insert_all!(rows)
     end

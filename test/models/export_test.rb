@@ -61,7 +61,6 @@ class ExportTest < ActiveSupport::TestCase
     copying = JSON.parse(Export.new(@user).json)["copyings"].first
 
     assert_equal 1, copying["pos"]
-    assert_equal false, copying["on_paper"]
     assert_equal [ [ [ 0.2, 0.3 ] ] ], copying["glyph_paths"]
     assert_includes Export.new(@user).markdown, copying["glyph"]
   end
