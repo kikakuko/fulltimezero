@@ -240,10 +240,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
   # 이 앱은 쉼을 가르치지 않는다 — 쉬는 마음이 형상을 얻게 할 뿐이다(§5).
   # 인용 원문은 예외다. 옛글의 낱말은 옛글의 것이다.
-  TEACHING = {
-    "ko" => /수행|훈련|연습|단계|레벨|달성/,
-    "en" => /\bpracti[cst]|\btraining\b|\bexercis|\bstages?\b|\blevels?\b|\bachiev/i
-  }.freeze
+  TEACHING = CopyLocks::TEACHING
 
   test "카피가 쉼을 가르치지 않는다 — 수행·훈련·단계의 말이 없다" do
     %w[ko en].each do |locale|

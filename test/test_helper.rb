@@ -4,6 +4,7 @@ require_relative "../config/environment"
 require "rails/test_help"
 require_relative "test_helpers/session_test_helper"
 require_relative "test_helpers/stubbing"
+require_relative "test_helpers/copy_locks"
 
 module ActiveSupport
   class TestCase

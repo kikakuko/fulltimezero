@@ -4,7 +4,7 @@ sutra:
   id: heart_sutra
   title_han: 般若波羅蜜多心經
   title_ko: 반야바라밀다심경
-  edition: 현장(玄奘)역, 제목 제외 260자
+  edition: 현장(玄奘)역, 제목을 제외한 본문
   total: 260
   translation_note: 우리말·영어 번역과 자리별 풀이는 fulltimezero 고유 작업. 기존 번역을 인용하지 않았다.
   unique_glyphs: 116
@@ -18,7 +18,7 @@ phrases:
 - id: 2
   han: 行深般若波羅蜜多時
   ko: 깊은 반야바라밀다를 행할 때
-  en: while practicing the deep perfection of wisdom,
+  en: while faring deep in the perfection of wisdom,
   start: 6
   end: 14
 - id: 3
@@ -374,7 +374,7 @@ chars:
   glyph: 行
   reading: 행할 행
   sense_here: 닦다, 실천하다. 뒤에서 두 번은 "지음(行蘊)"으로 다시 만난다
-  gloss_en: to practice
+  gloss_en: to fare, to go
   phrase: 2
   nth: 1
   total: 3
@@ -2573,7 +2573,7 @@ chars:
 - pos: 252
   glyph: 羅
   reading: 그물 라
-  sense_here: 빠라의 끝 소리. 260자 중 마지막 羅
+  sense_here: 빠라의 끝 소리. 이 경에서 마지막으로 만나는 羅다
   gloss_en: (pā)ra
   phrase: 51
   sanskrit:
@@ -2669,7 +2669,7 @@ chars:
 - pos: 260
   glyph: 訶
   reading: 꾸짖을 하
-  sense_here: 스바하의 끝 소리. 260자의 마지막 — 이루어지이다
+  sense_here: 스바하의 끝 소리. 경의 마지막 자 — 이루어지이다
   gloss_en: hā
   phrase: 52
   sanskrit:
