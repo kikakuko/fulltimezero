@@ -90,6 +90,9 @@ en:
       plans: "Days"
       taken_on: "Taken on"
       cleared: "Days kept clear"
+      copyings: "Sutra copying"
+      on_paper: "on paper"
+      on_screen: "on screen"
 
   guide:
     back: "Back to the guide"
@@ -306,6 +309,15 @@ en:
               confirmation: doesn't match the password.
             time_zone:
               inclusion: is not a time zone we know.
+        copying:
+          attributes:
+            copied_on:
+              taken: "Today's character is already written. The next one comes tomorrow."
+            sutra_char:
+              taken: "This character is already written."
+              out_of_turn: "It is not this character's turn."
+            glyph_paths:
+              invalid: "The strokes could not be read."
         plan:
           attributes:
             what:

@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :sittings, dependent: :destroy
   has_many :plans, dependent: :destroy
   has_many :clearings, dependent: :destroy
+  has_many :copyings, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -45,6 +46,8 @@ class User < ApplicationRecord
   def moon
     MoonPhase.for(self)
   end
+
+  def pagoda(sutra: Sutra.heart) = Pagoda.for(self, sutra: sutra)
 
   private
     def hour_now = Time.current.in_time_zone(time_zone).hour

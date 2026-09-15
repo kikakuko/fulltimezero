@@ -13,6 +13,11 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
+    # 경전은 앱의 것이라 테스트에도 파일에서 심는다. 값을 테스트에 적지 않는다.
+    parallelize_setup { |_worker| Sutra.seed_from(Sutra::HEART_FILE) }
+
+    def heart_sutra = Sutra.find_by(slug: Sutra::HEART) || Sutra.seed_from(Sutra::HEART_FILE)
+
     # Add more helper methods to be used by all tests here...
   end
 end

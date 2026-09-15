@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_15_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_110100) do
   create_table "clearings", force: :cascade do |t|
     t.date "cleared_on", null: false
     t.datetime "created_at", null: false
@@ -18,6 +18,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_100000) do
     t.integer "user_id", null: false
     t.index ["user_id", "cleared_on"], name: "index_clearings_on_user_id_and_cleared_on", unique: true
     t.index ["user_id"], name: "index_clearings_on_user_id"
+  end
+
+  create_table "copyings", force: :cascade do |t|
+    t.date "copied_on", null: false
+    t.datetime "created_at", null: false
+    t.json "glyph_paths"
+    t.integer "sutra_char_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["sutra_char_id"], name: "index_copyings_on_sutra_char_id"
+    t.index ["user_id", "copied_on"], name: "index_copyings_on_user_id_and_copied_on", unique: true
+    t.index ["user_id", "sutra_char_id"], name: "index_copyings_on_user_id_and_sutra_char_id", unique: true
+    t.index ["user_id"], name: "index_copyings_on_user_id"
   end
 
   create_table "plans", force: :cascade do |t|
@@ -60,6 +73,51 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_100000) do
     t.index ["user_id"], name: "index_sittings_on_user_id"
   end
 
+  create_table "sutra_chars", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "gloss_en", null: false
+    t.string "glyph", null: false
+    t.integer "nth", null: false
+    t.integer "pos", null: false
+    t.string "reading", null: false
+    t.json "sanskrit"
+    t.string "sense_here", null: false
+    t.integer "sutra_id", null: false
+    t.integer "sutra_phrase_id", null: false
+    t.integer "total", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sutra_id", "pos"], name: "index_sutra_chars_on_sutra_id_and_pos", unique: true
+    t.index ["sutra_id"], name: "index_sutra_chars_on_sutra_id"
+    t.index ["sutra_phrase_id"], name: "index_sutra_chars_on_sutra_phrase_id"
+  end
+
+  create_table "sutra_phrases", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "en", null: false
+    t.integer "end_pos", null: false
+    t.string "han", null: false
+    t.string "ko", null: false
+    t.integer "number", null: false
+    t.integer "start_pos", null: false
+    t.integer "sutra_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sutra_id", "number"], name: "index_sutra_phrases_on_sutra_id_and_number", unique: true
+    t.index ["sutra_id"], name: "index_sutra_phrases_on_sutra_id"
+  end
+
+  create_table "sutras", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "edition"
+    t.string "slug", null: false
+    t.string "title_han", null: false
+    t.string "title_ko", null: false
+    t.integer "total", null: false
+    t.text "translation_note"
+    t.integer "unique_glyphs"
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_sutras_on_slug", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -71,8 +129,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_100000) do
   end
 
   add_foreign_key "clearings", "users"
+  add_foreign_key "copyings", "sutra_chars"
+  add_foreign_key "copyings", "users"
   add_foreign_key "plans", "users"
   add_foreign_key "rests", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "sittings", "users"
+  add_foreign_key "sutra_chars", "sutra_phrases"
+  add_foreign_key "sutra_chars", "sutras"
+  add_foreign_key "sutra_phrases", "sutras"
 end

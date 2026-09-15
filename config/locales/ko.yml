@@ -90,6 +90,9 @@ ko:
       plans: "일정"
       taken_on: "내려받은 날"
       cleared: "비워 둔 날"
+      copyings: "사경"
+      on_paper: "종이에 썼다"
+      on_screen: "화면에 썼다"
 
   guide:
     back: "안내로 돌아간다"
@@ -310,6 +313,15 @@ ko:
               confirmation: 두 비밀번호가 서로 다르다.
             time_zone:
               inclusion: 알 수 없는 시간대다.
+        copying:
+          attributes:
+            copied_on:
+              taken: "오늘의 한 자는 이미 적었다. 다음 자는 내일 온다."
+            sutra_char:
+              taken: "이미 적은 자다."
+              out_of_turn: "차례가 아닌 자다."
+            glyph_paths:
+              invalid: "획을 알아볼 수 없다."
         plan:
           attributes:
             what:

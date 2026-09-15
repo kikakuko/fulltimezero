@@ -1,0 +1,2680 @@
+# fulltimezero · 불탑 사경 데이터 — 반야심경 260자
+# 필드: pos 위치 · glyph 글자 · reading 훈음 · sense_here 이 자리의 뜻 · gloss_en 영어 · phrase 구절 id · nth/total 등장 순번/총수 · sanskrit(음역자만) 원어·음절·소리
+sutra:
+  id: heart_sutra
+  title_han: 般若波羅蜜多心經
+  title_ko: 반야바라밀다심경
+  edition: 현장(玄奘)역, 제목 제외 260자
+  total: 260
+  translation_note: 우리말·영어 번역과 자리별 풀이는 fulltimezero 고유 작업. 기존 번역을 인용하지 않았다.
+  unique_glyphs: 116
+phrases:
+- id: 1
+  han: 觀自在菩薩
+  ko: 관자재보살이
+  en: The bodhisattva who sees without hindrance,
+  start: 1
+  end: 5
+- id: 2
+  han: 行深般若波羅蜜多時
+  ko: 깊은 반야바라밀다를 행할 때
+  en: while practicing the deep perfection of wisdom,
+  start: 6
+  end: 14
+- id: 3
+  han: 照見五蘊皆空
+  ko: 다섯 쌓임이 모두 비었음을 비추어 보고
+  en: saw that the five heaps are all empty,
+  start: 15
+  end: 20
+- id: 4
+  han: 度一切苦厄
+  ko: 온갖 괴로움과 재앙을 건넜다
+  en: and crossed beyond all suffering and distress.
+  start: 21
+  end: 25
+- id: 5
+  han: 舍利子
+  ko: 사리자여
+  en: Śāriputra,
+  start: 26
+  end: 28
+- id: 6
+  han: 色不異空
+  ko: 물질은 비었음과 다르지 않고
+  en: form is not other than emptiness,
+  start: 29
+  end: 32
+- id: 7
+  han: 空不異色
+  ko: 비었음은 물질과 다르지 않다
+  en: emptiness is not other than form;
+  start: 33
+  end: 36
+- id: 8
+  han: 色即是空
+  ko: 물질이 곧 비었음이요
+  en: form is precisely emptiness,
+  start: 37
+  end: 40
+- id: 9
+  han: 空即是色
+  ko: 비었음이 곧 물질이다
+  en: emptiness is precisely form.
+  start: 41
+  end: 44
+- id: 10
+  han: 受想行識
+  ko: 느낌·생각·지음·앎도
+  en: Feeling, perception, formations, consciousness —
+  start: 45
+  end: 48
+- id: 11
+  han: 亦復如是
+  ko: 또한 이와 같다
+  en: these too are just so.
+  start: 49
+  end: 52
+- id: 12
+  han: 舍利子
+  ko: 사리자여
+  en: Śāriputra,
+  start: 53
+  end: 55
+- id: 13
+  han: 是諸法空相
+  ko: 이 모든 법의 빈 모습은
+  en: 'all things have the mark of emptiness:'
+  start: 56
+  end: 60
+- id: 14
+  han: 不生不滅
+  ko: 나지도 않고 사라지지도 않으며
+  en: not arising, not ceasing,
+  start: 61
+  end: 64
+- id: 15
+  han: 不垢不淨
+  ko: 더럽지도 않고 깨끗하지도 않으며
+  en: not defiled, not pure,
+  start: 65
+  end: 68
+- id: 16
+  han: 不增不減
+  ko: 늘지도 않고 줄지도 않는다
+  en: not increasing, not decreasing.
+  start: 69
+  end: 72
+- id: 17
+  han: 是故空中無色
+  ko: 그러므로 빔 가운데는 물질이 없고
+  en: Therefore, in emptiness there is no form,
+  start: 73
+  end: 78
+- id: 18
+  han: 無受想行識
+  ko: 느낌·생각·지음·앎이 없으며
+  en: no feeling, perception, formations, consciousness;
+  start: 79
+  end: 83
+- id: 19
+  han: 無眼耳鼻舌身意
+  ko: 눈·귀·코·혀·몸·뜻이 없고
+  en: no eye, ear, nose, tongue, body, mind;
+  start: 84
+  end: 90
+- id: 20
+  han: 無色聲香味觸法
+  ko: 빛깔·소리·냄새·맛·닿음·법이 없으며
+  en: no sight, sound, smell, taste, touch, thought;
+  start: 91
+  end: 97
+- id: 21
+  han: 無眼界
+  ko: 눈의 경계가 없고
+  en: no realm of the eye,
+  start: 98
+  end: 100
+- id: 22
+  han: 乃至無意識界
+  ko: 나아가 뜻의 앎의 경계까지 없다
+  en: and so on up to no realm of mind-consciousness;
+  start: 101
+  end: 106
+- id: 23
+  han: 無無明
+  ko: 어리석음도 없고
+  en: no ignorance,
+  start: 107
+  end: 109
+- id: 24
+  han: 亦無無明盡
+  ko: 어리석음이 다함도 없으며
+  en: and no ending of ignorance,
+  start: 110
+  end: 114
+- id: 25
+  han: 乃至無老死
+  ko: 나아가 늙음과 죽음도 없고
+  en: and so on up to no aging and death,
+  start: 115
+  end: 119
+- id: 26
+  han: 亦無老死盡
+  ko: 늙음과 죽음이 다함도 없다
+  en: and no ending of aging and death;
+  start: 120
+  end: 124
+- id: 27
+  han: 無苦集滅道
+  ko: 괴로움·원인·사라짐·길이 없고
+  en: no suffering, its origin, its ceasing, or the path;
+  start: 125
+  end: 129
+- id: 28
+  han: 無智亦無得
+  ko: 앎도 없고 얻음도 없다
+  en: no knowing and no attaining,
+  start: 130
+  end: 134
+- id: 29
+  han: 以無所得故
+  ko: 얻을 것이 없기 때문에
+  en: because there is nothing to attain.
+  start: 135
+  end: 139
+- id: 30
+  han: 菩提薩埵
+  ko: 보리살타는
+  en: The bodhisattva,
+  start: 140
+  end: 143
+- id: 31
+  han: 依般若波羅蜜多故
+  ko: 반야바라밀다에 의지하므로
+  en: relying on the perfection of wisdom,
+  start: 144
+  end: 151
+- id: 32
+  han: 心無罣礙
+  ko: 마음에 걸림이 없고
+  en: has a mind with no hindrance;
+  start: 152
+  end: 155
+- id: 33
+  han: 無罣礙故
+  ko: 걸림이 없으므로
+  en: having no hindrance,
+  start: 156
+  end: 159
+- id: 34
+  han: 無有恐怖
+  ko: 두려움이 없으며
+  en: there is no fear;
+  start: 160
+  end: 163
+- id: 35
+  han: 遠離顛倒夢想
+  ko: 뒤집힌 헛된 생각을 멀리 떠나
+  en: leaving far behind all upside-down dreaming,
+  start: 164
+  end: 169
+- id: 36
+  han: 究竟涅槃
+  ko: 마침내 열반에 이른다
+  en: one arrives at last at nirvāṇa.
+  start: 170
+  end: 173
+- id: 37
+  han: 三世諸佛
+  ko: 삼세의 모든 부처님도
+  en: The buddhas of the three times,
+  start: 174
+  end: 177
+- id: 38
+  han: 依般若波羅蜜多故
+  ko: 반야바라밀다에 의지하므로
+  en: relying on the perfection of wisdom,
+  start: 178
+  end: 185
+- id: 39
+  han: 得阿耨多羅三藐三菩提
+  ko: 위없이 바르고 두루 깨달음을 얻는다
+  en: attain unsurpassed, complete and perfect awakening.
+  start: 186
+  end: 195
+- id: 40
+  han: 故知般若波羅蜜多
+  ko: 그러므로 알라, 반야바라밀다는
+  en: 'Therefore know: the perfection of wisdom'
+  start: 196
+  end: 203
+- id: 41
+  han: 是大神呪
+  ko: 크게 신령한 진언이요
+  en: is the great spirit-mantra,
+  start: 204
+  end: 207
+- id: 42
+  han: 是大明呪
+  ko: 크게 밝은 진언이요
+  en: the great bright mantra,
+  start: 208
+  end: 211
+- id: 43
+  han: 是無上呪
+  ko: 위없는 진언이요
+  en: the unsurpassed mantra,
+  start: 212
+  end: 215
+- id: 44
+  han: 是無等等呪
+  ko: 견줄 데 없는 진언이니
+  en: the mantra equal to the unequalled,
+  start: 216
+  end: 220
+- id: 45
+  han: 能除一切苦
+  ko: 온갖 괴로움을 없애며
+  en: able to remove all suffering,
+  start: 221
+  end: 225
+- id: 46
+  han: 真實不虛
+  ko: 참되어 헛되지 않다
+  en: true and not false.
+  start: 226
+  end: 229
+- id: 47
+  han: 故說般若波羅蜜多呪
+  ko: 그러므로 반야바라밀다의 진언을 말하니
+  en: Therefore the mantra of the perfection of wisdom is spoken,
+  start: 230
+  end: 238
+- id: 48
+  han: 即說呪曰
+  ko: 곧 진언을 이르되
+  en: 'the mantra that goes:'
+  start: 239
+  end: 242
+- id: 49
+  han: 揭諦揭諦
+  ko: 가떼 가떼
+  en: gate gate
+  start: 243
+  end: 246
+- id: 50
+  han: 波羅揭諦
+  ko: 빠라가떼
+  en: pāragate
+  start: 247
+  end: 250
+- id: 51
+  han: 波羅僧揭諦
+  ko: 빠라상가떼
+  en: pārasaṃgate
+  start: 251
+  end: 255
+- id: 52
+  han: 菩提薩婆訶
+  ko: 보디 스바하
+  en: bodhi svāhā
+  start: 256
+  end: 260
+chars:
+- pos: 1
+  glyph: 觀
+  reading: 볼 관
+  sense_here: 비추어 보다. 이름의 첫 자이자 이 경 전체가 하는 일
+  gloss_en: to see through
+  phrase: 1
+  nth: 1
+  total: 1
+- pos: 2
+  glyph: 自
+  reading: 스스로 자
+  sense_here: 자재(自在)의 자 — 스스로, 걸림 없이
+  gloss_en: self, of oneself
+  phrase: 1
+  nth: 1
+  total: 1
+- pos: 3
+  glyph: 在
+  reading: 있을 재
+  sense_here: 자재의 재 — 어디에나 있어 막힘이 없다
+  gloss_en: present, unhindered
+  phrase: 1
+  nth: 1
+  total: 1
+- pos: 4
+  glyph: 菩
+  reading: 보리 보
+  sense_here: 보살의 보. 깨어남(bodhi)을 소리로 옮긴 자
+  gloss_en: bo(dhi), awakening
+  phrase: 1
+  sanskrit:
+    word: bodhisattva
+    syllable: bo(dhi)
+    sound_ko: 보디사뜨바
+  nth: 1
+  total: 4
+- pos: 5
+  glyph: 薩
+  reading: 보살 살
+  sense_here: 보살의 살. 존재(sattva)를 소리로 옮긴 자
+  gloss_en: sat(tva), being
+  phrase: 1
+  sanskrit:
+    word: bodhisattva
+    syllable: sat(tva)
+    sound_ko: 보디사뜨바
+  nth: 1
+  total: 3
+- pos: 6
+  glyph: 行
+  reading: 행할 행
+  sense_here: 닦다, 실천하다. 뒤에서 두 번은 "지음(行蘊)"으로 다시 만난다
+  gloss_en: to practice
+  phrase: 2
+  nth: 1
+  total: 3
+- pos: 7
+  glyph: 深
+  reading: 깊을 심
+  sense_here: 얕은 반야가 아닌 깊은 반야
+  gloss_en: deep
+  phrase: 2
+  nth: 1
+  total: 1
+- pos: 8
+  glyph: 般
+  reading: 반야 반
+  sense_here: 반야의 반. 지혜(prajñā)의 첫 소리
+  gloss_en: pra(jñā)
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 5
+- pos: 9
+  glyph: 若
+  reading: 반야 야
+  sense_here: 반야의 야. 같은 자가 다른 자리에선 "같을 약"이지만 여기선 소리
+  gloss_en: (praj)ñā, wisdom
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: jñā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 5
+- pos: 10
+  glyph: 波
+  reading: 물결 파
+  sense_here: 바라밀의 바. 건너감(pāramitā)의 첫 소리. 마지막 진언에서 다시 만난다
+  gloss_en: pā(ramitā)
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 7
+- pos: 11
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 바라밀의 라
+  gloss_en: (pā)ra(mitā)
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: ra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 8
+- pos: 12
+  glyph: 蜜
+  reading: 꿀 밀
+  sense_here: 바라밀의 밀. 꿀이라는 뜻과 무관한 소리
+  gloss_en: (pāra)mi(tā)
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: mi
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 5
+- pos: 13
+  glyph: 多
+  reading: 많을 다
+  sense_here: 바라밀다의 다. 여기선 "많다"가 아니라 소리
+  gloss_en: (pārami)tā
+  phrase: 2
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: tā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 1
+  total: 6
+- pos: 14
+  glyph: 時
+  reading: 때 시
+  sense_here: '"…할 때". 이 경은 한 순간을 이야기한다'
+  gloss_en: at the time when
+  phrase: 2
+  nth: 1
+  total: 1
+- pos: 15
+  glyph: 照
+  reading: 비출 조
+  sense_here: 빛을 비추다. 觀이 안으로 보는 것이라면 照는 비추어 드러내는 것
+  gloss_en: to illuminate
+  phrase: 3
+  nth: 1
+  total: 1
+- pos: 16
+  glyph: 見
+  reading: 볼 견
+  sense_here: 보다, 알아차리다. 照見 — 비추어 보다
+  gloss_en: to see
+  phrase: 3
+  nth: 1
+  total: 1
+- pos: 17
+  glyph: 五
+  reading: 다섯 오
+  sense_here: 다섯 — 오온의 다섯
+  gloss_en: five
+  phrase: 3
+  nth: 1
+  total: 1
+- pos: 18
+  glyph: 蘊
+  reading: 쌓일 온
+  sense_here: 쌓임(skandha). 몸·느낌·생각·지음·앎의 다섯 무더기
+  gloss_en: aggregate, heap
+  phrase: 3
+  nth: 1
+  total: 1
+- pos: 19
+  glyph: 皆
+  reading: 다 개
+  sense_here: 모두, 하나도 남김없이
+  gloss_en: all
+  phrase: 3
+  nth: 1
+  total: 1
+- pos: 20
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음(śūnya). 이 경의 심장
+  gloss_en: empty
+  phrase: 3
+  nth: 1
+  total: 7
+- pos: 21
+  glyph: 度
+  reading: 건널 도
+  sense_here: 건너다. 강을 건너듯 괴로움의 저편으로
+  gloss_en: to cross over
+  phrase: 4
+  nth: 1
+  total: 1
+- pos: 22
+  glyph: 一
+  reading: 한 일
+  sense_here: 한. 一切 — 하나로 끊음 없이, 곧 온갖
+  gloss_en: one, whole
+  phrase: 4
+  nth: 1
+  total: 2
+- pos: 23
+  glyph: 切
+  reading: 온통 체
+  sense_here: 온통. 一切의 체. "끊을 절"과 같은 자
+  gloss_en: all, entire
+  phrase: 4
+  nth: 1
+  total: 2
+- pos: 24
+  glyph: 苦
+  reading: 쓸 고
+  sense_here: 괴로움(duḥkha). 사성제의 첫 진리
+  gloss_en: suffering
+  phrase: 4
+  nth: 1
+  total: 3
+- pos: 25
+  glyph: 厄
+  reading: 액 액
+  sense_here: 재앙, 곤액. 苦厄 — 괴로움과 액운
+  gloss_en: distress, calamity
+  phrase: 4
+  nth: 1
+  total: 1
+- pos: 26
+  glyph: 舍
+  reading: 집 사
+  sense_here: 사리자의 사. 어머니 이름 샤리(Śārī, 백로)의 첫 소리
+  gloss_en: śā(ri)
+  phrase: 5
+  sanskrit:
+    word: Śāriputra
+    syllable: śā
+    sound_ko: 샤리뿌뜨라
+  nth: 1
+  total: 2
+- pos: 27
+  glyph: 利
+  reading: 이로울 리
+  sense_here: 사리자의 리. 소리를 옮긴 자
+  gloss_en: (śā)ri
+  phrase: 5
+  sanskrit:
+    word: Śāriputra
+    syllable: ri
+    sound_ko: 샤리뿌뜨라
+  nth: 1
+  total: 2
+- pos: 28
+  glyph: 子
+  reading: 아들 자
+  sense_here: 아들. 뿌뜨라(putra)를 뜻으로 옮겼다 — 샤리의 아들
+  gloss_en: son (putra)
+  phrase: 5
+  nth: 1
+  total: 2
+- pos: 29
+  glyph: 色
+  reading: 빛 색
+  sense_here: 물질, 형상(rūpa). 오온의 첫째. "빛깔"이 아니라 몸과 물질
+  gloss_en: form, matter
+  phrase: 6
+  nth: 1
+  total: 6
+- pos: 30
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다. 이 경은 아홉 번 "아니다"라고 말한다
+  gloss_en: not
+  phrase: 6
+  nth: 1
+  total: 9
+- pos: 31
+  glyph: 異
+  reading: 다를 이
+  sense_here: 다르다. 不異 — 다르지 않다
+  gloss_en: different, other
+  phrase: 6
+  nth: 1
+  total: 2
+- pos: 32
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음. 물질의 다른 이름
+  gloss_en: emptiness
+  phrase: 6
+  nth: 2
+  total: 7
+- pos: 33
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음. 앞 구절을 뒤집어 다시
+  gloss_en: emptiness
+  phrase: 7
+  nth: 3
+  total: 7
+- pos: 34
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다
+  gloss_en: not
+  phrase: 7
+  nth: 2
+  total: 9
+- pos: 35
+  glyph: 異
+  reading: 다를 이
+  sense_here: 다르다
+  gloss_en: different
+  phrase: 7
+  nth: 2
+  total: 2
+- pos: 36
+  glyph: 色
+  reading: 빛 색
+  sense_here: 물질. 비었음의 다른 이름
+  gloss_en: form
+  phrase: 7
+  nth: 2
+  total: 6
+- pos: 37
+  glyph: 色
+  reading: 빛 색
+  sense_here: 물질
+  gloss_en: form
+  phrase: 8
+  nth: 3
+  total: 6
+- pos: 38
+  glyph: 即
+  reading: 곧 즉
+  sense_here: 곧, 바로. 다르지 않은 데서 한 걸음 더 — 바로 그것이다
+  gloss_en: precisely, is
+  phrase: 8
+  nth: 1
+  total: 3
+- pos: 39
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다. 即是 — 바로 이것
+  gloss_en: is
+  phrase: 8
+  nth: 1
+  total: 9
+- pos: 40
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음
+  gloss_en: emptiness
+  phrase: 8
+  nth: 4
+  total: 7
+- pos: 41
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음
+  gloss_en: emptiness
+  phrase: 9
+  nth: 5
+  total: 7
+- pos: 42
+  glyph: 即
+  reading: 곧 즉
+  sense_here: 곧
+  gloss_en: precisely
+  phrase: 9
+  nth: 2
+  total: 3
+- pos: 43
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다
+  gloss_en: is
+  phrase: 9
+  nth: 2
+  total: 9
+- pos: 44
+  glyph: 色
+  reading: 빛 색
+  sense_here: 물질. 비었음이 허무가 아님을 여기서 말한다
+  gloss_en: form
+  phrase: 9
+  nth: 4
+  total: 6
+- pos: 45
+  glyph: 受
+  reading: 받을 수
+  sense_here: 느낌(vedanā). 오온의 둘째. 좋다·싫다·덤덤하다
+  gloss_en: feeling
+  phrase: 10
+  nth: 1
+  total: 2
+- pos: 46
+  glyph: 想
+  reading: 생각 상
+  sense_here: 생각, 표상(saṃjñā). 오온의 셋째. 이름 붙여 알아보는 일
+  gloss_en: perception
+  phrase: 10
+  nth: 1
+  total: 3
+- pos: 47
+  glyph: 行
+  reading: 행할 행
+  sense_here: 지음(saṃskāra). 오온의 넷째. 앞에선 "행하다"였던 자
+  gloss_en: formations
+  phrase: 10
+  nth: 2
+  total: 3
+- pos: 48
+  glyph: 識
+  reading: 알 식
+  sense_here: 앎(vijñāna). 오온의 다섯째. 분별하여 아는 마음
+  gloss_en: consciousness
+  phrase: 10
+  nth: 1
+  total: 3
+- pos: 49
+  glyph: 亦
+  reading: 또 역
+  sense_here: 또한. 물질만이 아니라
+  gloss_en: also
+  phrase: 11
+  nth: 1
+  total: 4
+- pos: 50
+  glyph: 復
+  reading: 다시 부
+  sense_here: 다시, 또. 亦復 — 또한 다시
+  gloss_en: again
+  phrase: 11
+  nth: 1
+  total: 1
+- pos: 51
+  glyph: 如
+  reading: 같을 여
+  sense_here: 같다. 如是 — 이와 같다
+  gloss_en: like, as
+  phrase: 11
+  nth: 1
+  total: 1
+- pos: 52
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것. 앞에서 말한 그대로
+  gloss_en: this, so
+  phrase: 11
+  nth: 3
+  total: 9
+- pos: 53
+  glyph: 舍
+  reading: 집 사
+  sense_here: 사리자를 두 번째 부른다
+  gloss_en: śā(ri)
+  phrase: 12
+  sanskrit:
+    word: Śāriputra
+    syllable: śā
+    sound_ko: 샤리뿌뜨라
+  nth: 2
+  total: 2
+- pos: 54
+  glyph: 利
+  reading: 이로울 리
+  sense_here: 소리를 옮긴 자
+  gloss_en: (śā)ri
+  phrase: 12
+  sanskrit:
+    word: Śāriputra
+    syllable: ri
+    sound_ko: 샤리뿌뜨라
+  nth: 2
+  total: 2
+- pos: 55
+  glyph: 子
+  reading: 아들 자
+  sense_here: 아들(putra)
+  gloss_en: son
+  phrase: 12
+  nth: 2
+  total: 2
+- pos: 56
+  glyph: 是
+  reading: 이 시
+  sense_here: 이. 지시하는 자로 쓰였다
+  gloss_en: this
+  phrase: 13
+  nth: 4
+  total: 9
+- pos: 57
+  glyph: 諸
+  reading: 모두 제
+  sense_here: 모든. 諸法 — 모든 것
+  gloss_en: all
+  phrase: 13
+  nth: 1
+  total: 2
+- pos: 58
+  glyph: 法
+  reading: 법 법
+  sense_here: 법, 것(dharma). 여기선 존재하는 모든 것
+  gloss_en: things, dharmas
+  phrase: 13
+  nth: 1
+  total: 2
+- pos: 59
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음. 空相 — 빈 모습
+  gloss_en: empty
+  phrase: 13
+  nth: 6
+  total: 7
+- pos: 60
+  glyph: 相
+  reading: 모양 상
+  sense_here: 모습, 특징(lakṣaṇa). 빔이 갖는 여섯 가지 "아님"이 이어진다
+  gloss_en: mark, characteristic
+  phrase: 13
+  nth: 1
+  total: 1
+- pos: 61
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다. 여섯 "아님"의 첫째
+  gloss_en: not
+  phrase: 14
+  nth: 3
+  total: 9
+- pos: 62
+  glyph: 生
+  reading: 날 생
+  sense_here: 나다, 생기다
+  gloss_en: arising
+  phrase: 14
+  nth: 1
+  total: 1
+- pos: 63
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다
+  gloss_en: not
+  phrase: 14
+  nth: 4
+  total: 9
+- pos: 64
+  glyph: 滅
+  reading: 멸할 멸
+  sense_here: 사라지다, 멸하다
+  gloss_en: ceasing
+  phrase: 14
+  nth: 1
+  total: 2
+- pos: 65
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다
+  gloss_en: not
+  phrase: 15
+  nth: 5
+  total: 9
+- pos: 66
+  glyph: 垢
+  reading: 때 구
+  sense_here: 때, 더러움
+  gloss_en: defiled
+  phrase: 15
+  nth: 1
+  total: 1
+- pos: 67
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다
+  gloss_en: not
+  phrase: 15
+  nth: 6
+  total: 9
+- pos: 68
+  glyph: 淨
+  reading: 깨끗할 정
+  sense_here: 깨끗함. 더러움의 반대도 부정된다
+  gloss_en: pure
+  phrase: 15
+  nth: 1
+  total: 1
+- pos: 69
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다
+  gloss_en: not
+  phrase: 16
+  nth: 7
+  total: 9
+- pos: 70
+  glyph: 增
+  reading: 더할 증
+  sense_here: 늘다, 더해지다
+  gloss_en: increasing
+  phrase: 16
+  nth: 1
+  total: 1
+- pos: 71
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다. 이 경의 마지막 "아님"은 真實不虛에서
+  gloss_en: not
+  phrase: 16
+  nth: 8
+  total: 9
+- pos: 72
+  glyph: 減
+  reading: 덜 감
+  sense_here: 줄다, 덜어지다
+  gloss_en: decreasing
+  phrase: 16
+  nth: 1
+  total: 1
+- pos: 73
+  glyph: 是
+  reading: 이 시
+  sense_here: 이. 是故 — 이런 까닭에
+  gloss_en: this
+  phrase: 17
+  nth: 5
+  total: 9
+- pos: 74
+  glyph: 故
+  reading: 연고 고
+  sense_here: 까닭. 是故 — 그러므로
+  gloss_en: therefore
+  phrase: 17
+  nth: 1
+  total: 7
+- pos: 75
+  glyph: 空
+  reading: 빌 공
+  sense_here: 비었음. 空中 — 빔 가운데
+  gloss_en: emptiness
+  phrase: 17
+  nth: 7
+  total: 7
+- pos: 76
+  glyph: 中
+  reading: 가운데 중
+  sense_here: 가운데, 안
+  gloss_en: within
+  phrase: 17
+  nth: 1
+  total: 1
+- pos: 77
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 스물한 번 이어지는 "없음"의 첫째
+  gloss_en: no, none
+  phrase: 17
+  nth: 1
+  total: 21
+- pos: 78
+  glyph: 色
+  reading: 빛 색
+  sense_here: 물질. 오온의 첫째가 없다
+  gloss_en: form
+  phrase: 17
+  nth: 5
+  total: 6
+- pos: 79
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 18
+  nth: 2
+  total: 21
+- pos: 80
+  glyph: 受
+  reading: 받을 수
+  sense_here: 느낌
+  gloss_en: feeling
+  phrase: 18
+  nth: 2
+  total: 2
+- pos: 81
+  glyph: 想
+  reading: 생각 상
+  sense_here: 생각
+  gloss_en: perception
+  phrase: 18
+  nth: 2
+  total: 3
+- pos: 82
+  glyph: 行
+  reading: 행할 행
+  sense_here: 지음. 세 번째이자 마지막 行
+  gloss_en: formations
+  phrase: 18
+  nth: 3
+  total: 3
+- pos: 83
+  glyph: 識
+  reading: 알 식
+  sense_here: 앎
+  gloss_en: consciousness
+  phrase: 18
+  nth: 2
+  total: 3
+- pos: 84
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 여섯 감각기관(六根)이 없다
+  gloss_en: 'no'
+  phrase: 19
+  nth: 3
+  total: 21
+- pos: 85
+  glyph: 眼
+  reading: 눈 안
+  sense_here: 눈
+  gloss_en: eye
+  phrase: 19
+  nth: 1
+  total: 2
+- pos: 86
+  glyph: 耳
+  reading: 귀 이
+  sense_here: 귀
+  gloss_en: ear
+  phrase: 19
+  nth: 1
+  total: 1
+- pos: 87
+  glyph: 鼻
+  reading: 코 비
+  sense_here: 코
+  gloss_en: nose
+  phrase: 19
+  nth: 1
+  total: 1
+- pos: 88
+  glyph: 舌
+  reading: 혀 설
+  sense_here: 혀
+  gloss_en: tongue
+  phrase: 19
+  nth: 1
+  total: 1
+- pos: 89
+  glyph: 身
+  reading: 몸 신
+  sense_here: 몸. 촉감의 기관
+  gloss_en: body
+  phrase: 19
+  nth: 1
+  total: 1
+- pos: 90
+  glyph: 意
+  reading: 뜻 의
+  sense_here: 뜻, 마음. 생각의 기관
+  gloss_en: mind
+  phrase: 19
+  nth: 1
+  total: 2
+- pos: 91
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 여섯 대상(六境)이 없다
+  gloss_en: 'no'
+  phrase: 20
+  nth: 4
+  total: 21
+- pos: 92
+  glyph: 色
+  reading: 빛 색
+  sense_here: 빛깔, 보이는 것. 앞의 "물질"과 같은 자, 여기선 눈의 대상
+  gloss_en: sight
+  phrase: 20
+  nth: 6
+  total: 6
+- pos: 93
+  glyph: 聲
+  reading: 소리 성
+  sense_here: 소리. 귀의 대상
+  gloss_en: sound
+  phrase: 20
+  nth: 1
+  total: 1
+- pos: 94
+  glyph: 香
+  reading: 향기 향
+  sense_here: 냄새. 코의 대상
+  gloss_en: smell
+  phrase: 20
+  nth: 1
+  total: 1
+- pos: 95
+  glyph: 味
+  reading: 맛 미
+  sense_here: 맛. 혀의 대상
+  gloss_en: taste
+  phrase: 20
+  nth: 1
+  total: 1
+- pos: 96
+  glyph: 觸
+  reading: 닿을 촉
+  sense_here: 닿음. 몸의 대상
+  gloss_en: touch
+  phrase: 20
+  nth: 1
+  total: 1
+- pos: 97
+  glyph: 法
+  reading: 법 법
+  sense_here: 법. 여기선 뜻의 대상 — 생각되는 것
+  gloss_en: mental objects
+  phrase: 20
+  nth: 2
+  total: 2
+- pos: 98
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 열여덟 경계(十八界)의 처음
+  gloss_en: 'no'
+  phrase: 21
+  nth: 5
+  total: 21
+- pos: 99
+  glyph: 眼
+  reading: 눈 안
+  sense_here: 눈
+  gloss_en: eye
+  phrase: 21
+  nth: 2
+  total: 2
+- pos: 100
+  glyph: 界
+  reading: 경계 계
+  sense_here: 경계, 영역(dhātu). 눈의 영역
+  gloss_en: realm
+  phrase: 21
+  nth: 1
+  total: 2
+- pos: 101
+  glyph: 乃
+  reading: 이에 내
+  sense_here: 이에. 乃至 — 나아가 …까지
+  gloss_en: and so on
+  phrase: 22
+  nth: 1
+  total: 2
+- pos: 102
+  glyph: 至
+  reading: 이를 지
+  sense_here: 이르다. 열여덟 경계를 처음과 끝만 말하고 건너뛴다
+  gloss_en: up to
+  phrase: 22
+  nth: 1
+  total: 2
+- pos: 103
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 22
+  nth: 6
+  total: 21
+- pos: 104
+  glyph: 意
+  reading: 뜻 의
+  sense_here: 뜻. 意識 — 뜻의 앎
+  gloss_en: mind
+  phrase: 22
+  nth: 2
+  total: 2
+- pos: 105
+  glyph: 識
+  reading: 알 식
+  sense_here: 앎. 意識界 — 열여덟 경계의 마지막
+  gloss_en: consciousness
+  phrase: 22
+  nth: 3
+  total: 3
+- pos: 106
+  glyph: 界
+  reading: 경계 계
+  sense_here: 경계
+  gloss_en: realm
+  phrase: 22
+  nth: 2
+  total: 2
+- pos: 107
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 열두 연기(十二緣起)의 처음을 부정한다
+  gloss_en: 'no'
+  phrase: 23
+  nth: 7
+  total: 21
+- pos: 108
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 無明의 無 — 밝음이 없음
+  gloss_en: un-
+  phrase: 23
+  nth: 8
+  total: 21
+- pos: 109
+  glyph: 明
+  reading: 밝을 명
+  sense_here: 밝음. 無明 — 밝지 않음, 어리석음(avidyā)
+  gloss_en: knowing (ignorance)
+  phrase: 23
+  nth: 1
+  total: 3
+- pos: 110
+  glyph: 亦
+  reading: 또 역
+  sense_here: 또한
+  gloss_en: also
+  phrase: 24
+  nth: 2
+  total: 4
+- pos: 111
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 24
+  nth: 9
+  total: 21
+- pos: 112
+  glyph: 無
+  reading: 없을 무
+  sense_here: 無明의 無
+  gloss_en: un-
+  phrase: 24
+  nth: 10
+  total: 21
+- pos: 113
+  glyph: 明
+  reading: 밝을 명
+  sense_here: 밝음
+  gloss_en: knowing
+  phrase: 24
+  nth: 2
+  total: 3
+- pos: 114
+  glyph: 盡
+  reading: 다할 진
+  sense_here: 다하다, 끝나다. 어리석음이 끝남조차 없다
+  gloss_en: ending
+  phrase: 24
+  nth: 1
+  total: 2
+- pos: 115
+  glyph: 乃
+  reading: 이에 내
+  sense_here: 이에
+  gloss_en: and so on
+  phrase: 25
+  nth: 2
+  total: 2
+- pos: 116
+  glyph: 至
+  reading: 이를 지
+  sense_here: 이르다. 열두 연기의 마지막까지
+  gloss_en: up to
+  phrase: 25
+  nth: 2
+  total: 2
+- pos: 117
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 25
+  nth: 11
+  total: 21
+- pos: 118
+  glyph: 老
+  reading: 늙을 로
+  sense_here: 늙음
+  gloss_en: aging
+  phrase: 25
+  nth: 1
+  total: 2
+- pos: 119
+  glyph: 死
+  reading: 죽을 사
+  sense_here: 죽음. 열두 연기의 끝
+  gloss_en: death
+  phrase: 25
+  nth: 1
+  total: 2
+- pos: 120
+  glyph: 亦
+  reading: 또 역
+  sense_here: 또한
+  gloss_en: also
+  phrase: 26
+  nth: 3
+  total: 4
+- pos: 121
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 26
+  nth: 12
+  total: 21
+- pos: 122
+  glyph: 老
+  reading: 늙을 로
+  sense_here: 늙음
+  gloss_en: aging
+  phrase: 26
+  nth: 2
+  total: 2
+- pos: 123
+  glyph: 死
+  reading: 죽을 사
+  sense_here: 죽음
+  gloss_en: death
+  phrase: 26
+  nth: 2
+  total: 2
+- pos: 124
+  glyph: 盡
+  reading: 다할 진
+  sense_here: 다함. 늙고 죽음이 끝남조차 없다
+  gloss_en: ending
+  phrase: 26
+  nth: 2
+  total: 2
+- pos: 125
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 사성제(四聖諦)를 부정한다
+  gloss_en: 'no'
+  phrase: 27
+  nth: 13
+  total: 21
+- pos: 126
+  glyph: 苦
+  reading: 쓸 고
+  sense_here: 괴로움. 첫째 진리
+  gloss_en: suffering
+  phrase: 27
+  nth: 2
+  total: 3
+- pos: 127
+  glyph: 集
+  reading: 모을 집
+  sense_here: 모임, 원인. 둘째 진리 — 괴로움의 일어남
+  gloss_en: origin
+  phrase: 27
+  nth: 1
+  total: 1
+- pos: 128
+  glyph: 滅
+  reading: 멸할 멸
+  sense_here: 사라짐. 셋째 진리 — 괴로움의 그침
+  gloss_en: ceasing
+  phrase: 27
+  nth: 2
+  total: 2
+- pos: 129
+  glyph: 道
+  reading: 길 도
+  sense_here: 길. 넷째 진리 — 그침에 이르는 길
+  gloss_en: path
+  phrase: 27
+  nth: 1
+  total: 1
+- pos: 130
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 28
+  nth: 14
+  total: 21
+- pos: 131
+  glyph: 智
+  reading: 지혜 지
+  sense_here: 앎, 지혜(jñāna). 반야조차 없다
+  gloss_en: knowing
+  phrase: 28
+  nth: 1
+  total: 1
+- pos: 132
+  glyph: 亦
+  reading: 또 역
+  sense_here: 또한
+  gloss_en: also
+  phrase: 28
+  nth: 4
+  total: 4
+- pos: 133
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 28
+  nth: 15
+  total: 21
+- pos: 134
+  glyph: 得
+  reading: 얻을 득
+  sense_here: 얻음. 깨달음을 얻는다는 것도 없다
+  gloss_en: attaining
+  phrase: 28
+  nth: 1
+  total: 3
+- pos: 135
+  glyph: 以
+  reading: 써 이
+  sense_here: …로써, …때문에
+  gloss_en: because
+  phrase: 29
+  nth: 1
+  total: 1
+- pos: 136
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 스물한 "없음"의 마지막
+  gloss_en: 'no'
+  phrase: 29
+  nth: 16
+  total: 21
+- pos: 137
+  glyph: 所
+  reading: 바 소
+  sense_here: 바, 것. 所得 — 얻을 것
+  gloss_en: that which
+  phrase: 29
+  nth: 1
+  total: 1
+- pos: 138
+  glyph: 得
+  reading: 얻을 득
+  sense_here: 얻음
+  gloss_en: is attained
+  phrase: 29
+  nth: 2
+  total: 3
+- pos: 139
+  glyph: 故
+  reading: 연고 고
+  sense_here: 까닭. 부정의 절이 여기서 끝난다
+  gloss_en: therefore
+  phrase: 29
+  nth: 2
+  total: 7
+- pos: 140
+  glyph: 菩
+  reading: 보리 보
+  sense_here: 보리의 보. 깨어남(bodhi)의 첫 소리
+  gloss_en: bo(dhi)
+  phrase: 30
+  sanskrit:
+    word: bodhisattva
+    syllable: bo
+    sound_ko: 보디사뜨바
+  nth: 2
+  total: 4
+- pos: 141
+  glyph: 提
+  reading: 끌 제
+  sense_here: 보리의 리. 앞의 菩薩과 같은 말을 네 자로 옮긴 것
+  gloss_en: (bo)dhi
+  phrase: 30
+  sanskrit:
+    word: bodhisattva
+    syllable: dhi
+    sound_ko: 보디사뜨바
+  nth: 1
+  total: 3
+- pos: 142
+  glyph: 薩
+  reading: 보살 살
+  sense_here: 살타의 살. 존재(sattva)
+  gloss_en: sat(tva)
+  phrase: 30
+  sanskrit:
+    word: bodhisattva
+    syllable: sat
+    sound_ko: 보디사뜨바
+  nth: 2
+  total: 3
+- pos: 143
+  glyph: 埵
+  reading: 언덕 타
+  sense_here: 살타의 타. 소리를 옮긴 자
+  gloss_en: (sat)tva
+  phrase: 30
+  sanskrit:
+    word: bodhisattva
+    syllable: tva
+    sound_ko: 보디사뜨바
+  nth: 1
+  total: 1
+- pos: 144
+  glyph: 依
+  reading: 의지할 의
+  sense_here: 의지하다, 기대다
+  gloss_en: relying on
+  phrase: 31
+  nth: 1
+  total: 2
+- pos: 145
+  glyph: 般
+  reading: 반야 반
+  sense_here: 반야의 반. 두 번째 반야바라밀다
+  gloss_en: pra(jñā)
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 5
+- pos: 146
+  glyph: 若
+  reading: 반야 야
+  sense_here: 반야의 야
+  gloss_en: (praj)ñā
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: jñā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 5
+- pos: 147
+  glyph: 波
+  reading: 물결 파
+  sense_here: 바라밀의 바
+  gloss_en: pā(ramitā)
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 7
+- pos: 148
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 바라밀의 라
+  gloss_en: (pā)ra(mitā)
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: ra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 8
+- pos: 149
+  glyph: 蜜
+  reading: 꿀 밀
+  sense_here: 바라밀의 밀
+  gloss_en: (pāra)mi(tā)
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: mi
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 5
+- pos: 150
+  glyph: 多
+  reading: 많을 다
+  sense_here: 바라밀다의 다
+  gloss_en: (pārami)tā
+  phrase: 31
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: tā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 2
+  total: 6
+- pos: 151
+  glyph: 故
+  reading: 연고 고
+  sense_here: 까닭. …하므로
+  gloss_en: therefore
+  phrase: 31
+  nth: 3
+  total: 7
+- pos: 152
+  glyph: 心
+  reading: 마음 심
+  sense_here: 마음. 이 경의 이름에 든 그 心
+  gloss_en: mind, heart
+  phrase: 32
+  nth: 1
+  total: 1
+- pos: 153
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 32
+  nth: 17
+  total: 21
+- pos: 154
+  glyph: 罣
+  reading: 걸 괘
+  sense_here: 걸리다. 그물에 걸리듯
+  gloss_en: hindrance
+  phrase: 32
+  nth: 1
+  total: 2
+- pos: 155
+  glyph: 礙
+  reading: 거리낄 애
+  sense_here: 거리끼다, 막히다. 罣礙 — 걸리고 막힘
+  gloss_en: obstruction
+  phrase: 32
+  nth: 1
+  total: 2
+- pos: 156
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다
+  gloss_en: 'no'
+  phrase: 33
+  nth: 18
+  total: 21
+- pos: 157
+  glyph: 罣
+  reading: 걸 괘
+  sense_here: 걸림
+  gloss_en: hindrance
+  phrase: 33
+  nth: 2
+  total: 2
+- pos: 158
+  glyph: 礙
+  reading: 거리낄 애
+  sense_here: 막힘
+  gloss_en: obstruction
+  phrase: 33
+  nth: 2
+  total: 2
+- pos: 159
+  glyph: 故
+  reading: 연고 고
+  sense_here: 까닭
+  gloss_en: therefore
+  phrase: 33
+  nth: 4
+  total: 7
+- pos: 160
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 無有 — 있음이 없다
+  gloss_en: 'no'
+  phrase: 34
+  nth: 19
+  total: 21
+- pos: 161
+  glyph: 有
+  reading: 있을 유
+  sense_here: 있다. 이 경에서 단 한 번 나오는 "있음"이 부정된다
+  gloss_en: existence of
+  phrase: 34
+  nth: 1
+  total: 1
+- pos: 162
+  glyph: 恐
+  reading: 두려울 공
+  sense_here: 두려움
+  gloss_en: fear
+  phrase: 34
+  nth: 1
+  total: 1
+- pos: 163
+  glyph: 怖
+  reading: 두려워할 포
+  sense_here: 두려워함. 恐怖 — 두려움
+  gloss_en: terror
+  phrase: 34
+  nth: 1
+  total: 1
+- pos: 164
+  glyph: 遠
+  reading: 멀 원
+  sense_here: 멀리
+  gloss_en: far
+  phrase: 35
+  nth: 1
+  total: 1
+- pos: 165
+  glyph: 離
+  reading: 떠날 리
+  sense_here: 떠나다. 遠離 — 멀리 떠나다
+  gloss_en: leaving
+  phrase: 35
+  nth: 1
+  total: 1
+- pos: 166
+  glyph: 顛
+  reading: 넘어질 전
+  sense_here: 넘어지다, 뒤집히다
+  gloss_en: upside-down
+  phrase: 35
+  nth: 1
+  total: 1
+- pos: 167
+  glyph: 倒
+  reading: 넘어질 도
+  sense_here: 넘어지다. 顛倒 — 거꾸로 뒤집힌 봄
+  gloss_en: inverted
+  phrase: 35
+  nth: 1
+  total: 1
+- pos: 168
+  glyph: 夢
+  reading: 꿈 몽
+  sense_here: 꿈
+  gloss_en: dream
+  phrase: 35
+  nth: 1
+  total: 1
+- pos: 169
+  glyph: 想
+  reading: 생각 상
+  sense_here: 생각. 夢想 — 꿈같은 헛된 생각. 오온의 想과 같은 자
+  gloss_en: thinking
+  phrase: 35
+  nth: 3
+  total: 3
+- pos: 170
+  glyph: 究
+  reading: 궁구할 구
+  sense_here: 궁구하다, 끝까지
+  gloss_en: ultimate
+  phrase: 36
+  nth: 1
+  total: 1
+- pos: 171
+  glyph: 竟
+  reading: 마침내 경
+  sense_here: 마침내. 究竟 — 끝내, 마침내
+  gloss_en: finally
+  phrase: 36
+  nth: 1
+  total: 1
+- pos: 172
+  glyph: 涅
+  reading: 개흙 녈
+  sense_here: 열반의 열. 꺼짐(nirvāṇa)의 첫 소리
+  gloss_en: nir(vāṇa)
+  phrase: 36
+  sanskrit:
+    word: nirvāṇa
+    syllable: nir
+    sound_ko: 니르바나
+  nth: 1
+  total: 1
+- pos: 173
+  glyph: 槃
+  reading: 쟁반 반
+  sense_here: 열반의 반. 소리를 옮긴 자. 불이 꺼진 고요
+  gloss_en: (nir)vāṇa
+  phrase: 36
+  sanskrit:
+    word: nirvāṇa
+    syllable: vāṇa
+    sound_ko: 니르바나
+  nth: 1
+  total: 1
+- pos: 174
+  glyph: 三
+  reading: 석 삼
+  sense_here: 셋. 三世 — 과거·현재·미래
+  gloss_en: three
+  phrase: 37
+  nth: 1
+  total: 3
+- pos: 175
+  glyph: 世
+  reading: 세상 세
+  sense_here: 세상, 때
+  gloss_en: times, worlds
+  phrase: 37
+  nth: 1
+  total: 1
+- pos: 176
+  glyph: 諸
+  reading: 모두 제
+  sense_here: 모든
+  gloss_en: all
+  phrase: 37
+  nth: 2
+  total: 2
+- pos: 177
+  glyph: 佛
+  reading: 부처 불
+  sense_here: 부처(buddha). 깨어난 이
+  gloss_en: buddha
+  phrase: 37
+  nth: 1
+  total: 1
+- pos: 178
+  glyph: 依
+  reading: 의지할 의
+  sense_here: 의지하다. 보살에 이어 부처님도
+  gloss_en: relying on
+  phrase: 38
+  nth: 2
+  total: 2
+- pos: 179
+  glyph: 般
+  reading: 반야 반
+  sense_here: 반야의 반. 세 번째 반야바라밀다
+  gloss_en: pra(jñā)
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 5
+- pos: 180
+  glyph: 若
+  reading: 반야 야
+  sense_here: 반야의 야
+  gloss_en: (praj)ñā
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: jñā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 5
+- pos: 181
+  glyph: 波
+  reading: 물결 파
+  sense_here: 바라밀의 바
+  gloss_en: pā(ramitā)
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 7
+- pos: 182
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 바라밀의 라
+  gloss_en: (pā)ra(mitā)
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: ra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 8
+- pos: 183
+  glyph: 蜜
+  reading: 꿀 밀
+  sense_here: 바라밀의 밀
+  gloss_en: (pāra)mi(tā)
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: mi
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 5
+- pos: 184
+  glyph: 多
+  reading: 많을 다
+  sense_here: 바라밀다의 다
+  gloss_en: (pārami)tā
+  phrase: 38
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: tā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 3
+  total: 6
+- pos: 185
+  glyph: 故
+  reading: 연고 고
+  sense_here: 까닭
+  gloss_en: therefore
+  phrase: 38
+  nth: 5
+  total: 7
+- pos: 186
+  glyph: 得
+  reading: 얻을 득
+  sense_here: 얻다. 앞에서 "얻음이 없다"던 그 得
+  gloss_en: attain
+  phrase: 39
+  nth: 3
+  total: 3
+- pos: 187
+  glyph: 阿
+  reading: 언덕 아
+  sense_here: 아눗따라(anuttarā, 위없음)의 첫 소리
+  gloss_en: a(nuttarā)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: a
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 1
+  total: 1
+- pos: 188
+  glyph: 耨
+  reading: 김맬 누
+  sense_here: 아눗따라의 둘째 소리
+  gloss_en: (a)nu(ttarā)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: nu
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 1
+  total: 1
+- pos: 189
+  glyph: 多
+  reading: 많을 다
+  sense_here: 아눗따라의 셋째 소리. 여기선 반야바라밀"다"가 아니다
+  gloss_en: (anu)tta(rā)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: tta
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 4
+  total: 6
+- pos: 190
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 아눗따라의 끝 소리
+  gloss_en: (anutta)rā
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: rā
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 4
+  total: 8
+- pos: 191
+  glyph: 三
+  reading: 석 삼
+  sense_here: 삼먁의 삼. 삼약(samyak, 바른)의 첫 소리. "셋"이 아니다
+  gloss_en: sam(yak)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: sam
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 2
+  total: 3
+- pos: 192
+  glyph: 藐
+  reading: 멀 막
+  sense_here: 삼먁의 먁. 소리를 옮긴 자
+  gloss_en: (sam)yak
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: yak
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 1
+  total: 1
+- pos: 193
+  glyph: 三
+  reading: 석 삼
+  sense_here: 삼보리의 삼. 삼보디(saṃbodhi, 두루 깨어남)의 첫 소리
+  gloss_en: saṃ(bodhi)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: saṃ
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 3
+  total: 3
+- pos: 194
+  glyph: 菩
+  reading: 보리 보
+  sense_here: 삼보리의 보
+  gloss_en: (saṃ)bo(dhi)
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: bo
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 3
+  total: 4
+- pos: 195
+  glyph: 提
+  reading: 끌 제
+  sense_here: 삼보리의 리. 깨어남(bodhi)
+  gloss_en: (saṃbo)dhi
+  phrase: 39
+  sanskrit:
+    word: anuttarā samyak-saṃbodhi
+    syllable: dhi
+    sound_ko: 아눗따라 삼약삼보디
+  nth: 2
+  total: 3
+- pos: 196
+  glyph: 故
+  reading: 연고 고
+  sense_here: 그러므로
+  gloss_en: therefore
+  phrase: 40
+  nth: 6
+  total: 7
+- pos: 197
+  glyph: 知
+  reading: 알 지
+  sense_here: 알다. 알아야 한다
+  gloss_en: know
+  phrase: 40
+  nth: 1
+  total: 1
+- pos: 198
+  glyph: 般
+  reading: 반야 반
+  sense_here: 반야의 반. 네 번째
+  gloss_en: pra(jñā)
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 4
+  total: 5
+- pos: 199
+  glyph: 若
+  reading: 반야 야
+  sense_here: 반야의 야
+  gloss_en: (praj)ñā
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: jñā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 4
+  total: 5
+- pos: 200
+  glyph: 波
+  reading: 물결 파
+  sense_here: 바라밀의 바
+  gloss_en: pā(ramitā)
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 4
+  total: 7
+- pos: 201
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 바라밀의 라
+  gloss_en: (pā)ra(mitā)
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: ra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 8
+- pos: 202
+  glyph: 蜜
+  reading: 꿀 밀
+  sense_here: 바라밀의 밀
+  gloss_en: (pāra)mi(tā)
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: mi
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 4
+  total: 5
+- pos: 203
+  glyph: 多
+  reading: 많을 다
+  sense_here: 바라밀다의 다
+  gloss_en: (pārami)tā
+  phrase: 40
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: tā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 6
+- pos: 204
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다. 네 번 이어지는 "…진언이다"의 첫째
+  gloss_en: is
+  phrase: 41
+  nth: 6
+  total: 9
+- pos: 205
+  glyph: 大
+  reading: 큰 대
+  sense_here: 크다
+  gloss_en: great
+  phrase: 41
+  nth: 1
+  total: 2
+- pos: 206
+  glyph: 神
+  reading: 귀신 신
+  sense_here: 신령하다. 大神 — 크게 신령한
+  gloss_en: spirit, marvelous
+  phrase: 41
+  nth: 1
+  total: 1
+- pos: 207
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언(mantra). 소리로 지니는 말. 뜻으로 옮긴 자
+  gloss_en: mantra
+  phrase: 41
+  nth: 1
+  total: 6
+- pos: 208
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다
+  gloss_en: is
+  phrase: 42
+  nth: 7
+  total: 9
+- pos: 209
+  glyph: 大
+  reading: 큰 대
+  sense_here: 크다
+  gloss_en: great
+  phrase: 42
+  nth: 2
+  total: 2
+- pos: 210
+  glyph: 明
+  reading: 밝을 명
+  sense_here: 밝다. 無明의 明이 여기선 긍정된다
+  gloss_en: bright, knowing
+  phrase: 42
+  nth: 3
+  total: 3
+- pos: 211
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언
+  gloss_en: mantra
+  phrase: 42
+  nth: 2
+  total: 6
+- pos: 212
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다
+  gloss_en: is
+  phrase: 43
+  nth: 8
+  total: 9
+- pos: 213
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 無上 — 위가 없다. 부정이 아니라 최상
+  gloss_en: un-
+  phrase: 43
+  nth: 20
+  total: 21
+- pos: 214
+  glyph: 上
+  reading: 위 상
+  sense_here: 위. 그 위가 없다
+  gloss_en: surpassed
+  phrase: 43
+  nth: 1
+  total: 1
+- pos: 215
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언
+  gloss_en: mantra
+  phrase: 43
+  nth: 3
+  total: 6
+- pos: 216
+  glyph: 是
+  reading: 이 시
+  sense_here: 이것이다
+  gloss_en: is
+  phrase: 44
+  nth: 9
+  total: 9
+- pos: 217
+  glyph: 無
+  reading: 없을 무
+  sense_here: 없다. 無等等 — 같은 것이 없는 것과 같은
+  gloss_en: un-
+  phrase: 44
+  nth: 21
+  total: 21
+- pos: 218
+  glyph: 等
+  reading: 무리 등
+  sense_here: 같다. 견줄 것
+  gloss_en: equalled
+  phrase: 44
+  nth: 1
+  total: 2
+- pos: 219
+  glyph: 等
+  reading: 무리 등
+  sense_here: 같다. 두 번 겹쳐 "견줄 데 없는 것과 같은"
+  gloss_en: equal to
+  phrase: 44
+  nth: 2
+  total: 2
+- pos: 220
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언
+  gloss_en: mantra
+  phrase: 44
+  nth: 4
+  total: 6
+- pos: 221
+  glyph: 能
+  reading: 능할 능
+  sense_here: 능히, 할 수 있다
+  gloss_en: able to
+  phrase: 45
+  nth: 1
+  total: 1
+- pos: 222
+  glyph: 除
+  reading: 덜 제
+  sense_here: 덜다, 없애다
+  gloss_en: remove
+  phrase: 45
+  nth: 1
+  total: 1
+- pos: 223
+  glyph: 一
+  reading: 한 일
+  sense_here: 한. 一切
+  gloss_en: all
+  phrase: 45
+  nth: 2
+  total: 2
+- pos: 224
+  glyph: 切
+  reading: 온통 체
+  sense_here: 온통
+  gloss_en: entire
+  phrase: 45
+  nth: 2
+  total: 2
+- pos: 225
+  glyph: 苦
+  reading: 쓸 고
+  sense_here: 괴로움. 첫머리의 度一切苦厄이 돌아온다
+  gloss_en: suffering
+  phrase: 45
+  nth: 3
+  total: 3
+- pos: 226
+  glyph: 真
+  reading: 참 진
+  sense_here: 참되다
+  gloss_en: 'true'
+  phrase: 46
+  nth: 1
+  total: 1
+- pos: 227
+  glyph: 實
+  reading: 열매 실
+  sense_here: 실답다. 真實 — 참되고 실다운
+  gloss_en: real
+  phrase: 46
+  nth: 1
+  total: 1
+- pos: 228
+  glyph: 不
+  reading: 아닐 불
+  sense_here: 아니다. 이 경의 마지막 "아님"
+  gloss_en: not
+  phrase: 46
+  nth: 9
+  total: 9
+- pos: 229
+  glyph: 虛
+  reading: 빌 허
+  sense_here: 헛되다, 비다. 空과 다른 "빔" — 이쪽은 거짓의 빔
+  gloss_en: false, hollow
+  phrase: 46
+  nth: 1
+  total: 1
+- pos: 230
+  glyph: 故
+  reading: 연고 고
+  sense_here: 그러므로
+  gloss_en: therefore
+  phrase: 47
+  nth: 7
+  total: 7
+- pos: 231
+  glyph: 說
+  reading: 말씀 설
+  sense_here: 말하다, 설하다
+  gloss_en: speak
+  phrase: 47
+  nth: 1
+  total: 2
+- pos: 232
+  glyph: 般
+  reading: 반야 반
+  sense_here: 반야의 반. 다섯 번째이자 마지막
+  gloss_en: pra(jñā)
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 5
+- pos: 233
+  glyph: 若
+  reading: 반야 야
+  sense_here: 반야의 야
+  gloss_en: (praj)ñā
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: jñā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 5
+- pos: 234
+  glyph: 波
+  reading: 물결 파
+  sense_here: 바라밀의 바
+  gloss_en: pā(ramitā)
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: pā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 7
+- pos: 235
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 바라밀의 라
+  gloss_en: (pā)ra(mitā)
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: ra
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 6
+  total: 8
+- pos: 236
+  glyph: 蜜
+  reading: 꿀 밀
+  sense_here: 바라밀의 밀
+  gloss_en: (pāra)mi(tā)
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: mi
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 5
+  total: 5
+- pos: 237
+  glyph: 多
+  reading: 많을 다
+  sense_here: 바라밀다의 다
+  gloss_en: (pārami)tā
+  phrase: 47
+  sanskrit:
+    word: prajñāpāramitā
+    syllable: tā
+    sound_ko: 쁘라즈냐빠라미따
+  nth: 6
+  total: 6
+- pos: 238
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언
+  gloss_en: mantra
+  phrase: 47
+  nth: 5
+  total: 6
+- pos: 239
+  glyph: 即
+  reading: 곧 즉
+  sense_here: 곧, 바로
+  gloss_en: then
+  phrase: 48
+  nth: 3
+  total: 3
+- pos: 240
+  glyph: 說
+  reading: 말씀 설
+  sense_here: 말하다
+  gloss_en: speak
+  phrase: 48
+  nth: 2
+  total: 2
+- pos: 241
+  glyph: 呪
+  reading: 빌 주
+  sense_here: 진언. 뜻이 있는 글자는 여기서 끝난다
+  gloss_en: mantra
+  phrase: 48
+  nth: 6
+  total: 6
+- pos: 242
+  glyph: 曰
+  reading: 가로 왈
+  sense_here: 가로되, 이르되. 이 다음은 소리뿐이다
+  gloss_en: it goes
+  phrase: 48
+  nth: 1
+  total: 1
+- pos: 243
+  glyph: 揭
+  reading: 들 게
+  sense_here: 가떼(gate, 간 이여)의 첫 소리. 뜻으로 읽지 않는다
+  gloss_en: ga(te)
+  phrase: 49
+  sanskrit:
+    word: gate
+    syllable: ga
+    sound_ko: 가떼
+  nth: 1
+  total: 4
+- pos: 244
+  glyph: 諦
+  reading: 살필 체
+  sense_here: 가떼의 끝 소리. "살필 체"이지만 여기선 소리
+  gloss_en: (ga)te
+  phrase: 49
+  sanskrit:
+    word: gate
+    syllable: te
+    sound_ko: 가떼
+  nth: 1
+  total: 4
+- pos: 245
+  glyph: 揭
+  reading: 들 게
+  sense_here: 가떼, 다시
+  gloss_en: ga(te)
+  phrase: 49
+  sanskrit:
+    word: gate
+    syllable: ga
+    sound_ko: 가떼
+  nth: 2
+  total: 4
+- pos: 246
+  glyph: 諦
+  reading: 살필 체
+  sense_here: 가떼의 끝 소리
+  gloss_en: (ga)te
+  phrase: 49
+  sanskrit:
+    word: gate
+    syllable: te
+    sound_ko: 가떼
+  nth: 2
+  total: 4
+- pos: 247
+  glyph: 波
+  reading: 물결 파
+  sense_here: 빠라(pāra, 저편)의 첫 소리. 바라밀의 波가 돌아온다
+  gloss_en: pā(ra)
+  phrase: 50
+  sanskrit:
+    word: pāragate
+    syllable: pā
+    sound_ko: 빠라가떼
+  nth: 6
+  total: 7
+- pos: 248
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 빠라의 끝 소리
+  gloss_en: (pā)ra
+  phrase: 50
+  sanskrit:
+    word: pāragate
+    syllable: ra
+    sound_ko: 빠라가떼
+  nth: 7
+  total: 8
+- pos: 249
+  glyph: 揭
+  reading: 들 게
+  sense_here: 가떼의 첫 소리
+  gloss_en: ga(te)
+  phrase: 50
+  sanskrit:
+    word: pāragate
+    syllable: ga
+    sound_ko: 빠라가떼
+  nth: 3
+  total: 4
+- pos: 250
+  glyph: 諦
+  reading: 살필 체
+  sense_here: 가떼의 끝 소리
+  gloss_en: (ga)te
+  phrase: 50
+  sanskrit:
+    word: pāragate
+    syllable: te
+    sound_ko: 빠라가떼
+  nth: 3
+  total: 4
+- pos: 251
+  glyph: 波
+  reading: 물결 파
+  sense_here: 빠라의 첫 소리
+  gloss_en: pā(ra)
+  phrase: 51
+  sanskrit:
+    word: pārasaṃgate
+    syllable: pā
+    sound_ko: 빠라상가떼
+  nth: 7
+  total: 7
+- pos: 252
+  glyph: 羅
+  reading: 그물 라
+  sense_here: 빠라의 끝 소리. 260자 중 마지막 羅
+  gloss_en: (pā)ra
+  phrase: 51
+  sanskrit:
+    word: pārasaṃgate
+    syllable: ra
+    sound_ko: 빠라상가떼
+  nth: 8
+  total: 8
+- pos: 253
+  glyph: 僧
+  reading: 중 승
+  sense_here: 상(saṃ, 온전히)의 소리. "중 승"이지만 여기선 소리
+  gloss_en: saṃ
+  phrase: 51
+  sanskrit:
+    word: pārasaṃgate
+    syllable: saṃ
+    sound_ko: 빠라상가떼
+  nth: 1
+  total: 1
+- pos: 254
+  glyph: 揭
+  reading: 들 게
+  sense_here: 가떼의 첫 소리
+  gloss_en: ga(te)
+  phrase: 51
+  sanskrit:
+    word: pārasaṃgate
+    syllable: ga
+    sound_ko: 빠라상가떼
+  nth: 4
+  total: 4
+- pos: 255
+  glyph: 諦
+  reading: 살필 체
+  sense_here: 가떼의 끝 소리
+  gloss_en: (ga)te
+  phrase: 51
+  sanskrit:
+    word: pārasaṃgate
+    syllable: te
+    sound_ko: 빠라상가떼
+  nth: 4
+  total: 4
+- pos: 256
+  glyph: 菩
+  reading: 보리 보
+  sense_here: 보디(bodhi, 깨어남)의 첫 소리
+  gloss_en: bo(dhi)
+  phrase: 52
+  sanskrit:
+    word: bodhi svāhā
+    syllable: bo
+    sound_ko: 보디 스바하
+  nth: 4
+  total: 4
+- pos: 257
+  glyph: 提
+  reading: 끌 제
+  sense_here: 보디의 끝 소리
+  gloss_en: (bo)dhi
+  phrase: 52
+  sanskrit:
+    word: bodhi svāhā
+    syllable: dhi
+    sound_ko: 보디 스바하
+  nth: 3
+  total: 3
+- pos: 258
+  glyph: 薩
+  reading: 보살 살
+  sense_here: 스바하(svāhā)의 첫 소리
+  gloss_en: s(vā)
+  phrase: 52
+  sanskrit:
+    word: bodhi svāhā
+    syllable: sva
+    sound_ko: 보디 스바하
+  nth: 3
+  total: 3
+- pos: 259
+  glyph: 婆
+  reading: 할미 바
+  sense_here: 스바하의 가운데 소리
+  gloss_en: (s)vā
+  phrase: 52
+  sanskrit:
+    word: bodhi svāhā
+    syllable: (v)ā
+    sound_ko: 보디 스바하
+  nth: 1
+  total: 1
+- pos: 260
+  glyph: 訶
+  reading: 꾸짖을 하
+  sense_here: 스바하의 끝 소리. 260자의 마지막 — 이루어지이다
+  gloss_en: hā
+  phrase: 52
+  sanskrit:
+    word: bodhi svāhā
+    syllable: hā
+    sound_ko: 보디 스바하
+  nth: 1
+  total: 1

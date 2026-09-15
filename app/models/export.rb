@@ -14,6 +14,14 @@
 # 이것은 화면이 아니라 들고 나가는 파일이다. 사람이 읽고 다른 도구가
 # 읽을 수 있어야 하므로 날짜는 날짜대로 적는다.
 class Export
+  # 사용자의 것은 빠짐없이 내보낸다. 사용자에게 딸린 것이 새로 생기면
+  # 여기에 자리를 만들어야 한다 — 그러지 않으면 export_test 가 깨진다.
+  # 세션은 누구의 것인지 말고 아무것도 담지 않으므로 내보낼 것이 없다.
+  SECTIONS = {
+    rests: :rests, sittings: :sittings, plans: :plans,
+    clearings: :cleared_days, copyings: :copyings
+  }.freeze
+
   attr_reader :user, :on
 
   def initialize(user, on: nil)
@@ -30,7 +38,8 @@ class Export
       rests: rests,
       sittings: sittings,
       plans: plans,
-      cleared_days: clearings
+      cleared_days: clearings,
+      copyings: copyings
     )
   end
 
@@ -40,7 +49,8 @@ class Export
       section(t("settings.export.rests"), rest_lines),
       section(t("settings.export.sittings"), sitting_lines),
       section(t("settings.export.plans"), plan_lines),
-      section(t("settings.export.cleared"), clearing_lines)
+      section(t("settings.export.cleared"), clearing_lines),
+      section(t("settings.export.copyings"), copying_lines)
     ]
 
     sections.compact.join("\n\n") + "\n"
@@ -78,6 +88,17 @@ class Export
     def clearings
       user.clearings.order(:cleared_on).map { |clearing| clearing.cleared_on.iso8601 }
     end
+
+    # 사경한 자. 화면에 쓴 획은 그대로, 종이에 쓴 자는 종이에 썼다고.
+    def copyings
+      copied.map do |copying|
+        { copied_on: copying.copied_on.iso8601, pos: copying.sutra_char.pos,
+          glyph: copying.sutra_char.glyph, on_paper: copying.on_paper?,
+          glyph_paths: copying.glyph_paths }
+      end
+    end
+
+    def copied = user.copyings.includes(:sutra_char).order(:copied_on)
 
     # ── 사람이 읽는 쪽 ──
 
@@ -125,6 +146,14 @@ class Export
 
     def clearing_lines
       user.clearings.order(:cleared_on).map { |clearing| "- #{clearing.cleared_on.iso8601}" }
+    end
+
+    def copying_lines
+      copied.map do |copying|
+        where = copying.on_paper? ? t("settings.export.on_paper") : t("settings.export.on_screen")
+
+        "- #{copying.copied_on.iso8601} · #{copying.sutra_char.glyph} · #{where}"
+      end
     end
 
     def t(key) = I18n.t(key, locale: user.locale)

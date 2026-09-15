@@ -41,7 +41,29 @@ class ExportTest < ActiveSupport::TestCase
   test "앱의 것은 사용자의 것이 아니므로 담지 않는다" do
     keys = JSON.parse(Export.new(@user).json).keys
 
-    assert_equal %w[exported_on account rests sittings plans cleared_days], keys
+    assert_equal %w[exported_on account rests sittings plans cleared_days copyings], keys
+  end
+
+  # 데이터는 언제든 통째로 들고 나갈 수 있다(제7조 — 개정하지 않는 조항).
+  # 사용자에게 딸린 것이 새로 생겼는데 내보내기에 자리가 없으면 깨진다.
+  test "사용자의 것은 빠짐없이 내보낸다" do
+    owned = User.reflect_on_all_associations(:has_many).map(&:name) - [ :sessions ]
+
+    assert_equal owned.sort, Export::SECTIONS.keys.sort,
+      "사용자에게 딸린 것 가운데 내보내기에 빠진 것이 있다"
+    assert_equal Export::SECTIONS.values.map(&:to_s).sort,
+      (JSON.parse(Export.new(@user).json).keys - %w[exported_on account]).sort
+  end
+
+  test "사경한 자도 획까지 들고 나간다" do
+    heart_sutra
+    @user.copyings.create!(sutra_char: @user.pagoda.next_char, glyph_paths: [ [ [ 0.2, 0.3 ] ] ])
+    copying = JSON.parse(Export.new(@user).json)["copyings"].first
+
+    assert_equal 1, copying["pos"]
+    assert_equal false, copying["on_paper"]
+    assert_equal [ [ [ 0.2, 0.3 ] ] ], copying["glyph_paths"]
+    assert_includes Export.new(@user).markdown, copying["glyph"]
   end
 
   test "사람이 읽는 쪽은 사용자의 언어로 적힌다" do
