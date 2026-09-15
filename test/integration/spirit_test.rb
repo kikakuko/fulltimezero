@@ -99,11 +99,24 @@ class SpiritTest < ActionDispatch::IntegrationTest
   # 달에는 이목구비가 없다. 호선 둘을 얹는 순간 그것은 미소 띤 달이
   # 아니라 얼굴이 되고, 얼굴이 되는 순간 의인화가 된다.
   # 달은 표정이 아니라 빛으로 말한다.
+  #
+  # 이 자물쇠는 달을 그리는 파일에만 걸린다(SPIRIT §7, 2026-09-15).
+  # 파장동 미륵은 마을 사람들이 덧칠해 만든 얼굴이 곧 정체성이라,
+  # 얼굴을 빼면 미륵이 아니다.
+  MOON_COMPONENTS = %w[
+    app/helpers/moon_helper.rb
+    app/javascript/controllers/sitting_controller.js
+  ].freeze
+
   test "달에 얼굴을 그리지 않는다" do
     # 주석은 왜 그리지 않는지를 적은 자리이므로 걷어내고, 코드만 본다.
-    faces = /\bsmile\b|moon_smile|\bface\b|\beyes?\b|\bmouth\b|눈매|입매/i
+    # 밑줄도 낱말의 경계로 친다. \b 만 쓰면 moon_face 같은 이름이 새어 나간다.
+    faces = /(?:\b|_)(?:smiles?|faces?|eyes?|mouths?)(?:\b|_)|눈매|입매/i
 
-    offenders = written.select { |path| strip_comments(path).match?(faces) }
+    moon = MOON_COMPONENTS.map { |file| Rails.root.join(file) }
+    assert moon.all?(&:exist?), "달을 그리는 파일이 옮겨졌다. MOON_COMPONENTS 를 고쳐라."
+
+    offenders = moon.select { |path| strip_comments(path).match?(faces) }
 
     assert_empty offenders.map { |path| path.relative_path_from(Rails.root).to_s },
       "달에 표정을 그리는 코드가 남아 있다"
@@ -221,6 +234,23 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
       flatten_copy(copy).each do |line|
         assert_no_match(/\d/, line, "#{locale} 카피에 숫자가 있다: #{line.inspect}")
+      end
+    end
+  end
+
+  # 이 앱은 쉼을 가르치지 않는다 — 쉬는 마음이 형상을 얻게 할 뿐이다(§5).
+  # 인용 원문은 예외다. 옛글의 낱말은 옛글의 것이다.
+  TEACHING = {
+    "ko" => /수행|훈련|연습|단계|레벨|달성/,
+    "en" => /\bpracti[cst]|\btraining\b|\bexercis|\bstages?\b|\blevels?\b|\bachiev/i
+  }.freeze
+
+  test "카피가 쉼을 가르치지 않는다 — 수행·훈련·단계의 말이 없다" do
+    %w[ko en].each do |locale|
+      copy = YAML.load_file(Rails.root.join("config/locales/#{locale}.yml")).fetch(locale)
+
+      flatten_copy(copy).reject { |line| line.start_with?("「") }.each do |line|
+        assert_no_match TEACHING[locale], line, "#{locale} 카피가 가르친다: #{line[0, 60]}"
       end
     end
   end
