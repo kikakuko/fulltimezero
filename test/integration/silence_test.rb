@@ -37,6 +37,15 @@ class SilenceTest < ActionDispatch::IntegrationTest
 
   # ── 종성 ──────────────────────────────────────────────────────────
 
+  # 기기를 떨게 하는 코드는 한 파일뿐이고, 게이트가 허락할 때만 떤다.
+  test "진동은 한 곳에서만, 게이트가 허락할 때만" do
+    haptics = "app/javascript/lib/haptics.js"
+    shakers = Rails.root.join("app").glob("**/*.{js,erb}").select { |path| path.read.gsub(%r{^\s*//.*$}, "").include?("navigator.vibrate") }
+
+    assert_equal [ haptics ], relative(shakers), "진동이 게이트를 거치지 않는 곳에서 난다"
+    assert_match(/if \(!allowed\) return/, Rails.root.join(haptics).read, "허락을 묻지 않고 떤다")
+  end
+
   # 스티뮬러스의 Controller 는 생성자에서 this.context 를 대입한다.
   # 컨트롤러가 같은 이름의 접근자를 두면 그 대입이 터지고, 컨트롤러는
   # 아예 붙지 않는다 — 종이 영영 울리지 않는다. 실제로 그랬다.
@@ -195,7 +204,8 @@ class SilenceTest < ActionDispatch::IntegrationTest
   private
     def bell_source = Rails.root.join(BELL).read
 
-    def controllers = Rails.root.join("app/javascript/controllers").glob("*_controller.js")
+    def controllers = Rails.root.join("app/javascript/controllers").glob("*_controller.js") +
+                      Rails.root.join("app/javascript/lib").glob("*.js")
 
     def sources(glob)
       %w[app lib config].flat_map { |dir| Rails.root.join(dir).glob(glob) }.select(&:file?)

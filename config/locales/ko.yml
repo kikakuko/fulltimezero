@@ -271,6 +271,7 @@ ko:
       saturday: 토
 
   copyings:
+    pagoda: "탑"
     surface: "%{glyph} 자를 따라 쓰는 자리"
     rewrite: "다시 쓴다"
     offer: "올린다"

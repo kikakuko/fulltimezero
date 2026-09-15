@@ -1,30 +1,23 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
-// 사경. 손가락으로 그은 획을 붓처럼 그린다 — 빨리 그으면 가늘고,
-// 천천히 그으면 굵다(perfect-freehand).
+// 사경. 손가락으로 그은 획을 붓처럼 그린다(lib/brush).
 //
 // 그은 획을 정답과 견주지 않는다. 알아보려 들지도, 점수를 매기지도
 // 않는다. 쓰면 그걸로 한 자다. 남기는 것은 그어진 자리 그대로다 —
 // 쓰는 자리 안에서의 비율로 적어, 나중에 어떤 크기로도 다시 그릴 수
 // 있게 한다.
+//
+// 올리면 방금 쓴 글씨가 탑의 제 자리로 날아가 앉는다(lib/pagoda_scene).
 import { Controller } from "@hotwired/stimulus"
-import { getStroke } from "perfect-freehand"
+import { outline, VIEW } from "lib/brush"
+import { touch } from "lib/haptics"
+import { playScene } from "lib/pagoda_scene"
 
-const VIEW = 1000 // 쓰는 자리의 크기 (viewBox)
-
-// 붓의 결. 속도에 따라 굵기가 달라지고 획의 처음과 끝이 가늘어진다.
-const BRUSH = {
-  size: 46,
-  thinning: 0.62,
-  smoothing: 0.55,
-  streamline: 0.5,
-  simulatePressure: true,
-  start: { taper: 18, cap: true },
-  end: { taper: 30, cap: true }
-}
+const LANDING = 30 // 앉는 순간의 짧은 떨림
 
 export default class extends Controller {
   static targets = ["surface", "strokes", "field", "offer"]
+  static values = { glyph: String, vibrate: Boolean, pagoda: String }
 
   connect() {
     this.lines = []
@@ -34,7 +27,10 @@ export default class extends Controller {
   down(event) {
     event.preventDefault()
 
-    this.current = [this.point(event)]
+    const first = this.point(event)
+    if (!first) return
+
+    this.current = [first]
     this.lines.push(this.current)
     this.path = document.createElementNS("http://www.w3.org/2000/svg", "path")
     this.strokesTarget.append(this.path)
@@ -52,7 +48,10 @@ export default class extends Controller {
     // 그때는 이 이벤트 하나를 쓴다 — 그러지 않으면 점이 하나도 찍히지 않는다.
     const coalesced = event.getCoalescedEvents?.() || []
     const samples = coalesced.length ? coalesced : [event]
-    for (const sample of samples) this.current.push(this.point(sample))
+    for (const sample of samples) {
+      const point = this.point(sample)
+      if (point) this.current.push(point)
+    }
     this.paint()
   }
 
@@ -70,44 +69,64 @@ export default class extends Controller {
     this.store()
   }
 
+  // 올린다 · 종이에 썼다. 받아들여지면 글씨가 탑으로 가는 장면을 틀고,
+  // 장면이 끝나면 「오늘 몫은 끝났다」로 간다. 무엇이 어긋나면 장면 없이
+  // 평소대로 보낸다 — 서버가 까닭을 한 줄로 말해 준다.
+  async offer(event) {
+    event.preventDefault()
+    if (this.sending) return
+    this.sending = true
+
+    const form = event.target
+    const paper = form.hasAttribute("data-paper")
+    const response = await fetch(form.action, {
+      method: "POST", body: new FormData(form), headers: { Accept: "application/json" }, credentials: "same-origin"
+    }).catch(() => null)
+
+    if (response?.status !== 201) return HTMLFormElement.prototype.submit.call(form)
+
+    const { scene } = await response.json()
+    await playScene({
+      scene,
+      flier: this.flier(paper),
+      label: this.pagodaValue,
+      reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      onLand: () => touch(LANDING, this.vibrateValue)
+    })
+
+    window.Turbo ? window.Turbo.visit(location.href, { action: "replace" }) : location.reload()
+  }
+
+  // 날아갈 글씨 — 쓴 획 그대로, 종이에 썼다면 그 자의 활자를 옅게.
+  flier(paper) {
+    const rect = this.surfaceTarget.getBoundingClientRect()
+
+    if (!paper) return { rect, content: this.strokesTarget.cloneNode(true) }
+
+    const type = document.createElementNS("http://www.w3.org/2000/svg", "text")
+    Object.entries({ x: VIEW / 2, y: VIEW * 0.54, "text-anchor": "middle", "dominant-baseline": "middle", class: "pagoda__type" })
+      .forEach(([key, value]) => type.setAttribute(key, value))
+    type.textContent = this.glyphValue
+    return { rect, content: type }
+  }
+
   paint() {
     this.path.setAttribute("d", outline(this.current))
   }
 
+  // 쓰는 자리 안에서의 비율. 어떤 까닭으로든 숫자가 아니면 점을 찍지 않는다.
   point(event) {
     const box = this.surfaceTarget.getBoundingClientRect()
     const x = (event.clientX - box.left) / box.width
     const y = (event.clientY - box.top) / box.height
 
-    return [round(clamp(x)), round(clamp(y))]
+    return Number.isFinite(x) && Number.isFinite(y) ? [round(clamp(x)), round(clamp(y))] : null
   }
 
   store() {
     this.fieldTarget.value = JSON.stringify(this.lines)
     this.offerTarget.disabled = this.lines.length === 0
   }
-}
-
-function outline(points) {
-  const stroke = getStroke(points.map(([x, y]) => [x * VIEW, y * VIEW]), BRUSH)
-  return svgPath(stroke)
-}
-
-// 외곽선 점들을 부드러운 닫힌 경로로 잇는다.
-function svgPath(points) {
-  if (points.length < 2) return ""
-
-  const middle = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
-  const [first, ...rest] = points
-  let d = `M ${first[0].toFixed(1)} ${first[1].toFixed(1)} Q`
-
-  rest.forEach((point, i) => {
-    const next = rest[i + 1] || first
-    const [mx, my] = middle(point, next)
-    d += ` ${point[0].toFixed(1)} ${point[1].toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`
-  })
-
-  return `${d} Z`
 }
 
 const clamp = value => Math.min(1, Math.max(0, value))

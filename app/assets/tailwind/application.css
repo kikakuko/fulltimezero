@@ -353,3 +353,30 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .copy-phrase strong { color: var(--ink); font-weight: 700; }
 
 .copy-glyph { font-family: var(--serif); font-size: 7rem; line-height: 1; margin: 2rem 0 0; }
+
+/* ── 글씨가 탑으로 가는 장면 ────────────────────────────────────────
+   잠깐 떴다 사라진다. 빈 칸은 그리지 않고 윤곽선은 층으로만, 옅게. */
+
+.pagoda-scene {
+  position: fixed; inset: 0; z-index: 30;
+  display: grid; place-items: center;
+  background: var(--paper); /* 뒤의 쓰는 자리가 비쳐 탑을 가리지 않게 온전히 덮는다. */
+  opacity: 0; transition: opacity 250ms ease;
+}
+.pagoda-scene.is-open { opacity: 1; }
+.pagoda-scene.is-closing { opacity: 0; transition-duration: 300ms; }
+
+.pagoda { height: min(84vh, 48rem); width: auto; max-width: 92vw; }
+.pagoda__outline { fill: none; stroke: var(--rule); stroke-width: 1; }
+.pagoda__eave { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; opacity: 0.55; stroke-linecap: round; }
+.pagoda__bell path, .pagoda__bell circle { stroke: var(--ink-soft); stroke-width: 0.8; fill: none; opacity: 0.8; }
+.pagoda__bell path + path, .pagoda__bell circle { fill: var(--ink-soft); }
+.pagoda__ink path { fill: var(--ink); }
+.pagoda__type { font-family: var(--serif); font-size: 780px; fill: var(--ink); opacity: 0.16; }
+
+.pagoda-flier { position: fixed; z-index: 31; transform-origin: 0 0; pointer-events: none; }
+.pagoda-flier path { fill: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pagoda-scene, .pagoda-scene.is-closing { transition: none; }
+}

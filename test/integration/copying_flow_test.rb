@@ -74,6 +74,45 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("today.done"), response.body
   end
 
+  test "올리면 방금 쓴 글씨가 앉을 탑을 함께 돌려준다" do
+    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
+
+    assert_response :created
+    scene = response.parsed_body["scene"]
+    fresh = scene["cells"].find { |cell| cell["fresh"] }
+
+    assert_equal 1, fresh["pos"]
+    assert_equal STROKES, fresh["paths"]
+    assert_equal 1, scene["cells"].size, "쓰지 않은 칸의 자리가 함께 나갔다"
+  end
+
+  test "이미 쓴 날에는 장면 없이 되돌려 보낸다" do
+    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
+    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
+
+    assert_response :unprocessable_entity
+  end
+
+  # 탑은 잠깐 보였다 사라져야 한다. 머물면 자기 탑을 세게 된다.
+  test "오늘 몫이 끝난 화면에는 탑이 머물지 않는다" do
+    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
+    get new_copying_path
+
+    assert_match I18n.t("today.done"), response.body
+
+    # 머리말의 모듈 목록이 아니라, 사용자가 보는 본문에 탑이 있는지를 본다.
+    main = Nokogiri::HTML(response.body).at_css("main")
+    assert_empty main.css("[class*=pagoda], [data-copying-pagoda-value]"), "몫이 끝난 뒤에도 탑이 화면에 남는다"
+  end
+
+  test "앉는 순간 떨지 말지는 게이트가 정한다" do
+    get new_copying_path
+    assert_select "[data-copying-vibrate-value=true]"
+
+    stubbing(SilenceGate, :allow?, false) { get new_copying_path }
+    assert_select "[data-copying-vibrate-value=false]"
+  end
+
   test "종이에 썼다고 하면 획 없이 한 자가 된다" do
     post copyings_path, params: { on_paper: 1 }
 

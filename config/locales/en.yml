@@ -271,6 +271,7 @@ en:
       saturday: Sat
 
   copyings:
+    pagoda: "The pagoda"
     surface: "A place to trace the character %{glyph}"
     rewrite: "Write again"
     offer: "Offer it"

@@ -26,7 +26,9 @@ class SilenceGate
   # 여기에 무언가를 넣으려면 SPIRIT.md 개정이 먼저다.
   KINDS = {
     password_reset: { channel: :mail,  origin: :solicited },
-    bell:           { channel: :sound, origin: :solicited }
+    bell:           { channel: :sound, origin: :solicited },
+    # 사용자가 손을 댄 그 순간의 짧은 떨림. 앱이 먼저 떨게 하는 일은 없다.
+    vibration:      { channel: :touch, origin: :solicited }
   }.freeze
 
   # 침묵의 시각 — 사용자 시간대 기준.
