@@ -8,8 +8,10 @@ class SpiritTest < ActionDispatch::IntegrationTest
   # 규칙을 적은 자리와 규칙을 어긴 자리를 섞지 않기 위해 여기만 뺀다.
   RULE_BOOKS = %w[test/integration/spirit_test.rb docs/STATUS.md].freeze
 
+  setup { heart_sutra }
+
   OPEN_PAGES = %i[gate_path new_user_path new_session_path new_password_path guide_path privacy_path].freeze
-  SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path new_sitting_path].freeze
+  SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path new_sitting_path new_copying_path].freeze
 
   # 화면에 숫자·퍼센트·분·"n일째"가 없어야 한다.
   test "어느 화면에도 숫자나 지표가 보이지 않는다" do

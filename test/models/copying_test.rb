@@ -50,6 +50,12 @@ class CopyingTest < ActiveSupport::TestCase
     assert_equal strokes, write(glyph_paths: strokes).reload.glyph_paths
   end
 
+  test "한 획도 없는 목록은 화면에 쓴 것이 아니다" do
+    copying = @user.copyings.new(sutra_char: @user.pagoda.next_char, glyph_paths: [])
+
+    refute copying.valid?
+  end
+
   test "획이 획의 목록이 아니면 받지 않는다 — 잘 썼는지는 보지 않는다" do
     copying = @user.copyings.new(sutra_char: @user.pagoda.next_char, glyph_paths: { "score" => 1 })
 

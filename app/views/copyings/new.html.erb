@@ -1,0 +1,64 @@
+<%# 사경 — 오늘의 한 자. 쓰면 그걸로 한 자다. 채점도 인식도 없다.
+    몇 번째 자인지, 이 자가 경에 몇 번 나오는지는 쓰지 않는다 — 세는 일이므로. %>
+<% if @char.nil? %>
+  <div class="center">
+    <p class="lead"><%= t("copyings.finished") %></p>
+  </div>
+<% elsif @written %>
+  <%# 하루 한 자를 이미 썼다. 오늘 몫은 끝났다(제2조). %>
+  <div class="center">
+    <p class="copy-glyph"><%= @char.glyph %></p>
+    <p class="lead"><%= t("today.done") %></p>
+  </div>
+<% else %>
+  <div class="copying" data-controller="copying">
+    <div class="copy-sheet">
+      <svg viewBox="0 0 1000 1000" role="img" aria-label="<%= t("copyings.surface", glyph: @char.glyph) %>"
+           data-copying-target="surface"
+           data-action="pointerdown->copying#down pointermove->copying#move pointerup->copying#up pointercancel->copying#up">
+        <text class="copy-model" x="500" y="540" text-anchor="middle" dominant-baseline="middle"><%= @char.glyph %></text>
+        <g class="copy-strokes" data-copying-target="strokes"></g>
+      </svg>
+    </div>
+
+    <p class="copy-tools">
+      <button type="button" class="quiet" data-action="copying#clear"><%= t("copyings.rewrite") %></button>
+    </p>
+
+    <div class="copy-offer">
+      <%= form_with url: copyings_path, scope: :copying do |f| %>
+        <%= f.hidden_field :glyph_paths, value: "", data: { copying_target: "field" } %>
+        <%= f.submit t("copyings.offer"), disabled: true, data: { copying_target: "offer" } %>
+      <% end %>
+
+      <%= button_to t("copyings.on_paper"), copyings_path, params: { on_paper: 1 }, class: "quiet" %>
+    </div>
+
+    <dl class="copy-notes">
+      <dt><%= t("copyings.reading") %></dt>
+      <dd><%= @char.reading %></dd>
+
+      <% if @char.transliterated? %>
+        <%# 소리를 옮긴 자에는 뜻 대신 원어를 둔다. %>
+        <dt><%= t("copyings.sanskrit") %></dt>
+        <dd>
+          <%= @char.sanskrit["word"] %> · <%= @char.sanskrit["syllable"] %>
+          <% if I18n.locale == :ko %> · <%= @char.sanskrit["sound_ko"] %><% end %>
+        </dd>
+      <% else %>
+        <dt><%= t("copyings.sense") %></dt>
+        <dd><%= @char.sense_here %></dd>
+      <% end %>
+
+      <dt><%= t("copyings.phrase") %></dt>
+      <dd class="copy-phrase"><% @char.phrase.chars.each do |char| %><%= char == @char ? tag.strong(char.glyph) : char.glyph %><% end %></dd>
+
+      <dt><%= t("copyings.english") %></dt>
+      <dd><%= @char.gloss_en %></dd>
+    </dl>
+
+    <% if @again %>
+      <p class="tiny"><%= t("copyings.again", phrase: @again.han) %></p>
+    <% end %>
+  </div>
+<% end %>

@@ -270,6 +270,19 @@ en:
       friday: Fri
       saturday: Sat
 
+  copyings:
+    surface: "A place to trace the character %{glyph}"
+    rewrite: "Write again"
+    offer: "Offer it"
+    on_paper: "Written on paper"
+    reading: "Reading"
+    sense: "Meaning here"
+    sanskrit: "Sanskrit"
+    phrase: "Phrase"
+    english: "In English"
+    again: "This character comes again — next in 「%{phrase}」."
+    finished: "The sutra is written to the end."
+
   privacy:
     title: Privacy
     collect: We take one email address and nothing else. No other personal data is collected.

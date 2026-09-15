@@ -18,6 +18,9 @@ Rails.application.routes.draw do
     resources :sittings, only: %i[new create show update destroy]
     post "nothing" => "sittings#nothing", as: :nothing
 
+    # 사경 — 하루 한 자. 탑은 아직 세우지 않는다.
+    resources :copyings, only: %i[new create]
+
     # 날들 — 빈 일정. 달력의 날짜 숫자만이 이 앱에서 허용되는 숫자다.
     get   "days" => "days#index", as: :days
     get   "days/:date" => "days#show", as: :day

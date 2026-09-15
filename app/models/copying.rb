@@ -12,6 +12,10 @@
 #   - glyph_paths 가 비어 있으면 종이에 쓴 것이다. 화면에 쓴 자와
 #     똑같이 탑을 쌓는다(§3 화면은 종이로 가는 문).
 class Copying < ApplicationRecord
+  # 한 자에 그을 수 있는 획과 점의 끝. 넘치는 입력을 막을 뿐, 잘 썼는지와는 상관없다.
+  MOST_STROKES = 64
+  MOST_POINTS = 1000
+
   belongs_to :user
   belongs_to :sutra_char
 
@@ -37,7 +41,21 @@ class Copying < ApplicationRecord
     end
 
     # 획이 있다면 획의 목록이어야 한다. 모양이 맞는지만 볼 뿐, 잘 썼는지는 보지 않는다.
+    # 한 획은 점의 목록, 한 점은 [x, y] — 쓰는 자리 안에서의 비율이다.
+    # 빈 목록은 받지 않는다. 한 획도 긋지 않았다면 그것은 화면에 쓴 것이 아니다.
     def strokes_are_strokes
-      errors.add(:glyph_paths, :invalid) unless glyph_paths.nil? || glyph_paths.is_a?(Array)
+      return if glyph_paths.nil?
+
+      errors.add(:glyph_paths, :invalid) unless strokes?(glyph_paths)
+    end
+
+    def strokes?(paths)
+      paths.is_a?(Array) && paths.size.between?(1, MOST_STROKES) &&
+        paths.all? { |stroke| points?(stroke) }
+    end
+
+    def points?(stroke)
+      stroke.is_a?(Array) && stroke.size.between?(1, MOST_POINTS) &&
+        stroke.all? { |point| point.is_a?(Array) && point.size == 2 && point.all?(Numeric) }
     end
 end

@@ -327,3 +327,29 @@ input[type="text"] {
 
 /* 문이 본문을 가리지 않도록 아래를 비워 둔다. */
 body:has(.doors) .sheet { padding-bottom: 8rem; }
+
+/* ── 사경 ───────────────────────────────────────────────────────────
+   오늘의 한 자를 옅게 깔고 그 위에 따라 쓴다. 채점하지 않는다.
+   쓰는 자리 안에서는 화면이 밀리지 않게 한다 — 손가락이 획을 그어야지
+   화면을 끌어서는 안 된다. */
+
+.copy-sheet {
+  max-width: 22rem; margin: 0 auto 1rem;
+  border: 1px solid var(--rule); border-radius: 0.25rem;
+  background: var(--paper);
+}
+.copy-sheet svg { display: block; width: 100%; aspect-ratio: 1; touch-action: none; cursor: crosshair; }
+.copy-model { font-family: var(--serif); font-size: 780px; fill: var(--rule); user-select: none; }
+.copy-strokes path { fill: var(--ink); }
+
+.copy-tools { text-align: center; margin: 0 0 1.5rem; }
+.copy-offer { display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.copy-offer form { margin: 0; }
+
+.copy-notes { max-width: 22rem; margin: 2.5rem auto 1.5rem; }
+.copy-notes dt { font-size: 0.75rem; color: var(--ink-soft); margin-top: 1rem; }
+.copy-notes dd { margin: 0.2rem 0 0; }
+.copy-phrase { font-family: var(--serif); font-size: 1.15rem; letter-spacing: 0.15em; color: var(--ink-soft); }
+.copy-phrase strong { color: var(--ink); font-weight: 700; }
+
+.copy-glyph { font-family: var(--serif); font-size: 7rem; line-height: 1; margin: 2rem 0 0; }

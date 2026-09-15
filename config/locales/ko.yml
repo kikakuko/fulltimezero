@@ -270,6 +270,19 @@ ko:
       friday: 금
       saturday: 토
 
+  copyings:
+    surface: "%{glyph} 자를 따라 쓰는 자리"
+    rewrite: "다시 쓴다"
+    offer: "올린다"
+    on_paper: "종이에 썼다"
+    reading: "훈음"
+    sense: "이 자리의 뜻"
+    sanskrit: "원어"
+    phrase: "구절"
+    english: "영어"
+    again: "이 글자는 다시 온다. 다음은 「%{phrase}」에서."
+    finished: "경을 끝까지 썼다."
+
   privacy:
     title: 개인정보 처리방침
     collect: 우리는 이메일 하나만 받는다. 그 밖에 어떤 개인정보도 모으지 않는다.
