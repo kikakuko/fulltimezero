@@ -26,4 +26,9 @@ class Pagoda
   def next_char = sutra.chars.find_by(pos: last_pos + 1)
 
   def complete? = last_pos >= sutra.total
+
+  # 예고: 경을 다 쓰면 회향(廻向)을 하고 다음 탑을 시작한다. 이백육십 자를
+  # 마치는 날 「이 공덕을 ___에게 돌립니다」 한 줄을 적고 새 탑이 선다.
+  # 그때 사경에 「몇 번째 탑인가」의 자리가 생기고, 지금의 「한 자는 한 번」
+  # 유일 색인(user · sutra_char)은 탑마다 한 번으로 바뀐다.
 end
