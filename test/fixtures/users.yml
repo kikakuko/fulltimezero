@@ -5,9 +5,11 @@ one:
   password_digest: <%= password_digest %>
   locale: ko
   time_zone: Asia/Seoul
+  onboarded_at: <%= 1.week.ago.to_fs(:db) %>
 
 two:
   email_address: two@example.com
   password_digest: <%= password_digest %>
   locale: en
   time_zone: America/New_York
+  onboarded_at: <%= 1.week.ago.to_fs(:db) %>

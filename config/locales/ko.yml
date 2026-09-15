@@ -72,6 +72,8 @@ ko:
     window: 지난 스물여드레.
 
   settings:
+    daily_door: "앱을 열 때 숨 한 번"
+    threshold_again: "처음의 문을 다시 지난다"
     title: 설정
     language: 언어
     time_zone: 시간대
@@ -93,6 +95,8 @@ ko:
       copyings: "사경"
 
   guide:
+    copying: "경을 한 자씩 옮겨 쓰는 쉼도 있다."
+    copying_go: "한 자 쓴다"
     back: "안내로 돌아간다"
     marks: ["一", "二", "三", "四", "五"]
     title: "쉼의 안내"
@@ -280,6 +284,17 @@ ko:
     english: "영어"
     again: "이 글자는 다시 온다. 다음은 「%{phrase}」에서."
     finished: "경을 끝까지 썼다."
+
+  threshold:
+    later: "나중에"
+    stop:
+      line: "문 앞에 섰다."
+      go: "들어간다"
+    naming:
+      question: "무엇에서 쉬려 하는가"
+      go: "지나간다"
+    breath:
+      line: "화면에 손을 얹는다."
 
   privacy:
     title: 개인정보 처리방침

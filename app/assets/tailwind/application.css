@@ -378,3 +378,44 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 @media (prefers-reduced-motion: reduce) {
   .pagoda-scene, .pagoda-scene.is-closing { transition: none; }
 }
+
+/* ── 처음의 문 셋 ────────────────────────────────────────────────────
+   설명이 아니라 지나는 문이다. 어둡고, 한 줄뿐이다. */
+
+.threshold {
+  position: fixed; inset: 0; z-index: 10;
+  display: grid; place-content: center; justify-items: center; gap: 2.5rem;
+  padding: 0 1.75rem; text-align: center;
+  background: #0b0a08; color: #cfc7b6;
+}
+.threshold__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: #cfc7b6; }
+.threshold__way { margin: 0; min-height: 3rem; }
+.threshold .action, .threshold input[type="submit"] { color: #cfc7b6; border-color: #2a2620; }
+.threshold__form { display: grid; justify-items: center; gap: 2rem; width: min(22rem, 100%); }
+.threshold__form label { font-size: 1.3rem; color: #cfc7b6; margin: 0; }
+.threshold__field {
+  width: 100%; background: transparent; border: 0; border-bottom: 1px solid #2a2620;
+  color: #cfc7b6; font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
+}
+.threshold__field:focus { outline: none; border-color: #6b655c; }
+.threshold__later { position: fixed; bottom: 2rem; left: 0; right: 0; text-align: center; }
+.threshold__later .quiet { color: #3f3a33; text-decoration-color: #2a2620; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .arriving { animation: waking 1.6s ease-out both; }
+}
+
+/* 셋째 문 — 손을 얹고 있는 동안 밝아졌다 어두워지기를 세 번. */
+.threshold--breath { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.threshold--breath.breathing { animation: threshold-breath 6s ease-in-out 3; }
+@keyframes threshold-breath { 0%, 100% { background: #0b0a08 } 50% { background: #3a352d } }
+
+/* 매일 지나는 문 — 숨 한 번의 어둠. */
+.daily-door {
+  position: fixed; inset: 0; z-index: 40; background: #0b0a08;
+  animation: daily-door 0.8s ease-in forwards;
+}
+@keyframes daily-door { 0%, 30% { opacity: 1 } 100% { opacity: 0 } }
+
+/* Turbo 의 기본 진행 막대는 파랑이라 이 앱의 먹색과 어긋난다. */
+.turbo-progress-bar { background-color: var(--ink-soft); height: 2px; }

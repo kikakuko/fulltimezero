@@ -72,6 +72,8 @@ en:
     window: The last four weeks.
 
   settings:
+    daily_door: "A breath each time the app opens"
+    threshold_again: "Pass through the first gates again"
     title: Settings
     language: Language
     time_zone: Time zone
@@ -93,6 +95,8 @@ en:
       copyings: "Sutra copying"
 
   guide:
+    copying: "There is also the rest of copying a sutra, one character at a time."
+    copying_go: "Write one character"
     back: "Back to the guide"
     marks: ["I", "II", "III", "IV", "V"]
     title: "A Guide to Rest"
@@ -280,6 +284,17 @@ en:
     english: "In English"
     again: "This character comes again — next in 「%{phrase}」."
     finished: "The sutra is written to the end."
+
+  threshold:
+    later: "Later"
+    stop:
+      line: "You have come to the gate."
+      go: "Go in"
+    naming:
+      question: "What are you resting from"
+      go: "Pass through"
+    breath:
+      line: "Rest your hand on the screen."
 
   privacy:
     title: Privacy

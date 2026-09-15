@@ -1,5 +1,8 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 class TodayController < ApplicationController
+  # 처음 온 사람은 오늘에 앞서 문 셋을 지난다.
+  before_action -> { redirect_to threshold_path unless Current.user.onboarded? }
+
   def show
     @moon = Current.user.moon
     @quiet = Current.user.quiet_today?

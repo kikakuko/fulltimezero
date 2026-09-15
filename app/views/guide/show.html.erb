@@ -9,3 +9,9 @@
     </li>
   <% end %>
 </ul>
+
+<%# 사경은 여기서 스스로 찾게 둔다. 알림도 배지도 없이, 그냥 거기 있다. %>
+<p class="tiny" style="margin-top:3rem">
+  <%= t("guide.copying") %>
+  <%= link_to t("guide.copying_go"), new_copying_path %>
+</p>

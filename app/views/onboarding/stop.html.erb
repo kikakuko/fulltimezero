@@ -1,0 +1,16 @@
+<%# 첫째 문 — 멈춤. 한 줄만 있다. 서두를 수 없다는 것을 말로 하지 않고,
+    길이 나타날 때까지 실제로 기다리게 한다. %>
+<% content_for :no_chrome, true %>
+<% content_for :no_locales, true %>
+
+<div class="threshold" data-controller="wait" data-wait-after-value="4000">
+  <p class="threshold__line"><%= t("threshold.stop.line") %></p>
+
+  <p class="threshold__way">
+    <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action", hidden: true,
+                data: { wait_target: "reveal" } %>
+    <noscript><%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action" %></noscript>
+  </p>
+
+  <%= render "later" %>
+</div>

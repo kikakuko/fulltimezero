@@ -16,6 +16,11 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     assert_equal "Asia/Seoul", user.time_zone
     assert_redirected_to today_path(locale: :ko)
 
+    # 처음 온 사람은 오늘에 앞서 문 셋을 지난다.
+    follow_redirect!
+    assert_redirected_to threshold_path(locale: :ko)
+    post threshold_passed_path(locale: :ko)
+
     follow_redirect!
     assert_response :success
     assert_select ".lead", text: I18n.t("today.question", locale: :ko)

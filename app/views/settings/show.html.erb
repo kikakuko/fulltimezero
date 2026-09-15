@@ -22,8 +22,19 @@
     <%= f.select :time_zone, time_zone_choices(@user) %>
   </div>
 
+  <ul class="choices">
+    <li>
+      <%= f.label :daily_door do %>
+        <%= f.check_box :daily_door %>
+        <%= t("settings.daily_door") %>
+      <% end %>
+    </li>
+  </ul>
+
   <p style="margin-top:2rem"><%= f.submit t("settings.save") %></p>
 <% end %>
+
+<p class="tiny"><%= link_to t("settings.threshold_again"), threshold_path %></p>
 
 <hr class="rule">
 

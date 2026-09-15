@@ -11,6 +11,13 @@ Rails.application.routes.draw do
     resources :passwords, only: %i[new create edit update], param: :token
 
     get "today" => "today#show", as: :today
+
+    # 처음의 문 셋 — 설명이 아니라 지나는 문이다.
+    get   "threshold" => "onboarding#stop", as: :threshold
+    get   "threshold/naming" => "onboarding#naming", as: :threshold_naming
+    patch "threshold/naming" => "onboarding#name"
+    get   "threshold/breath" => "onboarding#breath", as: :threshold_breath
+    post  "threshold/passed" => "onboarding#pass", as: :threshold_passed
     resources :rests, only: %i[new create destroy]
     get "moon" => "moon#show", as: :moon
 

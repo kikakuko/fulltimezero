@@ -19,6 +19,12 @@
   </head>
 
   <body>
+    <%# 매일 지나는 문. 숨 한 번의 어둠이 지나가고, 누르면 곧장 걷힌다. %>
+    <% if daily_door_due? %>
+      <div class="daily-door" data-controller="daily-door"
+           data-action="click->daily-door#pass animationend->daily-door#pass" aria-hidden="true"></div>
+    <% end %>
+
     <% unless content_for?(:no_chrome) %>
       <header class="chrome">
         <%= link_to t("app.name"), authenticated? ? today_path : gate_path %>

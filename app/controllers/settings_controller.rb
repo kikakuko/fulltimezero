@@ -24,6 +24,6 @@ class SettingsController < ApplicationController
 
   private
     def settings_params
-      params.expect(user: [ :locale, :time_zone ])
+      params.expect(user: [ :locale, :time_zone, :daily_door ])
     end
 end
