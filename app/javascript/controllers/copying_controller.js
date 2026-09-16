@@ -16,7 +16,7 @@ import { playScene } from "lib/pagoda_scene"
 const LANDING = 30 // 앉는 순간의 짧은 떨림
 
 export default class extends Controller {
-  static targets = ["surface", "strokes", "field", "offer"]
+  static targets = ["surface", "strokes", "field", "offer", "art"]
   static values = { vibrate: Boolean, pagoda: String }
 
   connect() {
@@ -87,6 +87,7 @@ export default class extends Controller {
     const { scene } = await response.json()
     await playScene({
       scene,
+      art: this.hasArtTarget ? this.artTarget.content.firstElementChild.cloneNode(true) : null,
       flier: { rect: this.surfaceTarget.getBoundingClientRect(), content: this.strokesTarget.cloneNode(true) },
       label: this.pagodaValue,
       reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,

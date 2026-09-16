@@ -43,7 +43,34 @@ class PagodaLayoutTest < ActiveSupport::TestCase
     scene = PagodaLayout.scene(@user.copyings.includes(:sutra_char))
 
     assert_equal [ 1, 2, 3 ], scene[:cells].map { |cell| cell[:pos] }
-    assert_equal PagodaLayout.floors.size, scene[:eaves].size, "처마는 층마다 하나"
+  end
+
+  # 칸은 그림의 층에 맞춰 앉는다. 그림을 다시 그리면 이 값들이 함께 바뀐다.
+  test "층은 그림의 자리에 선다 — 처마 아래 숨 한 칸을 두고" do
+    drawing = Rails.root.join("app/assets/images/pagoda_outline.svg").read
+    _, height = PagodaLayout::VIEW
+
+    assert_match(/viewBox="0 0 #{PagodaLayout::VIEW[0]} #{height}"/, drawing, "그림틀이 그림과 다르다")
+
+    PagodaLayout.floors.each do |floor|
+      rows = PagodaLayout::FLOORS[floor.layer - 1].last
+      cells = PagodaLayout.cells[(floor.first - 1)..(floor.last - 1)]
+
+      assert_equal rows * PagodaLayout::PITCH + PagodaLayout::BREATH, floor.height
+      assert_equal floor.y + PagodaLayout::BREATH, cells.map(&:y).min - (PagodaLayout::PITCH - PagodaLayout::GLYPH) / 2,
+        "#{floor.layer}층의 칸이 처마 아래 숨을 두고 앉지 않는다"
+      assert_equal floor.y + floor.height, cells.map { |cell| cell.y + PagodaLayout::GLYPH }.max +
+        (PagodaLayout::PITCH - PagodaLayout::GLYPH) / 2, "#{floor.layer}층의 칸이 바닥에 붙어 앉지 않는다"
+      assert_match(/M \d+(?:\.\d+)? #{floor.y.to_i} /, drawing, "#{floor.layer}층의 처마가 그림에 없다")
+    end
+  end
+
+  test "꼭대기 한 자는 칸의 층 밖, 상륜 위에 앉는다" do
+    crown = PagodaLayout.cells.last
+
+    assert_equal PagodaLayout.capacity, crown.pos
+    assert_operator crown.y + crown.size, :<, PagodaLayout.floors.last.y, "꼭대기 자리가 다섯째 층 안에 있다"
+    assert_in_delta PagodaLayout::VIEW[0] / 2.0, crown.x + crown.size / 2.0, 0.01
   end
 
   test "탑의 칸에는 사용자가 쓴 획이 그대로 실린다 — 활자로 대신 채우지 않는다" do
@@ -53,17 +80,27 @@ class PagodaLayoutTest < ActiveSupport::TestCase
     assert_equal @user.copyings.first.glyph_paths, cell[:paths]
   end
 
-  test "한 층이 차면 처마 양 끝에 풍경이 걸린다" do
+  # 풍경은 그림에 이미 걸려 있다. 여기서는 어느 층이 찼는지만 알려 준다.
+  test "층이 차야 그 층의 풍경이 남는다" do
     first_floor = PagodaLayout.floors.first
     write_through(first_floor.last - 1)
-    assert_empty PagodaLayout.scene(@user.copyings.includes(:sutra_char))[:bells]
+    floors = PagodaLayout.scene(@user.copyings.includes(:sutra_char))[:floors]
+
+    assert_empty floors[:filled], "차지 않은 층에 풍경이 걸린다"
+    assert_nil floors[:fresh]
 
     fresh = @user.copyings.create!(sutra_char: @user.pagoda.next_char, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
-    bells = PagodaLayout.scene(@user.copyings.includes(:sutra_char), fresh: fresh)[:bells]
+    floors = PagodaLayout.scene(@user.copyings.includes(:sutra_char), fresh: fresh)[:floors]
 
-    assert_equal 2, bells.size
-    assert bells.all? { |bell| bell[:fresh] }, "방금 층을 채웠는데 풍경이 새로 걸리지 않는다"
-    assert_equal PagodaLayout::VIEW[0], bells.sum { |bell| bell[:x] }, "풍경이 탑의 가운데를 두고 짝을 이루지 않는다"
+    assert_equal [ 1 ], floors[:filled]
+    assert_equal 1, floors[:fresh], "방금 찬 층이 어느 층인지 나가지 않는다"
+  end
+
+  test "층을 채우지 않은 날에는 흔들릴 풍경이 없다" do
+    write_through(3)
+    fresh = @user.copyings.create!(sutra_char: @user.pagoda.next_char, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
+
+    assert_nil PagodaLayout.scene(@user.copyings.includes(:sutra_char), fresh: fresh)[:floors][:fresh]
   end
 
   private

@@ -6,13 +6,20 @@
 // 보였다가 사라진다. 잠깐이어야 한다 — 머물게 하면 사용자가 자기 탑을
 // 세게 된다. 그래서 장면이 끝나면 탑은 어디에도 남지 않는다.
 //
-// 탑은 서버가 보낸 것만 그린다. 서버는 쓴 칸의 자리만 보내므로, 여기서는
-// 빈 격자를 그리고 싶어도 그릴 수 없다. 윤곽선은 칸이 아니라 층이다.
+// 탑의 그림(윤곽 · 처마 · 상륜 · 기단 · 풍경)은 손으로 그린 것을 그대로
+// 심는다. 여기서는 어느 층이 찼는지에 따라 풍경을 남기거나 지우고, 서버가
+// 보낸 쓴 칸의 글씨를 그 위에 얹을 뿐이다. 빈 격자는 그리고 싶어도 그릴
+// 수 없다 — 서버가 쓴 칸만 보낸다.
+//
+// 탑은 세로로 길어 한 화면에 통째로 담으면 한 칸이 손톱만 해진다. 그래서
+// 앉는 동안에는 그 자리 언저리로 다가갔다가, 앉고 나면 물러나 탑 전체를
+// 보인다. 잘라 보이지는 않는다 — 물러난 자리에서 탑은 통째로 보인다.
 import { outline, VIEW } from "lib/brush"
 
 const SVG = "http://www.w3.org/2000/svg"
 const OPEN = 250    // 탑이 떠오르는 동안
 const FLIGHT = 800  // 글씨가 날아가 앉는 동안 — 이 길이는 그대로 둔다
+const WIDEN = 900   // 앉은 뒤 물러나 탑 전체가 되는 동안
 const HOLD = 1500   // 탑 전체가 보이는 동안 — 잠깐
 const CLOSE = 300   // 사라지는 동안
 
@@ -22,18 +29,26 @@ const ARC_MOST = 90   // 그래도 이만큼 넘게 솟지는 않는다
 const OVERSHOOT = 2   // 제 자리보다 이만큼 더 갔다가 되돌아온다
 const SETTLE = 0.86   // 되돌아오기 시작하는 때
 
-export async function playScene({ scene, flier, label, reduced, onLand }) {
+// 앉는 자리로 다가가는 정도. 한 칸이 손톱만 해지지 않을 만큼만.
+const NEAR = 2.4
+
+export async function playScene({ scene, art, flier, label, reduced, onLand }) {
   const overlay = document.createElement("div")
   overlay.className = "pagoda-scene"
 
   const [width, height] = scene.view
   const svg = node("svg", { viewBox: `0 0 ${width} ${height}`, class: "pagoda", role: "img", "aria-label": label })
-  scene.outline.forEach(d => svg.append(node("path", { d, class: "pagoda__outline" })))
-  scene.eaves.forEach(d => svg.append(node("path", { d, class: "pagoda__eave" })))
+  const camera = node("g", { class: "pagoda__camera" })
+  svg.append(camera)
+
+  if (art) camera.append(hangBells(art, scene.floors, { stirred: !reduced }))
 
   const fresh = scene.cells.find(cell => cell.fresh)
-  scene.cells.filter(cell => !cell.fresh).forEach(cell => svg.append(glyph(cell)))
-  scene.bells.filter(bell => !bell.fresh).forEach(bell => svg.append(windBell(bell)))
+  scene.cells.filter(cell => !cell.fresh).forEach(cell => camera.append(glyph(cell)))
+
+  // 앉는 자리 언저리에서 시작해, 앉고 나서 물러난다.
+  const near = fresh && !reduced && nearView(fresh, scene.view)
+  if (near) camera.setAttribute("transform", near)
 
   overlay.append(svg)
   document.body.append(overlay)
@@ -45,15 +60,56 @@ export async function playScene({ scene, flier, label, reduced, onLand }) {
   overlay.classList.add("is-open")
   await wait(reduced ? 0 : OPEN)
 
-  if (fresh && flier && !reduced) await fly(flier, svg, fresh)
-  if (fresh) svg.append(glyph(fresh, { settling: !reduced }))
-  scene.bells.filter(bell => bell.fresh).forEach(bell => svg.append(windBell(bell, { stirred: !reduced })))
+  if (fresh && flier && !reduced) await fly(flier, camera, fresh)
+  if (fresh) camera.append(glyph(fresh, { settling: !reduced }))
   onLand?.()
+
+  if (near) {
+    camera.classList.add("pagoda__camera--widening")
+    camera.setAttribute("transform", "translate(0 0) scale(1)")
+    await wait(WIDEN, () => skipped)
+  }
 
   await wait(HOLD, () => skipped)
   overlay.classList.add("is-closing")
   await wait(reduced ? 0 : CLOSE)
   overlay.remove()
+}
+
+// 층이 찬 자리에만 풍경이 걸린다. 안 찬 층은 처마만 남는다.
+// 막 찬 층의 풍경만 한 번 흔들렸다 멈춘다 — 한 층에 한 번뿐이라
+// 흔해지지 않는다. 매다는 자리는 그림에서 읽는다 — 손으로 적지 않으므로
+// 윤곽을 다시 그려도 따라간다.
+function hangBells(art, floors, { stirred }) {
+  art.querySelectorAll(".bell").forEach(bell => {
+    const layer = Number(bell.dataset.layer)
+
+    if (!floors.filled.includes(layer)) return bell.remove()
+    if (!stirred || layer !== floors.fresh) return
+
+    const [x, y] = hangingPoint(bell)
+    bell.style.transformOrigin = `${x}px ${y}px`
+    bell.classList.add("bell--stirred")
+  })
+
+  return art
+}
+
+// 종을 매단 곳 — 그 무리의 첫 획이 시작하는 자리.
+function hangingPoint(bell) {
+  const first = bell.querySelector("path")?.getAttribute("d") || ""
+  const [x, y] = first.replace(/^\s*M\s*/, "").split(/[\s,]+/)
+
+  return [ Number(x) || 0, Number(y) || 0 ]
+}
+
+// 앉는 자리 언저리로 다가간 틀. 탑 밖의 빈 자리가 보이지 않게
+// 가장자리에서 멈춘다.
+function nearView(cell, [width, height]) {
+  const middle = { x: cell.x + cell.size / 2, y: cell.y + cell.size / 2 }
+  const hold = (at, span) => Math.min(0, Math.max(span * (1 - NEAR), span / 2 - NEAR * at))
+
+  return `translate(${hold(middle.x, width)} ${hold(middle.y, height)}) scale(${NEAR})`
 }
 
 // 한 자 — 사용자가 쓴 획 그대로. 활자로 대신 채우지 않는다.
@@ -68,22 +124,9 @@ function glyph(cell, { settling = false } = {}) {
   return box
 }
 
-// 한 층이 차면 처마 양 끝에 풍경이 걸린다. 소리는 없다.
-// 막 걸린 풍경만 한 번 흔들렸다 멈춘다 — 한 층에 한 번뿐이라 흔해지지 않는다.
-// 자리는 붙박이(transform 속성)로 두고, 흔들림은 그 안에서만 일어난다.
-function windBell({ x, y }, { stirred = false } = {}) {
-  const place = node("g", { transform: `translate(${x} ${y}) scale(1.7)` })
-  const bell = node("g", { class: stirred ? "pagoda__bell pagoda__bell--stirred" : "pagoda__bell" })
-  bell.append(node("path", { d: "M 0 0 V 7" }))
-  bell.append(node("path", { d: "M -2.6 12 L -1.8 7 H 1.8 L 2.6 12 Z" }))
-  bell.append(node("circle", { cx: 0, cy: 13.4, r: 0.9 }))
-  place.append(bell)
-  return place
-}
-
 // 쓰는 자리의 글씨를 탑의 칸까지 옮긴다 — 작아지며 날아가 앉는다.
-async function fly({ rect, content }, svg, cell) {
-  const target = screenBox(svg, cell)
+async function fly({ rect, content }, camera, cell) {
+  const target = screenBox(camera, cell)
 
   const plane = document.createElement("div")
   plane.className = "pagoda-flier"
@@ -134,9 +177,9 @@ function flightPath(dx, dy, scale) {
   return frames
 }
 
-// 탑 그림 안의 칸이 화면의 어디에 있는지.
-function screenBox(svg, cell) {
-  const matrix = svg.getScreenCTM()
+// 탑 그림 안의 칸이 화면의 어디에 있는지 — 다가가 있는 지금의 틀에서.
+function screenBox(camera, cell) {
+  const matrix = camera.getScreenCTM()
   const point = (x, y) => new DOMPoint(x, y).matrixTransform(matrix)
   const from = point(cell.x, cell.y)
   const to = point(cell.x + cell.size, cell.y + cell.size)

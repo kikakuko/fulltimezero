@@ -105,6 +105,46 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_empty main.css("[class*=pagoda], [data-copying-pagoda-value]"), "몫이 끝난 뒤에도 탑이 화면에 남는다"
   end
 
+  # 탑의 그림은 손으로 그린 것이다. 좌표도 곡선도 코드가 만들지 않는다.
+  test "탑은 그려 둔 윤곽을 그대로 심는다" do
+    get new_copying_path
+
+    assert_select "template[data-copying-target=art] svg.pagoda__art", count: 1
+    assert_select "template[data-copying-target=art] .bell[data-layer]", count: 10, message: "층마다 풍경 둘"
+
+    layout = Rails.root.join("app/models/pagoda_layout.rb").read
+    assert_no_match(/"M |eave_path|outline_path/, layout, "탑의 선을 코드가 그린다")
+
+    # 안 찬 층은 처마만 남는다. 풍경이 미리 걸려 있으면 몇 층이 남았는지가 세어진다.
+    scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
+    assert_match(/if \(!floors\.filled\.includes\(layer\)\) return bell\.remove\(\)/, scene,
+      "차지 않은 층에도 풍경이 걸린다")
+  end
+
+  # 글씨가 주인공이고 탑은 자리다. 옅기는 손으로 고칠 수 있게 상수로 둔다.
+  test "윤곽은 옅게 깔린다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    art = css[/\.pagoda__art \{.*?\n\}/m]
+
+    assert_match(/--art: 0\.3;/, art.to_s)
+    assert_match(/--art-pillar: [\d.]+;/, art.to_s, "기둥선을 따로 옅게 할 수 없다")
+    assert_match(/--art-bell: [\d.]+;/, art.to_s, "풍경의 진하기를 따로 정할 수 없다")
+    assert_match(/\.pagoda__eave \{[^}]*opacity: var\(--art\)/, css)
+    assert_match(/\.pagoda__pillar \{[^}]*opacity: calc\(var\(--art\) \* var\(--art-pillar\)\)/, css)
+  end
+
+  # 탑은 통째로 보여야 탑이다. 앉는 동안만 다가가고, 끝에는 물러난다.
+  test "다가갔다 물러나 탑 전체를 보인다 — 잘라 보이지 않는다" do
+    scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+
+    assert_match(/camera\.setAttribute\("transform", "translate\(0 0\) scale\(1\)"\)/, scene,
+      "물러나 탑 전체가 되지 않는다")
+    assert_match(/\.pagoda__camera--widening \{ transition: transform \d+ms /, css)
+    assert_match(/\.pagoda \{ height: min\(84vh, 48rem\); width: auto; max-width: 92vw; \}/, css,
+      "탑이 화면에 다 들어오지 않는다")
+  end
+
   # 날아가는 결. 밋밋하지 않게 넷을 얹되, 길이는 그대로 팔 할 초다.
   test "글씨는 호를 그리며 날아가 지나쳤다 되돌아와 앉는다" do
     scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
@@ -124,7 +164,13 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_match(/scale\(0\.92\)/, settle.to_s, "먹이 번지는 움츠림이 없다")
 
     sway = css[/@keyframes bell-sway \{.*?\n\}/m]
-    assert_match(/\.pagoda__bell--stirred \{ transform-origin: 0 0; animation: bell-sway 1\.2s /, css)
+    assert_match(/\.bell--stirred \{ animation: bell-sway 1\.2s /, css)
+
+    # 매다는 자리는 그림에서 읽는다 — 손으로 적어 두면 윤곽을 다시 그릴 때 어긋난다.
+    scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
+    assert_match(/hangingPoint\(bell\)/, scene)
+    assert_match(/bell\.querySelector\("path"\)\?\.getAttribute\("d"\)/, scene)
+    assert_no_match(/\.bell--stirred \{[^}]*transform-origin/, css, "매다는 자리를 손으로 적었다")
     degrees = sway.to_s.scan(/rotate\((-?[\d.]+)deg\)/).flatten.map { |turn| turn.to_f.abs }
     assert_equal 3.0, degrees.max, "풍경이 삼 도 넘게 흔들린다"
     assert_operator degrees.each_cons(2).count { |before, after| after > before }, :<=, 1,
@@ -137,7 +183,8 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
 
     assert_match(/if \(fresh && flier && !reduced\) await fly/, scene)
     assert_match(/glyph\(fresh, \{ settling: !reduced \}\)/, scene)
-    assert_match(/windBell\(bell, \{ stirred: !reduced \}\)/, scene)
+    assert_match(/hangBells\(art, scene\.floors, \{ stirred: !reduced \}\)/, scene)
+    assert_match(/const near = fresh && !reduced && nearView/, scene, "움직임을 줄여도 틀이 움직인다")
   end
 
   test "앉는 순간 떨지 말지는 게이트가 정한다" do

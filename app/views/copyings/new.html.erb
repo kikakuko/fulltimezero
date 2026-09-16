@@ -32,6 +32,10 @@
       <% end %>
     </div>
 
+    <%# 탑의 그림. 올린 뒤 장면에서만 쓰이므로 여기서는 그려지지 않는다 —
+        그때 가서 부르면 탑이 한 박자 늦게 서기 때문에 미리 심어 둔다. %>
+    <template data-copying-target="art"><%= pagoda_outline %></template>
+
     <dl class="copy-notes">
       <dt><%= t("copyings.reading") %></dt>
       <dd><%= @char.reading %></dd>

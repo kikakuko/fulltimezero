@@ -380,10 +380,29 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda-scene.is-closing { opacity: 0; transition-duration: 300ms; }
 
 .pagoda { height: min(84vh, 48rem); width: auto; max-width: 92vw; }
-.pagoda__outline { fill: none; stroke: var(--rule); stroke-width: 1; }
-.pagoda__eave { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; opacity: 0.55; stroke-linecap: round; }
-.pagoda__bell path, .pagoda__bell circle { stroke: var(--ink-soft); stroke-width: 0.8; fill: none; opacity: 0.8; }
-.pagoda__bell path + path, .pagoda__bell circle { fill: var(--ink-soft); }
+
+/* 탑의 그림 — 손으로 그린 윤곽을 그대로 심는다. 옅게 깔린다:
+   글씨가 주인공이고 탑은 자리다. 처마가 글씨보다 눈에 띄면
+   아래 둘을 내린다(전체 0.3 → 0.2 같은 식으로). */
+.pagoda__art {
+  --art: 0.3;         /* 그림의 옅기 — 처마 · 상륜 · 기단 */
+  --art-pillar: 0.75; /* 기둥선은 그 안에서 조금 더 옅게 */
+  --art-bell: 0.55;   /* 풍경만 조금 진하게 — 층이 찬 표이므로 보여야 한다 */
+  overflow: visible;
+}
+.pagoda__art path, .pagoda__art circle { fill: none; }
+.pagoda__pillar { stroke: var(--ink-soft); opacity: calc(var(--art) * var(--art-pillar)); }
+.pagoda__eave { stroke: var(--ink-soft); stroke-linecap: round; opacity: var(--art); }
+.pagoda__gilt { stroke: var(--dancheong-ocher); opacity: var(--art); }
+.pagoda__gilt--solid { fill: var(--dancheong-ocher); stroke: none; }
+.bell { opacity: var(--art-bell); }
+.bell .pagoda__pillar, .bell .pagoda__gilt { opacity: 1; }
+
+/* 다가갔다 물러나는 틀. 앉는 자리가 손톱만 하지 않도록 잠깐 다가갔다가,
+   앉고 나면 물러나 탑 전체를 보인다. 탑을 잘라 보이지는 않는다. */
+.pagoda__camera { transform-origin: 0 0; }
+.pagoda__camera--widening { transition: transform 900ms ease-in-out; }
+
 .pagoda__ink path { fill: var(--ink); }
 
 /* 방금 올린 한 자만 주사로 찍힌다 — 탑다라니의 붉은 인쇄처럼.
@@ -398,8 +417,8 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 @keyframes ink-settle { 0% { transform: scale(1) } 45% { transform: scale(0.92) } 100% { transform: scale(1) } }
 
 /* 층이 차는 순간 — 그 층의 풍경 둘이 잠깐 흔들렸다 멈춘다. 소리는 없다.
-   매다는 자리가 축이다. */
-.pagoda__bell--stirred { transform-origin: 0 0; animation: bell-sway 1.2s ease-out; }
+   매다는 자리는 그림에서 읽어 자리에서 정한다. */
+.bell--stirred { animation: bell-sway 1.2s ease-out; }
 @keyframes bell-sway {
   0% { transform: rotate(0deg) }
   14% { transform: rotate(3deg) }
@@ -414,7 +433,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda-flier path { fill: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
-  .pagoda-scene, .pagoda-scene.is-closing { transition: none; }
+  .pagoda-scene, .pagoda-scene.is-closing, .pagoda__camera--widening { transition: none; }
 }
 
 /* ── 처음의 문 셋 — 그림 한 장 위의 장막 ───────────────────────────
