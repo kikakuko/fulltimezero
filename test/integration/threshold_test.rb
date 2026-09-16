@@ -258,8 +258,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_match I18n.t("gate.line"), Nokogiri::HTML(response.body).css("main").text, "가입 화면에 그 한 줄이 없다"
 
-    post users_path, params: { user: { email_address: "walked@fulltimezero.test", password: "a good long password",
-                                       password_confirmation: "a good long password", time_zone: "Asia/Seoul" } }
+    post users_path, params: { user: { email_address: "walked@fulltimezero.test", password: "a good long password", time_zone: "Asia/Seoul" } }
     user = User.find_by!(email_address: "walked@fulltimezero.test")
 
     assert user.onboarded?, "문을 지났는데 가입 뒤에 다시 문 앞이다"
@@ -276,8 +275,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert_empty User.where(what_moves: "잊힐 한 줄")
     reset!
 
-    post users_path, params: { user: { email_address: "fresh@fulltimezero.test", password: "a good long password",
-                                       password_confirmation: "a good long password", time_zone: "Asia/Seoul" } }
+    post users_path, params: { user: { email_address: "fresh@fulltimezero.test", password: "a good long password", time_zone: "Asia/Seoul" } }
     fresh = User.find_by!(email_address: "fresh@fulltimezero.test")
     assert_nil fresh.what_moves
     refute fresh.onboarded?, "문을 지나지 않았는데 지난 것으로 되어 있다"
@@ -285,8 +283,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
 
   test "문을 지나지 않고 가입한 사람은 마당에 앞서 문으로 간다" do
     sign_out
-    post users_path, params: { user: { email_address: "direct@fulltimezero.test", password: "a good long password",
-                                       password_confirmation: "a good long password", time_zone: "Asia/Seoul" } }
+    post users_path, params: { user: { email_address: "direct@fulltimezero.test", password: "a good long password", time_zone: "Asia/Seoul" } }
     follow_redirect!
 
     assert_redirected_to threshold_path

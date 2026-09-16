@@ -36,10 +36,9 @@ ko:
     password: 비밀번호
     password_confirmation: 비밀번호 확인
     new:
-      title: 시작하기
-      only_email: 이메일 외에는 아무것도 묻지 않는다.
-      submit: 시작
-      have_account: 이미 계정이 있다
+      title: 들어간다
+      only_email: 이메일 외에는 아무것도 묻지 않는다. 계정이 없으면 여기서 생긴다.
+      submit: 들어간다
 
   sessions:
     new:

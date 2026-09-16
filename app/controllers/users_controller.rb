@@ -1,6 +1,8 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 이메일 외에는 아무것도 묻지 않는다. 시간대는 브라우저에서 추정해 받는다.
+# 셋째 문 뒤의 한 화면. 이메일과 비밀번호 — 계정이 있으면 들어가고, 없으면
+# 여기서 생긴다. 이메일 외에는 아무것도 묻지 않는다. 시간대는 브라우저에서
+# 추정해 받는다.
 class UsersController < ApplicationController
   allow_unauthenticated_access
   rate_limit to: 10, within: 3.minutes, only: :create, by: :throttle_key,
@@ -11,13 +13,20 @@ class UsersController < ApplicationController
   end
 
   def create
+    if (user = User.find_by(email_address: User.normalize_value_for(:email_address, user_params[:email_address].to_s)))
+      return enter(user) if user.authenticate(user_params[:password])
+
+      # 있는 계정인데 비밀번호가 다르다. 계정이 있다는 것 말고는 흘리지 않는다.
+      @user = User.new(email_address: user_params[:email_address])
+      @user.errors.add(:password, t("errors.sign_in_failed"))
+      return render :new, status: :unprocessable_entity
+    end
+
     @user = User.new(user_params.merge(locale: I18n.locale.to_s))
     @user.time_zone = "Asia/Seoul" unless ActiveSupport::TimeZone[@user.time_zone.to_s]
 
     if @user.save
-      receive_threshold(@user)
-      start_new_session_for @user
-      redirect_to today_path
+      enter(@user)
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,6 +37,12 @@ class UsersController < ApplicationController
   end
 
   private
+    def enter(user)
+      receive_threshold(user)
+      start_new_session_for user
+      redirect_to today_path
+    end
+
     # 문 셋을 지나며 세션이 들고 있던 것을 계정으로 옮긴다. 둘째 문의 한 줄과,
     # 문을 지났다는 사실. 옮기고 나면 세션에서 지운다.
     def receive_threshold(user)
@@ -36,6 +51,6 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.expect(user: [ :email_address, :password, :password_confirmation, :time_zone ])
+      params.expect(user: [ :email_address, :password, :time_zone ])
     end
 end

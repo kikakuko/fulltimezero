@@ -6,7 +6,6 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     post users_path(locale: :ko), params: { user: {
       email_address: " NEW@Example.com ",
       password: "a good long password",
-      password_confirmation: "a good long password",
       time_zone: "Asia/Seoul"
     } }
 

@@ -34,10 +34,9 @@ en:
     password: Password
     password_confirmation: Password again
     new:
-      title: Begin
-      only_email: We ask for nothing but an email address.
-      submit: Begin
-      have_account: I already have an account
+      title: Come in
+      only_email: Nothing is asked but an email. If there is no account yet, one begins here.
+      submit: Come in
 
   sessions:
     new:
