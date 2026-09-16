@@ -4,23 +4,18 @@
 # 않지만, 어조 규정은 더 엄하게 건다 — 진단하지 않고, 시키지 않고,
 # 초대로 끝맺는다. 다섯째 장은 앱 밖을 가리키며 끝난다(제7조).
 require "test_helper"
+require_relative "../test_helpers/copy_locks"
 
 class GuideTest < ActionDispatch::IntegrationTest
   CHAPTERS = GuideController::CHAPTERS
 
-  # 사용자의 상태를 규정하거나 값매기는 말.
-  DIAGNOSING = /당신(은|이|의)\s*\S*\s*(아직|이미|충분|부족|잘못|못하)|(당신|너)의 (마음|상태|수준)|
-                \byou are (still|already|not)\b|\byour (mind|state|level|progress)\b/xi
-
-  # 등급표의 말. 이 앱에는 단계도 수준도 없다(제3조).
-  GRADING = /단계|수준|진도|초급|중급|고급|\bstage\b|\blevel\b|\bbeginner\b|\badvanced\b/i
-
-  # 시키는 말.
-  COMMANDING = /하라|해라|해\s?보라|하십시오|해야 한다|하세요|
-                \byou (must|should|need to)\b|\bmake sure\b/xi
+  # 금지어는 언어별로 CopyLocks 한 곳에 있다.
+  DIAGNOSING = CopyLocks.pattern(:diagnosing)
+  GRADING = CopyLocks.pattern(:grading)
+  COMMANDING = CopyLocks.pattern(:commanding)
 
   test "다섯 장이 ko/en 양쪽에서 열린다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get guide_path(locale: locale)
       assert_response :success
 
@@ -71,7 +66,7 @@ class GuideTest < ActionDispatch::IntegrationTest
   end
 
   test "다섯째 장은 기능으로 회수되지 않고 앱 밖을 가리킨다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get guide_chapter_path("complete_rest", locale: locale)
 
       assert_select ".guide .aside", false, "온전한 쉼 장이 기능으로 이어진다"
@@ -124,7 +119,7 @@ class GuideTest < ActionDispatch::IntegrationTest
     def prose = Nokogiri::HTML(response.body).css("body").text.gsub(/\s+/, " ")
 
     def each_chapter
-      %i[ko en].each do |locale|
+      I18n.available_locales.each do |locale|
         CHAPTERS.each do |chapter|
           get guide_chapter_path(chapter, locale: locale)
           assert_response :success

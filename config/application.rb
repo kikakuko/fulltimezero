@@ -17,7 +17,10 @@ module Fulltimezero
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # 국제적 웹앱: 경로 스코프 /:locale 로 ko|en 만 받는다.
+    # 국제적 웹앱: 경로 스코프 /:locale 로 여기 적힌 언어만 받는다.
+    # 언어의 목록은 여기 한 곳에만 있다 — 경로 · 계정의 언어 · 화면 아래의
+    # 전환이 모두 여기서 나온다. 셋째 언어는 여기에 더하고, 그 언어의
+    # 로케일 파일 · 금지어 목록 · 데이터 칸이 갖춰져야 테스트가 통과한다.
     config.i18n.available_locales = %i[ ko en ]
     config.i18n.default_locale = :ko
     config.i18n.fallbacks = [ :en ]

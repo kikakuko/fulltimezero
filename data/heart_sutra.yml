@@ -1,5 +1,11 @@
 # fulltimezero · 불탑 사경 데이터 — 반야심경 260자
 # 필드: pos 위치 · glyph 글자 · reading 훈음 · sense_here 이 자리의 뜻 · gloss_en 영어 · phrase 구절 id · nth/total 등장 순번/총수 · sanskrit(음역자만) 원어·음절·소리
+#
+# 언어별 칸의 규칙 (app/models/concerns/localized.rb 한 곳):
+#   기본 칸은 한국어. 다른 언어는 <칸>_<언어> 로 붙는다 — sense_here_ja 처럼.
+#   영어의 뜻은 gloss_en 이 맡는다. 그 언어의 칸이 없으면 영어로 보인다.
+#   훈음(reading)과 소리(sound_ko)는 한국어의 것이라 다른 언어에서는 비운다.
+#   기계 번역은 없다. 그 언어로 쓰는 사람이 쓴다.
 sutra:
   id: heart_sutra
   title_han: 般若波羅蜜多心經

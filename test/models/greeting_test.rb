@@ -43,7 +43,7 @@ class GreetingTest < ActiveSupport::TestCase
   test "어느 날에 오는 말이든 ko/en 양쪽에 있다" do
     (Date.new(2026, 1, 1)..Date.new(2026, 12, 31)).each do |date|
       Greeting.keys_for(date).each do |key|
-        %i[ko en].each do |locale|
+        I18n.available_locales.each do |locale|
           assert I18n.exists?("greetings.#{key}", locale),
             "#{locale} 에 greetings.#{key} 가 없다"
         end
@@ -52,7 +52,7 @@ class GreetingTest < ActiveSupport::TestCase
   end
 
   test "인사에도 느낌표와 이모지가 없다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       I18n.t("greetings", locale: locale).each_value do |line|
         assert_no_match(/[!\u{1F300}-\u{1FAFF}]/, line, line)
       end

@@ -1,6 +1,7 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 class User < ApplicationRecord
-  LOCALES = %w[ko en].freeze
+  # 언어의 목록은 config/application.rb 한 곳에서 온다.
+  LOCALES = I18n.available_locales.map(&:to_s).freeze
 
   # 「무엇이 움직이는가」에 적는 한 줄의 끝.
   WHAT_MOVES_MOST = 200

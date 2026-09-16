@@ -14,6 +14,8 @@
 # 글자 하나, 풀이 한 줄도 코드에 적지 않는다. 값은 data/ 의 파일에서만
 # 들어온다. 파일의 키가 곧 칸의 이름이라, 모르는 키가 생기면 시드가 터진다.
 class Abiding < ApplicationRecord
+  include Localized
+
   FILE = Rails.root.join("data/nine_abidings.yml")
   COUNT = 9
 
@@ -36,13 +38,16 @@ class Abiding < ApplicationRecord
 
   def stone = STONES.fetch(pos)
 
-  # 이 자리의 이름 — 한국어는 한글, 영어는 풀이.
-  def name = I18n.locale == :en ? gloss_en : ko
+  # 이 자리의 이름 — 한국어는 한글, 다른 언어는 그 언어의 풀이(없으면 영어).
+  def name_ko = ko
+  def name_en = gloss_en
+  def name = localized_value(:name)
 
-  # 로케일에 맞는 글. 영어는 번역이 아니라 그 언어로 쓴 문장이다.
-  %w[one_line what_happens what_to_do power engagement hindrance image sit_hint].each do |field|
-    define_method("#{field}_here") { I18n.locale == :en ? public_send("#{field}_en") : public_send(field) }
-  end
+  # 언어별 칸의 규칙은 Localized 한 곳에 있다. 영어는 번역이 아니라 그 언어로 쓴 문장이다.
+  localized :one_line, :what_happens, :what_to_do, :power, :engagement, :hindrance, :image, :sit_hint
+
+  # 영어 풀이는 이름이 영어가 아닐 때만 곁에 적는다.
+  def gloss_beside = (gloss_en unless name == gloss_en)
 
   class << self
     # 이 길 전체가 말하는 것. 한 문단이라 표에 넣지 않는다 — 파일이 곧 원본이다.

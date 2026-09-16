@@ -10,6 +10,7 @@
 #   매일의 문은 어두워졌다 밝아지며 걷힌다
 #   문에는 이름이 없다        — 형상으로만. 둘째 문 양쪽의 자리는 비어 있다
 require "test_helper"
+require_relative "../test_helpers/copy_locks"
 
 class PaletteTest < ActionDispatch::IntegrationTest
   CSS = Rails.root.join("app/assets/tailwind/application.css")
@@ -120,10 +121,10 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
   test "문에는 이름을 붙이지 않는다 — 형상으로만" do
     # 「문」이라는 낱말은 괜찮다. 이름이 안 된다 — 일주문, 천왕문 같은.
-    names = /일주문|천왕문|금강문|불이문|해탈문|신장|사천왕|il-?ju|cheonwang|buri-?mun|one[- ]pillar|heavenly kings|non-?duality|guardians?/i
+    names = CopyLocks.pattern(:gate_names)
     sign_in_as users(:one)
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       [ threshold_path(locale: locale), threshold_naming_path(locale: locale), threshold_breath_path(locale: locale) ].each do |door|
         get door
 

@@ -1,7 +1,7 @@
 <%# 자리 하나. 이름 · 한 줄 · 일어나는 일 · 앉을 때 해 보는 일 · 떠받치는 힘.
     다음 자리로 미는 고리는 없다. 몇째 자리인지도 적지 않는다. %>
 <h1 class="title"><%= @abiding.han %> <span class="soft"><%= @abiding.name %></span></h1>
-<p class="tiny"><%= @abiding.sanskrit %><% if I18n.locale == :ko %> · <%= @abiding.gloss_en %><% end %></p>
+<p class="tiny"><%= @abiding.sanskrit %><% if @abiding.gloss_beside %> · <%= @abiding.gloss_beside %><% end %></p>
 
 <div class="guide">
   <p class="lead"><%= @abiding.one_line_here %></p>

@@ -33,7 +33,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     user = users(:one)
     sign_in_as user
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       post sittings_path(locale: locale), params: { sitting: { length: "incense", bell: "1" } }
       follow_redirect!
       assert_quiet_screen "앉는 중", locale
@@ -189,7 +189,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     %w[치과 회의 저녁 약속 장보기].each { |what| user.plans.create!(planned_on: user.today, what: what) }
     user.clearings.create!(cleared_on: user.today + 1)
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       sign_in_as user
 
       [ days_path(locale: locale), day_path(user.today, locale: locale) ].each do |page|
@@ -252,14 +252,12 @@ class SpiritTest < ActionDispatch::IntegrationTest
 
   # 이 앱은 쉼을 가르치지 않는다 — 쉬는 마음이 형상을 얻게 할 뿐이다(§5).
   # 인용 원문은 예외다. 옛글의 낱말은 옛글의 것이다.
-  TEACHING = CopyLocks::TEACHING
-
   test "카피가 쉼을 가르치지 않는다 — 수행·훈련·단계의 말이 없다" do
-    %w[ko en].each do |locale|
+    I18n.available_locales.map(&:to_s).each do |locale|
       copy = YAML.load_file(Rails.root.join("config/locales/#{locale}.yml")).fetch(locale)
 
       flatten_copy(copy).reject { |line| line.start_with?("「") }.each do |line|
-        assert_no_match TEACHING[locale], line, "#{locale} 카피가 가르친다: #{line[0, 60]}"
+        assert_no_match CopyLocks.pattern(:teaching, locale), line, "#{locale} 카피가 가르친다: #{line[0, 60]}"
       end
     end
   end
@@ -285,7 +283,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
   test "바깥으로 나가는 문은 눌러야만 열린다" do
     outward = false
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       GuideController::CHAPTERS.each do |chapter|
         get guide_chapter_path(chapter, locale: locale)
         assert_no_outward_requests("guide/#{chapter}", locale)
@@ -323,7 +321,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     Copying.insert_all!(rows)
     sign_in_as user
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get pagoda_path(locale: locale)
 
       assert_no_match(/\d/, visible_text, "탑 화면에 숫자가 있다")
@@ -340,7 +338,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     sources = File.read(Rails.root.join("docs/SOURCES.md"))
     assert_match(/CC0/, sources, "출처 문서에 라이선스 원칙이 없다")
 
-    copy = %i[ko en].flat_map { |l| flatten_copy(I18n.t("guide", locale: l)) }.join(" ")
+    copy = I18n.available_locales.flat_map { |l| flatten_copy(I18n.t("guide", locale: l)) }.join(" ")
     quotations = copy.scan(/[“「『]([^”」』]+)[”」』]/).flatten
 
     # 출처 문서에서는 긴 인용문이 여러 줄로 접혀 있다. 줄바꿈이 출처
@@ -424,7 +422,7 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
 
     def each_page
-      %i[ko en].each do |locale|
+      I18n.available_locales.each do |locale|
         OPEN_PAGES.each do |page|
           get public_send(page, locale: locale)
           assert_response :success, "#{page}(#{locale}) 가 열리지 않는다"

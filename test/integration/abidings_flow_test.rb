@@ -10,7 +10,7 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "여섯째 장에 돌 아홉이 흩어져 있고, 번호는 없다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get guide_chapter_path("abidings", locale: locale)
 
       assert_response :success
@@ -34,7 +34,7 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
   test "자리 하나를 읽는다 — 이름 · 한 줄 · 일어나는 일 · 앉을 때" do
     abiding = @abidings.fetch(3)
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get abiding_path(abiding, locale: locale)
 
       assert_response :success

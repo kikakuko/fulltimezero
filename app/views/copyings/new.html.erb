@@ -39,27 +39,33 @@
         그때 가서 부르면 탑이 한 박자 늦게 서기 때문에 미리 심어 둔다. %>
     <template data-copying-target="art"><%= pagoda_outline %></template>
 
+    <%# 언어별 칸은 모델의 *_here 가 정한다(Localized). 훈음은 한국어에서만,
+        뜻은 그 언어로, 영어 풀이는 뜻이 영어가 아닐 때만 곁에. %>
     <dl class="copy-notes">
-      <dt><%= t("copyings.reading") %></dt>
-      <dd><%= @char.reading %></dd>
+      <% if @char.reading_here %>
+        <dt><%= t("copyings.reading") %></dt>
+        <dd><%= @char.reading_here %></dd>
+      <% end %>
 
       <% if @char.transliterated? %>
         <%# 소리를 옮긴 자에는 뜻 대신 원어를 둔다. %>
         <dt><%= t("copyings.sanskrit") %></dt>
         <dd>
           <%= @char.sanskrit["word"] %> · <%= @char.sanskrit["syllable"] %>
-          <% if I18n.locale == :ko %> · <%= @char.sanskrit["sound_ko"] %><% end %>
+          <% if @char.sound_here %> · <%= @char.sound_here %><% end %>
         </dd>
       <% else %>
         <dt><%= t("copyings.sense") %></dt>
-        <dd><%= @char.sense_here %></dd>
+        <dd><%= @char.sense_here_here %></dd>
       <% end %>
 
       <dt><%= t("copyings.phrase") %></dt>
       <dd class="copy-phrase"><% @char.phrase.chars.each do |char| %><%= char == @char ? tag.strong(char.glyph) : char.glyph %><% end %></dd>
 
-      <dt><%= t("copyings.english") %></dt>
-      <dd><%= @char.gloss_en %></dd>
+      <% if @char.gloss_beside %>
+        <dt><%= t("copyings.english") %></dt>
+        <dd><%= @char.gloss_beside %></dd>
+      <% end %>
     </dl>
 
     <% if @again %>

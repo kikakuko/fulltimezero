@@ -1,5 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 require "test_helper"
+require_relative "../test_helpers/copy_locks"
 
 class DaysFlowTest < ActionDispatch::IntegrationTest
   setup do
@@ -124,9 +125,9 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
 
   # 「바라는 바 없이 한다」를 「바라지 말라」로 바꾸면 명령이 된다.
   test "저녁의 말은 응원도 명령도 아니다" do
-    orders = /하자$|해보|해\s?봐|하세요|하십시오|하라$|해라$|합시다|\b(?:let'?s|try|keep going|you can do)\b/i
+    orders = CopyLocks.pattern(:urging)
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       Evening::WITHOUT_AIM.each do |name|
         line = I18n.t("days.without_aim.#{name}", locale: locale)
 
@@ -138,9 +139,9 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
 
   # 빈 날의 축하가 바쁜 날의 비난이 되어서는 안 된다(제5조).
   test "축하와 위로는 서로의 거울이 아니다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       evening_lines(locale).each do |busy|
-        assert_no_match(/못|실패|아쉽|부족|failed|should have|too much/i, busy,
+        assert_no_match(CopyLocks.pattern(:blame), busy,
           "#{locale} 의 저녁 문구가 나무란다: #{busy}")
       end
     end
@@ -219,7 +220,7 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
 
     get days_path
 
-    assert_no_match(/연속|합계|모두|번째|streak|total|in a row/i, visible_text)
+    assert_no_match CopyLocks.pattern(:counting), visible_text
   end
 
   test "비운 날 아침에만 달이 한 번 크게 숨 쉰다" do

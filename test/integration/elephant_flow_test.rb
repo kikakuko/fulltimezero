@@ -2,6 +2,7 @@
 #
 # 코끼리의 길 — 앉기의 자리 맨 위. 흔적이지 경지가 아니다.
 require "test_helper"
+require_relative "../test_helpers/copy_locks"
 
 class ElephantFlowTest < ActionDispatch::IntegrationTest
   setup do
@@ -35,12 +36,12 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
   # 주어는 코끼리다. 정거장은 지명이지 사용자의 경지가 아니다.
   test "카드의 주어는 코끼리고, 읽는 이를 부르지 않는다" do
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       get new_sitting_path(locale: locale)
 
       card = I18n.t("sittings.elephant.card", station: "x", locale: locale)
       assert_match(/\A(코끼리가|The elephant)/, card)
-      assert_no_match(/당신|너의|\byou\b|\byour\b/i, card, "#{locale} 카드가 읽는 이를 부른다")
+      assert_no_match(CopyLocks.pattern(:addressing), card, "#{locale} 카드가 읽는 이를 부른다")
       station = I18n.with_locale(locale) { @abidings.first.name }
       assert_match I18n.t("sittings.elephant.card", station: station, locale: locale), visible_text
     end

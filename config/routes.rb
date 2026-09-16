@@ -2,7 +2,8 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
-  scope "/:locale", locale: /ko|en/ do
+  # 언어의 목록은 config/application.rb 한 곳에서 온다.
+  scope "/:locale", locale: Regexp.union(I18n.available_locales.map(&:to_s)) do
     get "/" => "gate#show", as: :gate
 
     get  "sign_up" => "users#new",    as: :new_user

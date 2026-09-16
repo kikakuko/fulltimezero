@@ -2,6 +2,7 @@
 #
 # 처음의 문 셋. 튜토리얼은 알려주는 것이고 리츄얼은 거치게 하는 것이다.
 require "test_helper"
+require_relative "../test_helpers/copy_locks"
 
 class ThresholdTest < ActionDispatch::IntegrationTest
   setup do
@@ -34,7 +35,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
       assert_select ".gates__line", text: I18n.t(key)
     end
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       lines = I18n.t("threshold", locale: locale).values.flat_map { |value| value.is_a?(Hash) ? value.values : value }.join("\n")
       assert_no_match(/멈추어라|멈춰라|멈추세요|\bstop(?! ?ped)\b/i, lines, "문이 사용자에게 멈추라고 한다")
       assert_no_match(/문 앞에 섰다|무엇에서 쉬려|화면에 손을 얹는다|come to the gate|resting from|Rest your hand/, lines)
@@ -176,9 +177,9 @@ class ThresholdTest < ActionDispatch::IntegrationTest
 
   # 잘했다는 말을 하지 않는다. 그냥 열린다.
   test "문에는 칭찬이 없고, 숫자도 없다" do
-    praise = /잘했|훌륭|대단|축하|멋지|well done|great|good job|congrat|nice|amazing/i
+    praise = CopyLocks.pattern(:praise)
 
-    %i[ko en].each do |locale|
+    I18n.available_locales.each do |locale|
       [ threshold_path(locale: locale), threshold_naming_path(locale: locale), threshold_breath_path(locale: locale) ].each do |door|
         get door
         text = Nokogiri::HTML(response.body).css("body").text

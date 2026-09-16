@@ -52,7 +52,7 @@ class AbidingTest < ActiveSupport::TestCase
       end
     end
 
-    %i[ko en].each { |locale| assert_empty CopyLocks.breaks(Abiding.epigraph(locale)), "#{locale} 머리글이 자물쇠에 걸린다" }
+    I18n.available_locales.each { |locale| assert_empty CopyLocks.breaks(Abiding.epigraph(locale)), "#{locale} 머리글이 자물쇠에 걸린다" }
   end
 
   # 사다리가 아니다. 돌은 흩어 놓는다 — 가로로도 세로로도 차례를 따르지 않는다.
