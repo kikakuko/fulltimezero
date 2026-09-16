@@ -32,6 +32,12 @@ class AbidingTest < ActiveSupport::TestCase
     path.delete if path.exist?
   end
 
+  # 육력(六力)과 사작의(四作意)의 이름은 무착 『성문지』의 낱말이다 — 앱이
+  # 사용자에게 하는 말이 아니라 옛글의 이름이므로 가르침의 자물쇠 밖이다.
+  # 「인용 원문은 예외다. 옛글의 낱말은 옛글의 것이다」(SPIRIT §5).
+  # 새 예외가 아니라 있는 규칙의 적용이다. 숫자 · 느낌표 · 이모지는 그대로 건다.
+  CLASSICAL = %w[power engagement].freeze
+
   # 화면에 나가는 글에는 카피와 같은 자물쇠를 건다 — 가르침 · 숫자 · 느낌표 · 이모지.
   test "아홉 자리의 글은 자물쇠를 다 지난다" do
     fields = %w[ko gloss_en one_line what_happens what_to_do power engagement hindrance image sit_hint] +
@@ -39,7 +45,10 @@ class AbidingTest < ActiveSupport::TestCase
 
     @abidings.each do |abiding|
       fields.each do |field|
-        assert_empty CopyLocks.breaks(abiding.public_send(field)), "#{abiding.ko}.#{field} 이 자물쇠에 걸린다"
+        broken = CopyLocks.breaks(abiding.public_send(field))
+        broken -= [ "가르침" ] if CLASSICAL.include?(field.delete_suffix("_en"))
+
+        assert_empty broken, "#{abiding.ko}.#{field} 이 자물쇠에 걸린다"
       end
     end
 
