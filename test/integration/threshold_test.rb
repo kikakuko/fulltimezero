@@ -73,6 +73,24 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert_operator size.to_f, :>=, 1.0, "입력칸의 글자가 16px 보다 작다"
   end
 
+  # 장막은 위 삼분의 일에만, 반을 넘지 않게. 아래는 그림 그대로다.
+  test "장막은 위 삼분의 일만 옅게 덮고, 아래는 그림 그대로다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "")
+    stops = css.match(/--veil-stop-top: ([\d.]+);.*?--veil-stop-upper: ([\d.]+);/m).captures.map(&:to_f)
+    assert stops.all? { |value| value <= 0.5 }, "첫째 문의 장막이 반을 넘는다"
+
+    %w[stop naming breath].each do |state|
+      rule = css[/\.gates__veil\[data-state="#{state}"\][^{]*\{([^}]*)\}/, 1]
+      alphas = rule.scan(/--veil-a\d: (?:var\(--veil-stop-\w+\)|([\d.]+))/).flatten.compact.map(&:to_f)
+      assert alphas.all? { |value| value <= 0.5 }, "#{state} 의 장막이 반을 넘는다"
+      assert_operator rule[/--veil-p4: (\d+)%/, 1].to_i, :<=, 34, "#{state} 의 장막이 위 삼분의 일을 넘어 내려온다"
+      assert_equal 0.0, rule[/--veil-r3: ([\d.]+)/, 1].to_f, "#{state} 에 둘레를 잠그는 어둠이 있다"
+    end
+
+    scrim = css[/\.gates__scrim \{[^}]*\}/]
+    assert_no_match(/night/, scrim, "아래에 어둠의 그늘이 남아 있다")
+  end
+
   test "그림은 자르지 않고 통째로 — 틀이 그림의 비율 그대로다" do
     image = Rails.root.join("app/assets/images/gates.png")
     assert image.exist?, "그림(gates.png)이 아직 없다"

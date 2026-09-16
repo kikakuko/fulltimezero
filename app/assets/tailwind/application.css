@@ -463,11 +463,10 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .gates {
   position: fixed; inset: 0; z-index: 9;
   background: var(--night-gate);
-  /* 첫째 문 장막의 위쪽 두 겹. 잰 값은 0.94 · 0.88 이었으나 그림의
-     위쪽이 밝은 미색이라 그대로 덮으면 먹빛이 되어 멀리 있는 문 둘이
-     아주 사라졌다. 조금 낮추어, 아직 보이지 않되 거기 있는 것으로 둔다. */
-  --veil-stop-top: 0.80;
-  --veil-stop-upper: 0.70;
+  /* 첫째 문 장막의 위쪽 두 겹. 위 삼분의 일만 옅게 — 반을 넘지 않는다.
+     아래는 그림 그대로다. 멀리 있는 문 둘은 안개 속에 있되 보인다. */
+  --veil-stop-top: 0.5;
+  --veil-stop-upper: 0.4;
 }
 .gates__frame {
   position: absolute; inset: 0; margin: auto;
@@ -511,21 +510,22 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
     --veil-r2 1.2s ease-out, --veil-r3 1.2s ease-out;
 }
 
-/* 나는 멈추었다 — 위에서 아래로. 0% · 34% · 50% · 60% */
+/* 장막은 위 삼분의 일에만 있고, 문을 지날수록 위로 물러난다. 아래는 그림 그대로.
+   나는 멈추었다 — 0% · 20% · 28% · 34% */
 .gates__veil[data-state="stop"] {
-  --veil-a1: var(--veil-stop-top); --veil-a2: var(--veil-stop-upper); --veil-a3: 0.30;
-  --veil-p2: 34%; --veil-p3: 50%; --veil-p4: 60%;
+  --veil-a1: var(--veil-stop-top); --veil-a2: var(--veil-stop-upper); --veil-a3: 0.15;
+  --veil-p2: 20%; --veil-p3: 28%; --veil-p4: 34%;
 }
-/* 무엇이 움직이는가 — 0% · 14% · 28% · 38% */
+/* 무엇이 움직이는가 — 0% · 10% · 18% · 24% */
 .gates__veil[data-state="naming"] {
-  --veil-a1: 0.88; --veil-a2: 0.70; --veil-a3: 0.12;
-  --veil-p2: 14%; --veil-p3: 28%; --veil-p4: 38%;
+  --veil-a1: 0.45; --veil-a2: 0.32; --veil-a3: 0.1;
+  --veil-p2: 10%; --veil-p3: 18%; --veil-p4: 24%;
 }
-/* 한 번도 움직인 적 없다 — 가운데 (50%, 15%) 만 트이고 나머지는 잠긴다. */
+/* 한 번도 움직인 적 없다 — 위 한 뼘만 남고 거의 걷혀 있다. 먼 문의 빛은 그림의 것이다. */
 .gates__veil[data-state="breath"], .gates__veil[data-state="open"] {
-  --veil-a1: 0; --veil-a2: 0; --veil-a3: 0;
-  --veil-p2: 14%; --veil-p3: 28%; --veil-p4: 38%;
-  --veil-r2: 0.45; --veil-r3: 0.92;
+  --veil-a1: 0.2; --veil-a2: 0.1; --veil-a3: 0;
+  --veil-p2: 6%; --veil-p3: 10%; --veil-p4: 14%;
+  --veil-r2: 0; --veil-r3: 0;
 }
 /* 열림 — 장막이 걷히고 그림 전체가 드러난다. */
 .gates__veil[data-state="open"] { opacity: 0; transition: opacity 1.6s ease-out; }
@@ -533,14 +533,10 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 그림 전체를 한 숨 보여 준 뒤, 한지빛 오늘로 옅어진다. */
 .gates.gates--leaving { opacity: 0; transition: opacity 0.8s ease-in 1s; }
 
-/* 아래 — 글자가 읽히도록. 잰 값은 200px 이었으나 그림의 아래쪽이
-   밝은 돌길이라 그만큼으로는 글이 묻혔다. 조금 더 높이고 짙게 한다. */
+/* 아래 — 글이 먹빛이 되어 그늘이 거의 필요 없다. 돌길의 밝은 결만 살짝 잠재운다. */
 .gates__scrim {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 300px;
-  background: linear-gradient(to bottom,
-    transparent,
-    color-mix(in srgb, var(--night-gate) 62%, transparent) 45%,
-    color-mix(in srgb, var(--night-gate) 90%, transparent));
+  position: absolute; left: 0; right: 0; bottom: 0; height: 220px;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--paper) 55%, transparent));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -552,20 +548,21 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   position: fixed; inset: 0; z-index: 10;
   display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 1.5rem;
   padding: 0 1.75rem calc(var(--gates-edge) + 4.5rem); text-align: center;
-  color: var(--night-ink);
+  color: var(--ink);
 }
-.gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--night-ink); }
+.gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--ink); }
+
 .threshold__way { margin: 0; min-height: 3rem; }
-.threshold .action, .threshold input[type="submit"] { color: var(--night-ink); border-color: var(--night-rule); }
+.threshold .action, .threshold input[type="submit"] { color: var(--ink); border-color: var(--ink-soft); }
 .threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
-.threshold__form label { font-size: 1.3rem; color: var(--night-ink); margin: 0; }
+.threshold__form label { font-size: 1.3rem; color: var(--ink); margin: 0; }
 input[type="text"].threshold__field {
-  width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--night-rule);
-  color: var(--night-ink); font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
+  width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--ink-soft);
+  color: var(--ink); font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
 }
-.threshold__field:focus { outline: none; border-color: var(--night-focus); }
+.threshold__field:focus { outline: none; border-color: var(--ink); }
 .threshold__later { position: fixed; bottom: calc(var(--gates-edge) + 1.25rem); left: 0; right: 0; text-align: center; }
-.threshold__later .quiet { color: var(--night-soft); text-decoration-color: var(--night-rule); }
+.threshold__later .quiet { color: var(--ink-soft); text-decoration-color: var(--rule); }
 
 /* 둘째 문 — 물음과 입력칸을 키보드가 올라오는 자리 위에 둔다.
    아이폰의 사파리는 키보드가 입력칸을 가릴 때에만 화면 전체를 밀어
@@ -578,13 +575,14 @@ input[type="text"].threshold__field {
   padding-top: calc(var(--gates-edge) + var(--gates-h) * 0.07);
 }
 .threshold--naming .threshold__form { position: relative; }
-/* 글 뒤의 그늘. 테두리가 보이면 상자가 되므로 가장자리에서 온전히
-   사라지게 하고, 글보다 넉넉히 넓게 편다. */
+/* 글 뒤의 안개. 그림이 밝아졌으니 그늘이 아니라 한지빛 안개다 — 글은 먹빛으로.
+   테두리가 보이면 상자가 되므로 가장자리에서 온전히 사라지게 하고, 글보다
+   넉넉히 넓게 편다. */
 .threshold--naming .threshold__form::before {
   content: ""; position: absolute; inset: -3.5rem -4rem -4.5rem; z-index: -1;
   background: radial-gradient(62% 55% at 50% 52%,
-    color-mix(in srgb, var(--night-gate) 78%, transparent) 0%,
-    color-mix(in srgb, var(--night-gate) 58%, transparent) 45%,
+    color-mix(in srgb, var(--paper) 82%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 60%, transparent) 45%,
     transparent 78%);
 }
 
