@@ -5,11 +5,11 @@
      data-elephant-whiteness-value="<%= reading.whiteness %>"
      data-elephant-yesterday-value="<%= reading.yesterday %>"
      data-elephant-moving-value="<%= moving %>">
-  <svg class="elephant-field__map" viewBox="0 0 390 780" aria-hidden="true">
+  <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
     <% stations.each_with_index do |name, index| %>
       <% x, y = anchors.fetch(index) %>
-      <text class="elephant-field__station" x="<%= x %>" y="<%= y + 26 %>" text-anchor="middle"><%= name %></text>
+      <text class="elephant-field__station" x="<%= x %>" y="<%= y + 44 %>" text-anchor="middle"><%= name %></text>
     <% end %>
   </svg>
 

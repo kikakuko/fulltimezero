@@ -668,11 +668,13 @@ input[type="text"].threshold__field {
   --elephant-width: 104px;  /* 폭. 산수에 견줘 커 보이면 80px 도 시험한다 */
   --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
   --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
-  position: relative; width: 100%; aspect-ratio: 390 / 780; margin: 0 auto 1rem;
+  position: relative; width: 100%; aspect-ratio: 864 / 1184; margin: 0 auto 1rem;
+  /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
+  background: url("elephant_field.png") center / cover no-repeat;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
-.elephant-field__station { font-family: var(--sans); font-size: 12px; fill: var(--ink-soft); }
+.elephant-field__station { font-family: var(--sans); font-size: 26px; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 6px; stroke-linejoin: round; }
 
 /* 자리 — 발이 길의 가운데 선에 닿는다. */
 .elephant {

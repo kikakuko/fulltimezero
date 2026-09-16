@@ -16,11 +16,13 @@ class Elephant
   # 길 위의 정거장 아홉 — 지명이지 경지가 아니다.
   STATIONS = 9
 
-  # 길의 앵커 — 아래에서 위로. 그리는 쪽(elephant_controller.js)과 같은
-  # 값이어야 한다(elephant_test 가 지킨다). 정거장의 이름이 이 위에 선다.
+  # 길의 틀과 앵커 — 배경 그림(elephant_field.png) 속 흰 길의 굽이마다
+  # 한 점. 그리는 쪽(elephant_controller.js)과 같은 값이어야 한다
+  # (elephant_flow_test 가 지킨다). 정거장의 이름이 이 위에 선다.
+  VIEW = [ 864, 1184 ].freeze
   ANCHORS = [
-    [ 90, 660 ], [ 300, 590 ], [ 100, 520 ], [ 295, 450 ], [ 95, 380 ],
-    [ 290, 310 ], [ 110, 245 ], [ 270, 182 ], [ 195, 110 ]
+    [ 555, 1085 ], [ 175, 905 ], [ 660, 770 ], [ 300, 640 ], [ 640, 555 ],
+    [ 325, 470 ], [ 575, 395 ], [ 355, 320 ], [ 450, 120 ]
   ].freeze
 
   Reading = Data.define(:whiteness, :yesterday) do

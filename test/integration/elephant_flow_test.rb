@@ -60,7 +60,12 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     anchors = js[/export const ANCHORS = \[(.*?)\n\]/m, 1].scan(/\[ (\d+), (\d+) \]/).map { |x, y| [ x.to_i, y.to_i ] }
 
     assert_equal Elephant::ANCHORS, anchors
+    assert_equal Elephant::VIEW, js[/export const VIEW = \[ (\d+), (\d+) \]/, 0].scan(/\d+/).map(&:to_i)
     assert_match(/getPointAtLength/, js, "길 위의 점을 재지 않는다")
+
+    # 앵커는 그림 안에 있고, 아래에서 위로 오른다.
+    Elephant::ANCHORS.each { |x, y| assert x.between?(0, Elephant::VIEW[0]) && y.between?(0, Elephant::VIEW[1]) }
+    assert_equal Elephant::ANCHORS.map(&:last).sort.reverse, Elephant::ANCHORS.map(&:last), "길이 올라가지 않는다"
   end
 
   test "걸음은 여덟 할 초를 오가고, 움직임을 줄이면 멈춘다" do
