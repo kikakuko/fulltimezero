@@ -10,8 +10,8 @@ Abiding.seed_from
 #   gate@fulltimezero.test / fulltimezero   문을 아직 지나지 않은 계정. 온보딩부터.
 #   look@fulltimezero.test / fulltimezero   지난 두 달을 산 계정 — 쉰 날 열둘,
 #                                           비운 날 다섯, 앉음 여덟(자리 고른 것
-#                                           셋), 사경 마흔 자. 코끼리는 길 중간,
-#                                           미륵은 눈까지, 탑은 첫 층 절반 남짓.
+#                                           셋), 사경 예순네 자. 코끼리는 길 중간,
+#                                           미륵은 눈까지, 탑은 첫 층에 여섯 자 남음.
 #
 # 몇 번을 돌려도 같은 결과가 된다 — 지우고 다시 심는다.
 if Rails.env.development?
@@ -60,11 +60,12 @@ if Rails.env.development?
   # 비운 날 다섯 — 미륵이 눈까지 올라온다.
   [ 4, 11, 33, 47, 58 ].each { |days_ago| look.clearings.create!(cleared_on: today - days_ago) }
 
-  # 사경 마흔 자 — 하루 한 자씩, 지난 두 달에 흩어서. 획은 눈으로 보기 위한 것이다.
+  # 사경 예순네 자 — 첫 층(일흔 칸)에 여섯 자가 남은 상태. 하루 한 자씩, 지난 석 달에
+  # 흩어서. 획은 눈으로 보기 위한 것이다.
   strokes = [ [ [ 0.22, 0.34 ], [ 0.5, 0.38 ], [ 0.78, 0.36 ] ], [ [ 0.5, 0.14 ], [ 0.48, 0.5 ], [ 0.5, 0.86 ] ], [ [ 0.3, 0.64 ], [ 0.7, 0.66 ] ] ]
   # 최근 스물여드레에는 셋만 — 나머지는 그 전에. 그래야 코끼리가 길 중간에 선다.
-  days = ((29..65).to_a + [ 7, 17, 25 ]).sort.reverse
-  Sutra.heart.chars.order(:pos).first(40).zip(days).each do |char, days_ago|
+  days = ((29..89).to_a + [ 7, 17, 25 ]).sort.reverse
+  Sutra.heart.chars.order(:pos).first(64).zip(days).each do |char, days_ago|
     look.copyings.create!(sutra_char: char, copied_on: today - days_ago, glyph_paths: strokes)
   end
 
