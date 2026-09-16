@@ -665,7 +665,7 @@ input[type="text"].threshold__field {
    검은 코끼리가 앉은 날만큼 희어지며 길을 오른다. 길은 그리지 않는다.
    자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
 .elephant-field {
-  --elephant-width: 104px;  /* 폭. 산수에 견줘 커 보이면 80px 도 시험한다 */
+  --elephant-width: 80px;   /* 폭. 그림 속 길의 너비에 맞춘 값이다 */
   --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
   --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
   position: relative; width: 100%; aspect-ratio: 864 / 1184; margin: 0 auto 1rem;

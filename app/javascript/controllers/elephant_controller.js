@@ -18,6 +18,13 @@ export const ANCHORS = [
 ]
 export const VIEW = [ 864, 1184 ]
 
+// 정거장이 아닌 굽이 — 그림의 기하다. 정거장 아홉은 뜻이 있는 자리고,
+// 길 점은 그림 속 길이 굽는 곳이다. 배경을 바꾸면 정거장은 두고 이것만
+// 손본다. 열쇠는 그 굽이가 뒤따르는 정거장의 차례(0 부터).
+export const BENDS = {
+  7: [ [ 480, 250 ], [ 395, 190 ] ] // 전주일취를 지나 봉우리로 오르며 두 번 더 굽는다
+}
+
 // 비스듬함은 접선각을 따르되 이만큼을 넘지 않는다 — 앵커 근처에서 길이
 // 거의 곧추서는데, 코끼리가 곧추서면 코끼리가 아니다.
 const TILT_MOST = 12
@@ -27,7 +34,7 @@ export default class extends Controller {
   static values = { whiteness: Number, yesterday: Number, moving: Boolean }
 
   connect() {
-    this.pathTarget.setAttribute("d", catmullRom(ANCHORS))
+    this.pathTarget.setAttribute("d", catmullRom(road(ANCHORS, BENDS)))
 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
     this.figureTarget.style.setProperty("--whiteness", this.whitenessValue)
@@ -70,7 +77,12 @@ export default class extends Controller {
   }
 }
 
-// 앵커를 매끄럽게 잇는 길 — Catmull-Rom 을 세제곱 베지어로 옮긴다.
+// 정거장 사이에 굽이를 끼운 길의 점들.
+export function road(anchors, bends) {
+  return anchors.flatMap((anchor, index) => [ anchor, ...(bends[index] || []) ])
+}
+
+// 점들을 매끄럽게 잇는 길 — Catmull-Rom 을 세제곱 베지어로 옮긴다.
 export function catmullRom(points) {
   const at = index => points[Math.min(Math.max(index, 0), points.length - 1)]
   let d = `M ${points[0][0]} ${points[0][1]}`

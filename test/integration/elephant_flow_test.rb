@@ -51,7 +51,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
     assert_match(/--elephant-dark: 0\.35;/, css)
     assert_match(/--elephant-light: 2\.4;/, css)
-    assert_match(/--elephant-width: 104px;/, css)
+    assert_match(/--elephant-width: 80px;/, css)
     assert_match(/filter: grayscale\(1\) brightness\(calc\(var\(--elephant-dark\)/, css)
   end
 
@@ -62,6 +62,11 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_equal Elephant::ANCHORS, anchors
     assert_equal Elephant::VIEW, js[/export const VIEW = \[ (\d+), (\d+) \]/, 0].scan(/\d+/).map(&:to_i)
     assert_match(/getPointAtLength/, js, "길 위의 점을 재지 않는다")
+
+    # 굽이는 정거장과 따로 산다 — 정거장 아홉은 그대로, 길 점만 그림을 따른다.
+    assert_match(/export const BENDS = \{/, js)
+    assert_match(/catmullRom\(road\(ANCHORS, BENDS\)\)/, js, "굽이가 길에 끼지 않는다")
+    assert_equal 9, anchors.size, "정거장이 아홉이 아니다"
 
     # 앵커는 그림 안에 있고, 아래에서 위로 오른다.
     Elephant::ANCHORS.each { |x, y| assert x.between?(0, Elephant::VIEW[0]) && y.between?(0, Elephant::VIEW[1]) }
