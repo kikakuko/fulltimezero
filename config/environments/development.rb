@@ -1,6 +1,10 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # bin/review 의 임시 터널 주소(*.trycloudflare.com)를 개발에서만 받는다.
+  # 운영의 hosts 는 건드리지 않는다 — 진짜 배포는 docs/DEPLOY.md.
+  config.hosts << /[a-z0-9-]+\.trycloudflare\.com/
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# This app is a raft. — 이 앱도 뗏목이다.
+#
+# 휴대폰으로 보기 위한 임시 주소. 개발 서버와 Cloudflare 터널(빠른 모드,
+# 계정 없음)을 함께 띄우고, 찍히는 https 주소를 휴대폰에서 연다.
+#
+# ★ 이 주소는 만든 사람 혼자 확인하는 용도다. 트래픽이 Cloudflare 를
+#   거치므로 다른 사람에게 돌리지 않는다. 진짜 배포는 docs/DEPLOY.md.
+#   주소는 매번 바뀌고, 이 스크립트를 끄면 사라진다.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PORT="${PORT:-3000}"
+
+if ! command -v cloudflared >/dev/null; then
+  echo "cloudflared 가 없다. brew install cloudflared 뒤에 다시." >&2
+  exit 1
+fi
+
+# 끄면 둘 다 함께 꺼진다 — 서버는 pid 파일로도 한 번 더 확인한다.
+cleanup() {
+  kill "${SERVER:-}" "${TUNNEL:-}" 2>/dev/null || true
+  [ -f tmp/pids/review.pid ] && kill "$(cat tmp/pids/review.pid)" 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM
+
+# 개발 서버. 터널이 여기로 붙는다. 다른 기기에서 오므로 모든 주소에 연다.
+bin/rails server -b 0.0.0.0 -p "$PORT" -P tmp/pids/review.pid >tmp/review-server.log 2>&1 &
+SERVER=$!
+
+# 터널. 주소는 로그에 찍힌다 — 그 한 줄만 건져 보인다.
+cloudflared tunnel --url "http://localhost:$PORT" --no-autoupdate >tmp/review-tunnel.log 2>&1 &
+TUNNEL=$!
+
+for _ in $(seq 1 60); do
+  URL=$(grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' tmp/review-tunnel.log | head -1 || true)
+  [ -n "$URL" ] && break
+  sleep 1
+done
+
+if [ -z "${URL:-}" ]; then
+  echo "터널 주소를 얻지 못했다. tmp/review-tunnel.log 를 본다." >&2
+  exit 1
+fi
+
+echo
+echo "  휴대폰에서:  $URL/ko"
+echo "  혼자 보는 주소다. 끄면 사라진다. (Ctrl-C)"
+echo
+
+# 둘 중 하나가 죽으면 같이 내려간다. (맥의 bash 는 3.2 라 wait -n 이 없다.)
+while kill -0 "$SERVER" 2>/dev/null && kill -0 "$TUNNEL" 2>/dev/null; do sleep 1; done
