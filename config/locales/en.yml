@@ -72,6 +72,19 @@ en:
     full: The moon is full.
     title: The moon
 
+  abidings:
+    when_sitting: When sitting
+    power: The power beneath it
+    engagement: How the mind engages
+    hindrance: What gets in the way
+    image: In the picture
+    sit_here: Sit at this place
+    back: Back to the nine
+    read: Read the nine
+    none: No particular place
+    sources: From Asaṅga's Śrāvakabhūmi and the fourteenth chapter of the Mahāyānasūtrālaṃkāra. The pairing with the six powers and four kinds of engagement, and the elephant picture, are the Tibetan lamrim reading.
+    invitation: Any stone can be picked up first. There is no order.
+
   pagodas:
     back: "Go and write a character"
 
@@ -102,7 +115,7 @@ en:
     copying: "There is also the rest of copying a sutra, one character at a time."
     copying_go: "Write one character"
     back: "Back to the guide"
-    marks: ["I", "II", "III", "IV", "V"]
+    marks: ["I", "II", "III", "IV", "V", "VI"]
     title: "A Guide to Rest"
     not_open: "Not open yet."
     chapters:
@@ -111,6 +124,7 @@ en:
       sitting: "Sitting rest — zazen and the breath"
       waking: "Rest while awake — mindfulness"
       complete_rest: "Complete rest — doing nothing, and stillness"
+      abidings: "The nine abidings"
     body:
       body:
         - text: "Lying down carries a strange guilt. Sitting looks like doing something, walking looks like moving, but lying down looks like collapse. In the middle of the day it looks worse."
@@ -199,6 +213,7 @@ en:
       nothing: Do nothing
       nothing_go: Go in
       nothing_bell: A bell on the way in
+      abiding: Place
     # A stick of incense and a cup of tea were how time was measured
     # before clocks. They keep their own words, apart from rests.durations.
     lengths:

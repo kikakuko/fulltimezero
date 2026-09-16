@@ -7,7 +7,8 @@
 class GuideController < ApplicationController
   allow_unauthenticated_access
 
-  CHAPTERS = %w[body walking sitting waking complete_rest].freeze
+  # 여섯째 장 「아홉 자리」는 글이 로케일이 아니라 data/ 에서 온다.
+  CHAPTERS = %w[body walking sitting waking complete_rest abidings].freeze
 
   def show
     @chapters = CHAPTERS
@@ -18,6 +19,11 @@ class GuideController < ApplicationController
 
     return redirect_to guide_path unless @chapter
 
-    @body = t("guide.body.#{@chapter}")
+    if @chapter == "abidings"
+      @abidings = Abiding.in_order
+      render :abidings
+    else
+      @body = t("guide.body.#{@chapter}")
+    end
   end
 end

@@ -20,6 +20,9 @@ class Sitting < ApplicationRecord
   STALE_AFTER = 4.hours
 
   belongs_to :user
+  # 그때 고른 자리. 비워 둘 수 있다. 이것으로 사람을 판정하지 않는다 —
+  # 어느 자리를 몇 번 골랐는지 세는 곳은 없다.
+  belongs_to :abiding, optional: true
 
   validates :mode, inclusion: { in: MODES }
 

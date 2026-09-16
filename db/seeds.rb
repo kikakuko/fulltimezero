@@ -2,6 +2,8 @@
 #
 # 경전은 앱의 것이라 어느 환경에나 심는다. 값은 파일에서만 온다.
 Sutra.seed_from(Sutra::HEART_FILE)
+# 아홉 자리도 앱의 것이다.
+Abiding.seed_from
 
 # 개발용 씨앗. 달이 차오른 모습을 눈으로 보기 위한 것뿐이다.
 if Rails.env.development?

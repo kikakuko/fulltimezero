@@ -7,8 +7,10 @@ class SittingTest < ActiveSupport::TestCase
   # 앉음에 남는 것은 "그 날 앉았다"는 사실뿐이다.
   # 길이·분·완주·점수 컬럼이 뒷문으로 들어오지 못하게 목록을 못박는다.
   test "컬럼 목록은 이것뿐이다" do
-    assert_equal %w[created_at ended_at id mode sat_on updated_at user_id],
+    # abiding_id 는 그때 고른 자리다. 판정도 집계도 아니다 — 비워 둘 수 있다.
+    assert_equal %w[abiding_id created_at ended_at id mode sat_on updated_at user_id],
       Sitting.column_names.sort
+    assert Sitting.columns_hash["abiding_id"].null, "자리를 고르지 않으면 앉을 수 없다"
   end
 
   test "길이도 분도 저장하지 않는다" do

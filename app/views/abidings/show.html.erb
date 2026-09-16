@@ -1,0 +1,37 @@
+<%# 자리 하나. 이름 · 한 줄 · 일어나는 일 · 앉을 때 해 보는 일 · 떠받치는 힘.
+    다음 자리로 미는 고리는 없다. 몇째 자리인지도 적지 않는다. %>
+<h1 class="title"><%= @abiding.han %> <span class="soft"><%= @abiding.name %></span></h1>
+<p class="tiny"><%= @abiding.sanskrit %><% if I18n.locale == :ko %> · <%= @abiding.gloss_en %><% end %></p>
+
+<div class="guide">
+  <p class="lead"><%= @abiding.one_line_here %></p>
+
+  <p><%= @abiding.what_happens_here %></p>
+
+  <dl class="copy-notes">
+    <dt><%= t("abidings.when_sitting") %></dt>
+    <dd><%= @abiding.what_to_do_here %></dd>
+
+    <dt><%= t("abidings.power") %></dt>
+    <dd><%= @abiding.power_here %></dd>
+
+    <dt><%= t("abidings.engagement") %></dt>
+    <dd><%= @abiding.engagement_here %></dd>
+
+    <dt><%= t("abidings.hindrance") %></dt>
+    <dd><%= @abiding.hindrance_here %></dd>
+
+    <dt><%= t("abidings.image") %></dt>
+    <dd><%= @abiding.image_here %></dd>
+  </dl>
+
+  <% if authenticated? %>
+    <p class="aside">
+      <%= link_to t("abidings.sit_here"), new_sitting_path(abiding: @abiding.pos) %>
+    </p>
+  <% end %>
+</div>
+
+<p class="tiny" style="margin-top:4rem">
+  <%= link_to t("abidings.back"), guide_chapter_path("abidings"), class: "soft" %>
+</p>

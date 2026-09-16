@@ -8,11 +8,17 @@ class SittingsController < ApplicationController
   def new
     @length = SittingLength.new(SittingLength::DEFAULT)
     @bell = SilenceGate.allow?(:bell, user: Current.user)
+    @abidings = Abiding.in_order
+
+    # 고른 자리는 지난번 그대로 두되, 안내에서 「이 자리로 앉는다」로 왔으면 그 자리.
+    @abiding = Abiding.find_by(pos: params[:abiding]) || Current.user.sittings.where.not(abiding_id: nil)
+                                                                   .order(:created_at).last&.abiding
   end
 
   # 길이와 종성은 그 자리의 설정이므로 저장하지 않고 주소로 지닌다.
+  # 고른 자리만 앉음에 남는다 — 비워 둘 수 있고, 무엇도 판정하지 않는다.
   def create
-    sitting = Current.user.sittings.create!(mode: "sitting")
+    sitting = Current.user.sittings.create!(mode: "sitting", abiding: Abiding.find_by(pos: params.dig(:sitting, :abiding)))
 
     redirect_to sitting_path(sitting, length: length_param, bell: bell_param)
   end

@@ -28,6 +28,9 @@ Rails.application.routes.draw do
     resources :sittings, only: %i[new create show update destroy]
     post "nothing" => "sittings#nothing", as: :nothing
 
+    # 아홉 자리 — 읽고 고르는 안내. 처음부터 아홉이 다 열려 있다.
+    resources :abidings, only: :show, param: :pos
+
     # 사경 — 하루 한 자. 쌓인 탑은 언제든 볼 수 있다.
     resources :copyings, only: %i[new create]
     get "pagoda" => "pagodas#show", as: :pagoda

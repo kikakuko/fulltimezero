@@ -10,7 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_15_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_16_100000) do
+  create_table "abidings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "engagement", null: false
+    t.string "engagement_en", null: false
+    t.string "gloss_en", null: false
+    t.string "han", null: false
+    t.string "hindrance", null: false
+    t.string "hindrance_en", null: false
+    t.text "image", null: false
+    t.text "image_en", null: false
+    t.string "ko", null: false
+    t.string "one_line", null: false
+    t.string "one_line_en", null: false
+    t.integer "pos", null: false
+    t.string "power", null: false
+    t.string "power_en", null: false
+    t.string "sanskrit", null: false
+    t.string "sit_hint", null: false
+    t.string "sit_hint_en", null: false
+    t.datetime "updated_at", null: false
+    t.text "what_happens", null: false
+    t.text "what_happens_en", null: false
+    t.text "what_to_do", null: false
+    t.text "what_to_do_en", null: false
+    t.index ["pos"], name: "index_abidings_on_pos", unique: true
+  end
+
   create_table "clearings", force: :cascade do |t|
     t.date "cleared_on", null: false
     t.datetime "created_at", null: false
@@ -63,12 +90,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_140000) do
   end
 
   create_table "sittings", force: :cascade do |t|
+    t.integer "abiding_id"
     t.datetime "created_at", null: false
     t.datetime "ended_at"
     t.string "mode", null: false
     t.date "sat_on", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["abiding_id"], name: "index_sittings_on_abiding_id"
     t.index ["user_id", "sat_on"], name: "index_sittings_on_user_id_and_sat_on"
     t.index ["user_id"], name: "index_sittings_on_user_id"
   end
@@ -137,6 +166,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_140000) do
   add_foreign_key "plans", "users"
   add_foreign_key "rests", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "sittings", "abidings"
   add_foreign_key "sittings", "users"
   add_foreign_key "sutra_chars", "sutra_phrases"
   add_foreign_key "sutra_chars", "sutras"

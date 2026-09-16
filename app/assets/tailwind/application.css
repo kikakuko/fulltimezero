@@ -612,5 +612,24 @@ input[type="text"].threshold__field {
 }
 @keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
 
+/* ── 흩어 놓은 돌 — 아홉 자리 ─────────────────────────────────────
+   순서가 읽히지 않게 흩어 놓는다. 사다리가 아니다. 돌 하나에 이름 하나. */
+.stones { position: relative; width: 100%; aspect-ratio: 100 / 60; margin: 2rem 0; }
+.stone {
+  position: absolute; transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: 0.3rem;
+  text-decoration: none; color: var(--ink-soft); font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
+}
+.stone__pebble {
+  display: block; width: 2.1rem; height: 1.5rem;
+  background: var(--rule); border: 1px solid var(--ink-soft);
+  border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%;
+  transition: background 0.4s, border-color 0.4s;
+}
+.stone:hover .stone__pebble, .stone:has(:checked) .stone__pebble { background: var(--ink-soft); border-color: var(--ink); }
+.stone:has(:checked) { color: var(--ink); }
+.stone input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.stone:has(input:focus-visible) .stone__pebble { outline: 2px solid var(--ink); outline-offset: 2px; }
+
 /* Turbo 의 기본 진행 막대는 파랑이라 이 앱의 먹색과 어긋난다. */
 .turbo-progress-bar { background-color: var(--ink-soft); height: 2px; }

@@ -72,6 +72,19 @@ ko:
     full: 달이 찼다.
     title: 달
 
+  abidings:
+    when_sitting: 앉을 때
+    power: 떠받치는 힘
+    engagement: 마음 씀씀이
+    hindrance: 두드러지는 걸림
+    image: 그림에서는
+    sit_here: 이 자리로 앉는다
+    back: 아홉 자리로 돌아간다
+    read: 아홉 자리를 읽는다
+    none: 자리를 두지 않는다
+    sources: 무착 『성문지』와 『대승장엄경론』 열넷째 장에서 온다. 육력과 사작의를 짝지은 것과 코끼리 그림은 티베트 람림 전통의 해석이다.
+    invitation: 어느 돌부터 들어도 된다. 차례가 없다.
+
   pagodas:
     back: "한 자 쓰러 간다"
 
@@ -102,7 +115,7 @@ ko:
     copying: "경을 한 자씩 옮겨 쓰는 쉼도 있다."
     copying_go: "한 자 쓴다"
     back: "안내로 돌아간다"
-    marks: ["一", "二", "三", "四", "五"]
+    marks: ["一", "二", "三", "四", "五", "六"]
     title: "쉼의 안내"
     not_open: "아직 열리지 않았다."
     chapters:
@@ -111,6 +124,7 @@ ko:
       sitting: "앉은 쉼 — 좌선과 호흡"
       waking: "깨어 있는 쉼 — 알아차림"
       complete_rest: "온전한 쉼 — 무위와 선정"
+      abidings: "아홉 자리 — 구주심"
     body:
       body:
         - text: "눕는 것에는 이상하게 죄책감이 붙어 있다. 앉아 있으면 무언가 하는 것 같고 걸으면 움직이는 것 같은데, 누우면 무너진 것 같다. 낮에 눕는 일은 특히 그렇다."
@@ -199,6 +213,7 @@ ko:
       nothing: 아무것도 하지 않는다
       nothing_go: 들어간다
       nothing_bell: 들어갈 때 종성
+      abiding: 자리
     # 향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다.
     # 쉼의 길이(rests.durations)와 낱말이 겹치지 않게 둔다.
     lengths:

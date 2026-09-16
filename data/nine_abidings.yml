@@ -1,0 +1,275 @@
+# fulltimezero · 구주심(九住心) 안내 데이터
+#
+# 출전: 무착 『성문지(聲聞地)』, 『대승장엄경론』 제14장.
+#       육력(六力)·사작의(四作意) 배대와 코끼리 도상은 티베트 람림
+#       전통(종카파 『보리도차제론』)에서 정착된 해석이다.
+#
+# ★ 이 데이터는 사용자를 판정하는 데 쓰지 않는다.
+#   아홉 자리는 처음부터 전부 열려 있고, 사용자가 읽고 고르는
+#   안내(커리큘럼)다. 쉰 날의 수로 자리를 부여하지 않는다.
+#   코끼리의 색과 위치는 별도 계산(활동의 흔적)이며 여기에
+#   자리 이름을 붙이지 않는다.
+#
+# 필드
+#   pos          1~9
+#   han          한자
+#   ko           한글 이름
+#   sanskrit     산스크리트
+#   gloss_en     영어
+#   one_line     한 줄 뜻 (목록에 쓰는 짧은 말)
+#   what_happens 이 자리에서 마음에 일어나는 일 (서술, 2~3문장)
+#   what_to_do   앉을 때 해보는 일 (사용자의 행동, 1~2문장)
+#   power        육력(六力) — 이 자리를 떠받치는 힘
+#   engagement   사작의(四作意) — 이 자리의 마음 씀씀이
+#   hindrance    이 자리에서 두드러지는 걸림
+#   image        탕카 도상에서 이 자리의 그림
+#   sit_hint     이 자리를 골랐을 때 앉기 화면에 뜨는 한 줄
+#   *_en         영어. 번역이 아니라 그 언어로 쓴 문장이다.
+
+stages:
+  - pos: 1
+    han: 內住
+    ko: 내주
+    sanskrit: cittasthāpana
+    gloss_en: placing the mind
+    one_line: 처음으로 마음을 한 자리에 둔다
+    what_happens: >-
+      앉자마자 생각이 쏟아진다. 평소에도 이만큼 시끄러웠는데
+      앉고서야 보인 것이다. 오래 머물지 못하는 것이 당연한 자리다.
+    what_to_do: >-
+      숨이 드나드는 자리를 한 곳 정하고, 거기에 마음을 놓는다.
+      흩어졌다는 걸 알아차리면 그것으로 충분하다.
+    power: 청문력 (聽聞力) — 들어서 아는 힘
+    engagement: 역려운전작의 (力勵運轉作意) — 힘껏 애쓰는 마음
+    hindrance: 온갖 생각이 한꺼번에 몰려옴
+    image: 코끼리가 온통 검고, 원숭이가 앞에서 끌고 간다. 사람은 멀리 뒤처져 있다.
+    sit_hint: 흩어지는 것이 잘못이 아니다. 알아차리면 그 자리가 시작이다.
+    one_line_en: "The mind is set in one place for the first time"
+    what_happens_en: "As soon as sitting begins, thoughts pour in. They were this loud all along; sitting is only where it shows. Not staying long is the nature of this place."
+    what_to_do_en: "One spot where the breath comes and goes is chosen, and the mind is set down there. Noticing that it has scattered is already enough."
+    power_en: "The power of hearing — knowing from what was heard"
+    engagement_en: "Tight engagement — the mind that strains"
+    hindrance_en: "Every thought arriving at once"
+    image_en: "The elephant is black all over, and a monkey leads it on. The person is far behind."
+    sit_hint_en: "Scattering is not a fault. Noticing is where it begins."
+
+  - pos: 2
+    han: 等住
+    ko: 등주
+    sanskrit: saṃsthāpana
+    gloss_en: continuous placing
+    one_line: 잠깐이나마 이어서 머문다
+    what_happens: >-
+      여전히 자주 놓치지만, 놓치기 전까지의 시간이 조금 길어진다.
+      한 숨에서 두 숨, 두 숨에서 다섯 숨으로 이어지는 자리다.
+    what_to_do: >-
+      돌아왔을 때 스스로를 나무라지 않는다. 나무라는 생각도
+      또 하나의 생각이다.
+    power: 사유력 (思惟力) — 거듭 생각하는 힘
+    engagement: 역려운전작의 (力勵運轉作意)
+    hindrance: 곧바로 다시 흩어짐
+    image: 코끼리의 머리 끝에 흰 점이 하나 생긴다.
+    sit_hint: 이어지지 않아도 된다. 다시 시작하는 것이 곧 이어짐이다.
+    one_line_en: "It stays a little while, then a little longer"
+    what_happens_en: "It still slips away often, but the time before it slips grows a little. One breath becomes two, and two become five."
+    what_to_do_en: "On coming back, there is no scolding. The scolding thought is one more thought."
+    power_en: "The power of reflection — thinking it over again and again"
+    engagement_en: "Tight engagement"
+    hindrance_en: "Scattering again right away"
+    image_en: "A white spot appears on the crown of the elephant's head."
+    sit_hint_en: "It does not have to hold. Beginning again is what holding is."
+
+  - pos: 3
+    han: 安住
+    ko: 안주
+    sanskrit: avasthāpana
+    gloss_en: repeated placing
+    one_line: 흩어진 것을 알아차리고 곧 돌아온다
+    what_happens: >-
+      흩어졌다는 사실을 예전보다 빨리 안다. 멀리 갔다가 문득
+      돌아오는 것이 아니라, 나가려는 참에 알아차린다.
+    what_to_do: >-
+      돌아오는 길을 짧게 만든다. 왜 흩어졌는지 따지지 말고
+      숨이 있는 자리로 바로 온다.
+    power: 억념력 (憶念力) — 잊지 않고 붙드는 힘
+    engagement: 유간결운전작의 (有間缺運轉作意) — 끊겼다 이어지는 마음
+    hindrance: 굵은 들뜸(掉擧)
+    image: 사람이 코끼리에게 가까워지고, 밧줄이 닿기 시작한다. 토끼가 나타난다.
+    sit_hint: 멀리 가기 전에 알아차리는 것, 그것이 이 자리의 일이다.
+    one_line_en: "Scattering is noticed, and the way back is short"
+    what_happens_en: "That the mind has scattered is known sooner than before. It is not a return from far away but a noticing on the way out."
+    what_to_do_en: "The way back is kept short. Why it scattered is left alone; the mind comes straight to where the breath is."
+    power_en: "The power of remembering — holding on without forgetting"
+    engagement_en: "Interrupted engagement — the mind that breaks and rejoins"
+    hindrance_en: "Coarse restlessness"
+    image_en: "The person draws nearer to the elephant, and the rope begins to reach. A rabbit appears."
+    sit_hint_en: "Noticing before it goes far — that is the work of this place."
+
+  - pos: 4
+    han: 近住
+    ko: 근주
+    sanskrit: upasthāpana
+    gloss_en: close placing
+    one_line: 마음이 곁에 머문다
+    what_happens: >-
+      크게 놓치는 일이 드물어진다. 마음이 대상에서 멀리
+      떨어지지 않고 그 언저리에 있다.
+    what_to_do: >-
+      붙드는 힘을 조금 늦춘다. 너무 꽉 쥐면 가라앉고,
+      놓으면 흩어진다. 그 사이를 찾는다.
+    power: 억념력 (憶念力)
+    engagement: 유간결운전작의 (有間缺運轉作意)
+    hindrance: 가라앉음(昏沈)이 들어오기 시작함
+    image: 코끼리가 반쯤 희어지고, 사람이 밧줄을 잡는다.
+    sit_hint: 붙들되 쥐지 않는다.
+    one_line_en: "The mind stays close by"
+    what_happens_en: "Losing it entirely becomes rare. The mind does not go far from its object; it stays somewhere near."
+    what_to_do_en: "The grip loosens a little. Held too tight, the mind sinks; let go, it scatters. Somewhere between is found."
+    power_en: "The power of remembering"
+    engagement_en: "Interrupted engagement"
+    hindrance_en: "Sinking begins to enter"
+    image_en: "The elephant is half white, and the person holds the rope."
+    sit_hint_en: "Held, not gripped."
+
+  - pos: 5
+    han: 調順
+    ko: 조순
+    sanskrit: damana
+    gloss_en: taming
+    one_line: 고요함의 맛을 알아 스스로 따라온다
+    what_happens: >-
+      앉아 있는 일이 참아내야 할 무엇이 아니게 된다. 고요가
+      좋다는 것을 마음이 알아채고, 억지로 끌지 않아도 따라온다.
+    what_to_do: >-
+      가라앉음이 오면 눈을 조금 뜨거나 마음을 밝게 들어 올린다.
+    power: 정지력 (正知力) — 지금 무슨 일이 일어나는지 아는 힘
+    engagement: 유간결운전작의 (有間缺運轉作意)
+    hindrance: 미세한 가라앉음
+    image: 사람이 앞서 걷고 코끼리가 따라온다.
+    sit_hint: 앉아 있는 것이 견디는 일이 아니게 되는 자리다.
+    one_line_en: "It knows the taste of quiet and comes along on its own"
+    what_happens_en: "Sitting stops being something to endure. The mind notices that quiet is good, and it comes along without being pulled."
+    what_to_do_en: "When sinking comes, the eyes open a little, or the mind is lifted and brightened."
+    power_en: "The power of clear knowing — knowing what is happening now"
+    engagement_en: "Interrupted engagement"
+    hindrance_en: "Subtle sinking"
+    image_en: "The person walks ahead, and the elephant follows."
+    sit_hint_en: "The place where sitting stops being endured."
+
+  - pos: 6
+    han: 寂靜
+    ko: 적정
+    sanskrit: śamana
+    gloss_en: pacifying
+    one_line: 앉기 싫은 마음이 잦아든다
+    what_happens: >-
+      앉는 것을 미루거나 그만두고 싶은 마음이 눈에 띄게 줄어든다.
+      마음이 스스로 조용해지는 것을 반긴다.
+    what_to_do: >-
+      들뜸도 가라앉음도 없는지 가만히 살핀다. 살피는 일이
+      또 하나의 소란이 되지 않게 가볍게.
+    power: 정지력 (正知力)
+    engagement: 유간결운전작의 (有間缺運轉作意)
+    hindrance: 미세한 들뜸
+    image: 토끼가 사라진다. 코끼리가 더 희어진다.
+    sit_hint: 그만두고 싶은 마음이 오면, 그 마음도 지나간다.
+    one_line_en: "The wish not to sit grows quiet"
+    what_happens_en: "The wish to put off sitting, or to stop, visibly lessens. The mind welcomes its own growing quiet."
+    what_to_do_en: "A light look at whether there is any restlessness or sinking. Lightly, so that the looking does not become one more noise."
+    power_en: "The power of clear knowing"
+    engagement_en: "Interrupted engagement"
+    hindrance_en: "Subtle restlessness"
+    image_en: "The rabbit is gone. The elephant is whiter."
+    sit_hint_en: "When the wish to stop comes, that wish passes too."
+
+  - pos: 7
+    han: 最極寂靜
+    ko: 최극적정
+    sanskrit: vyupaśamana
+    gloss_en: fully pacifying
+    one_line: 미세한 걸림까지 곧바로 가라앉는다
+    what_happens: >-
+      들뜸과 가라앉음이 일어나기는 하지만, 일어나는 즉시
+      가라앉는다. 애쓰는 일이 눈에 띄게 줄어든다.
+    what_to_do: >-
+      이제는 살피는 힘을 조금 덜어낸다. 지키려는 마음이
+      남아 있는지를 본다.
+    power: 精進力 — 꾸준히 이어가는 힘
+    engagement: 유간결운전작의 (有間缺運轉作意)
+    hindrance: 아주 미세한 걸림
+    image: 원숭이가 손을 놓는다. 불꽃이 거의 사라진다.
+    sit_hint: 일어나는 것을 막지 않는다. 다만 따라가지 않는다.
+    one_line_en: "Even the finest stirring settles at once"
+    what_happens_en: "Restlessness and sinking still arise, but they settle as soon as they arise. Striving visibly lessens."
+    what_to_do_en: "Now the watching eases a little. What is looked at is whether any wish to guard remains."
+    power_en: "The power of perseverance — carrying on steadily"
+    engagement_en: "Interrupted engagement"
+    hindrance_en: "The very finest stirring"
+    image_en: "The monkey lets go. The flame has nearly gone out."
+    sit_hint_en: "What arises is not stopped. It is only not followed."
+
+  - pos: 8
+    han: 專注一趣
+    ko: 전주일취
+    sanskrit: ekotīkaraṇa
+    gloss_en: single-pointed
+    one_line: 한 번 앉으면 끊기지 않는다
+    what_happens: >-
+      처음에 살짝 마음을 두면 끝까지 끊기지 않는다.
+      중간에 힘을 들일 일이 없다.
+    what_to_do: >-
+      시작할 때만 마음을 두고, 그 뒤로는 손을 뗀다.
+    power: 精進力
+    engagement: 무간결운전작의 (無間缺運轉作意) — 끊김 없는 마음
+    hindrance: 시작할 때의 약간의 힘
+    image: 원숭이가 없다. 코끼리가 밧줄 없이 따라온다.
+    sit_hint: 처음에만 마음을 두고, 나머지는 맡긴다.
+    one_line_en: "Once seated, it does not break"
+    what_happens_en: "A light touch of attention at the start, and it holds unbroken to the end. Nothing in the middle asks for effort."
+    what_to_do_en: "Attention is given only at the start; after that, the hands are off."
+    power_en: "The power of perseverance"
+    engagement_en: "Unbroken engagement — the mind that does not break off"
+    hindrance_en: "A little effort at the start"
+    image_en: "There is no monkey. The elephant follows without a rope."
+    sit_hint_en: "Attention at the start only; the rest is left to itself."
+
+  - pos: 9
+    han: 等持
+    ko: 등지
+    sanskrit: samādhāna
+    gloss_en: balanced placing
+    one_line: 애쓰지 않아도 머문다
+    what_happens: >-
+      앉으면 그냥 그대로 있다. 붙드는 일도, 살피는 일도
+      필요하지 않다.
+    what_to_do: >-
+      아무것도 하지 않는다.
+    power: 관습력 (串習力) — 몸에 밴 힘
+    engagement: 무공용운전작의 (無功用運轉作意) — 힘쓰지 않는 마음
+    hindrance: 없다
+    image: 코끼리와 사람이 나란히 앉아 있다. 둘 다 희다. 불꽃이 없다.
+    sit_hint: 이 자리에 이르면 앱이 할 일이 없다.
+    one_line_en: "It stays without any effort"
+    what_happens_en: "Seated, it simply is as it is. Neither holding nor watching is needed."
+    what_to_do_en: "Nothing is done."
+    power_en: "The power of familiarity — what has settled into the body"
+    engagement_en: "Effortless engagement — the mind that makes no effort"
+    hindrance_en: "None"
+    image_en: "The elephant and the person sit side by side. Both are white. There is no flame."
+    sit_hint_en: "At this place, the app has nothing left to do."
+
+# 이 길 전체가 말하는 것 — 앱의 안내문 첫 장에 쓸 한 문단
+epigraph: >-
+  머문다(住)는 것은 더 가지 않는다는 것, 곧 그침이다. 사마타를
+  한자로 止라 옮긴 것도 같은 뜻이다. 그러니 아홉 자리는 오르는
+  사다리가 아니라 쉼이 깊어지는 아홉 가지 결이다. 길가의 불꽃 —
+  애쓰는 힘 — 은 위로 갈수록 작아지다 꺼지고, 아홉째 자리에서
+  할 일은 아무것도 하지 않는 것이다.
+
+epigraph_en: >-
+  To abide is to go no further — that is stopping. When śamatha was
+  rendered in Chinese as 止, to stop, it meant the same thing. So the nine
+  abidings are not a ladder to climb but nine grains of a rest that
+  deepens. The flame beside the path — striving — grows smaller as the
+  path goes on, until it goes out; and at the ninth place, what there is
+  to do is nothing.

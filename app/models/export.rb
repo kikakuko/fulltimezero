@@ -76,7 +76,7 @@ class Export
 
     def sittings
       user.sittings.chronological.map do |sitting|
-        { sat_on: sitting.sat_on.iso8601, mode: sitting.mode }
+        { sat_on: sitting.sat_on.iso8601, mode: sitting.mode, abiding: sitting.abiding&.ko }
       end
     end
 

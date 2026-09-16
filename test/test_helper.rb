@@ -15,9 +15,10 @@ module ActiveSupport
     fixtures :all
 
     # 경전은 앱의 것이라 테스트에도 파일에서 심는다. 값을 테스트에 적지 않는다.
-    parallelize_setup { |_worker| Sutra.seed_from(Sutra::HEART_FILE) }
+    parallelize_setup { |_worker| Sutra.seed_from(Sutra::HEART_FILE); Abiding.seed_from }
 
     def heart_sutra = Sutra.find_by(slug: Sutra::HEART) || Sutra.seed_from(Sutra::HEART_FILE)
+    def nine_abidings = Abiding.count == Abiding::COUNT ? Abiding.in_order.to_a : Abiding.seed_from
 
     # Add more helper methods to be used by all tests here...
   end

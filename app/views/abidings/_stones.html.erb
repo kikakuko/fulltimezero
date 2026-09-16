@@ -1,0 +1,20 @@
+<%# 흩어 놓은 돌 — 아홉 자리. 순서가 읽히지 않게 흩어 놓는다. 사다리가
+    아니다. 자리마다 이름 하나뿐이고 번호는 없다.
+    mode: :links 는 안내에서 들어가는 문, :choice 는 앉기에서 고르는 자리. %>
+<div class="stones" role="<%= mode == :choice ? "radiogroup" : "list" %>">
+  <% abidings.each do |abiding| %>
+    <% x, y = abiding.stone %>
+    <% if mode == :choice %>
+      <label class="stone" style="left:<%= x %>%; top:<%= y %>%">
+        <%= radio_button_tag "sitting[abiding]", abiding.pos, chosen == abiding, id: "abiding_#{abiding.pos}" %>
+        <span class="stone__pebble" aria-hidden="true"></span>
+        <span class="stone__name"><%= abiding.name %></span>
+      </label>
+    <% else %>
+      <%= link_to abiding_path(abiding), class: "stone", style: "left:#{x}%; top:#{y}%" do %>
+        <span class="stone__pebble" aria-hidden="true"></span>
+        <span class="stone__name"><%= abiding.name %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
