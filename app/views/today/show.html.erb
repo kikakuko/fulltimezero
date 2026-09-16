@@ -41,7 +41,12 @@
         지키지 못해도 아무 일 없다(제5조 · 제6조). %>
     <p class="tiny clearing">
       <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
-                    day_path(Current.user.today, from: "today"), method: :patch, class: "quiet" %>
+                    day_path(Current.user.today, from: "today"), method: :patch, class: "quiet",
+                    data: { action: "click->clearing#declare click->bell#open" },
+                    form: { data: { controller: "clearing bell",
+                                    clearing_vibrate_value: @vibrate, clearing_declaring_value: !@cleared_today,
+                                    bell_enabled_value: @clearing_bell && !@cleared_today,
+                                    bell_start_url_value: bell_source(:start) } } %>
     </p>
 
     <%# 「쉼의 안내」는 문이 아니라 여기서 내려가는 길이다. %>

@@ -5,6 +5,13 @@
 class DaysController < ApplicationController
   def index
     @calendar = Calendar.for(Current.user, month: month)
+
+    # 달력 위의 미륵. 비운 날 아침 첫 화면에서만 한 뼘 올라온다 —
+    # 오늘의 달이 한 번 숨 쉬는 것과 같은 짜임이다.
+    @maitreya = Maitreya.for(Current.user)
+    @maitreya_rising = @maitreya.moved? && Current.user.cleared_today? && Current.user.morning? &&
+                       session[:maitreya_seen_on] != Current.user.today.to_s
+    session[:maitreya_seen_on] = Current.user.today.to_s if @maitreya_rising
   end
 
   def show

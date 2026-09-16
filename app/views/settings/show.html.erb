@@ -29,6 +29,12 @@
         <%= t("settings.daily_door") %>
       <% end %>
     </li>
+    <li>
+      <%= f.label :clearing_sound do %>
+        <%= f.check_box :clearing_sound %>
+        <%= t("settings.clearing_sound") %>
+      <% end %>
+    </li>
   </ul>
 
   <p style="margin-top:2rem"><%= f.submit t("settings.save") %></p>

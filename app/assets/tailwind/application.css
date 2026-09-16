@@ -612,6 +612,55 @@ input[type="text"].threshold__field {
 }
 @keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
 
+/* ── 미륵 ────────────────────────────────────────────────────────────
+   땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나 올라왔는지는
+   --rise(0 ~ 1) 하나로 온다 — 몇 번인지는 여기서 모른다.
+   허공(ground)의 아래 가장자리가 땅의 선이다. 그 선 아래로 내려간 것은
+   잘려서 보이지 않는다 — 그것이 묻힘이다. 땅 · 흙먼지 · 물결은 여기서
+   그리고, 미륵은 그림 한 장이다. 도상은 말하지 않는다. */
+.maitreya { position: relative; width: min(11rem, 60%); margin: 0 auto 3rem; }
+.maitreya__ground { position: relative; overflow: hidden; aspect-ratio: 5 / 6; }
+.maitreya__figure {
+  position: absolute; left: 50%; bottom: 0; width: 78%; height: auto;
+  /* 0 이면 땅의 선 아래로 온전히 내려가고, 1 이면 온전히 드러난다. */
+  transform: translate(-50%, calc((1 - var(--rise, 0)) * 100%));
+  user-select: none; -webkit-user-drag: none;
+}
+.maitreya--moving .maitreya__figure { transition: transform 1.2s ease-out; }
+
+/* 땅 — 선 아래의 흙. 위쪽 가장자리가 땅의 선이다. */
+.maitreya__soil {
+  display: block; height: 0.9rem; border-radius: 0 0 40% 40% / 0 0 100% 100%;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--dancheong-ocher) 34%, var(--paper)),
+    color-mix(in srgb, var(--dancheong-ocher) 18%, var(--paper)));
+}
+
+/* 흙먼지 — 올라오는 순간 땅의 선에서 한 번 일었다 가라앉는다. */
+.maitreya__dust {
+  position: absolute; left: 50%; bottom: 0.6rem; width: 70%; height: 1.6rem;
+  transform: translateX(-50%) scale(0.6); opacity: 0; border-radius: 50%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--dancheong-ocher) 45%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.maitreya--rising .maitreya__dust { animation: maitreya-dust 1.2s ease-out both; }
+@keyframes maitreya-dust {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.6) }
+  25% { opacity: 0.9; transform: translateX(-50%) scale(1) }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.35) translateY(-40%) }
+}
+
+/* 물결 — 땅 아래 물이 있다는 한 줄. */
+.maitreya__ripple {
+  position: absolute; left: 6%; right: 6%; bottom: -0.7rem; height: 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--dancheong-green) 55%, transparent);
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maitreya--moving .maitreya__figure { transition: none; }
+  .maitreya--rising .maitreya__dust { animation: none; }
+}
+
 /* ── 코끼리의 길 ─────────────────────────────────────────────────────
    검은 코끼리가 앉은 날만큼 희어지며 길을 오른다. 길은 그리지 않는다.
    자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */

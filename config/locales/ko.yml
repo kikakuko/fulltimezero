@@ -90,6 +90,7 @@ ko:
 
   settings:
     daily_door: "앱을 열 때 숨 한 번"
+    clearing_sound: "오늘을 비울 때 종성"
     threshold_again: "처음의 문을 다시 지난다"
     title: 설정
     language: 언어

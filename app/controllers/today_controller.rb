@@ -22,7 +22,10 @@ class TodayController < ApplicationController
     end
 
     # 오늘을 비워 두겠다는 선언. 일정이 있든 없든 할 수 있다.
+    # 그 손짓 안의 떨림과 종성은 게이트가 정한다. 종성은 기본으로 꺼져 있다.
     @cleared_today = Current.user.cleared_today?
+    @vibrate = SilenceGate.allow?(:vibration, user: Current.user)
+    @clearing_bell = Current.user.clearing_sound && SilenceGate.allow?(:bell, user: Current.user)
 
     # 비운 날의 아침 첫 화면에서만, 달이 살짝 크게 한 번 숨 쉰다.
     @cleared_morning = @empty && Current.user.morning? &&

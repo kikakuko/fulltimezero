@@ -1,6 +1,8 @@
 <%# 달력 하나. 한 칸이 셋을 품는다 — 일정이 있는 날엔 먹점, 비워 둔 날엔
     옅은 원, 고요했던 날(쉼이나 앉음)은 날짜가 먹빛으로 또렷하다.
     개수도 합계도 연속기록도 두지 않는다 — 있고 없음뿐이다. %>
+<%= render "maitreya", reading: @maitreya, rising: @maitreya_rising %>
+
 <h1 class="title"><%= month_name(@calendar.month) %></h1>
 
 <nav class="months tiny">

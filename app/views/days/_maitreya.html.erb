@@ -1,0 +1,15 @@
+<%# 미륵. 땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나
+    드러났는지는 그림이 말한다 — 숫자도 눈금도 없다. 땅 · 흙먼지 · 물결은
+    앱이 그리고, 미륵은 그림 한 장이다. 도상은 말하지 않는다. %>
+<div class="maitreya<%= " maitreya--rising" if rising %>" data-controller="maitreya"
+     data-maitreya-rise-value="<%= reading.rise %>"
+     data-maitreya-before-value="<%= reading.before %>"
+     data-maitreya-rising-value="<%= rising %>" aria-hidden="true">
+  <%# 땅 위의 허공 — 여기 밖으로 나간 것은 땅 아래 묻힌 것이다. %>
+  <div class="maitreya__ground">
+    <%= image_tag "maitreya.png", class: "maitreya__figure", alt: "", draggable: false, data: { maitreya_target: "figure" } %>
+  </div>
+  <span class="maitreya__dust"></span>
+  <span class="maitreya__soil"></span>
+  <span class="maitreya__ripple"></span>
+</div>
