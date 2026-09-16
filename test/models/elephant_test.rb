@@ -75,8 +75,10 @@ class ElephantTest < ActiveSupport::TestCase
     elephant = Rails.root.join("app/models/elephant.rb").read
     assert_no_match(/abiding/i, elephant, "코끼리가 자리를 읽는다")
 
+    # 코끼리 모델(Elephant · @elephant)과 자리가 한 줄에 함께 서면 잇는 것이다.
+    # 정거장 이름의 링크(elephant-field__stop)는 CSS 이름이지 코끼리의 자리가 아니다.
     sources = Rails.root.glob("app/**/*.{rb,erb,js}").map(&:read).join
-    assert_no_match(/abiding[^\n]*Elephant|Elephant[^\n]*abiding/i, sources,
+    assert_no_match(/abiding[^\n]*(?:\bElephant\b|@elephant\b)|(?:\bElephant\b|@elephant\b)[^\n]*abiding/, sources,
       "코끼리의 자리와 골라 둔 자리를 한 줄에서 잇는다")
     assert_no_match(/station[^\n]*abiding_id|abiding_id[^\n]*station|whiteness[^\n]*abiding/i, sources)
   end

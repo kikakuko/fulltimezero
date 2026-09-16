@@ -1,16 +1,17 @@
-<%# 앉기의 자리. 두 길이 같은 무게로 나란히 선다 — 앉는 것과 아무것도
-    하지 않는 것. 무위를 2차 메뉴로 내려 두면 그것은 곁가지가 된다.
+<%# 선방. 위 절반은 산수와 코끼리, 그 아래 한 줄, 그리고 같은 무게의 두 길 —
+    앉는 것과 아무것도 하지 않는 것. 자리 고르기는 「앉는다」 안에 있다.
+    카드도 태그도 「다른 길」 목록도 없다.
     길이는 글자로만 적는다 — 숫자는 화면에 없다.
-    종성은 「앉는다」를 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
-<%# 앉기의 자리 맨 위에 코끼리의 길. 그 아래 앉는다 · 아무것도 하지 않는다. %>
-<%= render "elephant", reading: @elephant, moving: @elephant_moving, stations: @stations, anchors: Elephant::ANCHORS %>
+    종성은 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
+<%= render "elephant", reading: @elephant, moving: @elephant_moving,
+           anchors: Elephant::ANCHORS,
+           abidings: @abidings %>
 
-<h1 class="title"><%= t("sittings.new.title") %></h1>
-
-<%= form_with url: sittings_path, scope: :sitting,
+<%= form_with url: sittings_path, scope: :sitting, id: "sitting-form",
               data: { controller: "bell", bell_enabled_value: @bell,
                       bell_start_url_value: bell_source(:start),
-                      bell_measure_value: Rails.env.development? } do |f| %>
+                      bell_measure_value: Rails.env.development?,
+                      action: "submit->bell#open" } do |f| %>
   <ul class="choices">
     <% SittingLength::NAMES.each do |name| %>
       <li>
@@ -20,9 +21,6 @@
         <% end %>
       </li>
     <% end %>
-  </ul>
-
-  <ul class="choices">
     <li>
       <%= f.label :bell do %>
         <%= f.check_box :bell, checked: true, data: { bell_target: "switch" } %>
@@ -33,7 +31,7 @@
 
   <%# 아홉 자리 가운데 하나를 고른다 — 흩어 놓은 돌에서. 고르지 않아도 된다.
       고른 자리로 앉는 중의 한 줄이 정해질 뿐, 무엇도 세지 않는다. %>
-  <h2 class="title" style="margin-top:2.5rem"><%= t("sittings.new.abiding") %></h2>
+  <p class="tiny"><%= t("sittings.new.abiding") %></p>
   <%= render "abidings/stones", abidings: @abidings, mode: :choice, chosen: @abiding %>
   <ul class="choices">
     <li>
@@ -44,23 +42,16 @@
     </li>
   </ul>
   <p class="tiny"><%= link_to t("abidings.read"), guide_chapter_path("abidings"), class: "soft" %></p>
-
-  <p style="margin-top:2.5rem">
-    <%= f.submit t("sittings.new.submit"), data: { action: "click->bell#open" } %>
-  </p>
 <% end %>
-
-<hr class="rule">
-
-<h2 class="title"><%= t("sittings.new.nothing") %></h2>
 
 <%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있고,
     켜 두었으면 들어가는 그 손짓에 한 번만 울린다. 마침종은 없다. %>
-<%= form_with url: nothing_path,
+<%= form_with url: nothing_path, id: "nothing-form",
               data: { controller: "bell", bell_enabled_value: @bell,
                       bell_start_url_value: bell_source(:start),
-                      bell_measure_value: Rails.env.development? } do %>
-  <ul class="choices">
+                      bell_measure_value: Rails.env.development?,
+                      action: "submit->bell#open" } do %>
+  <ul class="choices choices--aside">
     <li>
       <%= label_tag :bell do %>
         <%= check_box_tag :bell, "1", false, data: { bell_target: "switch" } %>
@@ -68,10 +59,10 @@
       <% end %>
     </li>
   </ul>
-
-  <p style="margin-top:2.5rem">
-    <button type="submit" data-action="click->bell#open">
-      <%= t("sittings.new.nothing_go") %>
-    </button>
-  </p>
 <% end %>
+
+<%# 두 길이 같은 무게로 나란히 선다. 각각 제 폼으로 간다. %>
+<p class="ways">
+  <button type="submit" form="sitting-form"><%= t("sittings.new.submit") %></button>
+  <button type="submit" form="nothing-form"><%= t("sittings.new.nothing") %></button>
+</p>

@@ -48,5 +48,23 @@ echo "  휴대폰에서:  $URL/ko"
 echo "  혼자 보는 주소다. 끄면 사라진다. (Ctrl-C)"
 echo
 
-# 둘 중 하나가 죽으면 같이 내려간다. (맥의 bash 는 3.2 라 wait -n 이 없다.)
-while kill -0 "$SERVER" 2>/dev/null && kill -0 "$TUNNEL" 2>/dev/null; do sleep 1; done
+# 빠른 터널은 Cloudflare 쪽에서 얼마 뒤 사라진다("Tunnel not found"). 그러면
+# 터널만 새로 띄우고 새 주소를 찍는다 — 주소는 바뀌므로 휴대폰에서 다시 연다.
+# 서버가 죽으면 같이 내려간다. (맥의 bash 는 3.2 라 wait -n 이 없다.)
+while kill -0 "$SERVER" 2>/dev/null; do
+  if ! kill -0 "$TUNNEL" 2>/dev/null || tail -3 tmp/review-tunnel.log | grep -q "Tunnel not found"; then
+    kill "$TUNNEL" 2>/dev/null || true
+    : > tmp/review-tunnel.log
+    cloudflared tunnel --url "http://localhost:$PORT" --no-autoupdate >tmp/review-tunnel.log 2>&1 &
+    TUNNEL=$!
+    for _ in $(seq 1 60); do
+      NEW=$(grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' tmp/review-tunnel.log | head -1 || true)
+      [ -n "$NEW" ] && break
+      sleep 1
+    done
+    echo
+    echo "  터널이 끊겨 새로 띄웠다. 휴대폰에서:  ${NEW:-(주소를 얻지 못했다)}/ko"
+    echo
+  fi
+  sleep 10
+done

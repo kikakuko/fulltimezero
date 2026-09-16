@@ -8,14 +8,12 @@ class SittingsController < ApplicationController
   def new
     @length = SittingLength.new(SittingLength::DEFAULT)
     @bell = SilenceGate.allow?(:bell, user: Current.user)
-    @abidings = Abiding.in_order
+    @abidings = Abiding.in_order.to_a
 
     # 코끼리 — 앉은 흔적. 흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다.
     @elephant = Elephant.for(Current.user)
     @elephant_moving = @elephant.moved? && session[:elephant_seen_on] != Current.user.today.to_s
     session[:elephant_seen_on] = Current.user.today.to_s
-    # 정거장의 이름 — 지명으로만 빌린다. 골라 둔 자리와는 아무 관계가 없다.
-    @stations = @abidings.map(&:name)
 
     # 고른 자리는 지난번 그대로 두되, 안내에서 「이 자리로 앉는다」로 왔으면 그 자리.
     @abiding = Abiding.find_by(pos: params[:abiding]) || Current.user.sittings.where.not(abiding_id: nil)

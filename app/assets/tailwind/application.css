@@ -679,13 +679,24 @@ input[type="text"].threshold__field {
   --elephant-width: 80px;   /* 폭. 그림 속 길의 너비에 맞춘 값이다 */
   --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
   --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
-  position: relative; width: 100%; aspect-ratio: 864 / 1184; margin: 0 auto 1rem;
+  /* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
+  position: relative; width: calc(100% + 3rem); aspect-ratio: 864 / 1184; margin: 0 -1.5rem 1rem;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
   background: url("elephant_field.png") center / cover no-repeat;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
-.elephant-field__station { font-family: var(--sans); font-size: 26px; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 6px; stroke-linejoin: round; }
+.elephant-field__station { font-family: var(--sans); font-size: 24px; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 6px; stroke-linejoin: round; }
+/* 정거장 이름을 누르면 그 자리를 읽는 곳으로. */
+.elephant-field__stop { cursor: pointer; }
+.elephant-field__stop:hover .elephant-field__station, .elephant-field__stop:focus .elephant-field__station { text-decoration: underline; }
+
+/* 한 줄 — 코끼리가 어디 곁을 지나는지, 그 자리의 한 줄과 함께. */
+.quote { font-family: var(--serif); font-size: 1.05rem; line-height: 1.8; color: var(--ink-soft); text-align: center; margin: 0 0 2rem; }
+
+/* 두 길이 같은 무게로 나란히. */
+.ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin: 2rem 0 1rem; }
+.choices--aside { margin: 0.5rem 0 0; }
 
 /* 자리 — 발이 길의 가운데 선에 닿는다. */
 .elephant {

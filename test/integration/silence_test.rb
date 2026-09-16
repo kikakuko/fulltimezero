@@ -68,8 +68,12 @@ class SilenceTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get new_sitting_path
 
-    assert_select "form[data-controller=bell] [data-action*='click->bell#open']",
+    # 누르는 손짓이 곧 폼의 submit 이다 — 그 안에서 깨운다. 버튼은 두 길이 나란히
+    # 서도록 폼 밖에 있고 form 속성으로 제 폼에 매인다.
+    assert_select "form[data-controller=bell][data-action*='submit->bell#open']",
       count: 2, message: "앉기와 무위 모두 손짓 안에서 종을 쳐야 한다"
+    assert_select "button[type=submit][form=sitting-form]", count: 1
+    assert_select "button[type=submit][form=nothing-form]", count: 1
   end
 
   test "앉는 자리에서 시작종을 다시 치지 않는다" do

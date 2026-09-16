@@ -118,12 +118,11 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
   test "앉는다와 아무것도 하지 않는다가 나란히 선다" do
     get new_sitting_path
 
-    assert_select "h1,h2", text: I18n.t("sittings.new.title")
-    assert_select "h1,h2", text: I18n.t("sittings.new.nothing")
-
-    assert_select "form[action=?] input[type=submit]", sittings_path, count: 1
-    assert_select "form[action=?] button", nothing_path, count: 1
-    assert_select "form[action=?] button.quiet", nothing_path, false, "무위로 가는 길만 작다"
+    assert_select ".ways button[form=sitting-form]", text: I18n.t("sittings.new.submit"), count: 1
+    assert_select ".ways button[form=nothing-form]", text: I18n.t("sittings.new.nothing"), count: 1
+    assert_select "form#sitting-form[action=?]", sittings_path, count: 1
+    assert_select "form#nothing-form[action=?]", nothing_path, count: 1
+    assert_select ".ways button.quiet", false, "한쪽 길만 작다"
   end
 
   private

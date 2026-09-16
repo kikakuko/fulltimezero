@@ -17,7 +17,9 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_select ".elephant-field [data-controller=elephant]", count: 0
     assert_select ".elephant-field[data-controller=elephant]", count: 1
     assert_select ".elephant-field__station", count: 9
-    @abidings.each { |abiding| assert_select ".elephant-field__station", text: abiding.ko }
+    @abidings.each do |abiding|
+      assert_select "a.elephant-field__stop[href=?] .elephant-field__station", abiding_path(abiding), text: abiding.ko
+    end
     assert_select ".elephant img.elephant__whole[src*=elephant]", count: 1
 
     # 맨 위 — 앉는다 · 아무것도 하지 않는다보다 앞에 선다.
@@ -39,11 +41,15 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     I18n.available_locales.each do |locale|
       get new_sitting_path(locale: locale)
 
-      card = I18n.t("sittings.elephant.card", station: "x", locale: locale)
+      card = I18n.t("sittings.elephant.card", station: "x", line: "y", locale: locale)
       assert_match(/\A(코끼리가|The elephant)/, card)
       assert_no_match(CopyLocks.pattern(:addressing), card, "#{locale} 카드가 읽는 이를 부른다")
-      station = I18n.with_locale(locale) { @abidings.first.name }
-      assert_match I18n.t("sittings.elephant.card", station: station, locale: locale), visible_text
+      # 이름은 어려운 말 그대로(한자 곁에), 곁에 늘 그 자리의 한 줄.
+      first = @abidings.first
+      expected = I18n.with_locale(locale) do
+        I18n.t("sittings.elephant.card", station: "#{first.name}(#{first.han})", line: first.one_line_here)
+      end
+      assert_select ".quote", text: expected, count: 1
     end
   end
 
