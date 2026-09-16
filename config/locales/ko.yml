@@ -214,6 +214,9 @@ ko:
       nothing_go: 들어간다
       nothing_bell: 들어갈 때 종성
       abiding: 자리
+    elephant:
+      card: "코끼리가 %{station} 곁을 지난다"
+      alt: 길 위의 코끼리
     # 향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다.
     # 쉼의 길이(rests.durations)와 낱말이 겹치지 않게 둔다.
     lengths:

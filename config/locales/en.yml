@@ -214,6 +214,9 @@ en:
       nothing_go: Go in
       nothing_bell: A bell on the way in
       abiding: Place
+    elephant:
+      card: "The elephant passes by %{station}"
+      alt: An elephant on the path
     # A stick of incense and a cup of tea were how time was measured
     # before clocks. They keep their own words, apart from rests.durations.
     lengths:

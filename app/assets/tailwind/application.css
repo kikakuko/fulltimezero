@@ -612,6 +612,58 @@ input[type="text"].threshold__field {
 }
 @keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
 
+/* ── 코끼리의 길 ─────────────────────────────────────────────────────
+   검은 코끼리가 앉은 날만큼 희어지며 길을 오른다. 길은 그리지 않는다.
+   자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
+.elephant-field {
+  --elephant-width: 104px;  /* 폭. 산수에 견줘 커 보이면 80px 도 시험한다 */
+  --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
+  --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
+  position: relative; width: 100%; aspect-ratio: 390 / 780; margin: 0 auto 1rem;
+}
+.elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.elephant-field__path { fill: none; stroke: none; }
+.elephant-field__station { font-family: var(--sans); font-size: 12px; fill: var(--ink-soft); }
+
+/* 자리 — 발이 길의 가운데 선에 닿는다. */
+.elephant {
+  position: absolute; left: var(--x, 0%); top: var(--y, 0%);
+  width: var(--elephant-width); aspect-ratio: 347 / 243;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+.elephant--walking { transition: left 1s ease-out, top 1s ease-out; }
+
+/* 방향 — 접선만큼 비스듬해지고, 오른쪽으로 갈 때는 뒤집힌다. 축은 발. */
+.elephant__body {
+  width: 100%; height: 100%; transform-origin: 50% 100%;
+  transform: rotate(var(--angle, 0deg)) scaleX(var(--flip, 1));
+}
+
+/* 밝기 — 흰빛만큼. 원본의 색기는 지우고 밝기만 남긴다. */
+.elephant__whole {
+  display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none;
+  filter: grayscale(1) brightness(calc(var(--elephant-dark) + var(--whiteness, 0) * (var(--elephant-light) - var(--elephant-dark))));
+}
+
+/* 접지 그림자 — 발밑. 검정 스물둘 퍼센트. */
+.elephant__shadow {
+  position: absolute; left: 50%; bottom: -4px; width: 44px; height: 8px;
+  transform: translateX(-50%); border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+/* 걸음 — 다리는 아직 움직이지 않는다. 몸이 살짝 뜨고, 그림자는 반대로 줄어든다. */
+@media (prefers-reduced-motion: no-preference) {
+  .elephant__whole { animation: elephant-step 0.8s ease-in-out infinite alternate; }
+  .elephant__shadow { animation: elephant-shadow 0.8s ease-in-out infinite alternate; }
+}
+@keyframes elephant-step { from { transform: translateY(0) } to { transform: translateY(-3px) } }
+@keyframes elephant-shadow { from { transform: translateX(-50%) scaleX(1) } to { transform: translateX(-50%) scaleX(0.94) } }
+@media (prefers-reduced-motion: reduce) {
+  .elephant--walking { transition: none; }
+}
+
 /* ── 흩어 놓은 돌 — 아홉 자리 ─────────────────────────────────────
    순서가 읽히지 않게 흩어 놓는다. 사다리가 아니다. 돌 하나에 이름 하나. */
 .stones { position: relative; width: 100%; aspect-ratio: 100 / 60; margin: 2rem 0; }

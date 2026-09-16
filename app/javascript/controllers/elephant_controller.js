@@ -1,0 +1,89 @@
+// This app is a raft. — 이 앱도 뗏목이다.
+//
+// 코끼리의 길. 서버가 준 흰빛(0 ~ 1)만큼 숨긴 길을 따라가 코끼리를 놓는다.
+// 길은 화면에 그리지 않는다 — 시각적 길은 배경 그림 안에 있다.
+//
+// 자리 · 방향 · 밝기는 따로 계산해 CSS 변수로 넘긴다. 나중에 그림을
+// 부위별 SVG 로 갈아 끼워도 이 계산은 그대로 쓴다.
+//
+// 아홉 자리와 잇지 않는다. 여기에는 골라 둔 자리에 대한 것이 아무것도 없다.
+import { Controller } from "@hotwired/stimulus"
+
+// 길의 앵커 — 아래에서 위로 오르는 아홉 점. 브라우저에서 보며 고칠 수
+// 있게 여기 둔다. 정거장 아홉이 이 점 위에 선다.
+export const ANCHORS = [
+  [ 90, 660 ], [ 300, 590 ], [ 100, 520 ], [ 295, 450 ], [ 95, 380 ],
+  [ 290, 310 ], [ 110, 245 ], [ 270, 182 ], [ 195, 110 ]
+]
+export const VIEW = [ 390, 780 ]
+
+// 비스듬함은 접선각을 따르되 이만큼을 넘지 않는다 — 앵커 근처에서 길이
+// 거의 곧추서는데, 코끼리가 곧추서면 코끼리가 아니다.
+const TILT_MOST = 12
+
+export default class extends Controller {
+  static targets = [ "path", "figure" ]
+  static values = { whiteness: Number, yesterday: Number, moving: Boolean }
+
+  connect() {
+    this.pathTarget.setAttribute("d", catmullRom(ANCHORS))
+
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
+    this.figureTarget.style.setProperty("--whiteness", this.whitenessValue)
+
+    // 흰빛이 바뀐 날에만, 어제의 자리에서 오늘의 자리로 걸어온다.
+    if (this.movingValue && !reduced) {
+      this.place(this.yesterdayValue)
+      this.frame = requestAnimationFrame(() => requestAnimationFrame(() => {
+        this.figureTarget.classList.add("elephant--walking")
+        this.place(this.whitenessValue)
+      }))
+    } else {
+      this.place(this.whitenessValue)
+    }
+  }
+
+  disconnect() { cancelAnimationFrame(this.frame) }
+
+  // 길 위의 한 점과 그곳의 접선. 그림은 왼쪽을 보므로 오른쪽으로 갈 때는 뒤집는다.
+  place(whiteness) {
+    const path = this.pathTarget
+    const total = path.getTotalLength()
+    const at = Math.min(Math.max(whiteness, 0), 1) * total
+    const here = path.getPointAtLength(at)
+    const ahead = path.getPointAtLength(Math.min(at + 2, total))
+    const behind = path.getPointAtLength(Math.max(at - 2, 0))
+    const dx = ahead.x - behind.x
+    const dy = ahead.y - behind.y
+
+    const facingLeft = dx < 0
+    const heading = Math.atan2(dy, dx) * 180 / Math.PI
+    // 왼쪽을 보는 그림의 앞은 백팔십 도다. 뒤집으면 앞이 영 도가 된다.
+    const tilt = clamp(facingLeft ? heading - 180 : heading, -TILT_MOST, TILT_MOST)
+
+    const style = this.figureTarget.style
+    style.setProperty("--x", `${(here.x / VIEW[0]) * 100}%`)
+    style.setProperty("--y", `${(here.y / VIEW[1]) * 100}%`)
+    style.setProperty("--angle", `${tilt}deg`)
+    style.setProperty("--flip", facingLeft ? 1 : -1)
+  }
+}
+
+// 앵커를 매끄럽게 잇는 길 — Catmull-Rom 을 세제곱 베지어로 옮긴다.
+export function catmullRom(points) {
+  const at = index => points[Math.min(Math.max(index, 0), points.length - 1)]
+  let d = `M ${points[0][0]} ${points[0][1]}`
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const [ p0, p1, p2, p3 ] = [ at(i - 1), at(i), at(i + 1), at(i + 2) ]
+    const c1 = [ p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6 ]
+    const c2 = [ p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6 ]
+    d += ` C ${c1[0]} ${c1[1]} ${c2[0]} ${c2[1]} ${p2[0]} ${p2[1]}`
+  }
+
+  return d
+}
+
+function clamp(value, low, high) {
+  return Math.min(Math.max(value, low), high)
+}

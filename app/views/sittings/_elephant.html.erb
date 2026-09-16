@@ -1,0 +1,24 @@
+<%# 코끼리의 길. 검은 코끼리가 앉은 날만큼 희어지며 길을 오른다.
+    길은 그리지 않는다 — 시각적 길은 배경 그림 안에 있다. 정거장 아홉은
+    지명이지 경지가 아니다. 숫자는 없다. 아홉 자리와 잇지 않는다. %>
+<div class="elephant-field" data-controller="elephant"
+     data-elephant-whiteness-value="<%= reading.whiteness %>"
+     data-elephant-yesterday-value="<%= reading.yesterday %>"
+     data-elephant-moving-value="<%= moving %>">
+  <svg class="elephant-field__map" viewBox="0 0 390 780" aria-hidden="true">
+    <path class="elephant-field__path" data-elephant-target="path" d=""/>
+    <% stations.each_with_index do |name, index| %>
+      <% x, y = anchors.fetch(index) %>
+      <text class="elephant-field__station" x="<%= x %>" y="<%= y + 26 %>" text-anchor="middle"><%= name %></text>
+    <% end %>
+  </svg>
+
+  <div class="elephant" data-elephant-target="figure">
+    <span class="elephant__shadow" aria-hidden="true"></span>
+    <div class="elephant__body">
+      <%= image_tag "elephant.png", class: "elephant__whole", alt: t("sittings.elephant.alt"), draggable: false %>
+    </div>
+  </div>
+</div>
+
+<p class="tiny center"><%= t("sittings.elephant.card", station: stations.fetch(reading.station)) %></p>
