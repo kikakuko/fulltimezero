@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+# This app is a raft. — 이 앱도 뗏목이다.
+#
+# 수묵 그림의 흰 배경을 진짜 투명으로 바꾼다. 그러면 어떤 바탕에도 그대로 얹힌다.
+#
+#   bin/knockout app/assets/images/compound_src.png app/assets/images/compound.png
+#
+# 배경색(기본 #F5F5F5) 언저리(±TOLERANCE)는 투명, 거기서 FEATHER 만큼 떨어질
+# 때까지 알파를 서서히 올린다. 가장자리의 반투명 화소는 배경과 섞이기 전의
+# 먹색으로 되돌린다 — 그래야 먹선이 회색으로 뭉개지지 않는다.
+# 그림이 바뀌면 다시 돌린다. 바깥 것은 쓰지 않는다 — zlib 뿐이다.
+require "zlib"
+
+SRC, OUT = ARGV
+abort "쓰는 법: bin/knockout 원본.png 결과.png [배경색 #RRGGBB]" unless SRC && OUT
+
+BACKGROUND = (ARGV[2] || "#F5F5F5").delete("#").scan(/../).map { |h| h.to_i(16) }
+TOLERANCE = 8
+FEATHER = 28
+
+def chunks(png)
+  raise "PNG 가 아니다" unless png.byteslice(0, 8) == "\x89PNG\r\n\x1a\n".b
+  pos = 8
+  Enumerator.new do |y|
+    while pos < png.bytesize
+      length = png.byteslice(pos, 4).unpack1("N")
+      y << [ png.byteslice(pos + 4, 4), png.byteslice(pos + 8, length) ]
+      pos += 12 + length
+    end
+  end
+end
+
+def paeth(a, b, c)
+  p = a + b - c
+  pa, pb, pc = (p - a).abs, (p - b).abs, (p - c).abs
+  pa <= pb && pa <= pc ? a : (pb <= pc ? b : c)
+end
+
+png = File.binread(SRC)
+width = height = depth = color = nil
+idat = +""
+chunks(png).each do |type, body|
+  case type
+  when "IHDR" then width, height, depth, color = body.unpack("NNCC")
+  when "IDAT" then idat << body
+  end
+end
+abort "8비트 RGB 나 RGBA 만 다룬다" unless depth == 8 && [ 2, 6 ].include?(color)
+
+bpp = color == 6 ? 4 : 3
+stride = width * bpp
+raw = Zlib::Inflate.inflate(idat)
+rows = []
+prev = "\0".b * stride
+offset = 0
+height.times do
+  filter = raw.getbyte(offset)
+  line = raw.byteslice(offset + 1, stride).bytes
+  offset += 1 + stride
+  stride.times do |x|
+    a = x >= bpp ? line[x - bpp] : 0
+    b = prev.getbyte(x)
+    c = x >= bpp ? prev.getbyte(x - bpp) : 0
+    line[x] = case filter
+    when 1 then line[x] + a
+    when 2 then line[x] + b
+    when 3 then line[x] + (a + b) / 2
+    when 4 then line[x] + paeth(a, b, c)
+    else line[x]
+    end & 255
+  end
+  prev = line.pack("C*")
+  rows << line
+end
+
+out = +""
+cleared = 0
+rows.each do |line|
+  out << "\0"
+  (0...width).each do |x|
+    r, g, b = line[x * bpp, 3]
+    # 배경에서 얼마나 떨어졌는가 — 세 채널 가운데 가장 먼 것.
+    distance = [ (r - BACKGROUND[0]).abs, (g - BACKGROUND[1]).abs, (b - BACKGROUND[2]).abs ].max
+    alpha = ((distance - TOLERANCE).clamp(0, FEATHER) * 255.0 / FEATHER).round
+    if alpha.zero?
+      cleared += 1
+      out << [ 0, 0, 0, 0 ].pack("C4")
+    elsif alpha < 255
+      # 배경과 섞이기 전의 색으로 되돌린다: c = a·ink + (1 − a)·bg.
+      k = alpha / 255.0
+      ink = [ r, g, b ].zip(BACKGROUND).map { |ch, bg| ((ch - (1 - k) * bg) / k).round.clamp(0, 255) }
+      out << (ink + [ alpha ]).pack("C4")
+    else
+      out << [ r, g, b, 255 ].pack("C4")
+    end
+  end
+end
+
+chunk = ->(type, data) { [ data.bytesize ].pack("N") + type + data + [ Zlib.crc32(type + data) ].pack("N") }
+File.binwrite(OUT, "\x89PNG\r\n\x1a\n".b +
+  chunk.call("IHDR", [ width, height, 8, 6, 0, 0, 0 ].pack("NNCCCCC")) +
+  chunk.call("IDAT", Zlib::Deflate.deflate(out, Zlib::BEST_COMPRESSION)) +
+  chunk.call("IEND", ""))
+
+puts "#{OUT}: #{width}×#{height}, 투명해진 화소 #{(cleared * 100.0 / (width * height)).round}%"
