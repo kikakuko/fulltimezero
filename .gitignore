@@ -36,3 +36,10 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# 비밀값. Kamal 의 secrets 파일은 값이 아니라 명령을 담지만, 그래도 밖에 두지 않는다.
+/.kamal/secrets*
+
+# 도구와 운영체제가 남기는 것.
+.DS_Store
+/.omc/
