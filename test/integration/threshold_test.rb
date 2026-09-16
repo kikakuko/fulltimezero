@@ -137,18 +137,26 @@ class ThresholdTest < ActionDispatch::IntegrationTest
       "둘째 문에 적은 한 줄을 다른 곳에서 읽는다"
   end
 
-  test "셋째 문 — 손을 얹고 숨 세 번, 그러면 장막이 걷히고 열린다" do
+  # 할 일이 없다. 한 줄이 떠 있고, 아무것도 하지 않아도 잠시 뒤 장막이 스스로
+  # 걷힌다. 버튼도 손도 없다.
+  test "셋째 문 — 아무것도 하지 않아도 잠시 뒤 장막이 스스로 걷힌다" do
     get threshold_breath_path
 
     assert_select ".threshold--breath[data-controller~=breath]"
+    assert_select ".gates__line", count: 1, text: I18n.t("threshold.breath.line")
     assert_select "form[action=?][data-breath-target=gate]", threshold_passed_path
-    assert_select ".gates__hint", text: I18n.t("threshold.breath.hint")
-    css = Rails.root.join("app/assets/tailwind/application.css").read
-    assert_match(/\.gates--breathing \.gates__veil \{ animation: gates-breath [\d.]+s ease-in-out 3; \}/, css,
-      "숨이 세 번이 아니다")
+    assert_select ".threshold--breath[data-action]", false, "손을 얹게 한다"
+    assert_select ".gates__hint", false, "손을 얹으라는 안내가 남아 있다"
+    assert_select ".threshold--breath button, .threshold--breath a", count: 1, message: "「나중에」 말고 누를 것이 있다"
 
     breath = Rails.root.join("app/javascript/controllers/breath_controller.js").read
-    assert_match(/this\.veil\.dataset\.state = "open"/, breath, "세 숨 뒤에 장막이 걷히지 않는다")
+    dwell = breath[/const DWELL = (\d+)/, 1].to_i
+    assert_includes 4000..5000, dwell, "떠 있는 동안이 넉 초에서 다섯 초 사이가 아니다"
+    assert_match(/connect\(\) \{\s*this\.timer = setTimeout\(\(\) => this\.open\(\), DWELL\)/, breath, "스스로 걷히지 않는다")
+    assert_no_match(/pointer|breath|hold\(|release\(/, breath, "손이 남아 있다")
+
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    assert_no_match(/gates-breath|gates--breathing/, css, "세 숨이 남아 있다")
   end
 
   test "문이 열리면 오늘 화면으로 가고, 다시 붙잡지 않는다" do

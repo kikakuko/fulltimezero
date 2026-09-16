@@ -1,15 +1,13 @@
-<%# 셋째 문 — 몸으로 하는 일. 화면에 손을 얹고 있는 동안 장막이 옅어졌다
-    짙어지기를 세 번. 떼면 처음부터. 움직이지 않는 동안 한 줄이 떠 있다.
-    세 번을 마치면 장막이 걷힌다 — 잘했다는 말은 하지 않는다. %>
+<%# 셋째 문 — 할 일이 없다. 「한 번도 움직인 적 없다」가 떠 있고, 아무것도
+    하지 않아도 잠시 뒤 장막이 스스로 걷힌다. 버튼도 손도 없다.
+    잘했다는 말은 하지 않는다. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
 <%= render "gates", state: "breath" %>
 
-<div class="threshold threshold--breath" data-controller="gates breath" data-gates-state-value="breath"
-     data-action="pointerdown->breath#hold pointerup->breath#release pointercancel->breath#release pointerleave->breath#release animationend@document->breath#breathed">
+<div class="threshold threshold--breath" data-controller="gates breath" data-gates-state-value="breath">
   <p class="gates__line"><%= t("threshold.breath.line") %></p>
-  <p class="gates__hint"><%= t("threshold.breath.hint") %></p>
 
   <%= form_with url: threshold_passed_path, data: { breath_target: "gate" } do %><% end %>
 

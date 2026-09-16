@@ -1,12 +1,12 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
-// 셋째 문. 손을 얹고 있는 동안 장막이 옅어졌다 짙어지기를 세 번
-// (CSS 의 gates-breath, 세 번 되풀이). 손을 떼면 처음부터.
-// 세 번이 끝나면 장막이 걷히며 그림 전체가 드러나고(1.6초), 한 숨
-// 보여 준 뒤 한지빛 오늘로 옅어진다. 몇 번째인지 보여 주지 않고,
+// 셋째 문. 할 일이 없다. 「한 번도 움직인 적 없다」가 떠 있고, 아무것도
+// 하지 않아도 잠시 뒤 장막이 스스로 걷힌다 — 그림 전체가 드러나고(1.6초),
+// 한 숨 보여 준 뒤 한지빛 오늘로 옅어진다. 버튼도 손도 없다.
 // 잘했다는 말도 하지 않는다.
 import { Controller } from "@hotwired/stimulus"
 
+const DWELL = 4500  // 한 줄이 떠 있는 동안. 넉 초에서 다섯 초 사이
 const REVEAL = 1600 // 장막이 걷히는 동안
 const LEAVE = 1800  // 그림을 한 숨 보여 주고 옅어지는 동안
 
@@ -17,29 +17,17 @@ export default class extends Controller {
   get gates() { return document.getElementById("gates") }
   get veil() { return this.gates?.querySelector(".gates__veil") }
 
-  hold(event) {
-    if (this.opening) return
-    if (event.target.closest("form, button, a")) return // 「나중에」를 누르는 손은 숨이 아니다.
-
-    event.preventDefault()
-    this.gates?.classList.add("gates--breathing")
+  connect() {
+    this.timer = setTimeout(() => this.open(), DWELL)
   }
 
-  // 떼면 처음부터 — 되풀이 셈도 함께 처음으로 돌아간다.
-  // 장막이 걷히기 시작한 뒤에는 손을 떼도 그대로 열린다.
-  release() {
-    if (this.opening) return
+  disconnect() { clearTimeout(this.timer) }
 
-    this.gates?.classList.remove("gates--breathing")
-  }
-
-  async breathed(event) {
-    if (event.target !== this.veil || event.animationName !== "gates-breath") return
-    if (this.opening || !this.gates.classList.contains("gates--breathing")) return
+  async open() {
+    if (this.opening || !this.gates) return
 
     this.opening = true
     this.element.classList.add("opening")
-    this.gates.classList.remove("gates--breathing")
     this.veil.dataset.state = "open"
     await settle(this.veil, REVEAL)
 

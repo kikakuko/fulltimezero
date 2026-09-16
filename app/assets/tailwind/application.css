@@ -530,10 +530,6 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 열림 — 장막이 걷히고 그림 전체가 드러난다. */
 .gates__veil[data-state="open"] { opacity: 0; transition: opacity 1.6s ease-out; }
 
-/* 셋째 문 — 손을 얹고 있는 동안 장막이 옅어졌다 짙어지기를 세 번. */
-.gates--breathing .gates__veil { animation: gates-breath 6s ease-in-out 3; }
-@keyframes gates-breath { 0%, 100% { opacity: 1 } 50% { opacity: 0.72 } }
-
 /* 그림 전체를 한 숨 보여 준 뒤, 한지빛 오늘로 옅어진다. */
 .gates.gates--leaving { opacity: 0; transition: opacity 0.8s ease-in 1s; }
 
@@ -559,7 +555,6 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   color: var(--night-ink);
 }
 .gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--night-ink); }
-.gates__hint { font-size: 0.75rem; color: var(--night-soft); margin: 0; }
 .threshold__way { margin: 0; min-height: 3rem; }
 .threshold .action, .threshold input[type="submit"] { color: var(--night-ink); border-color: var(--night-rule); }
 .threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
@@ -593,7 +588,7 @@ input[type="text"].threshold__field {
     transparent 78%);
 }
 
-.threshold--breath { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+/* 셋째 문 — 할 일이 없다. 잠시 뒤 글이 옅어지고 장막이 걷힌다. */
 .threshold--breath.opening > * { animation: fade-away 1.2s ease-in forwards; }
 
 /* 둘째 문의 양쪽 — 훗날 두 신장(활 든 이 · 창 든 이)이 설 자리.

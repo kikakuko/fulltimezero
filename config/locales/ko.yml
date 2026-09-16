@@ -323,7 +323,6 @@ ko:
       go: "지나간다"
     breath:
       line: "한 번도 움직인 적 없다"
-      hint: "손을 얹어 둔다"
 
   privacy:
     title: 개인정보 처리방침

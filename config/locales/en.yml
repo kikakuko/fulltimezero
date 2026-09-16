@@ -323,7 +323,6 @@ en:
       go: "Pass through"
     breath:
       line: "It has never moved"
-      hint: "A hand rests on the screen"
 
   privacy:
     title: Privacy
