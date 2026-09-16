@@ -8,13 +8,25 @@ ko:
     ko: 한국어
     en: English
 
+  # 자리 넷은 전각이다 — 삼문을 지났으면 경내에 선다.
   nav:
-    today: "오늘"
+    today: "마당"
     guide: "쉼의 안내"
-    days: 날들
-    sitting: 앉기
-    copying: 사경
+    days: 미륵당
+    sitting: 선방
+    copying: 사경실
     settings: 설정
+
+  # 경내 조감도. 방은 장소이지 할 일이 아니다 — 이름뿐이다.
+  compound:
+    alt: 경내
+    halls:
+      sitting: 선방
+      maitreya: 미륵당
+      copying: 사경실
+      lecture: 강원
+      courtyard: 마당
+      gate: 문
 
   gate:
     line: 쉼은 배우는 것이 아니라 되찾는 것이다.

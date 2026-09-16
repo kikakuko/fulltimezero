@@ -1,0 +1,9 @@
+<%# 경내 조감도. 전각을 누르면 그 자리로. 누르는 자리는 그림 위의 이름뿐이다 —
+    테두리도 버튼 모양도 없다. 자리와 크기는 Compound::HALLS 한 곳에서 온다. %>
+<div class="compound">
+  <%= image_tag "compound.png", class: "compound__map", alt: t("compound.alt"), draggable: false %>
+  <% Compound::HALLS.each do |hall| %>
+    <%= link_to compound_path_for(hall), class: "compound__hall compound__hall--#{hall.key}",
+                style: "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%" do %><span class="compound__name"><%= t("compound.halls.#{hall.key}") %></span><% end %>
+  <% end %>
+</div>

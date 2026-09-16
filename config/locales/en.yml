@@ -9,12 +9,22 @@ en:
     en: English
 
   nav:
-    today: "Today"
+    today: "The courtyard"
     guide: "The guide"
-    days: Days
-    sitting: Sitting
-    copying: Copying
+    days: Maitreya hall
+    sitting: The sitting hall
+    copying: The copying hall
     settings: Settings
+
+  compound:
+    alt: The grounds
+    halls:
+      sitting: Sitting hall
+      maitreya: Maitreya hall
+      copying: Copying hall
+      lecture: Lecture hall
+      courtyard: Courtyard
+      gate: Gate
 
   gate:
     line: Rest is not learned. It is remembered.

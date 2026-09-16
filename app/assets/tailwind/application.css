@@ -605,6 +605,24 @@ input[type="text"].threshold__field {
 }
 @keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
 
+/* ── 경내 조감도 ──────────────────────────────────────────────────────
+   마당 맨 위, 화면 폭 전체. 전각을 누르면 그 자리로 — 누르는 자리는 그림 위의
+   이름뿐이고 테두리도 버튼 모양도 없다. 자리와 크기는 Compound::HALLS 에서 온다. */
+/* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
+.compound { position: relative; width: calc(100% + 3rem); margin: 0 -1.5rem 1.5rem; }
+.compound__map { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.compound__hall {
+  position: absolute; display: block;
+  font-family: var(--serif); font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1;
+}
+/* 이름은 전각 바로 아래. 먹선 위에서도 읽히게 한지빛 테를 두른다. */
+.compound__name {
+  position: absolute; top: 100%; left: -1rem; right: -1rem; margin-top: 0.15rem; text-align: center;
+  text-shadow: 0 0 5px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.compound__hall:hover .compound__name { text-decoration: underline; text-underline-offset: 0.3em; text-decoration-color: var(--rule); }
+.compound__hall:focus-visible { outline: 1px solid var(--ink-soft); outline-offset: 2px; }
+
 /* ── 미륵 ────────────────────────────────────────────────────────────
    땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나 올라왔는지는
    --rise(0 ~ 1) 하나로 온다 — 몇 번인지는 여기서 모른다.
