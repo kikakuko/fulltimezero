@@ -22,9 +22,9 @@ class ExportTest < ActiveSupport::TestCase
   end
 
   test "「무엇에서 쉬려 하는가」에 적은 한 줄도 사용자의 것이다" do
-    @user.update!(resting_from: "끝나지 않는 메일에서")
+    @user.update!(what_moves: "끝나지 않는 생각")
 
-    assert_equal "끝나지 않는 메일에서", JSON.parse(Export.new(@user).json).dig("account", "resting_from")
+    assert_equal "끝나지 않는 생각", JSON.parse(Export.new(@user).json).dig("account", "what_moves")
   end
 
   test "쉼의 결과 메모까지 남김없이 담긴다 — 반쪽짜리 내보내기는 내보내기가 아니다" do

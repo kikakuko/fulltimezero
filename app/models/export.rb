@@ -62,7 +62,7 @@ class Export
         email_address: user.email_address,
         locale: user.locale,
         time_zone: user.time_zone,
-        resting_from: user.resting_from,
+        what_moves: user.what_moves,
         joined_on: user.created_at.in_time_zone(user.time_zone).to_date.iso8601
       }
     end

@@ -1,0 +1,10 @@
+<%# 그림 한 장과 그 위의 장막. 문을 옮겨 가는 동안 그림은 그대로 남고
+    (data-turbo-permanent), 장막만 다음 상태로 옮아간다.
+    그림은 꾸밈이 아니라 자리이지만, 이름을 붙이지 않으므로 대체 글도 없다. %>
+<div id="gates" class="gates" data-turbo-permanent aria-hidden="true">
+  <div class="gates__frame">
+    <%= image_tag "gates.png", class: "gates__image", alt: "", draggable: false %>
+    <div class="gates__veil" data-state="<%= state %>"></div>
+    <div class="gates__scrim"></div>
+  </div>
+</div>

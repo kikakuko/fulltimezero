@@ -288,13 +288,14 @@ en:
   threshold:
     later: "Later"
     stop:
-      line: "You have come to the gate."
+      line: "I have stopped"
       go: "Go in"
     naming:
-      question: "What are you resting from"
+      question: "What is moving"
       go: "Pass through"
     breath:
-      line: "Rest your hand on the screen."
+      line: "It has never moved"
+      hint: "A hand rests on the screen"
 
   privacy:
     title: Privacy

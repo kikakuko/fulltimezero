@@ -21,8 +21,8 @@ class PaletteTest < ActionDispatch::IntegrationTest
   # 주사가 결코 닿아서는 안 되는 것.
   NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:action|quiet|plain|flash|errors|notice|alert|door)\b/
 
-  # 어두운 자리 — 처음의 문 셋 · 매일의 문 · 앉는 중 · 무위.
-  DARK_PLACES = %w[.threshold .daily-door .night .void].freeze
+  # 어두운 자리 — 처음의 문 셋(그림의 어둠) · 매일의 문 · 앉는 중 · 무위.
+  DARK_PLACES = %w[.gates .daily-door .night .void].freeze
 
   test "색 값은 :root 한 곳에만 있다" do
     root, rest = palette_and_rest
@@ -100,14 +100,14 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_equal 1, cells.count { |cell| cell[:fresh] }
   end
 
-  test "셋째 문은 세 번의 숨 뒤에 어둠에서 한지빛으로 밝아지며 열린다" do
-    assert_match(/\.threshold--breath\.opening \{ animation: threshold-dawn /, CSS.read)
-    dawn = CSS.read[/@keyframes threshold-dawn \{[^\n]*\}/]
-    assert_match(/0% \{ background: var\(--night\) \}.*100% \{ background: var\(--paper\) \}/, dawn)
+  # 문을 나서는 순간은 어둠에서 밝음으로 넘어가는 것으로 보인다(SPIRIT §2).
+  test "셋째 문은 장막이 걷히고, 그림이 한지빛 오늘로 옅어지며 열린다" do
+    assert_match(/\.gates\.gates--leaving \{ opacity: 0; /, CSS.read)
+    assert_equal "var(--paper)", declaration("body", "background"), "그림이 옅어진 자리가 한지가 아니다"
 
     breath = Rails.root.join("app/javascript/controllers/breath_controller.js").read
-    assert_match(/"threshold-dawn"\) \{\s*this\.gateTarget\.requestSubmit\(\)/, breath,
-                 "밝아짐이 끝나기 전에 문이 넘어간다")
+    assert_match(/gates--leaving"\)\s*await settle\(this\.gates, LEAVE\)\s*this\.gateTarget\.requestSubmit\(\)/, breath,
+                 "옅어짐이 끝나기 전에 문이 넘어간다")
   end
 
   test "매일의 문은 어두워졌다가 밝아지며 걷힌다" do

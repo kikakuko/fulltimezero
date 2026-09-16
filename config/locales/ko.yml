@@ -288,13 +288,14 @@ ko:
   threshold:
     later: "나중에"
     stop:
-      line: "문 앞에 섰다."
+      line: "나는 멈추었다"
       go: "들어간다"
     naming:
-      question: "무엇에서 쉬려 하는가"
+      question: "무엇이 움직이는가"
       go: "지나간다"
     breath:
-      line: "화면에 손을 얹는다."
+      line: "한 번도 움직인 적 없다"
+      hint: "손을 얹어 둔다"
 
   privacy:
     title: 개인정보 처리방침

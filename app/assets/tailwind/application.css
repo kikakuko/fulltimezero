@@ -29,7 +29,6 @@
   --night: #0b0a08;
   --night-deep: #050505;
   --night-dusk: #14120f;
-  --night-breath: #3a352d;
   --night-ink: #cfc7b6;
   --night-soft: #3f3a33;
   --night-faint: #45403a;
@@ -37,6 +36,8 @@
   --night-rule: #2a2620;
   --night-line: #1e1b16;
   --night-focus: #6b655c;
+  /* 처음의 문 셋 — 그림(gates.png)의 어둠 */
+  --night-gate: #0b1216;
 
   --serif: "Nanum Myeongjo", "AppleMyungjo", "Noto Serif KR", "Batang", "Songti SC", serif;
   --sans: system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
@@ -398,51 +399,170 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   .pagoda-scene, .pagoda-scene.is-closing { transition: none; }
 }
 
-/* ── 처음의 문 셋 ────────────────────────────────────────────────────
-   설명이 아니라 지나는 문이다. 어둡고, 한 줄뿐이다. */
+/* ── 처음의 문 셋 — 그림 한 장 위의 장막 ───────────────────────────
+   그림(gates.png)은 절대 움직이지 않는다. 스크롤도 확대도 카메라 이동도
+   없다. 사용자가 다가가는 것이 아니라, 보이지 않던 것이 드러날 뿐이다 —
+   한 번도 움직인 적 없다는 것이 화면의 동작으로도 지켜진다.
+   그래서 그림과 그 틀에는 transform · animation · transition 을 걸지
+   않는다(threshold_test 가 지킨다). 바뀌는 것은 그 위의 장막뿐이다.
 
+   그림은 자르지 않고 통째로 쓴다. 틀이 그림의 비율 그대로 화면 안에
+   들어앉고, 남는 가장자리는 그림의 어둠으로 채운다.
+
+   #gates 는 Turbo 가 문을 옮겨 가는 동안 그대로 남는다(data-turbo-permanent).
+   그림은 한 번 놓이면 다시 그려지지 않고, 장막만 다음 상태로 옮아간다. */
+
+.gates, .threshold {
+  /* 그림의 비율 — 가로 390 · 세로 844. */
+  --gates-w: min(100vw, calc(100svh * 390 / 844));
+  --gates-h: min(100svh, calc(100vw * 844 / 390));
+  --gates-edge: calc((100svh - var(--gates-h)) / 2);
+}
+
+.gates {
+  position: fixed; inset: 0; z-index: 9;
+  background: var(--night-gate);
+  /* 첫째 문 장막의 위쪽 두 겹. 잰 값은 0.94 · 0.88 이었으나 그림의
+     위쪽이 밝은 미색이라 그대로 덮으면 먹빛이 되어 멀리 있는 문 둘이
+     아주 사라졌다. 조금 낮추어, 아직 보이지 않되 거기 있는 것으로 둔다. */
+  --veil-stop-top: 0.80;
+  --veil-stop-upper: 0.70;
+}
+.gates__frame {
+  position: absolute; inset: 0; margin: auto;
+  width: var(--gates-w); height: var(--gates-h);
+  container-type: size; overflow: hidden;
+}
+.gates__image {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+  pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none;
+}
+
+/* 장막 — 상태마다 그라데이션만 바뀐다. 그라데이션의 겹과 자리를 등록된
+   변수로 두어, 상태가 바뀔 때 어둠이 스르르 물러나게 한다.
+   위쪽은 방사형(셋째 문), 아래쪽은 세로 선형(첫째 · 둘째 문). */
+@property --veil-a1 { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --veil-a2 { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --veil-a3 { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --veil-p2 { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@property --veil-p3 { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@property --veil-p4 { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+@property --veil-r2 { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --veil-r3 { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+.gates__veil {
+  position: absolute; inset: 0;
+  /* 셋째 문의 둥근 트임 — 390 폭의 그림에서 150px. 그림과 함께 커지고 작아진다. */
+  --veil-radius: calc(150cqw / 3.9);
+  background:
+    radial-gradient(circle var(--veil-radius) at 50% 15%,
+      transparent 0%,
+      color-mix(in srgb, var(--night-gate) calc(var(--veil-r2) * 100%), transparent) 55%,
+      color-mix(in srgb, var(--night-gate) calc(var(--veil-r3) * 100%), transparent) 100%),
+    linear-gradient(to bottom,
+      color-mix(in srgb, var(--night-gate) calc(var(--veil-a1) * 100%), transparent) 0%,
+      color-mix(in srgb, var(--night-gate) calc(var(--veil-a2) * 100%), transparent) var(--veil-p2),
+      color-mix(in srgb, var(--night-gate) calc(var(--veil-a3) * 100%), transparent) var(--veil-p3),
+      transparent var(--veil-p4));
+  transition:
+    --veil-a1 1.2s ease-out, --veil-a2 1.2s ease-out, --veil-a3 1.2s ease-out,
+    --veil-p2 1.2s ease-out, --veil-p3 1.2s ease-out, --veil-p4 1.2s ease-out,
+    --veil-r2 1.2s ease-out, --veil-r3 1.2s ease-out;
+}
+
+/* 나는 멈추었다 — 위에서 아래로. 0% · 34% · 50% · 60% */
+.gates__veil[data-state="stop"] {
+  --veil-a1: var(--veil-stop-top); --veil-a2: var(--veil-stop-upper); --veil-a3: 0.30;
+  --veil-p2: 34%; --veil-p3: 50%; --veil-p4: 60%;
+}
+/* 무엇이 움직이는가 — 0% · 14% · 28% · 38% */
+.gates__veil[data-state="naming"] {
+  --veil-a1: 0.88; --veil-a2: 0.70; --veil-a3: 0.12;
+  --veil-p2: 14%; --veil-p3: 28%; --veil-p4: 38%;
+}
+/* 한 번도 움직인 적 없다 — 가운데 (50%, 15%) 만 트이고 나머지는 잠긴다. */
+.gates__veil[data-state="breath"], .gates__veil[data-state="open"] {
+  --veil-a1: 0; --veil-a2: 0; --veil-a3: 0;
+  --veil-p2: 14%; --veil-p3: 28%; --veil-p4: 38%;
+  --veil-r2: 0.45; --veil-r3: 0.92;
+}
+/* 열림 — 장막이 걷히고 그림 전체가 드러난다. */
+.gates__veil[data-state="open"] { opacity: 0; transition: opacity 1.6s ease-out; }
+
+/* 셋째 문 — 손을 얹고 있는 동안 장막이 옅어졌다 짙어지기를 세 번. */
+.gates--breathing .gates__veil { animation: gates-breath 6s ease-in-out 3; }
+@keyframes gates-breath { 0%, 100% { opacity: 1 } 50% { opacity: 0.72 } }
+
+/* 그림 전체를 한 숨 보여 준 뒤, 한지빛 오늘로 옅어진다. */
+.gates.gates--leaving { opacity: 0; transition: opacity 0.8s ease-in 1s; }
+
+/* 아래 — 글자가 읽히도록. 잰 값은 200px 이었으나 그림의 아래쪽이
+   밝은 돌길이라 그만큼으로는 글이 묻혔다. 조금 더 높이고 짙게 한다. */
+.gates__scrim {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 300px;
+  background: linear-gradient(to bottom,
+    transparent,
+    color-mix(in srgb, var(--night-gate) 62%, transparent) 45%,
+    color-mix(in srgb, var(--night-gate) 90%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gates__veil, .gates__veil[data-state="open"], .gates.gates--leaving { transition: none; }
+}
+
+/* 문 위의 글 — 그림 틀의 아래쪽, 장막과 어둠 위에. */
 .threshold {
   position: fixed; inset: 0; z-index: 10;
-  display: grid; place-content: center; justify-items: center; gap: 2.5rem;
-  padding: 0 1.75rem; text-align: center;
-  background: var(--night); color: var(--night-ink);
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 1.5rem;
+  padding: 0 1.75rem calc(var(--gates-edge) + 4.5rem); text-align: center;
+  color: var(--night-ink);
 }
-.threshold__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--night-ink); }
+.gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--night-ink); }
+.gates__hint { font-size: 0.75rem; color: var(--night-soft); margin: 0; }
 .threshold__way { margin: 0; min-height: 3rem; }
 .threshold .action, .threshold input[type="submit"] { color: var(--night-ink); border-color: var(--night-rule); }
-.threshold__form { display: grid; justify-items: center; gap: 2rem; width: min(22rem, 100%); }
+.threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
 .threshold__form label { font-size: 1.3rem; color: var(--night-ink); margin: 0; }
-.threshold__field {
+input[type="text"].threshold__field {
   width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--night-rule);
   color: var(--night-ink); font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
 }
 .threshold__field:focus { outline: none; border-color: var(--night-focus); }
-.threshold__later { position: fixed; bottom: 2rem; left: 0; right: 0; text-align: center; }
+.threshold__later { position: fixed; bottom: calc(var(--gates-edge) + 1.25rem); left: 0; right: 0; text-align: center; }
 .threshold__later .quiet { color: var(--night-soft); text-decoration-color: var(--night-rule); }
 
-@media (prefers-reduced-motion: no-preference) {
-  .arriving { animation: waking 1.6s ease-out both; }
+/* 둘째 문 — 물음과 입력칸을 키보드가 올라오는 자리 위에 둔다.
+   아이폰의 사파리는 키보드가 입력칸을 가릴 때에만 화면 전체를 밀어
+   올린다. 가리지 않으면 밀지 않는다 — 키보드가 그림 아래쪽을 덮는 것은
+   괜찮지만 그림이 밀리는 것은 이 화면의 원칙에 어긋난다.
+   그래서 글이 화면 위쪽 절반 안에서 끝난다.
+   글자가 읽히도록, 아래의 장막 대신 글 뒤에 옅은 그늘을 깐다. */
+.threshold--naming {
+  justify-content: flex-start;
+  padding-top: calc(var(--gates-edge) + var(--gates-h) * 0.07);
+}
+.threshold--naming .threshold__form { position: relative; }
+/* 글 뒤의 그늘. 테두리가 보이면 상자가 되므로 가장자리에서 온전히
+   사라지게 하고, 글보다 넉넉히 넓게 편다. */
+.threshold--naming .threshold__form::before {
+  content: ""; position: absolute; inset: -3.5rem -4rem -4.5rem; z-index: -1;
+  background: radial-gradient(62% 55% at 50% 52%,
+    color-mix(in srgb, var(--night-gate) 78%, transparent) 0%,
+    color-mix(in srgb, var(--night-gate) 58%, transparent) 45%,
+    transparent 78%);
 }
 
-/* 셋째 문 — 손을 얹고 있는 동안 밝아졌다 어두워지기를 세 번. */
 .threshold--breath { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-.threshold--breath.breathing { animation: threshold-breath 6s ease-in-out 3; }
-@keyframes threshold-breath { 0%, 100% { background: var(--night) } 50% { background: var(--night-breath) } }
-
-/* 세 번의 숨이 끝나면 문이 열린다 — 어둠이 한지빛으로 밝아지고, 그
-   빛 그대로 오늘 화면이 이어진다. 끝났다는 말은 하지 않는다. */
-.threshold--breath.opening { animation: threshold-dawn 2.4s ease-in-out forwards; }
 .threshold--breath.opening > * { animation: fade-away 1.2s ease-in forwards; }
-@keyframes threshold-dawn { 0% { background: var(--night) } 100% { background: var(--paper) } }
 
 /* 둘째 문의 양쪽 — 훗날 두 신장(활 든 이 · 창 든 이)이 설 자리.
    지금은 비어 있다. 자리만 잡고 아무것도 그리지 않는다. */
 .threshold__flank {
-  position: fixed; top: 0; bottom: 0; width: 18vw; max-width: 9rem;
+  position: fixed; top: 0; bottom: 0; width: calc(var(--gates-w) * 0.18);
   pointer-events: none;
 }
-.threshold__flank--left { left: 0; }
-.threshold__flank--right { right: 0; }
+.threshold__flank--left { left: calc((100vw - var(--gates-w)) / 2); }
+.threshold__flank--right { right: calc((100vw - var(--gates-w)) / 2); }
 
 /* 매일 지나는 문 — 숨 한 번의 어둠. 어두워졌다가 밝아지며 걷힌다. */
 .daily-door {

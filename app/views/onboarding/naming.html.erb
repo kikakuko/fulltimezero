@@ -1,16 +1,18 @@
-<%# 둘째 문 — 이름 붙이기. 설문이 아니다. 선택지도, 태그도, 분류도,
+<%# 둘째 문 — 무엇이 움직이는가. 설문이 아니다. 선택지도, 태그도, 분류도,
     예시 문구도 없다. 한 줄을 적거나, 비워 두고 지나간다. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
-<div class="threshold">
+<%= render "gates", state: "naming" %>
+
+<div class="threshold threshold--naming" data-controller="gates" data-gates-state-value="naming">
   <%# 문의 양쪽 — 훗날 두 신장이 설 자리. 지금은 비워 둔다. %>
   <div class="threshold__flank threshold__flank--left" aria-hidden="true"></div>
   <div class="threshold__flank threshold__flank--right" aria-hidden="true"></div>
 
   <%= form_with model: Current.user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
-    <%= f.label :resting_from, t("threshold.naming.question"), class: "threshold__line" %>
-    <%= f.text_field :resting_from, maxlength: User::RESTING_FROM_MOST, autocomplete: "off",
+    <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>
+    <%= f.text_field :what_moves, maxlength: User::WHAT_MOVES_MOST, autocomplete: "off",
                      class: "threshold__field" %>
     <p class="threshold__way"><%= f.submit t("threshold.naming.go") %></p>
   <% end %>

@@ -1,15 +1,15 @@
-<%# 첫째 문 — 멈춤. 한 줄만 있다. 서두를 수 없다는 것을 말로 하지 않고,
-    길이 나타날 때까지 실제로 기다리게 한다. %>
+<%# 첫째 문 — 멈춤. 한 줄만 있다. 명령이 아니라 선언이다 — 읽는 사람이
+    스스로 자기에게 옮겨 오게 둔다. 기다리게 하지 않는다. 그림이 대신 말한다. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
-<div class="threshold" data-controller="wait" data-wait-after-value="4000">
-  <p class="threshold__line"><%= t("threshold.stop.line") %></p>
+<%= render "gates", state: "stop" %>
+
+<div class="threshold" data-controller="gates" data-gates-state-value="stop">
+  <p class="gates__line"><%= t("threshold.stop.line") %></p>
 
   <p class="threshold__way">
-    <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action", hidden: true,
-                data: { wait_target: "reveal" } %>
-    <noscript><%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action" %></noscript>
+    <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action" %>
   </p>
 
   <%= render "later" %>
