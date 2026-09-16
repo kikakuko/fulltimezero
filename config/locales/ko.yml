@@ -18,8 +18,6 @@ ko:
 
   gate:
     line: 쉼은 배우는 것이 아니라 되찾는 것이다.
-    enter: 들어가기
-    sign_in: 이미 계정이 있다
 
   users:
     email: 이메일

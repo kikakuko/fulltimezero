@@ -18,8 +18,6 @@ en:
 
   gate:
     line: Rest is not learned. It is remembered.
-    enter: Enter
-    sign_in: I already have an account
 
   users:
     email: Email

@@ -59,7 +59,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
   test "기기의 다크 모드를 따라 앱 전체를 어둡게 하지 않는다" do
     assert_no_match(/prefers-color-scheme/, CSS.read)
 
-    get gate_path
+    get threshold_path
     assert_select "meta[name=color-scheme][content=light]"
   end
 

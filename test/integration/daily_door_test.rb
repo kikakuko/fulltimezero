@@ -52,6 +52,7 @@ class DailyDoorTest < ActionDispatch::IntegrationTest
   test "들어오기 전에는 없다" do
     sign_out
     get gate_path
+    follow_redirect!
 
     assert_select ".daily-door", false
   end

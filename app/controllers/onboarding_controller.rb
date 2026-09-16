@@ -16,16 +16,29 @@
 # 없는 자리로 돌아오는 것이다. 그래서 그림은 움직이지 않고 장막만 걷힌다.
 #
 # 어느 문에서든 「나중에」로 지나갈 수 있다. 붙잡지 않는다(제7조).
+#
+# 문은 가입보다 먼저다. 처음 온 사람은 계정 없이 문 셋을 지나고, 셋째 문
+# 뒤에 가입한다. 둘째 문의 답은 그동안 세션이 들고 있다가 가입 뒤 계정에
+# 옮긴다. 가입 없이 나가면 버린다.
 class OnboardingController < ApplicationController
+  allow_unauthenticated_access
+
   def stop
   end
 
   def naming
+    @what_moves = Current.user&.what_moves || session[:what_moves]
   end
 
   # 받아 두기만 한다. 분석하지도, 추천에 쓰지도 않는다.
   def name
-    Current.user.update(what_moves: params.dig(:user, :what_moves).to_s)
+    line = params.dig(:user, :what_moves).to_s
+
+    if authenticated?
+      Current.user.update(what_moves: line)
+    else
+      session[:what_moves] = line.strip.first(User::WHAT_MOVES_MOST).presence
+    end
 
     redirect_to threshold_breath_path
   end
@@ -34,9 +47,14 @@ class OnboardingController < ApplicationController
   end
 
   # 셋째 문이 열렸거나 「나중에」를 눌렀다. 다시 지나도 처음 지난 날은 그대로다.
+  # 계정이 없으면 이제 가입이다 — 문을 지났다는 것을 세션이 기억한다.
   def pass
-    Current.user.update!(onboarded_at: Time.current) unless Current.user.onboarded?
-
-    redirect_to today_path
+    if authenticated?
+      Current.user.update!(onboarded_at: Time.current) unless Current.user.onboarded?
+      redirect_to today_path
+    else
+      session[:threshold_passed] = true
+      redirect_to new_user_path
+    end
   end
 end
