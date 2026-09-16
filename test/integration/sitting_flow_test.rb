@@ -113,6 +113,19 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/#{I18n.t("today.question")}/, visible_text)
   end
 
+  # 앉기의 자리에 두 길이 같은 무게로 선다. 무위를 2차 메뉴로 내려 두면
+  # 그것은 곁가지가 된다.
+  test "앉는다와 아무것도 하지 않는다가 나란히 선다" do
+    get new_sitting_path
+
+    assert_select "h1,h2", text: I18n.t("sittings.new.title")
+    assert_select "h1,h2", text: I18n.t("sittings.new.nothing")
+
+    assert_select "form[action=?] input[type=submit]", sittings_path, count: 1
+    assert_select "form[action=?] button", nothing_path, count: 1
+    assert_select "form[action=?] button.quiet", nothing_path, false, "무위로 가는 길만 작다"
+  end
+
   private
     def visible_text
       Nokogiri::HTML(response.body).css("body").text.gsub(/\s+/, " ")

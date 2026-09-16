@@ -92,15 +92,24 @@ class GuideTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 기능은 한꺼번에 소개하지 않는다. 사경은 여기서 스스로 찾게 둔다.
-  test "사경으로 가는 문은 쉼의 안내에 있고, 오늘 화면에는 없다" do
+  # 사경은 이제 자리 넷 가운데 하나다. 안내에도 길이 남아 있다 —
+  # 안내를 읽다가 그리로 갈 수 있어야 한다.
+  test "사경으로 가는 길은 안내에도 있다" do
     get guide_path
     assert_select "a[href=?]", new_copying_path
 
     sign_in_as users(:one)
     get today_path
-    assert_select "main a[href=?]", new_copying_path, false
-    assert_select "nav.doors a[href=?]", new_copying_path, false
+    assert_select "nav.doors a[href=?]", new_copying_path, count: 1
+  end
+
+  # 「쉼의 안내」는 문이 아니라 오늘 화면 안의 길이다.
+  test "쉼의 안내로 가는 길은 오늘 화면에 있고, 아래 자리에는 없다" do
+    sign_in_as users(:one)
+    get today_path
+
+    assert_select "main a[href=?]", guide_path, count: 1
+    assert_select "nav.doors a[href=?]", guide_path, false
   end
 
   test "안내에도 숫자와 느낌표와 이모지가 없다" do

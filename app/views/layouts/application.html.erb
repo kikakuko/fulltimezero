@@ -56,8 +56,10 @@
         내비가 없다. 성역에는 나가는 길만 있으면 된다. %>
     <% if authenticated? && !content_for?(:no_chrome) %>
       <nav class="doors">
-        <% { today: today_path, moon: moon_path,
-             days: days_path, guide: guide_path }.each do |name, path| %>
+        <%# 자리 넷 — 도상 넷과 하나씩 마주 선다: 달 · 미륵 · 코끼리 · 탑.
+            「쉼의 안내」는 문이 아니라 오늘 안의 길이다. %>
+        <% { today: today_path, days: days_path,
+             sitting: new_sitting_path, copying: new_copying_path }.each do |name, path| %>
           <%= link_to t("nav.#{name}"), path,
                       class: class_names("door", here: current_page?(path)) %>
         <% end %>

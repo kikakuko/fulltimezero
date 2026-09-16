@@ -2,7 +2,10 @@
 #
 # 한 달의 격자. 날짜 숫자는 여기에만 있다 — 달력의 날짜는 본질상
 # 숫자이고, 그것 말고는 어떤 숫자도 화면에 두지 않는다.
-# 일정의 개수를 세지 않는다. 있는 날과 없는 날, 그리고 비워 둔 날뿐이다.
+#
+# 한 칸이 세 가지를 품는다: 일정이 있는 날 · 비워 둔 날 · 고요했던 날
+# (쉬었거나 앉은 날). 개수는 세지 않는다 — 있고 없음뿐이다.
+# 합계도 연속기록도 없다. 달력은 지나온 날들이지 성적표가 아니다.
 class Calendar
   WEEK = 7
 
@@ -13,9 +16,11 @@ class Calendar
     span = month.beginning_of_month..month.end_of_month
     planned = user.plans.where(planned_on: span).distinct.pluck(:planned_on).to_set
     cleared = user.clearings.where(cleared_on: span).pluck(:cleared_on).to_set
+    quiet = user.rests.where(rested_on: span).pluck(:rested_on).to_set +
+            user.sittings.where(sat_on: span).pluck(:sat_on).to_set
 
     new(month, grid(month).map { |date|
-      Day.new(date, planned.include?(date), cleared.include?(date),
+      Day.new(date, planned.include?(date), cleared.include?(date), quiet.include?(date),
               date.month == month.month, date == today)
     })
   end
@@ -28,9 +33,11 @@ class Calendar
     (first - first.wday)..(last + (WEEK - 1 - last.wday))
   end
 
-  Day = Struct.new(:date, :planned, :cleared, :inside, :today) do
+  Day = Struct.new(:date, :planned, :cleared, :quiet, :inside, :today) do
     def planned? = planned
     def cleared? = cleared
+    # 그 날 쉼이나 앉음이 있었다. 얼마나였는지는 묻지 않는다.
+    def quiet? = quiet
     def inside? = inside
     def today? = today
     def empty? = !planned

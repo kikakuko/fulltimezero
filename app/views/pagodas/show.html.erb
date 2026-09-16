@@ -1,0 +1,11 @@
+<%# 탑. 쓴 자리만 그린다 — 빈 칸을 그리면 몇 칸 남았는지가 세어진다.
+    몇 층인지도, 몇 자를 썼는지도 적지 않는다. 탑이 그것을 이미 보인다. %>
+<div class="center pagoda-look">
+  <div data-controller="pagoda"
+       data-pagoda-scene-value="<%= @scene.to_json %>"
+       data-pagoda-label-value="<%= t("copyings.pagoda") %>">
+    <template data-pagoda-target="art"><%= pagoda_outline %></template>
+  </div>
+
+  <p class="tiny"><%= link_to t("pagodas.back"), new_copying_path, class: "soft" %></p>
+</div>

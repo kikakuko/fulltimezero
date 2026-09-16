@@ -19,14 +19,18 @@ Rails.application.routes.draw do
     get   "threshold/breath" => "onboarding#breath", as: :threshold_breath
     post  "threshold/passed" => "onboarding#pass", as: :threshold_passed
     resources :rests, only: %i[new create destroy]
-    get "moon" => "moon#show", as: :moon
+
+    # 달력은 하나다. 「달의 자취」는 「날들」에 들어갔다 — 달력 둘을 둘
+    # 이유가 없다. 예전 주소로 오는 발길은 그리로 보낸다.
+    get "moon", to: redirect { |path, _request| "/#{path[:locale]}/days" }
 
     # 앉음 — 명상 타이머와 무위의 시간.
     resources :sittings, only: %i[new create show update destroy]
     post "nothing" => "sittings#nothing", as: :nothing
 
-    # 사경 — 하루 한 자. 탑은 아직 세우지 않는다.
+    # 사경 — 하루 한 자. 쌓인 탑은 언제든 볼 수 있다.
     resources :copyings, only: %i[new create]
+    get "pagoda" => "pagodas#show", as: :pagoda
 
     # 날들 — 빈 일정. 달력의 날짜 숫자만이 이 앱에서 허용되는 숫자다.
     get   "days" => "days#index", as: :days

@@ -11,7 +11,10 @@ class SpiritTest < ActionDispatch::IntegrationTest
   setup { heart_sutra }
 
   OPEN_PAGES = %i[gate_path new_user_path new_session_path new_password_path guide_path privacy_path].freeze
-  SIGNED_IN_PAGES = %i[today_path new_rest_path moon_path settings_path new_sitting_path new_copying_path].freeze
+  # 날들은 여기에 없다 — 달력의 날짜는 숫자 금지의 유일한 예외이고,
+  # 그 화면은 따로 검사한다(「날들 화면의 숫자는 달력의 날짜뿐이다」).
+  SIGNED_IN_PAGES = %i[today_path new_rest_path settings_path new_sitting_path
+                       new_copying_path pagoda_path].freeze
 
   # 화면에 숫자·퍼센트·분·"n일째"가 없어야 한다.
   test "어느 화면에도 숫자나 지표가 보이지 않는다" do
@@ -41,12 +44,12 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 다섯 기둥 가운데 하나가 라우트로만 존재하면 없는 기능이다.
-  # 문 넷은 늘 아래에 있되, 몰입 화면에는 없다.
+  # 자리 넷 — 오늘 · 날들 · 앉기 · 사경. 도상 넷(달 · 미륵 · 코끼리 · 탑)과
+  # 하나씩 마주 선다. 늘 아래에 있되, 몰입 화면에는 없다.
   test "네 개의 문이 늘 아래에 있다" do
     sign_in_as users(:one)
 
-    [ today_path, moon_path, days_path, guide_path ].each do |page|
+    [ today_path, days_path, new_sitting_path, new_copying_path ].each do |page|
       get page
 
       assert_select "nav.doors a.door", count: 4, message: "#{page} 에 문이 넷이 아니다"
@@ -309,15 +312,27 @@ class SpiritTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "달의 자취는 날짜도 합계도 보이지 않고 점만 남긴다" do
+  # 탑은 언제든 볼 수 있다. 세는 것을 막는 일은 화면이 한다 —
+  # 숫자도, 빈 칸도, 몇 층인지도 없다. 쓴 자리만 그린다.
+  test "탑 화면에는 숫자도 빈 칸도 층 표시도 없다" do
     user = users(:one)
-    3.times { |i| user.rests.create!(rested_on: user.today - i, duration: "a_moment") }
+    rows = heart_sutra.chars.where(pos: 1..3).map do |char|
+      { user_id: user.id, sutra_char_id: char.id, copied_on: user.today - (4 - char.pos),
+        glyph_paths: [ [ [ 0.5, 0.5 ] ] ], created_at: Time.current, updated_at: Time.current }
+    end
+    Copying.insert_all!(rows)
     sign_in_as user
 
-    get moon_path(locale: :ko)
-    assert_select ".trail span", count: MoonPhase::WINDOW_DAYS
-    assert_select ".trail span.on", count: 3
-    assert_no_match(/\d/, visible_text)
+    %i[ko en].each do |locale|
+      get pagoda_path(locale: locale)
+
+      assert_no_match(/\d/, visible_text, "탑 화면에 숫자가 있다")
+      assert_no_match(/층|floor|layer|남은|남았|left|remaining/i, visible_text, "탑 화면이 층을 세거나 남은 것을 말한다")
+    end
+
+    scene = JSON.parse(css_select("[data-pagoda-scene-value]").first["data-pagoda-scene-value"])
+    assert_equal 3, scene["cells"].size, "쓰지 않은 칸의 자리가 화면으로 나갔다"
+    assert scene["cells"].none? { |cell| cell["fresh"] }, "보는 자리에 방금 올린 자가 있다"
   end
 
   # 「쉼의 안내」에 인용문이 들어온다면 그 출처는 CC0 원문뿐이어야 한다.

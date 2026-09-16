@@ -13,7 +13,7 @@ class DailyDoorTest < ActionDispatch::IntegrationTest
     get today_path
     assert_select ".daily-door[data-controller=daily-door]"
 
-    get moon_path
+    get days_path
     assert_select ".daily-door", false
   end
 

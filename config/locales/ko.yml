@@ -12,7 +12,8 @@ ko:
     today: "오늘"
     guide: "쉼의 안내"
     days: 날들
-    moon: 달의 자취
+    sitting: 앉기
+    copying: 사경
     settings: 설정
 
   gate:
@@ -44,6 +45,8 @@ ko:
     rested: 쉬었다
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기
+    clear: 오늘을 비워 둔다
+    unclear: 비움을 거둔다
 
   rests:
     recorded: 기록되었다. 달이 조금 찼다.
@@ -68,8 +71,9 @@ ko:
   moon:
     full: 달이 찼다.
     title: 달
-    trail_label: 지난 스물여드레의 자취
-    window: 지난 스물여드레.
+
+  pagodas:
+    back: "한 자 쓰러 간다"
 
   settings:
     daily_door: "앱을 열 때 숨 한 번"
@@ -193,6 +197,7 @@ ko:
       submit: 앉는다
       bell: 종성
       nothing: 아무것도 하지 않는다
+      nothing_go: 들어간다
       nothing_bell: 들어갈 때 종성
     # 향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다.
     # 쉼의 길이(rests.durations)와 낱말이 겹치지 않게 둔다.
@@ -231,7 +236,7 @@ ko:
 
   days:
     title: 날들
-    legend: 먹점은 일정이 있는 날, 옅은 원은 미리 비워 둔 날.
+    legend: 먹점은 일정이 있는 날, 옅은 원은 미리 비워 둔 날, 또렷한 날짜는 고요했던 날.
     previous: 지난달
     next: 다음달
     back: 달력으로
@@ -288,6 +293,7 @@ ko:
     phrase: "구절"
     english: "영어"
     again: "이 글자는 다시 온다. 다음은 「%{phrase}」에서."
+    look: "탑을 본다"
     finished: "경을 끝까지 썼다."
 
   threshold:

@@ -34,5 +34,17 @@
         <%= link_to t("today.sit"), new_sitting_path, class: "soft" %>
       </p>
     <% end %>
+
+    <%# 오늘을 비우는 선언. 앱의 한가운데 행위이므로 여기 둔다 — 날들의
+        하루 화면까지 세 번 눌러 들어가 있을 일이 아니다.
+        일정이 있어도 비울 수 있다. 비움은 사실의 보고가 아니라 선언이다.
+        지키지 못해도 아무 일 없다(제5조 · 제6조). %>
+    <p class="tiny clearing">
+      <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
+                    day_path(Current.user.today, from: "today"), method: :patch, class: "quiet" %>
+    </p>
+
+    <%# 「쉼의 안내」는 문이 아니라 여기서 내려가는 길이다. %>
+    <p class="tiny way"><%= link_to t("nav.guide"), guide_path, class: "soft" %></p>
   </div>
 <% end %>

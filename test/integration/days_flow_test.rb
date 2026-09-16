@@ -146,6 +146,82 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 비움은 앱의 한가운데 행위다. 세 번 눌러 들어가야 닿을 일이 아니다.
+  test "오늘 화면에서 오늘을 비우고 거둔다" do
+    get today_path
+    assert_select "form[action=?]", day_path(@user.today, from: "today")
+    assert_match I18n.t("today.clear"), visible_text
+
+    patch day_path(@user.today, from: "today")
+    assert_redirected_to today_path
+    assert @user.clearings.exists?(cleared_on: @user.today), "오늘이 비워지지 않았다"
+
+    follow_redirect!
+    assert_match I18n.t("today.unclear"), visible_text
+
+    patch day_path(@user.today, from: "today")
+    assert_empty @user.clearings.where(cleared_on: @user.today), "비움을 거두지 못한다"
+  end
+
+  # 비움은 사실의 보고가 아니라 선언이다. 일정이 있어도 비울 수 있다.
+  test "일정이 있어도 오늘을 비울 수 있다" do
+    @user.plans.create!(planned_on: @user.today, what: "회의")
+
+    get today_path
+    assert_match I18n.t("today.clear"), visible_text
+
+    patch day_path(@user.today, from: "today")
+    assert @user.clearings.exists?(cleared_on: @user.today)
+  end
+
+  # 다른 날의 비움은 그 날의 자리에 그대로 남는다.
+  test "다른 날은 날들에서 비운다" do
+    get day_path(@user.today - 3)
+
+    assert_select "form[action=?]", day_path(@user.today - 3)
+    patch day_path(@user.today - 3)
+
+    assert_redirected_to day_path(@user.today - 3)
+    assert @user.clearings.exists?(cleared_on: @user.today - 3)
+  end
+
+  # 달력은 하나다. 「달의 자취」와 「날들」이 둘 다 달력일 까닭이 없다.
+  test "한 칸이 셋을 품는다 — 일정 · 비움 · 고요했던 날" do
+    today = @user.today
+    @user.plans.create!(planned_on: today - 1, what: "회의")
+    @user.clearings.create!(cleared_on: today - 2)
+    @user.rests.create!(rested_on: today - 3, duration: "a_while")
+    @user.sittings.create!(sat_on: today - 4, mode: "sitting", ended_at: Time.current)
+
+    get days_path
+
+    assert_select "a[href=?] .kept", day_path(today - 1), count: 1, message: "일정이 있는 날의 먹점이 없다"
+    assert_select "a[href=?] .clear", day_path(today - 2), count: 1, message: "비워 둔 날의 옅은 원이 없다"
+    assert_select "a[href=?].quiet", day_path(today - 3), count: 1, message: "쉰 날이 고요하지 않다"
+    assert_select "a[href=?].quiet", day_path(today - 4), count: 1, message: "앉은 날이 고요하지 않다"
+    assert_select "a[href=?].quiet", day_path(today - 1), false, "아무 날이나 고요하다"
+  end
+
+  test "달력은 하나뿐이고, 예전의 달 화면은 날들로 보낸다" do
+    get "/ko/moon"
+
+    assert_redirected_to "/ko/days"
+    follow_redirect!
+
+    assert_select "nav.doors a[href=?]", days_path, count: 1
+    assert_select ".calendar", count: 1, message: "달력이 하나가 아니다"
+    assert_select ".trail", false, "달의 자취가 따로 남아 있다"
+  end
+
+  test "한 칸이 셋을 품어도 합계도 연속기록도 없다" do
+    today = @user.today
+    5.times { |i| @user.rests.create!(rested_on: today - i, duration: "a_while") }
+
+    get days_path
+
+    assert_no_match(/연속|합계|모두|번째|streak|total|in a row/i, visible_text)
+  end
+
   test "비운 날 아침에만 달이 한 번 크게 숨 쉰다" do
     travel_to Time.utc(2026, 8, 26, 22, 0) do # 서울 아침 일곱시
       get today_path

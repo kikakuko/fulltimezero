@@ -32,19 +32,26 @@ const SETTLE = 0.86   // 되돌아오기 시작하는 때
 // 앉는 자리로 다가가는 정도. 한 칸이 손톱만 해지지 않을 만큼만.
 const NEAR = 2.4
 
-export async function playScene({ scene, art, flier, label, reduced, onLand }) {
-  const overlay = document.createElement("div")
-  overlay.className = "pagoda-scene"
-
+// 가만히 선 탑. 보는 자리와 장면이 같은 손으로 그려지도록 여기 둔다.
+export function buildPagoda({ scene, art, label, stirred = false }) {
   const [width, height] = scene.view
   const svg = node("svg", { viewBox: `0 0 ${width} ${height}`, class: "pagoda", role: "img", "aria-label": label })
   const camera = node("g", { class: "pagoda__camera" })
   svg.append(camera)
 
-  if (art) camera.append(hangBells(art, scene.floors, { stirred: !reduced }))
-
-  const fresh = scene.cells.find(cell => cell.fresh)
+  if (art) camera.append(hangBells(art, scene.floors, { stirred }))
   scene.cells.filter(cell => !cell.fresh).forEach(cell => camera.append(glyph(cell)))
+
+  return svg
+}
+
+export async function playScene({ scene, art, flier, label, reduced, onLand }) {
+  const overlay = document.createElement("div")
+  overlay.className = "pagoda-scene"
+
+  const svg = buildPagoda({ scene, art, label, stirred: !reduced })
+  const camera = svg.querySelector(".pagoda__camera")
+  const fresh = scene.cells.find(cell => cell.fresh)
 
   // 앉는 자리 언저리에서 시작해, 앉고 나서 물러난다.
   const near = fresh && !reduced && nearView(fresh, scene.view)

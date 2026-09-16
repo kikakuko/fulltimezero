@@ -1,5 +1,6 @@
-<%# 달력. 일정이 있는 날엔 먹점 하나, 비워 둔 날엔 옅은 원.
-    개수도 배지도 두지 않는다 — 있고 없음뿐이다. %>
+<%# 달력 하나. 한 칸이 셋을 품는다 — 일정이 있는 날엔 먹점, 비워 둔 날엔
+    옅은 원, 고요했던 날(쉼이나 앉음)은 날짜가 먹빛으로 또렷하다.
+    개수도 합계도 연속기록도 두지 않는다 — 있고 없음뿐이다. %>
 <h1 class="title"><%= month_name(@calendar.month) %></h1>
 
 <nav class="months tiny">
@@ -14,7 +15,7 @@
 
   <% @calendar.days.each do |day| %>
     <% if day.inside? %>
-      <%= link_to day_path(day.date), class: class_names("day", today: day.today?) do %>
+      <%= link_to day_path(day.date), class: class_names("day", today: day.today?, quiet: day.quiet?) do %>
         <span class="date"><%= day.date.day %></span>
         <span class="<%= day.planned? ? "kept" : (day.cleared? ? "clear" : "bare") %>"></span>
       <% end %>

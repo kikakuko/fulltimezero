@@ -270,6 +270,8 @@ button:active, input[type="submit"]:active, .action:active {
 .calendar .outside { visibility: hidden; }
 
 .calendar .date { font-size: 0.8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+/* 고요했던 날 — 쉬었거나 앉은 날. 표를 더 그리지 않고 날짜가 또렷해진다. */
+.calendar .day.quiet .date { color: var(--ink); font-weight: 500; }
 .calendar .day.today .date { color: var(--ink); }
 
 /* 일정이 있는 날 · 비워 둔 날 · 그 밖. 셋 다 같은 크기다. */
@@ -380,6 +382,8 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda-scene.is-closing { opacity: 0; transition-duration: 300ms; }
 
 .pagoda { height: min(84vh, 48rem); width: auto; max-width: 92vw; }
+/* 보는 자리의 탑은 조금 낮다 — 아래의 길이 함께 보여야 한다. */
+.pagoda-look .pagoda { height: min(70vh, 40rem); }
 
 /* 탑의 그림 — 손으로 그린 윤곽을 그대로 심는다. 옅게 깔린다:
    글씨가 주인공이고 탑은 자리다. 처마가 글씨보다 눈에 띄면

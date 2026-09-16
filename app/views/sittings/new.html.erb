@@ -1,4 +1,6 @@
-<%# 앉기. 길이는 글자로만 적는다 — 숫자는 화면에 없다.
+<%# 앉기의 자리. 두 길이 같은 무게로 나란히 선다 — 앉는 것과 아무것도
+    하지 않는 것. 무위를 2차 메뉴로 내려 두면 그것은 곁가지가 된다.
+    길이는 글자로만 적는다 — 숫자는 화면에 없다.
     종성은 「앉는다」를 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
 <h1 class="title"><%= t("sittings.new.title") %></h1>
 
@@ -33,6 +35,8 @@
 
 <hr class="rule">
 
+<h2 class="title"><%= t("sittings.new.nothing") %></h2>
+
 <%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있고,
     켜 두었으면 들어가는 그 손짓에 한 번만 울린다. 마침종은 없다. %>
 <%= form_with url: nothing_path,
@@ -48,9 +52,9 @@
     </li>
   </ul>
 
-  <p>
-    <button type="submit" class="quiet" data-action="click->bell#open">
-      <%= t("sittings.new.nothing") %>
+  <p style="margin-top:2.5rem">
+    <button type="submit" data-action="click->bell#open">
+      <%= t("sittings.new.nothing_go") %>
     </button>
   </p>
 <% end %>

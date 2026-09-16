@@ -3,12 +3,15 @@
 <% if @char.nil? %>
   <div class="center">
     <p class="lead"><%= t("copyings.finished") %></p>
+    <p class="tiny"><%= link_to t("copyings.look"), pagoda_path, class: "soft" %></p>
   </div>
 <% elsif @written %>
-  <%# 하루 한 자를 이미 썼다. 오늘 몫은 끝났다(제2조). %>
+  <%# 하루 한 자를 이미 썼다. 오늘 몫은 끝났다(제2조).
+      쌓인 탑은 언제든 볼 수 있다 — 세는 것을 막는 일은 탑 화면이 한다. %>
   <div class="center">
     <p class="copy-glyph"><%= @char.glyph %></p>
     <p class="lead"><%= t("today.done") %></p>
+    <p class="tiny"><%= link_to t("copyings.look"), pagoda_path, class: "soft" %></p>
   </div>
 <% else %>
   <div class="copying" data-controller="copying"
@@ -62,5 +65,7 @@
     <% if @again %>
       <p class="tiny"><%= t("copyings.again", phrase: @again.han) %></p>
     <% end %>
+
+    <p class="tiny"><%= link_to t("copyings.look"), pagoda_path, class: "soft" %></p>
   </div>
 <% end %>

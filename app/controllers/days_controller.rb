@@ -18,12 +18,13 @@ class DaysController < ApplicationController
   end
 
   # 비움 예약을 걸고 거둔다. 오가는 것뿐이라 물어보지 않는다.
+  # 오늘 화면에서 선언했으면 오늘 화면으로 돌아간다.
   def update
     clearing = Current.user.clearings.find_by(cleared_on: date)
 
     clearing ? clearing.destroy! : Current.user.clearings.create!(cleared_on: date)
 
-    redirect_to day_path(date)
+    redirect_to params[:from] == "today" ? today_path : day_path(date)
   end
 
   private

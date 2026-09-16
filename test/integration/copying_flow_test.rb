@@ -105,6 +105,19 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_empty main.css("[class*=pagoda], [data-copying-pagoda-value]"), "몫이 끝난 뒤에도 탑이 화면에 남는다"
   end
 
+  # 아홉 달을 쌓는 것을 하루 한 번 잠깐만 보게 하는 것은 가혹하다.
+  # 탑은 언제든 볼 수 있다 — 세는 것을 막는 일은 탑 화면이 한다.
+  test "사경에서 탑으로 가는 길이 늘 있다" do
+    get new_copying_path
+    assert_select "a[href=?]", pagoda_path, count: 1
+
+    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
+    get new_copying_path
+
+    assert_match I18n.t("today.done"), response.body
+    assert_select "a[href=?]", pagoda_path, count: 1, message: "오늘 몫이 끝나면 탑으로 가는 길이 사라진다"
+  end
+
   # 탑의 그림은 손으로 그린 것이다. 좌표도 곡선도 코드가 만들지 않는다.
   test "탑은 그려 둔 윤곽을 그대로 심는다" do
     get new_copying_path
@@ -183,7 +196,7 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
 
     assert_match(/if \(fresh && flier && !reduced\) await fly/, scene)
     assert_match(/glyph\(fresh, \{ settling: !reduced \}\)/, scene)
-    assert_match(/hangBells\(art, scene\.floors, \{ stirred: !reduced \}\)/, scene)
+    assert_match(/buildPagoda\(\{ scene, art, label, stirred: !reduced \}\)/, scene)
     assert_match(/const near = fresh && !reduced && nearView/, scene, "움직임을 줄여도 틀이 움직인다")
   end
 

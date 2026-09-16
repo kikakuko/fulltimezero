@@ -12,7 +12,8 @@ en:
     today: "Today"
     guide: "The guide"
     days: Days
-    moon: The moon's trail
+    sitting: Sitting
+    copying: Copying
     settings: Settings
 
   gate:
@@ -44,6 +45,8 @@ en:
     rested: I rested
     done: Today's share is done. Now rest.
     record_again: Record once more
+    clear: Keep today clear
+    unclear: Let it go
 
   rests:
     recorded: Recorded. The moon is a little fuller.
@@ -68,8 +71,9 @@ en:
   moon:
     full: The moon is full.
     title: The moon
-    trail_label: The trail of the last four weeks
-    window: The last four weeks.
+
+  pagodas:
+    back: "Go and write a character"
 
   settings:
     daily_door: "A breath each time the app opens"
@@ -193,6 +197,7 @@ en:
       submit: Sit
       bell: Bell
       nothing: Do nothing
+      nothing_go: Go in
       nothing_bell: A bell on the way in
     # A stick of incense and a cup of tea were how time was measured
     # before clocks. They keep their own words, apart from rests.durations.
@@ -231,7 +236,7 @@ en:
 
   days:
     title: Days
-    legend: An ink dot marks a day with something on it. A faint ring marks a day kept clear.
+    legend: An ink dot marks a day with something on it. A faint ring marks a day kept clear. A darker date marks a day that was quiet.
     previous: Last month
     next: Next month
     back: Back to the month
@@ -288,6 +293,7 @@ en:
     phrase: "Phrase"
     english: "In English"
     again: "This character comes again — next in 「%{phrase}」."
+    look: "Look at the pagoda"
     finished: "The sutra is written to the end."
 
   threshold:

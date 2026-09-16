@@ -21,6 +21,9 @@ class TodayController < ApplicationController
     elsif Current.user.evening? then Evening.line_for(Current.user)
     end
 
+    # 오늘을 비워 두겠다는 선언. 일정이 있든 없든 할 수 있다.
+    @cleared_today = Current.user.cleared_today?
+
     # 비운 날의 아침 첫 화면에서만, 달이 살짝 크게 한 번 숨 쉰다.
     @cleared_morning = @empty && Current.user.morning? &&
                        session[:cleared_seen_on] != Current.user.today.to_s
