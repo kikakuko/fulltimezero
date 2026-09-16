@@ -82,7 +82,8 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
 
     scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
-    assert_match(/cell\.fresh \? "pagoda__ink pagoda__fresh"/, scene, "주사가 방금 올린 자에 매이지 않았다")
+    assert_match(/cell\.fresh && "pagoda__fresh"/, scene, "주사가 방금 올린 자에 매이지 않았다")
+    assert_equal 1, scene.scan(/"pagoda__fresh"/).size, "주사의 자리가 여럿이다"
   end
 
   # 한 자는 하루에 한 번만 올라가므로, 붉은 자는 하루에 하나를 넘지 않는다.

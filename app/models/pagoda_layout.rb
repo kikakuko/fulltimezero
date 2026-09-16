@@ -32,8 +32,8 @@ class PagodaLayout
 
     def outline_path = "M #{x} #{y + height} V #{y} H #{x + width} V #{y + height}"
 
-    # 풍경은 처마 오른쪽 끝에 걸린다.
-    def bell_at = { x: x + width + OVERHANG, y: y - 7 }
+    # 풍경은 처마 양 끝에 하나씩 걸린다.
+    def bells_at = [ x - OVERHANG, x + width + OVERHANG ].map { |edge| { x: edge, y: y - 7 } }
   end
 
   Cell = Data.define(:pos, :x, :y, :size)
@@ -56,8 +56,8 @@ class PagodaLayout
         view: VIEW,
         outline: floors.map(&:outline_path) + [ finial[:pole] ],
         eaves: floors.map(&:eave_path),
-        bells: floors.select { |floor| last >= floor.last }.map do |floor|
-          floor.bell_at.merge(fresh: fresh&.sutra_char&.pos == floor.last)
+        bells: floors.select { |floor| last >= floor.last }.flat_map do |floor|
+          floor.bells_at.map { |bell| bell.merge(fresh: fresh&.sutra_char&.pos == floor.last) }
         end,
         cells: written.map { |copying| cell_of(copying, fresh: copying == fresh) }
       }

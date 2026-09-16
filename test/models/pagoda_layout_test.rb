@@ -53,7 +53,7 @@ class PagodaLayoutTest < ActiveSupport::TestCase
     assert_equal @user.copyings.first.glyph_paths, cell[:paths]
   end
 
-  test "한 층이 차면 처마 끝에 풍경이 하나 걸린다" do
+  test "한 층이 차면 처마 양 끝에 풍경이 걸린다" do
     first_floor = PagodaLayout.floors.first
     write_through(first_floor.last - 1)
     assert_empty PagodaLayout.scene(@user.copyings.includes(:sutra_char))[:bells]
@@ -61,8 +61,9 @@ class PagodaLayoutTest < ActiveSupport::TestCase
     fresh = @user.copyings.create!(sutra_char: @user.pagoda.next_char, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
     bells = PagodaLayout.scene(@user.copyings.includes(:sutra_char), fresh: fresh)[:bells]
 
-    assert_equal 1, bells.size
-    assert bells.first[:fresh], "방금 층을 채웠는데 풍경이 새로 걸리지 않는다"
+    assert_equal 2, bells.size
+    assert bells.all? { |bell| bell[:fresh] }, "방금 층을 채웠는데 풍경이 새로 걸리지 않는다"
+    assert_equal PagodaLayout::VIEW[0], bells.sum { |bell| bell[:x] }, "풍경이 탑의 가운데를 두고 짝을 이루지 않는다"
   end
 
   private

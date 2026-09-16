@@ -105,6 +105,41 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_empty main.css("[class*=pagoda], [data-copying-pagoda-value]"), "몫이 끝난 뒤에도 탑이 화면에 남는다"
   end
 
+  # 날아가는 결. 밋밋하지 않게 넷을 얹되, 길이는 그대로 팔 할 초다.
+  test "글씨는 호를 그리며 날아가 지나쳤다 되돌아와 앉는다" do
+    scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
+
+    assert_match(/const FLIGHT = 800\b/, scene, "나는 동안이 팔 할 초가 아니다")
+    assert_match(/const x = dx \* t$/, scene, "가로가 고르게 가지 않는다")
+    assert_match(/Math\.sin\(Math\.PI \* t\)/, scene, "솟았다 내려앉는 호가 없다")
+    assert_match(/const OVERSHOOT = 2\b/, scene, "지나쳤다 되돌아오지 않는다")
+    assert_match(/easing = "ease-out"/, scene, "되돌아오는 끝이 느려지지 않는다")
+  end
+
+  test "앉는 순간과 층이 차는 순간에만 한 번씩 움직인다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+
+    settle = css[/@keyframes ink-settle \{[^\n]*\}/]
+    assert_match(/\.pagoda__settling \{ animation: ink-settle 0\.15s /, css, "앉는 순간이 찰나가 아니다")
+    assert_match(/scale\(0\.92\)/, settle.to_s, "먹이 번지는 움츠림이 없다")
+
+    sway = css[/@keyframes bell-sway \{.*?\n\}/m]
+    assert_match(/\.pagoda__bell--stirred \{ transform-origin: 0 0; animation: bell-sway 1\.2s /, css)
+    degrees = sway.to_s.scan(/rotate\((-?[\d.]+)deg\)/).flatten.map { |turn| turn.to_f.abs }
+    assert_equal 3.0, degrees.max, "풍경이 삼 도 넘게 흔들린다"
+    assert_operator degrees.each_cons(2).count { |before, after| after > before }, :<=, 1,
+      "흔들림이 점점 작아지지 않는다"
+  end
+
+  # 움직임을 줄인 화면에서는 넷 다 끄고 그냥 앉는다.
+  test "움직임을 줄이면 날지도 움츠리지도 흔들리지도 않는다" do
+    scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
+
+    assert_match(/if \(fresh && flier && !reduced\) await fly/, scene)
+    assert_match(/glyph\(fresh, \{ settling: !reduced \}\)/, scene)
+    assert_match(/windBell\(bell, \{ stirred: !reduced \}\)/, scene)
+  end
+
   test "앉는 순간 떨지 말지는 게이트가 정한다" do
     get new_copying_path
     assert_select "[data-copying-vibrate-value=true]"

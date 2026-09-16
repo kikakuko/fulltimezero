@@ -392,6 +392,24 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
    palette_test 가 깨진다. */
 .pagoda__fresh path { fill: var(--cinnabar); }
 
+/* 앉는 순간 — 먹이 종이에 닿아 번지듯 한 번 움츠렸다 펴진다.
+   움츠러드는 가운데는 칸마다 다르므로 자리에서 정한다. */
+.pagoda__settling { animation: ink-settle 0.15s ease-out; }
+@keyframes ink-settle { 0% { transform: scale(1) } 45% { transform: scale(0.92) } 100% { transform: scale(1) } }
+
+/* 층이 차는 순간 — 그 층의 풍경 둘이 잠깐 흔들렸다 멈춘다. 소리는 없다.
+   매다는 자리가 축이다. */
+.pagoda__bell--stirred { transform-origin: 0 0; animation: bell-sway 1.2s ease-out; }
+@keyframes bell-sway {
+  0% { transform: rotate(0deg) }
+  14% { transform: rotate(3deg) }
+  34% { transform: rotate(-2deg) }
+  54% { transform: rotate(1.2deg) }
+  74% { transform: rotate(-0.6deg) }
+  90% { transform: rotate(0.2deg) }
+  100% { transform: rotate(0deg) }
+}
+
 .pagoda-flier { position: fixed; z-index: 31; transform-origin: 0 0; pointer-events: none; }
 .pagoda-flier path { fill: var(--ink); }
 
