@@ -18,7 +18,7 @@ class TodayController < ApplicationController
     # 바쁜 날에는 낮 내내 아무 말도 하지 않다가 저녁에야 한마디 한다.
     @empty = Current.user.empty_today?
     @day_line = if @empty then "days.empty_today"
-    elsif Current.user.evening? then "days.evening"
+    elsif Current.user.evening? then Evening.line_for(Current.user)
     end
 
     # 비운 날의 아침 첫 화면에서만, 달이 살짝 크게 한 번 숨 쉰다.

@@ -250,6 +250,11 @@ ko:
       nothing: "아무것도 하지 않았다"
     empty_today: 오늘은 비어 있다. 잘 비웠다.
     evening: 바쁜 하루였다. 이제 내려놓아도 된다.
+    # 무원(無願) — 삼해탈문의 셋째. 응원이 아니라 서술이다.
+    without_aim:
+      doer: 하는 이 없이 하는 일이 있다
+      aim: 향하는 곳 없이 간다
+      wish: 바라는 바 없이 한다
     months:
       january: 일월
       february: 이월

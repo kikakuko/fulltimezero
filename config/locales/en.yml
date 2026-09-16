@@ -250,6 +250,11 @@ en:
       nothing: "Did nothing"
     empty_today: Today is empty. You cleared it well.
     evening: It was a busy day. You can put it down now.
+    # Aimlessness — the third of the three doors. A description, not encouragement.
+    without_aim:
+      doer: There is doing, and no doer.
+      aim: Going, with nowhere to arrive.
+      wish: Done, with nothing wanted from it.
     months:
       january: January
       february: February
