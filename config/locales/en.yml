@@ -122,7 +122,7 @@ en:
     back: "Go and write a character"
 
   settings:
-    daily_door: "A breath each time the app opens"
+    daily_door: "Light comes when the app opens"
     clearing_sound: "A bell when keeping today clear"
     threshold_again: "Pass through the first gates again"
     title: Settings

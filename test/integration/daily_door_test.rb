@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 매일 지나는 문 — 앱을 열 때마다 숨 한 번 쉬는 어둠.
+# 매일 지나는 문 — 앱을 열 때마다 빛이 온다.
 require "test_helper"
 
 class DailyDoorTest < ActionDispatch::IntegrationTest
@@ -9,7 +9,7 @@ class DailyDoorTest < ActionDispatch::IntegrationTest
     sign_in_as @user
   end
 
-  test "앱을 열면 숨 한 번의 어둠이 지나가고, 화면을 옮기는 사이에는 다시 오지 않는다" do
+  test "앱을 열면 빛이 오고, 화면을 옮기는 사이에는 다시 오지 않는다" do
     get today_path
     assert_select ".daily-door[data-controller=daily-door]"
 

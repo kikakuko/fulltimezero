@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  # 매일 지나는 문 — 앱을 열 때마다 숨 한 번 쉬는 어둠.
+  # 매일 지나는 문 — 앱을 열 때마다 첫째 문의 빛이 짧게 다가온다.
   # 「앱을 연다」는 것을 한동안 오지 않다가 돌아온 것으로 읽는다.
   # 화면을 옮겨 다니는 사이에는 다시 지나가지 않는다.
   DAILY_DOOR_AFTER = 30.minutes
