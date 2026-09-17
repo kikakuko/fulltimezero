@@ -13,7 +13,9 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%# 아이콘 — 한지 위의 먹빛 코끼리. 주사는 없다(manifest_test). %>
+    <%= tag.link rel: "icon", href: asset_path("icon.svg"), type: "image/svg+xml" %>
+    <%= tag.link rel: "apple-touch-icon", href: asset_path("apple-touch-icon.png"), sizes: "180x180" %>
     <%= tag.link rel: "manifest", href: "/manifest.json" %>
 
     <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
