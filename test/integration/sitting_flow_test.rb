@@ -123,6 +123,29 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     assert_select "form#sitting-form[action=?]", sittings_path, count: 1
     assert_select "form#nothing-form[action=?]", nothing_path, count: 1
     assert_select ".ways button.quiet", false, "한쪽 길만 작다"
+    assert_select ".ways button.button-primary", count: 2, message: "두 길이 같은 먹 알약이 아니다"
+  end
+
+  # 톤 정비 — 앉기의 부품. 산수는 먹틀에, 두 길은 먹 알약 둘, 나오는 길은 조용한 버튼.
+  test "앉기는 부품 다섯으로 선다 — 옛 버튼 없이" do
+    get new_sitting_path
+    assert_select ".elephant-field.ink-frame", count: 1
+    assert_select ".button-primary", count: 2
+    assert_select ".action, button.quiet, .verse", false
+
+    post sittings_path, params: { sitting: { length: SittingLength::DEFAULT } }
+    follow_redirect!
+    assert_select ".night .leave button.button-quiet", count: 1
+    assert_select ".action, button.quiet", false
+
+    post nothing_path
+    follow_redirect!
+    assert_select ".void .leave button.button-quiet", count: 1
+    patch sitting_path(Sitting.order(:id).last)
+    follow_redirect!
+    assert_select "a.button-primary", count: 1
+    assert_select "a.button-quiet", count: 1
+    assert_select ".action", false
   end
 
   private

@@ -199,7 +199,7 @@ a:hover { text-decoration-color: var(--ink); }
 /* ── 부품 다섯 — 피그마 design-tokens ────────────────────────────────
    카드 · 먹 알약 버튼 · 조용한 버튼 · 인용 · 먹틀. 이 밖의 부품은 만들지 않는다
    (태그 · 배지 · 진행 막대 · 아이콘 줄 · 그림자 카드는 palette_test 가 막는다).
-   화면마다 차례로 옮긴다 — 마당 · 날들. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
+   화면마다 차례로 옮긴다 — 마당 · 날들 · 앉기. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
 
 /* 카드 — 한 화면에 하나까지. 그림자를 두르지 않는다. */
 .card { background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 20px; }
@@ -364,7 +364,8 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 }
 
 .leave { position: fixed; right: 1.5rem; bottom: 1.5rem; transition: opacity 900ms ease; }
-.leave .quiet {
+/* 조용한 버튼의 밤 — 몰입 어둠 위에서는 먹 대신 밤의 옅은 빛. */
+.leave .button-quiet {
   border: 0; padding: 0; background: transparent; cursor: pointer;
   font-family: var(--sans); font-size: 0.75rem; color: var(--night-soft);
   text-decoration: underline; text-underline-offset: 0.35em;
@@ -1329,8 +1330,8 @@ input[type="text"].threshold__field {
    자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
 .elephant-field {
   --elephant-width: 80px;   /* 폭. 그림 속 길의 너비에 맞춘 값이다 */
-  /* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
-  position: relative; width: calc(100% + 3rem); aspect-ratio: 864 / 1184; margin: 0 -1.5rem 1rem;
+  /* 먹틀 — 본문 여백 밖으로 조금 나가되, 틀의 가장자리로 화면 양옆 16px 을 남긴다. */
+  position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1184; margin: 0 -0.5rem 1rem;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
   background: url("elephant_field.png") center / cover no-repeat;
 }
