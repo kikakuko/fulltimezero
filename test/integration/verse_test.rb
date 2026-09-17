@@ -5,6 +5,7 @@
 #
 # 황토는 경의 말에만. 경이 아닌 한 줄은 먹. 출전이 장소 · 사람 · 우리 말이면 .verse 가
 # 붙지 않는다 — 한국어 출전이 『경의 이름』으로 시작해야 경이다.
+# 다만 경의 말이 늘 황토인 것은 아니다. 바탕이 밝으면 먹으로 선다(첫째 문).
 #
 # 까닭: 우리가 지은 말에 경전의 색을 입히면 앱이 가르치는 목소리를 낸다(§5). 지은 말
 # 자체는 괜찮다. 경전인 척하는 것이 문제다. 출전이 곁에 서면 그 말이 어디서 왔는지
@@ -65,6 +66,11 @@ class VerseTest < ActionDispatch::IntegrationTest
       end
     end
     assert_equal [ :maitreya ], Compound::CARD_HALLS.reject(&:scripture).map(&:key)
+  end
+
+  test "밝은 바탕의 경의 말은 먹으로 선다 — 첫째 문" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    assert_match(/\.threshold__verse \{[^}]*color: var\(--ink\);/, css, "첫째 문의 경의 말이 먹이 아니다")
   end
 
   test "문의 경 한 줄은 출전과 함께 선다" do

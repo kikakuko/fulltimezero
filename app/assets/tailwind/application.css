@@ -11,9 +11,9 @@
    웹폰트를 내려받지 않는다 — 제3자 요청 없음(SPIRIT 제6조). */
 :root {
   /* ── 밑색 — 피그마 design-tokens 의 여덟, 몰입 어둠, 석간주 셋, 황토.
-     온도: 낮의 화면은 따뜻하고, 몰입은 차다. 한지와 먹, 석간주 · 황토 · 금빛 · 주사는
-     흙과 불의 계열이다. 찬 빛은 몰입 어둠(#0B1216) 하나뿐이고, 앉기 · 무위 · 문 셋이
-     그 색으로 간다. 낮의 화면에 찬 색을 들이려면 이 줄을 먼저 본다.
+     온도: 낮의 화면은 따뜻하다. 한지와 먹, 석간주 · 황토 · 금빛 · 주사는 흙과 불의
+     계열이다. 몰입 어둠(#0B1216)은 앉기 · 무위와 둘째 · 셋째 문에 든다. 첫째 문과 매일의
+     문은 빛이 다가오는 장면이라 밝다. 낮의 화면에 찬 색을 들이려면 이 줄을 먼저 본다.
      이 열셋 밖의 색은 아래 「이름 붙은 예외」에만 있고, 나머지는 모두 이 색들을
      섞어 만든다(palette_test 가 목록째 지킨다). */
 
@@ -58,7 +58,8 @@
   --compound-brightness: 1.04;
   --compound-contrast: 0.96;
 
-  /* 몰입 어둠 — 문과 몰입 화면(앉는 중 · 무위)의 것. 아홉째 밑색. */
+  /* 몰입 어둠 — 앉는 중 · 무위, 둘째 · 셋째 문의 장막, 문의 틀 밖. 첫째 문과 매일의
+     문에서는 빛이 오기 전의 어둠이다. 아홉째 밑색. */
   --night: #0b1216;
   /* 어둠의 여러 단 — 몰입 어둠에 한지를 조금씩 섞는다. 새 색을 들이지 않는다. */
   --night-deep: var(--night);
@@ -929,6 +930,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
     transparent 80%);
 }
 .threshold__quote { margin: 0; display: grid; gap: 0.2rem; justify-items: center; }
+/* 경의 말이지만 먹으로 선다 — 빛이 넘친 밝은 그림 위라 황토가 읽히지 않는다. */
 .threshold__verse { margin: 0; font-family: var(--serif); font-size: 1.125rem; line-height: 1.6; color: var(--ink); }
 .threshold__source { font-family: var(--sans); font-size: 0.75rem; color: var(--mute); }
 .threshold__source cite { font-style: normal; }

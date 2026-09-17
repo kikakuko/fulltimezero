@@ -25,7 +25,8 @@ class PaletteTest < ActionDispatch::IntegrationTest
   # 주사가 결코 닿아서는 안 되는 것.
   NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:button-primary|button-quiet|flash|errors|notice|alert|door)\b/
 
-  # 어두운 자리 — 처음의 문 셋(그림의 어둠) · 매일의 문 · 앉는 중 · 무위.
+  # 어두운 바탕 — 문 셋 · 매일의 문의 틀 밖(첫째 문과 매일의 문은 이 어둠에서 빛이 다가와
+  # 밝아진다) · 앉는 중 · 무위.
   DARK_PLACES = %w[.gates .daily-door .night .void].freeze
 
   test "색 값은 :root 한 곳에만 있다" do
@@ -63,9 +64,10 @@ class PaletteTest < ActionDispatch::IntegrationTest
   OCHER_INK_PLACES = [ ".verse" ].freeze
   OCHER_PICTURE_PLACES = /\A\.(?:void__bloom|compound__halo|maitreya__[\w-]+(?: [\w-]+)?|pagoda__[\w-]+|elephant[\w-]*)\z/
 
-  # 낮의 화면은 따뜻하고, 몰입은 차다. 찬 빛은 몰입 어둠 하나뿐이다 — 한지 · 먹은 흙의
-  # 계열이고(빨강이 파랑보다 높다), 청록은 몰입 화면(무위)에만 쓰인다.
-  test "낮의 화면은 따뜻하고 찬 빛은 몰입 어둠 하나뿐이다" do
+  # 낮의 화면은 따뜻하다 — 한지 · 먹은 흙의 계열이고(빨강이 파랑보다 높다), 찬 청록은
+  # 몰입 어둠이 드는 자리(앉는 중 · 무위)에만 쓰인다. 첫째 문과 매일의 문은 밝으므로 청록이
+  # 닿지 않는다.
+  test "낮의 화면은 따뜻하고 찬 빛은 몰입 어둠의 자리에만 있다" do
     root, = palette_and_rest
     warm = ->(token) { r, _, b = root[/#{token}:\s*#(\h{6})/, 1].scan(/../).map(&:hex); r > b }
 
@@ -74,7 +76,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
     rules.each do |selector, body|
       next unless body.match?(/var\(--verdigris\)/)
-      assert_match(/\A\.(?:void|night|gates|daily-door)/, selector, "청록이 낮의 화면에 쓰였다: #{selector}")
+      assert_match(/\A\.(?:void|night)(?:__|[\s.:]|\z)/, selector, "청록이 낮의 화면이나 밝은 문에 쓰였다: #{selector}")
     end
   end
 
