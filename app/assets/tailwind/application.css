@@ -1338,11 +1338,10 @@ input[type="text"].threshold__field {
      864 / (1184 + 124). 아홉째의 머리가 틀 밖으로 나가지 않는다. */
   position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1308; margin: 0 -0.5rem 1rem;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다.
-     그림은 아래에 붙이고, 위의 자리는 같은 그림의 맨 윗줄을 세로로 늘여 채운다 —
-     족자의 축과 하늘이 끊기지 않는다. */
-  background:
-    url("elephant_field.png") bottom / 100% auto no-repeat,
-    url("elephant_field.png") top / 100% 20000% no-repeat;
+     그림은 아래에 붙인다. 위의 자리는 아직 먹틀 바탕 그대로다 — 그림의 하늘에 세로
+     그러데이션과 가로 결이 있어 늘이거나 단색으로 칠하면 이음매가 선다. 위쪽까지
+     그려진 그림을 다시 받아 채운다(NEXT). */
+  background: url("elephant_field.png") bottom / 100% auto no-repeat, var(--ink-frame);
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
