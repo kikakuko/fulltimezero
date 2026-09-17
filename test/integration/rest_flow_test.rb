@@ -42,7 +42,7 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select ".flash", text: I18n.t("rests.recorded", locale: :ko)
     assert_select ".lead", text: I18n.t("today.done", locale: :ko)
-    assert_select "a.action, a.button-primary", count: 0, message: "오늘 몫이 끝난 화면에는 행동이 없어야 한다"
+    assert_select "a.button-primary", count: 0, message: "오늘 몫이 끝난 화면에는 행동이 없어야 한다"
   end
 
   test "결을 고르지 않아도 기록된다" do

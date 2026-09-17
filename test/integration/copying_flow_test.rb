@@ -232,7 +232,7 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_select ".button-primary", count: 1
     assert_select ".copy-offer button.button-primary[data-copying-target=offer]", text: I18n.t("copyings.offer")
     assert_select ".copy-offer button.button-quiet", text: I18n.t("copyings.rewrite")
-    assert_select "input[type=submit], .action, button.quiet, .verse", false, "옛 버튼이나 인용이 남아 있다"
+    assert_select "input[type=submit], .verse", false, "옛 제출 칸이나 인용이 남아 있다"
   end
 
   test "쓰지 않았다는 선언으로는 한 자가 되지 않는다" do

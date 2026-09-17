@@ -317,7 +317,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert_select ".threshold__way button[type=submit].button-primary", count: 1
     get threshold_breath_path
     assert_select ".threshold__later button.button-quiet", count: 1
-    assert_select "input[type=submit], .action, button.quiet", false
+    assert_select "input[type=submit]", false
 
     css = Rails.root.join("app/assets/tailwind/application.css").read
     assert_match(/\.threshold__way \.button-primary \{ padding: 0\.65rem 2rem; \}/, css, "문의 먹 알약이 커져 사천왕의 자리에 닿는다")

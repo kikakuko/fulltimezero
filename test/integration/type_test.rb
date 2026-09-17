@@ -79,7 +79,7 @@ class TypeTest < ActiveSupport::TestCase
   end
 
   test "손잡이 — 버튼은 고딕이다" do
-    %w[.action button,\ input[type="submit"]].each do |selector|
+    %w[.button-primary button,\ input[type="submit"]].each do |selector|
       body = rules.find { |one, _| one == selector }&.last
       assert_match(/font: var\(--type-ui\)/, body, "#{selector} 가 고딕 손잡이가 아니다")
     end

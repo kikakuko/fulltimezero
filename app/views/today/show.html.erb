@@ -38,7 +38,7 @@
         지키지 못해도 아무 일 없다(제5조 · 제6조). %>
     <div class="tiny clearing" id="clearing" data-controller="maitreya">
       <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
-                    day_path(Current.user.today, from: "today"), method: :patch, class: "quiet button-quiet",
+                    day_path(Current.user.today, from: "today"), method: :patch, class: "button-quiet",
                     data: { action: "click->clearing#declare click->bell#open click->maitreya#rise" },
                     form: { data: { controller: "clearing bell",
                                     clearing_vibrate_value: @vibrate, clearing_declaring_value: !@cleared_today,

@@ -15,7 +15,7 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_select ".button-primary", count: 1
     assert_select "form button[type=submit].button-primary", text: I18n.t("settings.save")
     assert_select "button.button-quiet", count: 2
-    assert_select "input[type=submit], .action, button.quiet, button.plain", false, "옛 버튼이 남아 있다"
+    assert_select "input[type=submit]", false, "옛 제출 칸이 남아 있다"
   end
 
   test "앱을 여는 문의 이름은 「매일의 문」이다" do

@@ -122,7 +122,6 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     assert_select ".ways button[form=nothing-form]", text: I18n.t("sittings.new.nothing"), count: 1
     assert_select "form#sitting-form[action=?]", sittings_path, count: 1
     assert_select "form#nothing-form[action=?]", nothing_path, count: 1
-    assert_select ".ways button.quiet", false, "한쪽 길만 작다"
     assert_select ".ways button.button-primary", count: 2, message: "두 길이 같은 먹 알약이 아니다"
   end
 
@@ -131,12 +130,11 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     get new_sitting_path
     assert_select ".elephant-field.ink-frame", count: 1
     assert_select ".button-primary", count: 2
-    assert_select ".action, button.quiet, .verse", false
+    assert_select ".verse", false
 
     post sittings_path, params: { sitting: { length: SittingLength::DEFAULT } }
     follow_redirect!
     assert_select ".night .leave button.button-quiet", count: 1
-    assert_select ".action, button.quiet", false
 
     post nothing_path
     follow_redirect!
@@ -145,7 +143,6 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select "a.button-primary", count: 1
     assert_select "a.button-quiet", count: 1
-    assert_select ".action", false
   end
 
   private

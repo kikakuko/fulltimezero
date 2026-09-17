@@ -23,7 +23,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
   SEOKGANJU_PLACES = /\A\.pagoda__(?:wash|pillar|under|eave|eave-light|eave-shade|base|base-shade|finial|ring|mast|jewel)\z/
 
   # 주사가 결코 닿아서는 안 되는 것.
-  NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:action|quiet|plain|flash|errors|notice|alert|door)\b/
+  NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:button-primary|button-quiet|flash|errors|notice|alert|door)\b/
 
   # 어두운 자리 — 처음의 문 셋(그림의 어둠) · 매일의 문 · 앉는 중 · 무위.
   DARK_PLACES = %w[.gates .daily-door .night .void].freeze

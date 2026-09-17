@@ -189,17 +189,11 @@ a { color: inherit; text-decoration: underline; text-underline-offset: 0.35em;
     text-decoration-thickness: 1px; text-decoration-color: var(--rule); }
 a:hover { text-decoration-color: var(--ink); }
 
-.action {
-  display: inline-block; font: var(--type-ui);
-  padding: 0.7rem 2.25rem; border: 1px solid var(--rule); border-radius: 999px;
-  text-decoration: none;
-}
-.action:hover { border-color: var(--ink); }
-
 /* ── 부품 다섯 — 피그마 design-tokens ────────────────────────────────
    카드 · 먹 알약 버튼 · 조용한 버튼 · 인용 · 먹틀. 이 밖의 부품은 만들지 않는다
    (태그 · 배지 · 진행 막대 · 아이콘 줄 · 그림자 카드는 palette_test 가 막는다).
-   화면마다 차례로 옮긴다 — 마당 · 날들 · 앉기 · 사경 · 문 셋 · 설정. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
+   여섯 화면(마당 · 날들 · 앉기 · 사경 · 문 셋 · 설정)이 모두 옮겼고, 옛 버튼 규칙은 걷었다
+   (component_test 가 되살아나지 않게 지킨다). */
 
 /* 카드 — 한 화면에 하나까지. 그림자를 두르지 않는다. */
 .card { background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 20px; }
@@ -261,9 +255,6 @@ button, input[type="submit"] {
   border: 1px solid var(--rule); border-radius: 999px; padding: 0.65rem 2rem; cursor: pointer;
 }
 button:hover { border-color: var(--ink); }
-button.plain { border: 0; padding: 0; text-decoration: underline;
-               text-decoration-color: var(--rule); text-underline-offset: 0.35em;
-               font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft); }
 
 .trail {
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 1rem;
@@ -281,7 +272,7 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 
 /* 트랜지션은 없거나 느리다. */
 @media (prefers-reduced-motion: no-preference) {
-  a, button, .action { transition: border-color 400ms ease, text-decoration-color 400ms ease; }
+  a, button { transition: border-color 400ms ease, text-decoration-color 400ms ease; }
 }
 
 /* ── 앉음 ───────────────────────────────────────────────────────────
@@ -376,14 +367,6 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 }
 .leave.veiled { opacity: 0; pointer-events: none; }
 
-/* 무위로 가는 길. 권하지 않으므로 버튼이 아니다. */
-button.quiet {
-  border: 0; padding: 0; background: transparent;
-  font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft);
-  text-decoration: underline; text-underline-offset: 0.35em;
-  text-decoration-color: var(--rule); cursor: pointer;
-}
-
 /* 오 초에 한 번만 다시 재고, 그 사이는 브라우저가 이어 붙인다.
    계단처럼 뚝뚝 끊기지 않게 하려는 것이지 움직임을 보이려는 것이 아니다. */
 /* 죽비 뒤에 입정이 온다.
@@ -442,13 +425,13 @@ button.quiet {
 @keyframes fuller { 0%, 100% { transform: scale(1) } 45% { transform: scale(1.06) } }
 
 /* 기록하고 올리는 순간은 어디서나 같은 결로 응답한다. 살짝 눌리고, 은은한 잔광. 무음. */
-button:active, input[type="submit"]:active, .action:active {
+button:active, input[type="submit"]:active, .button-primary:active {
   transform: scale(0.985);
   box-shadow: 0 0 0 0.4rem color-mix(in srgb, var(--rule) 45%, transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  button, input[type="submit"], .action {
+  button, input[type="submit"], .button-primary {
     transition: transform 150ms ease, box-shadow 150ms ease, border-color 400ms ease;
   }
 }
