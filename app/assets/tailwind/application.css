@@ -85,6 +85,24 @@
   /* 코끼리의 흰빛 — 밝기의 두 끝. 앉기의 코끼리와 강원의 코끼리 아홉이 같이 쓴다. */
   --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
   --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
+  /* 먹선 — 흰빛 1 에서 이만큼 옅어진다(검정에서 한지빛 쪽으로). 남아 있다. */
+  --elephant-ink-fade: 0.55;
+  /* 멀리 있는 다리 — 빛깔을 한 단 어둡게 */
+  --elephant-far: 0.18;
+  /* 걸음 — 다리의 폭과 한 걸음, 몸의 오르내림, 코와 꼬리 */
+  --elephant-stride: 1.8s;
+  --elephant-leg-swing: 5deg;
+  --elephant-bob: 1.5px;
+  --elephant-trunk-swing: 3deg;
+  --elephant-trunk-period: 2.9s;
+  --elephant-tail-swing: 4deg;
+  --elephant-tail-period: 3.7s;
+  /* 흩어짐 — 걸리는 때, 밀리는 거리(무리마다의 방향 × 이만큼), 남는 빛깔 */
+  --elephant-scatter: 3s;
+  --elephant-scatter-reach: 1;
+  --elephant-scatter-fill: 0.35;
+  /* 흩어진 뒤에도 먹선이 아주 옅게 남는다 — 한지 위의 흰 코끼리는 먹선이 없으면 형상째 사라진다. */
+  --elephant-scatter-ink: 0.3;
 
   /* 미륵이 솟을 때 하늘의 금빛 */
   --maitreya-gold: #f3e2b8;
@@ -93,8 +111,13 @@
      황토, 백은 어둠 속 먹빛, 흑은 어둠 그 자체다. 적만 따로 둔다 — 주사가
      아니다. 주사는 하루 한 점이고, 이것은 점이 아니라 번짐이다. */
   --obang-red: #7a3b30;
-  /* 어둠 속 코끼리의 밝기 — 흰빛과 무관한 하나의 값 */
-  --void-elephant: 1.7;
+  /* 어둠 속 코끼리의 흰빛(--ele) — 앉은 날과 무관한 하나의 값 */
+  --void-elephant: 0.66;
+  /* 무위에서 흩어지는 결 — 서 있는 동안, 무리 사이의 어긋남, 무리 하나가 흩어지는 동안.
+     다 합쳐(서 있는 동안 + 어긋남 × 여덟 + 흩어지는 동안) 열한 초 안팎. */
+  --void-still: 1.5s;
+  --void-step: 0.6s;
+  --void-drift: 4.5s;
 
   --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
   --sans: "Noto Sans KR", system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
@@ -217,15 +240,13 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 .void-line { font-family: var(--serif); font-size: 1.25rem; text-align: center; padding: 0 1.5rem; }
 
 /* 무위의 코끼리 — 들면 천천히 흩어져 사라지고, 잠깐 오색이 번진 뒤 어둠.
-   흰빛과 무관하고, 누구든 매번 본다. 조각은 dispersal_controller 가 자른다. */
+   흰빛과 무관하고, 누구든 매번 본다. 부위별 코끼리가 꼬리부터 코까지 차례로,
+   무리마다 제 모양을 지닌 채 떠올라 흐려진다 — 먹선이 먼저, 빛깔이 나중에.
+   조각으로 자르지 않으니 격자도 없다. 스크립트 없이 CSS 만으로 돈다. */
 .void { grid-template-rows: 1fr auto 1fr; }
 .void__scene { position: relative; align-self: end; margin-bottom: 2.5rem; }
-/* 조각이 온 화소로 떨어지게 폭과 높이를 조각 수의 배수로 둔다(스물다섯 × 열다섯). */
-.void__elephant { position: relative; width: 150px; height: 105px; }
-/* 밝기는 조각마다가 아니라 전체에 한 번 — 조각마다 걸면 이음매가 줄로 보인다. */
-.void__elephant { filter: grayscale(1) brightness(var(--void-elephant)); }
-.void__whole { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
-.void__piece { position: absolute; background-repeat: no-repeat; opacity: 0; }
+.void__elephant { position: relative; width: 150px; aspect-ratio: 347 / 243; }
+.void__elephant .elephant { --ele: var(--void-elephant); }
 .void__bloom {
   position: absolute; left: 50%; top: 50%; width: 340px; height: 340px; pointer-events: none;
   transform: translate(-50%, -50%) scale(0.6); opacity: 0; filter: blur(28px);
@@ -237,20 +258,39 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
     radial-gradient(circle at 50% 50%, var(--night-deep), transparent 70%);
 }
 
+/* 흩어지는 차례와 방향 — 꼬리에서 코로. 방향은 그림의 좌표(347 폭)로, 위로 떠오른다.
+   무리는 서로 겹쳐 가려 주는 부분이 있어, 따로 옅어지거나 멀리 벌어지면 가려져
+   있던 잘린 윤곽이 드러난다. 그래서 무리는 거의 함께 떠오르며 차례로 조금씩
+   어긋나고 먹선이 차례로 풀리며, 빛깔은 코끼리 전체가 한꺼번에 옅어진다. */
+.void__elephant .elephant__tail { --void-order: 0; --vx: 8px; --vy: -66px; }
+.void__elephant .elephant__leg-br { --void-order: 1; --vx: 6px; --vy: -60px; }
+.void__elephant .elephant__leg-bl { --void-order: 2; --vx: 3px; --vy: -62px; }
+.void__elephant .elephant__body { --void-order: 3; --vx: 0px; --vy: -70px; }
+.void__elephant .elephant__leg-fr { --void-order: 4; --vx: -3px; --vy: -61px; }
+.void__elephant .elephant__leg-fl { --void-order: 5; --vx: -5px; --vy: -59px; }
+.void__elephant .elephant__head { --void-order: 6; --vx: -6px; --vy: -68px; }
+.void__elephant .elephant__tusk { --void-order: 7; --vx: -8px; --vy: -64px; }
+.void__elephant .elephant__trunk { --void-order: 8; --vx: -9px; --vy: -58px; }
+
 @media (prefers-reduced-motion: no-preference) {
   .void__elephant { animation: void-rise 1.2s ease-out both; }
-  .void__scene--scattering .void__whole { visibility: hidden; }
-  .void__scene--scattering .void__piece { animation-name: void-scatter; animation-timing-function: ease-in; animation-fill-mode: both; }
-  .void__scene--scattering .void__bloom { animation: void-bloom 4.5s ease-in-out both; }
+  .void__elephant g[class^="elephant__"]:not(.elephant__parts) {
+    --void-delay: calc(var(--void-still) + var(--void-order) * var(--void-step));
+    animation: void-part var(--void-drift) ease-in var(--void-delay) both;
+  }
+  .void__elephant .elephant { animation: void-vanish calc(8 * var(--void-step) + var(--void-drift)) ease-in var(--void-still) both; }
+  .void__elephant .e-ink { animation: void-ink calc(var(--void-drift) * 0.45) ease-in var(--void-delay) both; }
+  .void__bloom { animation: void-bloom 4.5s ease-in-out calc(var(--void-still) + 8 * var(--void-step) + 0.5s) both; }
 }
 /* 움직임을 줄이면 흩어지지 않고, 그 자리에서 옅어지기만 한다. */
-.void__scene--still .void__whole { animation: void-fade 11s ease-in forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .void__elephant { animation: void-fade 11s ease-in forwards; }
+}
 
 @keyframes void-rise { from { opacity: 0 } to { opacity: 1 } }
-@keyframes void-scatter {
-  0% { opacity: 1; transform: none; }
-  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--turn)); filter: blur(3px); }
-}
+@keyframes void-part { from { translate: 0 0; } to { translate: var(--vx) var(--vy); } }
+@keyframes void-vanish { 0%, 20% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes void-ink { from { opacity: 1 } to { opacity: 0 } }
 @keyframes void-bloom {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
   45% { opacity: 0.55; }
@@ -1222,44 +1262,141 @@ input[type="text"].threshold__field {
 .ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin: 2rem 0 1rem; }
 .choices--aside { margin: 0.5rem 0 0; }
 
-/* 자리 — 발이 길의 가운데 선에 닿는다. */
-.elephant {
+/* 자리 틀 — 발이 길의 가운데 선에 닿는다. 길 위의 자리 · 비스듬함 · 방향만
+   맡고, 그 안의 코끼리(.elephant)는 부위별로 걷는다. */
+.elephant-place {
   position: absolute; left: var(--x, 0%); top: var(--y, 0%);
   width: var(--elephant-width); aspect-ratio: 347 / 243;
   transform: translate(-50%, -100%);
   pointer-events: none;
 }
-.elephant--walking { transition: left 1s ease-out, top 1s ease-out; }
-
+/* 흰빛이 바뀐 날 어제의 자리에서 오늘의 자리로 — 그동안에도 다리는 걷는다. */
+.elephant-place--walking { transition: left 1s ease-out, top 1s ease-out; }
 /* 방향 — 접선만큼 비스듬해지고, 오른쪽으로 갈 때는 뒤집힌다. 축은 발. */
-.elephant__body {
+.elephant-place__turn {
   width: 100%; height: 100%; transform-origin: 50% 100%;
   transform: rotate(var(--angle, 0deg)) scaleX(var(--flip, 1));
 }
-
-/* 밝기 — 흰빛만큼. 원본의 색기는 지우고 밝기만 남긴다. */
-.elephant__whole {
-  display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none;
-  filter: grayscale(1) brightness(calc(var(--elephant-dark) + var(--whiteness, 0) * (var(--elephant-light) - var(--elephant-dark))));
-}
-
-/* 접지 그림자 — 발밑. 검정 스물둘 퍼센트. */
-.elephant__shadow {
+/* 접지 그림자 — 발밑. */
+.elephant-place__shadow {
   position: absolute; left: 50%; bottom: -4px; width: 44px; height: 8px;
   transform: translateX(-50%); border-radius: 50%;
   background: color-mix(in srgb, var(--ink) 22%, transparent);
 }
-
-/* 걸음 — 다리는 아직 움직이지 않는다. 몸이 살짝 뜨고, 그림자는 반대로 줄어든다. */
-@media (prefers-reduced-motion: no-preference) {
-  .elephant__whole { animation: elephant-step 0.8s ease-in-out infinite alternate; }
-  .elephant__shadow { animation: elephant-shadow 0.8s ease-in-out infinite alternate; }
-}
-@keyframes elephant-step { from { transform: translateY(0) } to { transform: translateY(-3px) } }
-@keyframes elephant-shadow { from { transform: translateX(-50%) scaleX(1) } to { transform: translateX(-50%) scaleX(0.94) } }
 @media (prefers-reduced-motion: reduce) {
-  .elephant--walking { transition: none; }
+  .elephant-place--walking { transition: none; }
 }
+
+/* ── 코끼리 — 부위별 ───────────────────────────────────────────────
+   elephant_parts.svg 의 무리 아홉(body · tail · leg-br · leg-bl · leg-fr · leg-fl ·
+   trunk · head · tusk)이 그 차례로 겹친다. 파일에는 색이 없다.
+
+   색 — 흰빛 --ele(0 ~ 1) 하나로. 밝기 필터를 쓰지 않고 색을 직접 섞는다 —
+   먹선까지 같이 밝아지면 형상이 먼저 사라진다. :root 의 두 끝값(0.35 · 2.40)을
+   그대로 쓴다: 밝기 L = 어두운 끝 + 흰빛 × (밝은 끝 − 어두운 끝) 을 밝은 끝으로
+   나눈 만큼이 한지빛이고 나머지가 먹빛이다. 0 이면 먹빛, 1 이면 흰빛.
+   먹선은 0 에서 검정, 1 에서도 남아 있되 옅어진다. 상아는 늘 한지빛.
+   멀리 있는 다리(data-depth="far")는 한 단 어둡다.
+
+   걸음 — CSS 키프레임만. 오르내림은 translate, 흔들림은 rotate 로 따로 걸어 서로
+   덮지 않는다. 축(transform-origin)은 각 무리의 data-pivot 이다. 어긋난 짝
+   (앞오른 · 뒤왼)과 (앞왼 · 뒤오른)이 반 주기 어긋나게 돈다. 코와 꼬리의 주기는
+   걸음과 나누어떨어지지 않는다 — 기계처럼 보이지 않게. 귀는 머리 안에 있어
+   따로 움직이지 않는다.
+
+   도상은 말하지 않는다 — 걷는 것은 말하는 것이 아니다. 코끼리 곁에 숫자 ·
+   이름 · 「지금 여기」를 붙이지 않는다. */
+.elephant { display: block; width: 100%; height: 100%; }
+.elephant__art { display: block; width: 100%; height: 100%; overflow: visible; }
+.elephant .e-fill {
+  fill: color-mix(in srgb, var(--paper)
+    calc((var(--elephant-dark) + var(--ele, 0) * (var(--elephant-light) - var(--elephant-dark))) / var(--elephant-light) * 100%),
+    var(--ink));
+}
+.elephant .e-ink { fill: color-mix(in srgb, var(--night-deep) calc((1 - var(--ele, 0) * var(--elephant-ink-fade)) * 100%), var(--paper)); }
+.elephant .elephant__tusk .e-fill { fill: var(--paper); }
+.elephant [data-depth="far"] .e-fill {
+  fill: color-mix(in srgb, var(--paper)
+    calc((var(--elephant-dark) + var(--ele, 0) * (var(--elephant-light) - var(--elephant-dark))) / var(--elephant-light) * (1 - var(--elephant-far)) * 100%),
+    var(--ink));
+  /* 겹치는 차례는 그림의 것이라 먼 다리가 몸통 위에 그려진다. 한 단 어두운 빛깔이
+     몸통 안에서 네모로 드러나지 않게, 먹선이 시작되는 곳 위는 풀어 몸통이 비치게 한다. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 40%, black 50%);
+  mask-image: linear-gradient(to bottom, transparent 40%, black 50%);
+}
+
+.elephant__art g { transform-box: view-box; }
+.elephant__leg-fr { transform-origin: 133px 125px; }
+.elephant__leg-fl { transform-origin: 157px 125px; }
+.elephant__leg-bl { transform-origin: 273px 125px; }
+.elephant__leg-br { transform-origin: 297px 125px; }
+.elephant__trunk { transform-origin: 53px 101px; }
+.elephant__tail { transform-origin: 333px 109px; }
+.elephant__head { transform-origin: 95px 84px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .elephant--walking-legs .elephant__leg-fr,
+  .elephant--walking-legs .elephant__leg-bl { animation: elephant-leg var(--elephant-stride) ease-in-out infinite; }
+  .elephant--walking-legs .elephant__leg-fl,
+  .elephant--walking-legs .elephant__leg-br { animation: elephant-leg var(--elephant-stride) ease-in-out calc(var(--elephant-stride) / -2) infinite; }
+  .elephant--walking-legs .elephant__body,
+  .elephant--walking-legs .elephant__head,
+  .elephant--walking-legs .elephant__tusk { animation: elephant-bob calc(var(--elephant-stride) / 2) ease-in-out infinite; }
+  .elephant--walking-legs .elephant__trunk {
+    animation: elephant-bob calc(var(--elephant-stride) / 2) ease-in-out infinite,
+               elephant-trunk var(--elephant-trunk-period) ease-in-out infinite;
+  }
+  .elephant--walking-legs .elephant__tail {
+    animation: elephant-bob calc(var(--elephant-stride) / 2) ease-in-out infinite,
+               elephant-tail var(--elephant-tail-period) ease-in-out infinite;
+  }
+}
+@keyframes elephant-leg {
+  0%, 100% { rotate: var(--elephant-leg-swing); }
+  50% { rotate: calc(-1 * var(--elephant-leg-swing)); }
+}
+@keyframes elephant-bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 calc(-1 * var(--elephant-bob)); }
+}
+@keyframes elephant-trunk {
+  0%, 100% { rotate: var(--elephant-trunk-swing); }
+  50% { rotate: calc(-1 * var(--elephant-trunk-swing)); }
+}
+@keyframes elephant-tail {
+  0%, 100% { rotate: calc(-1 * var(--elephant-tail-swing)); }
+  50% { rotate: var(--elephant-tail-swing); }
+}
+
+/* 형상을 잃는 것 — 아홉째. 사라지는 것이 아니라 흩어지는 것이다. 아홉 무리가
+   저마다 아주 조금씩 다른 쪽으로 밀리고, 먹선이 먼저 옅어진 뒤 빛깔이 따라
+   옅어진다. 윤곽이 먼저 풀리고 빛깔이 나중에 풀린다. 한 번 흩어지면 되돌아오지
+   않는다 — 다시 모이는 움직임은 없다. 흩어지면 걷지도 않는다. */
+.elephant--scattering g[class^="elephant__"], .elephant--scattered g[class^="elephant__"] { animation: none; }
+.elephant__body { --dx: 0px; --dy: 2px; }
+.elephant__tail { --dx: 4px; --dy: -1px; }
+.elephant__leg-br { --dx: 3px; --dy: 3px; }
+.elephant__leg-bl { --dx: 1px; --dy: 4px; }
+.elephant__leg-fr { --dx: -2px; --dy: 3px; }
+.elephant__leg-fl { --dx: -1px; --dy: 4px; }
+.elephant__trunk { --dx: -4px; --dy: 2px; }
+.elephant__head { --dx: -3px; --dy: -2px; }
+.elephant__tusk { --dx: -4px; --dy: -1px; }
+.elephant--scattered g[class^="elephant__"]:not(.elephant__parts) { translate: calc(var(--dx) * var(--elephant-scatter-reach)) calc(var(--dy) * var(--elephant-scatter-reach)); }
+.elephant--scattered .e-ink { opacity: var(--elephant-scatter-ink); }
+.elephant--scattered .e-fill { opacity: var(--elephant-scatter-fill); }
+@media (prefers-reduced-motion: no-preference) {
+  .elephant--scattering g[class^="elephant__"]:not(.elephant__parts) { animation: elephant-drift var(--elephant-scatter) ease-out forwards; }
+  .elephant--scattering .e-ink { animation: elephant-ink-loosen var(--elephant-scatter) ease-in forwards; }
+  .elephant--scattering .e-fill { animation: elephant-fill-loosen var(--elephant-scatter) ease-in forwards; }
+}
+/* 움직임을 줄이면 흩어지는 동안도 없다 — 그 자리에 선 코끼리. */
+@media (prefers-reduced-motion: reduce) {
+  .elephant--scattering g[class^="elephant__"]:not(.elephant__parts) { translate: none; }
+}
+@keyframes elephant-drift { to { translate: calc(var(--dx) * var(--elephant-scatter-reach)) calc(var(--dy) * var(--elephant-scatter-reach)); } }
+@keyframes elephant-ink-loosen { 0% { opacity: 1; } 55% { opacity: var(--elephant-scatter-ink); } 100% { opacity: var(--elephant-scatter-ink); } }
+@keyframes elephant-fill-loosen { 0%, 40% { opacity: 1; } 100% { opacity: var(--elephant-scatter-fill); } }
 
 /* ── 흩어 놓은 돌 — 아홉 자리 ─────────────────────────────────────
    순서가 읽히지 않게 흩어 놓는다. 사다리가 아니다. 돌 하나에 이름 하나. */
@@ -1297,10 +1434,7 @@ input[type="text"].threshold__field {
 
 /* 탕카의 코끼리 아홉 — 검정에서 흼으로. 안내일 뿐, 앉기의 코끼리와 잇지 않는다. */
 .elephants { display: grid; grid-template-columns: repeat(9, 1fr); gap: 0.2rem; align-items: end; margin: 2.5rem 0 0.5rem; }
-.elephants__one {
-  width: 100%; height: auto; aspect-ratio: 347 / 243; object-fit: contain; user-select: none; -webkit-user-drag: none;
-  filter: grayscale(1) brightness(calc(var(--elephant-dark) + var(--whiteness, 0) * (var(--elephant-light) - var(--elephant-dark))));
-}
+.elephants__one { display: block; aspect-ratio: 347 / 243; }
 
 /* Turbo 의 기본 진행 막대는 파랑이라 이 앱의 먹색과 어긋난다. */
 .turbo-progress-bar { background-color: var(--ink-soft); height: 2px; }

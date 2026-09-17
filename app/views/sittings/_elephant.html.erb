@@ -16,10 +16,13 @@
     <% end %>
   </svg>
 
-  <div class="elephant" data-elephant-target="figure">
-    <span class="elephant__shadow" aria-hidden="true"></span>
-    <div class="elephant__body">
-      <%= image_tag "elephant.png", class: "elephant__whole", alt: t("sittings.elephant.alt"), draggable: false %>
+  <%# 자리 틀 — 길 위의 자리 · 비스듬함 · 방향. 그 안의 코끼리는 부위별로 걷는다.
+      아홉째 정거장에 닿으면 형상을 잃는다 — 흩어지는 것이지 사라지는 것이 아니다. %>
+  <div class="elephant-place" data-elephant-target="figure">
+    <span class="elephant-place__shadow" aria-hidden="true"></span>
+    <div class="elephant-place__turn">
+      <%= elephant_figure ele: reading.whiteness, walking: true, label: t("sittings.elephant.alt"),
+                          scattered: (reading.station == Elephant::STATIONS - 1 ? (moving ? :now : :already) : nil) %>
     </div>
   </div>
 </div>

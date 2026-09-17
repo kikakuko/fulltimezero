@@ -20,7 +20,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     @abidings.each do |abiding|
       assert_select "a.elephant-field__stop[href=?] .elephant-field__station", abiding_path(abiding), text: abiding.ko
     end
-    assert_select ".elephant img.elephant__whole[src*=elephant]", count: 1
+    assert_select ".elephant-place .elephant svg.elephant__art[role=img][aria-label]", count: 1
+    assert_select ".elephant-place .elephant.elephant--walking-legs", count: 1
 
     # 맨 위 — 앉는다 · 아무것도 하지 않는다보다 앞에 선다.
     main = Nokogiri::HTML(response.body).css("main").to_html
@@ -53,13 +54,16 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "흰빛은 그림의 밝기로만 보이고, 양 끝은 상수다" do
+  test "흰빛은 그림의 색으로만 보이고, 양 끝은 상수다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
 
     assert_match(/--elephant-dark: 0\.35;/, css)
     assert_match(/--elephant-light: 2\.4;/, css)
     assert_match(/--elephant-width: 80px;/, css)
-    assert_match(/filter: grayscale\(1\) brightness\(calc\(var\(--elephant-dark\)/, css)
+    assert_match(/\.elephant \.e-fill \{\s*fill: color-mix\(in srgb, var\(--paper\)\s*calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\)/m, css)
+
+    get new_sitting_path
+    assert_select ".elephant-place .elephant[style=?]", "--ele: #{Elephant.for(@user).whiteness.round(4)};"
   end
 
   test "앵커는 그리는 쪽과 재는 쪽이 같다" do
@@ -80,15 +84,32 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_equal Elephant::ANCHORS.map(&:last).sort.reverse, Elephant::ANCHORS.map(&:last), "길이 올라가지 않는다"
   end
 
-  test "걸음은 여덟 할 초를 오가고, 움직임을 줄이면 멈춘다" do
+  # 코끼리는 길 위에서 걷는다. 흰빛이 바뀐 날 곡선 위를 가는 동안에도 걸음은 이어진다.
+  test "걸음은 부위별로 이어지고, 길 위를 가는 동안에도 멈추지 않는다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
 
-    assert_match(/\.elephant__whole \{ animation: elephant-step 0\.8s ease-in-out infinite alternate; \}/, css)
-    assert_match(/\.elephant__shadow \{ animation: elephant-shadow 0\.8s ease-in-out infinite alternate; \}/, css)
-    assert_match(/translateY\(-3px\)/, css)
-    assert_match(/scaleX\(0\.94\)/, css)
-    assert_match(/prefers-reduced-motion: no-preference\) \{\s*\.elephant__whole \{ animation/, css, "움직임을 줄여도 걷는다")
-    assert_match(/\.elephant--walking \{ transition: left 1s ease-out, top 1s ease-out; \}/, css)
+    assert_match(/\.elephant-place--walking \{ transition: left 1s ease-out, top 1s ease-out; \}/, css)
+    assert_match(/\.elephant--walking-legs \.elephant__leg-fr,\s*\.elephant--walking-legs \.elephant__leg-bl \{ animation: elephant-leg var\(--elephant-stride\) ease-in-out infinite; \}/, css)
+    assert_no_match(/elephant-place--walking[^{]*\{[^}]*animation/, css, "길 위를 가는 동안 걸음이 따로 멈춘다")
+
+    js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
+    assert_match(/classList\.add\("elephant-place--walking"\)/, js)
+    assert_no_match(/requestAnimationFrame\(\s*function|setInterval|--whiteness/, js, "스크립트가 걸음을 매 프레임 그린다")
+  end
+
+  test "아홉째 정거장에 닿으면 형상을 잃는다 — 닿는 날은 흩어지고, 그 뒤로는 흩어진 채" do
+    Elephant::WINDOW_DAYS.times { |i| @user.rests.create!(rested_on: @user.today - i, duration: "a_while") }
+    assert_equal Elephant::STATIONS - 1, Elephant.for(@user).station
+
+    get new_sitting_path
+    assert_select ".elephant-place .elephant.elephant--scattering", count: 1
+
+    get new_sitting_path
+    assert_select ".elephant-place .elephant.elephant--scattered", count: 1, message: "흩어진 뒤 다시 모인다"
+
+    @user.rests.destroy_all
+    get new_sitting_path
+    assert_select ".elephant-place .elephant.elephant--scattered, .elephant-place .elephant.elephant--scattering", false
   end
 
   test "흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다" do

@@ -3,8 +3,8 @@
 // 코끼리의 길. 서버가 준 흰빛(0 ~ 1)만큼 숨긴 길을 따라가 코끼리를 놓는다.
 // 길은 화면에 그리지 않는다 — 시각적 길은 배경 그림 안에 있다.
 //
-// 자리 · 방향 · 밝기는 따로 계산해 CSS 변수로 넘긴다. 나중에 그림을
-// 부위별 SVG 로 갈아 끼워도 이 계산은 그대로 쓴다.
+// 자리 · 방향만 계산해 CSS 변수로 넘긴다. 밝기(흰빛)는 서버가 --ele 로 그림에
+// 직접 준다. 그림은 부위별 SVG 이고, 걸음은 CSS 가 맡는다.
 //
 // 아홉 자리와 잇지 않는다. 여기에는 골라 둔 자리에 대한 것이 아무것도 없다.
 import { Controller } from "@hotwired/stimulus"
@@ -37,13 +37,12 @@ export default class extends Controller {
     this.pathTarget.setAttribute("d", catmullRom(road(ANCHORS, BENDS)))
 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
-    this.figureTarget.style.setProperty("--whiteness", this.whitenessValue)
 
     // 흰빛이 바뀐 날에만, 어제의 자리에서 오늘의 자리로 걸어온다.
     if (this.movingValue && !reduced) {
       this.place(this.yesterdayValue)
       this.frame = requestAnimationFrame(() => requestAnimationFrame(() => {
-        this.figureTarget.classList.add("elephant--walking")
+        this.figureTarget.classList.add("elephant-place--walking")
         this.place(this.whitenessValue)
       }))
     } else {

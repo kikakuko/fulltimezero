@@ -47,9 +47,11 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @user
     get guide_chapter_path("abidings")
 
-    ones = css_select(".elephants img.elephants__one[src*=elephant]")
+    ones = css_select(".elephants .elephants__one .elephant")
     assert_equal 9, ones.size
-    assert_equal (0..8).map { |step| "--whiteness: #{(step / 8.0).round(3)};" }, ones.map { |one| one["style"] }
+    assert_equal (0..8).map { |step| "--ele: #{(step / 8.0).round(3)};" }, ones.map { |one| one["style"] }
+    assert_equal [ false ] * 8 + [ true ], ones.map { |one| one["class"].include?("elephant--scattered") }, "아홉째만 형상을 잃은 채가 아니다"
+    assert_empty ones.select { |one| one["class"].include?("walking") }, "강원의 코끼리 아홉이 걷는다"
     assert_select ".elephants .here, .elephants [aria-current], .elephants .current", false
     assert_no_match(/지금 여기|현재 위치|너는 여기|you are here|current(ly)? (place|stage)/i, visible_text)
 
@@ -57,7 +59,7 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/Elephant|whiteness_for|Current\.user|@elephant|sittings/, view, "코끼리 아홉이 앉은 기록과 이어졌다")
 
     css = Rails.root.join("app/assets/tailwind/application.css").read
-    assert_match(/\.elephants__one \{[^}]*brightness\(calc\(var\(--elephant-dark\) \+ var\(--whiteness, 0\)/m, css)
+    assert_no_match(/\.elephants__one \{[^}]*(?:brightness|filter)/m, css, "코끼리 아홉이 다른 색 계산을 쓴다")
     root = css[/:root \{.*?\n\}/m]
     assert_match(/--elephant-dark: 0\.35;/, root)
     assert_match(/--elephant-light: 2\.4;/, root)
