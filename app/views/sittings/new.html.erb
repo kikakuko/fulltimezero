@@ -3,6 +3,8 @@
     카드도 태그도 「다른 길」 목록도 없다.
     길이는 글자로만 적는다 — 숫자는 화면에 없다.
     종성은 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
+<%= render "compound/hall_header", key: :sitting %>
+
 <%= render "elephant", reading: @elephant, moving: @elephant_moving,
            anchors: Elephant::ANCHORS,
            abidings: @abidings %>

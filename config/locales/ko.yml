@@ -20,6 +20,7 @@ ko:
   # 경내 조감도. 방은 장소이지 할 일이 아니다 — 이름뿐이다.
   compound:
     alt: 경내
+    close: 닫는다
     halls:
       sitting: 선방
       maitreya: 미륵당
@@ -27,6 +28,30 @@ ko:
       lecture: 강원
       courtyard: 마당
       gate: 문
+    # 전각을 누르면 뜨는 카드의 글. 한 줄은 방 안에서도 머리로 다시 쓰인다.
+    # 경구는 그 전각과 이어지는 짧은 구절이고, 인용 원문 예외 아래 있다(§5).
+    detail:
+      sitting:
+        line: 앉는 곳. 검은 코끼리가 길을 간다.
+        verse: 붙들되 쥐지 않는다
+        enter: 선방으로 든다
+      copying:
+        line: 한 자씩 옮겨 쓰는 곳. 글자가 탑이 된다.
+        verse: 경이 있는 곳은 어디든 탑묘와 같다
+        enter: 사경실로 든다
+      maitreya:
+        line: 비운 날에 미륵이 땅에서 올라오는 곳.
+        verse: 오래 기다리는 이가 여기 있다
+        source: 수원 파장동 미륵당
+        enter: 미륵당으로 든다
+      lecture:
+        line: 읽는 곳. 쉼에 대하여 옛사람들이 남긴 말.
+        verse: 열반이 으뜸가는 즐거움
+        enter: 강원으로 든다
+      gate:
+        line: 들어온 자리. 다시 지날 수 있다.
+        verse: 나는 멈추었다
+        enter: 문으로 든다
 
   gate:
     line: 쉼은 배우는 것이 아니라 되찾는 것이다.

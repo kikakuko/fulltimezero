@@ -12,9 +12,15 @@
 :root {
   /* 한지 — 사경지, 전각의 벽 */
   --paper: #f5efe2;
+  /* 한지 짙은 곳 — 카드 테두리 같은 자리. 9번 톤 정비의 여덟 토큰 가운데
+     둘을 전각 카드를 위해 먼저 들인다. 값은 그때와 같다. */
+  --paper-deep: #eae5d8;
+  /* 카드의 바탕 — 한지보다도 밝다. 마찬가지로 9번 톤 정비에서 다시 나올 값. */
+  --paper-card: #fbf9f4;
   /* 먹 */
   --ink: #1c1a17;
   --ink-soft: #6b655c;
+  --mute: #8c8579;
   --rule: #e0d7c5;
 
   /* 주사(朱砂) — 탑다라니의 붉은 인쇄. 하루에 한 번만 보인다.
@@ -622,6 +628,78 @@ input[type="text"].threshold__field {
 }
 .compound__hall:hover .compound__name { text-decoration: underline; text-underline-offset: 0.3em; text-decoration-color: var(--rule); }
 .compound__hall:focus-visible { outline: 1px solid var(--ink-soft); outline-offset: 2px; }
+
+/* ── 전각에 드는 흐름 ────────────────────────────────────────────────
+   전각을 누르면 카드가 아래에서 올라와 무엇이 있는 곳인지 말한다. 「든다」를
+   누르면 조감도가 그 전각을 향해 커지며 한지빛으로 옅어지고, 그 방으로
+   넘어간다. 카드는 구조이지 움직임이 아니라 움직임을 줄여도 그대로 뜨고,
+   확대 · 축소만 건너뛴다.
+
+   경구의 강조는 --cinnabar 를 쓰지 않는다 — 하루 한 번(방금 올린 글자 ·
+   미륵이 오르는 순간)만의 것이라는 §2 의 규칙과 부딪힌다. 단청의 황토로
+   대신한다. */
+.compound__scene { position: relative; transform-origin: 50% 50%; }
+.compound--zooming .compound__scene {
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  transform: scale(2.6);
+  transition: transform 0.7s ease-in;
+}
+
+/* 누른 전각 뒤의 옅은 후광. */
+.compound__halo {
+  position: absolute; width: 22%; aspect-ratio: 3 / 2; transform: translate(-50%, -50%);
+  border-radius: 50%; pointer-events: none; z-index: 1;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--dancheong-ocher) 18%, transparent), transparent 72%);
+}
+
+.compound__veil {
+  position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none; z-index: 2;
+}
+.compound--zooming .compound__veil { opacity: 1; transition: opacity 0.7s ease-in; }
+
+.compound__zoom-label {
+  position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; margin: 0;
+  font-family: var(--serif); font-size: 1.15rem; color: var(--ink); opacity: 0; pointer-events: none;
+}
+.compound--zooming .compound__zoom-label { opacity: 1; transition: opacity 0.3s ease 0.4s; }
+
+/* 카드와 뒷막 — 화면을 바꾸지 않고 아래에서 올라온다. */
+.compound__backdrop {
+  position: fixed; inset: 0; z-index: 20; background: transparent;
+  opacity: 0; pointer-events: none; transition: opacity 0.35s ease-out;
+}
+.compound--card-open .compound__backdrop { opacity: 1; pointer-events: auto; }
+
+.compound__card {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; height: 300px;
+  background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 24px 24px 0 0;
+  box-sizing: border-box; padding: 1.75rem 2rem 2rem;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.35rem;
+  transform: translateY(100%); transition: transform 0.35s ease-out;
+}
+.compound--card-open .compound__card { transform: translateY(0); }
+
+.compound__card-close {
+  position: absolute; top: 0.6rem; right: 0.9rem; border: 0; background: none; cursor: pointer;
+  font-size: 1.4rem; line-height: 1; color: var(--mute); padding: 0.4rem;
+}
+.compound__card-name { font-family: var(--serif); font-weight: 700; font-size: 1.375rem; color: var(--ink); margin: 0.75rem 0 0; }
+.compound__card-han { font-family: var(--serif); font-size: 0.9375rem; color: var(--mute); margin: 0; }
+.compound__card-line { font-family: var(--serif); font-size: 0.9375rem; color: var(--ink-soft); margin: 0.6rem 0 0; }
+.compound__card-verse { font-family: var(--serif); font-size: 0.875rem; color: var(--dancheong-ocher); margin: 0.75rem 0 0; }
+.compound__card-source { font-family: var(--sans); font-size: 0.6875rem; color: var(--mute); margin: 0.15rem 0 0; }
+.compound__card .action { margin-top: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .compound--zooming .compound__scene,
+  .compound--zooming .compound__veil,
+  .compound--zooming .compound__zoom-label { transition: none; }
+}
+
+/* 방 머리 — 전각 이름과 한 줄. 경내에서 들어온 자리임을 알린다. */
+.hall-header { margin-bottom: 2rem; }
+.hall-header__name { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; color: var(--ink); margin: 0; }
+.hall-header__line { font-family: var(--sans); font-size: 0.75rem; color: var(--mute); margin: 0.3rem 0 0; }
 
 /* ── 미륵 ────────────────────────────────────────────────────────────
    땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나 올라왔는지는

@@ -18,6 +18,7 @@ en:
 
   compound:
     alt: The grounds
+    close: Close
     halls:
       sitting: Sitting hall
       maitreya: Maitreya hall
@@ -25,6 +26,31 @@ en:
       lecture: Lecture hall
       courtyard: Courtyard
       gate: Gate
+    # The card's words when a hall is tapped. The line is used again as the
+    # room's own heading. The verse is a short line paired with that hall,
+    # under the quoted-original exception (§5) for its source.
+    detail:
+      sitting:
+        line: Where sitting happens. A dark elephant walks the path.
+        verse: Held, not gripped
+        enter: Enter the sitting hall
+      copying:
+        line: Where one character is copied at a time. The characters become a pagoda.
+        verse: Wherever this sūtra is kept is like a shrine
+        enter: Enter the copying hall
+      maitreya:
+        line: Where Maitreya rises from the ground on days kept clear.
+        verse: One who waits long is here
+        source: The Maitreya shrine, Pajang-dong, Suwon
+        enter: Enter Maitreya hall
+      lecture:
+        line: Where old words about rest are read.
+        verse: Nibbāna is the highest ease
+        enter: Enter the lecture hall
+      gate:
+        line: Where you came in. It can be crossed again.
+        verse: I have stopped
+        enter: Enter the gate
 
   gate:
     line: Rest is not learned. It is remembered.

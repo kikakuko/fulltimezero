@@ -1,9 +1,50 @@
-<%# 경내 조감도. 전각을 누르면 그 자리로. 누르는 자리는 그림 위의 이름뿐이다 —
-    테두리도 버튼 모양도 없다. 자리와 크기는 Compound::HALLS 한 곳에서 온다. %>
-<div class="compound">
-  <%= image_tag "compound.png", class: "compound__map", alt: t("compound.alt"), draggable: false %>
-  <% Compound::HALLS.each do |hall| %>
-    <%= link_to compound_path_for(hall), class: "compound__hall compound__hall--#{hall.key}",
-                style: "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%" do %><span class="compound__name"><%= t("compound.halls.#{hall.key}") %></span><% end %>
-  <% end %>
+<%# 경내 조감도. 전각을 누르면 카드가 올라와 무엇이 있는 곳인지 말하고,
+    「든다」를 누르면 조감도가 그 전각을 향해 커지며 한지빛으로 옅어진 뒤
+    그 방으로 넘어간다(app/javascript/controllers/compound_controller.js).
+    마당은 스스로를 가리키므로 카드 없이 곧장 아래로 간다.
+    자리와 크기는 Compound::HALLS 한 곳에서 온다. %>
+<div class="compound" data-controller="compound">
+  <div class="compound__scene" data-compound-target="scene">
+    <%= image_tag "compound.png", class: "compound__map", alt: t("compound.alt"), draggable: false %>
+    <span class="compound__halo" data-compound-target="halo" hidden></span>
+
+    <% Compound::HALLS.each do |hall| %>
+      <% if hall.key == :courtyard %>
+        <%= link_to compound_path_for(hall), class: "compound__hall compound__hall--courtyard",
+                    style: "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%" do %>
+          <span class="compound__name"><%= t("compound.halls.courtyard") %></span>
+        <% end %>
+      <% else %>
+        <%= link_to compound_path_for(hall), class: "compound__hall compound__hall--#{hall.key}",
+                    style: "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%",
+                    data: { action: "click->compound#open",
+                            compound_key_param: hall.key, compound_cx_param: hall.cx, compound_cy_param: hall.cy,
+                            compound_name_param: t("compound.halls.#{hall.key}"), compound_han_param: hall.han,
+                            compound_line_param: t("compound.detail.#{hall.key}.line"),
+                            compound_verse_param: t("compound.detail.#{hall.key}.verse"),
+                            # 미륵당의 출전은 숫자가 없어 로케일에 둘 수 있다. 나머지 넷은
+                            # 숫자를 담고 있어 로케일에 둘 수 없고(카피에 숫자 0), 자리 쪽
+                            # 스크립트의 상수에서 온다(compound_controller.js 의 SOURCES).
+                            compound_source_param: (hall.key == :maitreya ? t("compound.detail.maitreya.source") : nil),
+                            compound_enter_param: t("compound.detail.#{hall.key}.enter") } do %>
+          <span class="compound__name"><%= t("compound.halls.#{hall.key}") %></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="compound__veil" data-compound-target="veil" aria-hidden="true"></div>
+  <p class="compound__zoom-label" data-compound-target="zoomLabel"></p>
+
+  <div class="compound__backdrop" data-compound-target="backdrop" data-action="click->compound#close"></div>
+  <div class="compound__card" data-compound-target="card" role="dialog" aria-hidden="true">
+    <button type="button" class="compound__card-close" data-action="click->compound#close"
+            aria-label="<%= t("compound.close") %>">&times;</button>
+    <p class="compound__card-name" data-compound-target="cardName"></p>
+    <p class="compound__card-han" data-compound-target="cardHan"></p>
+    <p class="compound__card-line" data-compound-target="cardLine"></p>
+    <p class="compound__card-verse" data-compound-target="cardVerse"></p>
+    <p class="compound__card-source" data-compound-target="cardSource"></p>
+    <button type="button" class="action" data-compound-target="cardEnter" data-action="click->compound#enter"></button>
+  </div>
 </div>

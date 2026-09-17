@@ -5,6 +5,7 @@ require "test_helper"
 
 class CompoundFlowTest < ActionDispatch::IntegrationTest
   setup do
+    heart_sutra
     @user = users(:one)
     sign_in_as @user
   end
@@ -72,6 +73,103 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
 
     assert_select "main a[href=?]", guide_path, count: 1
     assert_select "nav.doors a[href=?]", guide_path, false
+  end
+
+  # 전각에 드는 흐름 — 마당을 뺀 다섯 전각을 누르면 카드가 뜬다.
+  test "다섯 전각에 카드로 드는 손짓이 있고, 마당은 곧장 아래로 간다" do
+    get today_path
+
+    Compound::CARD_HALLS.each do |hall|
+      assert_select "a.compound__hall--#{hall.key}[data-action*='click->compound#open']", count: 1
+      assert_select "a.compound__hall--#{hall.key}[data-compound-key-param=?]", hall.key.to_s
+      assert_select "a.compound__hall--#{hall.key}[data-compound-han-param=?]", hall.han
+    end
+    assert_select "a.compound__hall--courtyard[data-action]", false, "마당이 카드를 연다"
+    assert_equal 5, Compound::CARD_HALLS.size
+  end
+
+  # 카드의 글 — 이름 · 한자 · 한 줄 · 경구 · 「드는」 말은 데이터 속성으로,
+  # 숫자가 없다. 출전(숫자를 담을 수 있는 자리)은 미륵당만 여기 있고,
+  # 나머지 넷은 자리 쪽 스크립트의 상수에서 온다.
+  test "카드의 글에는 숫자가 없다 — 출전은 미륵당만 예외로 여기 있다" do
+    get today_path
+    doc = Nokogiri::HTML(response.body)
+
+    Compound::CARD_HALLS.each do |hall|
+      anchor = doc.at_css("a.compound__hall--#{hall.key}")
+      %w[name han line verse enter].each do |field|
+        value = anchor["data-compound-#{field}-param"]
+        assert value.present?, "#{hall.key}.#{field} 이 없다"
+        assert_no_match(/\d/, value, "#{hall.key}.#{field} 에 숫자가 있다: #{value}")
+      end
+
+      source = anchor["data-compound-source-param"]
+      if hall.key == :maitreya
+        assert source.present?, "미륵당의 출전이 없다"
+        assert_no_match(/\d/, source, "미륵당의 출전에 숫자가 있다")
+      else
+        assert_nil source, "#{hall.key} 의 출전이 화면(서버 응답)에 있다 — 숫자를 담을 수 있는 자리다"
+      end
+    end
+  end
+
+  # 넷의 출전은 스크립트 쪽 상수에 있다. 「미륵」이라는 낱말과 한 파일에
+  # 있으면 안 된다 — elephant_test 와 같은 결의 자물쇠다.
+  test "출전 넷은 스크립트에 있고, 미륵당이라는 낱말과 섞이지 않는다" do
+    js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
+
+    assert_match(/const SOURCES = \{/, js)
+    %w[14 12 204 86].each { |digit| assert_match(/#{digit}/, js, "#{digit} 이 출전 상수에 없다") }
+    assert_no_match(/maitreya/, js, "미륵당이라는 낱말이 숫자를 담은 파일에 있다")
+  end
+
+  test "조감도가 커지는 자리는 눌린 전각의 중심이고, 한지빛으로 옅어진다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+
+    assert_match(/\.compound--zooming \.compound__scene \{[^}]*transform: scale\(2\.6\);/, css)
+    assert_match(/transform-origin: var\(--zoom-x, 50%\) var\(--zoom-y, 50%\);/, css)
+    assert_match(/\.compound--zooming \.compound__veil \{ opacity: 1; transition: opacity 0\.7s ease-in; \}/, css)
+
+    js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
+    assert_match(/this\.sceneTarget\.style\.setProperty\("--zoom-x", `\$\{cx\}%`\)/, js)
+  end
+
+  # 카드를 열고 읽는 것은 구조이지 움직임이 아니다 — 그대로 뜨고, 확대만 건너뛴다.
+  test "움직임을 줄이면 카드는 그대로 뜨고 확대만 건너뛴다" do
+    js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
+
+    assert_match(/prefers-reduced-motion: reduce.*matches.*return this\.go\(href\)/m, js)
+    assert_no_match(/prefers-reduced-motion.*open\(/m, js, "카드 자체가 움직임을 줄이면 사라진다")
+  end
+
+  # 경구의 강조는 --cinnabar 를 쓰지 않는다 — 하루 한 번의 규칙과 부딪힌다.
+  test "카드의 경구는 주사가 아니라 단청 황토를 쓴다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    verse = css[/\.compound__card-verse \{[^}]*\}/]
+    halo = css[/\.compound__halo \{[^}]*\}/m]
+
+    assert_match(/color: var\(--dancheong-ocher\)/, verse)
+    assert_no_match(/--cinnabar/, verse)
+    assert_no_match(/--cinnabar/, halo)
+  end
+
+  test "카드의 바탕색은 :root 토큰에서 온다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+
+    assert_match(/--paper-card: #fbf9f4;/, css)
+    assert_match(/\.compound__card \{[^}]*background: var\(--paper-card\);/, css)
+    assert_no_match(/#fbf9f4/i, css.sub(/--paper-card: #fbf9f4;/, ""), "카드 바탕색이 :root 밖에도 있다")
+  end
+
+  # 방 머리 — 전각 이름과 한 줄이 카드의 것과 같다(같은 로케일 키).
+  test "방 머리에 전각 이름과 한 줄이 있고, 카드의 것과 같다" do
+    { new_sitting_path => :sitting, new_copying_path => :copying,
+      days_path => :maitreya, guide_path => :lecture }.each do |path, key|
+      get path
+
+      assert_select ".hall-header__name", text: I18n.t("compound.halls.#{key}")
+      assert_select ".hall-header__line", text: I18n.t("compound.detail.#{key}.line")
+    end
   end
 
   test "조감도는 배경이 투명하다 — 어떤 바탕에도 얹힌다" do
