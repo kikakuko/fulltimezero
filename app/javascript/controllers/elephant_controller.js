@@ -45,12 +45,20 @@ export default class extends Controller {
         this.figureTarget.classList.add("elephant-place--walking")
         this.place(this.whitenessValue)
       }))
+      // 아홉째에 닿는 날 — 길을 다 올라온 뒤에 선다.
+      if (this.figureTarget.dataset.halt === "true") {
+        this.figureTarget.addEventListener("transitionend", () => this.halt(), { once: true })
+      }
     } else {
       this.place(this.whitenessValue)
     }
   }
 
   disconnect() { cancelAnimationFrame(this.frame) }
+
+  halt() {
+    this.figureTarget.querySelector(".elephant")?.classList.remove("elephant--walking-legs")
+  }
 
   // 길 위의 한 점과 그곳의 접선. 그림은 왼쪽을 보므로 오른쪽으로 갈 때는 뒤집는다.
   place(whiteness) {

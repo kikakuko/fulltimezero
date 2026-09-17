@@ -50,8 +50,7 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
     ones = css_select(".elephants .elephants__one .elephant")
     assert_equal 9, ones.size
     assert_equal (0..8).map { |step| "--ele: #{(step / 8.0).round(3)};" }, ones.map { |one| one["style"] }
-    assert_equal [ false ] * 8 + [ true ], ones.map { |one| one["class"].include?("elephant--scattered") }, "아홉째만 형상을 잃은 채가 아니다"
-    assert_empty ones.select { |one| one["class"].include?("walking") }, "강원의 코끼리 아홉이 걷는다"
+    assert_empty ones.select { |one| one["class"].match?(/walking|scatter/) }, "강원의 코끼리 아홉이 걷거나 흩어진다"
     assert_select ".elephants .here, .elephants [aria-current], .elephants .current", false
     assert_no_match(/지금 여기|현재 위치|너는 여기|you are here|current(ly)? (place|stage)/i, visible_text)
 

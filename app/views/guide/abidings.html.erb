@@ -17,10 +17,12 @@
   <%= render "abidings/footprint", abidings: @abidings %>
 
   <%# 코끼리 아홉 — 검정에서 흼으로. 앉기의 코끼리와 같은 색 계산(--ele)을 쓰고,
-      서 있다(걷지 않는다). 아홉째는 이미 형상을 잃은 채다 — 흩어진 뒤의 모습. %>
+      서 있다(걷지 않는다). 아홉째는 온전한 흰 코끼리다 — 등지(等持)는 형상이 풀리는
+      자리가 아니다. 그림은 한 벌만 두고 아홉이 가리킨다. %>
   <div class="elephants" aria-hidden="true">
+    <%= elephant_parts_defs %>
     <% 9.times do |step| %>
-      <span class="elephants__one"><%= elephant_figure ele: (step / 8.0).round(3), scattered: (step == 8 ? :already : nil) %></span>
+      <span class="elephants__one"><%= elephant_use ele: (step / 8.0).round(3) %></span>
     <% end %>
   </div>
   <p><%= t("abidings.thangka") %></p>

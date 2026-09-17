@@ -17,12 +17,14 @@
   </svg>
 
   <%# 자리 틀 — 길 위의 자리 · 비스듬함 · 방향. 그 안의 코끼리는 부위별로 걷는다.
-      아홉째 정거장에 닿으면 형상을 잃는다 — 흩어지는 것이지 사라지는 것이 아니다. %>
-  <div class="elephant-place" data-elephant-target="figure">
+      아홉째 정거장(등지)에 닿으면 걸음을 멈춘다 — 흰빛 1 로 온전히 선다. 걷다가
+      서는 것이 아홉째의 유일한 표시이고, 글자도 표시도 붙이지 않는다. 그날 길을
+      걸어 올라왔다면 다 올라온 뒤에 선다. %>
+  <% resting = reading.station == Elephant::STATIONS - 1 %>
+  <div class="elephant-place" data-elephant-target="figure" data-halt="<%= resting && moving %>">
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
-      <%= elephant_figure ele: reading.whiteness, walking: true, label: t("sittings.elephant.alt"),
-                          scattered: (reading.station == Elephant::STATIONS - 1 ? (moving ? :now : :already) : nil) %>
+      <%= elephant_figure ele: reading.whiteness, walking: !resting || moving, label: t("sittings.elephant.alt") %>
     </div>
   </div>
 </div>

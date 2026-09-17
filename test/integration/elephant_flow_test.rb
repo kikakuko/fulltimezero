@@ -60,7 +60,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_match(/--elephant-dark: 0\.35;/, css)
     assert_match(/--elephant-light: 2\.4;/, css)
     assert_match(/--elephant-width: 80px;/, css)
-    assert_match(/\.elephant \.e-fill \{\s*fill: color-mix\(in srgb, var\(--paper\)\s*calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\)/m, css)
+    assert_match(/--e-light: calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\) \* \(var\(--elephant-light\) - var\(--elephant-dark\)\)\) \/ var\(--elephant-light\)\);/, css)
+    assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\) calc\(var\(--e-light\) \* 100%\), var\(--ink\)\);/, css)
 
     get new_sitting_path
     assert_select ".elephant-place .elephant[style=?]", "--ele: #{Elephant.for(@user).whiteness.round(4)};"
@@ -97,19 +98,27 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/requestAnimationFrame\(\s*function|setInterval|--whiteness/, js, "스크립트가 걸음을 매 프레임 그린다")
   end
 
-  test "아홉째 정거장에 닿으면 형상을 잃는다 — 닿는 날은 흩어지고, 그 뒤로는 흩어진 채" do
+  # 아홉째는 등지(等持) — 애써 붙들지 않아도 흔들리지 않는 자리. 흩어지지 않고 흰빛
+  # 1 로 온전히 서되, 걸음을 멈춘다. 걷다가 서는 것이 유일한 표시다.
+  test "아홉째 정거장에 닿으면 걸음을 멈추고 온전히 선다 — 닿는 날은 올라온 뒤에 선다" do
     Elephant::WINDOW_DAYS.times { |i| @user.rests.create!(rested_on: @user.today - i, duration: "a_while") }
     assert_equal Elephant::STATIONS - 1, Elephant.for(@user).station
 
     get new_sitting_path
-    assert_select ".elephant-place .elephant.elephant--scattering", count: 1
+    assert_select ".elephant-place[data-halt=true] .elephant.elephant--walking-legs", count: 1
 
     get new_sitting_path
-    assert_select ".elephant-place .elephant.elephant--scattered", count: 1, message: "흩어진 뒤 다시 모인다"
+    assert_select ".elephant-place[data-halt=false] .elephant", count: 1
+    assert_select ".elephant-place .elephant--walking-legs", false, "아홉째에서도 걷는다"
+    assert_select ".elephant-place .elephant[style=?]", "--ele: 1.0;"
+
+    js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
+    assert_match(/dataset\.halt === "true".*transitionend.*this\.halt\(\)/m, js, "올라온 뒤에 서지 않는다")
+    assert_match(/halt\(\) \{\s*this\.figureTarget\.querySelector\("\.elephant"\)\?\.classList\.remove\("elephant--walking-legs"\)/, js)
 
     @user.rests.destroy_all
     get new_sitting_path
-    assert_select ".elephant-place .elephant.elephant--scattered, .elephant-place .elephant.elephant--scattering", false
+    assert_select ".elephant-place .elephant--walking-legs", count: 1, message: "아홉째가 아닌데 서 있다"
   end
 
   test "흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다" do

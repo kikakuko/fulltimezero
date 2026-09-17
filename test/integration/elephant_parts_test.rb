@@ -33,24 +33,37 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
     assert_not Rails.root.join("app/assets/images/elephant.png").exist?, "통짜 그림이 남아 있다"
   end
 
-  # 2. 색은 CSS 만 — 그림 파일에도, 들이는 쪽에도, 스크립트에도 색이 없다.
+  # 2. 색은 CSS 만 — 그림에는 색값이 없다. path 의 fill 은 var() 로 바깥 CSS 의 값을
+  # 받을 뿐이다(<use> 로 가리킬 때 사용자 지정 속성이 그림자 트리를 넘어 내려간다).
   test "e-fill 과 e-ink 의 색은 CSS 에서만 온다" do
     svg = SVG.read
-    assert_no_match(/\s(?:fill|stroke|style|color|stop-color)="/, svg, "그림 파일에 색이 박혀 있다")
+    assert_no_match(/#\h{3,8}\b|rgba?\(|hsla?\(/, svg, "그림 파일에 색값이 박혀 있다")
+    assert_no_match(/\s(?:stroke|style|color|stop-color)="/, svg, "그림 파일에 색 속성이 있다")
+    fills = svg.scan(/\sfill="([^"]*)"/).flatten.uniq.sort
+    assert_equal [ "url(#elephant-far-fade-ramp)", "var(--e-fill)", "var(--e-fill-far)", "var(--e-ink)", "var(--e-tusk)" ], fills
 
-    helper = Rails.root.join("app/helpers/elephant_helper.rb").read
-    assert_no_match(/fill|stroke|#\h{3,8}\b|rgb\(/, helper, "들이는 쪽이 색을 넣는다")
+    doc = Nokogiri::XML(svg)
+    doc.css("g[class^='elephant__']").reject { |g| g["class"] == "elephant__parts" }.each do |g|
+      fill, ink = g.css("> path").map { |path| path["fill"] }
+      expected = { "elephant__tusk" => "var(--e-tusk)", "elephant__leg-br" => "var(--e-fill-far)", "elephant__leg-bl" => "var(--e-fill-far)" }.fetch(g["class"], "var(--e-fill)")
+      assert_equal expected, fill, "#{g['class']} 의 빛깔이 제 값을 받지 않는다"
+      assert_equal "var(--e-ink)", ink
+    end
+
+    helper = Rails.root.join("app/helpers/elephant_helper.rb").read.lines.reject { |line| line.strip.start_with?("#") }.join
+    assert_no_match(/#\h{3,8}\b|rgb\(|fill=|stroke/, helper, "들이는 쪽이 색을 넣는다")
 
     scripts = Rails.root.glob("app/javascript/**/*.js").map(&:read).select { |js| js.match?(/elephant|e-fill|e-ink/) }.join
-    assert_no_match(/\.style\.(?:fill|stroke)|setAttribute\("(?:fill|stroke)"|e-fill|e-ink/, scripts, "스크립트가 코끼리에 색을 넣는다")
+    assert_no_match(/\.style\.(?:fill|stroke)|setAttribute\("(?:fill|stroke)"|--e-fill|--e-ink/, scripts, "스크립트가 코끼리에 색을 넣는다")
 
     css = CSS.read
-    %w[e-fill e-ink].each do |part|
-      rule = css[/\.elephant \.#{part} \{[^}]*\}/m]
-      assert_match(/fill: color-mix\(in srgb, var\(--/, rule)
-    end
+    elephant = css[/\.elephant \{\s*display: block;[^}]*\}/m]
+    assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\)/, elephant)
+    assert_match(/--e-ink: color-mix\(in srgb, var\(--night-deep\)/, elephant)
+    assert_match(/--e-tusk: var\(--paper\);/, elephant, "상아가 한지빛이 아니다")
+    assert_match(/\.elephant \.e-fill \{ fill: var\(--e-fill\); \}/, css)
+    assert_match(/\.elephant \.e-ink \{ fill: var\(--e-ink\); \}/, css)
     assert_no_match(/\.elephant[^{]*\{[^}]*filter:\s*[^;]*brightness/m, css, "밝기 필터로 흰빛을 낸다 — 먹선까지 밝아진다")
-    assert_match(/\.elephant \.elephant__tusk \.e-fill \{ fill: var\(--paper\); \}/, css, "상아가 한지빛이 아니다")
   end
 
   # 3. 다리 넷(과 코 · 꼬리 · 머리)의 축은 그림의 data-pivot 이다.
@@ -74,7 +87,7 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
     assert_equal "elephant-leg var(--elephant-stride) ease-in-out calc(var(--elephant-stride) / -2) infinite", two
     root = css[/:root \{.*?\n\}/m]
     { "stride" => "1.8s", "leg-swing" => "5deg", "bob" => "1.5px", "trunk-swing" => "3deg", "trunk-period" => "2.9s",
-      "tail-swing" => "4deg", "tail-period" => "3.7s", "scatter" => "3s" }.each do |name, value|
+      "tail-swing" => "4deg", "tail-period" => "3.7s" }.each do |name, value|
       assert_match(/--elephant-#{name}: #{Regexp.escape(value)};/, root, "--elephant-#{name} 가 :root 상수가 아니다")
     end
     assert_match(/elephant-bob calc\(var\(--elephant-stride\) \/ 2\)/, css, "몸통이 다리의 두 배 빠르기로 오르내리지 않는다")
@@ -107,18 +120,34 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 형상을 잃는 것은 흩어지는 것이다 — 한 번 흩어지면 되돌아오지 않는다.
-  test "흩어짐은 먹선이 먼저, 빛깔이 나중에 풀리고 다시 모이지 않는다" do
-    css = CSS.read
+  # 아홉째(등지)는 형상이 풀리는 자리가 아니다. 흩어짐은 아홉 뒤의 문, 무위에만 있다.
+  test "흩어짐은 무위에만 걸린다 — 앉기와 강원에는 없다" do
+    Elephant::WINDOW_DAYS.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_while") }
 
-    assert_match(/@keyframes elephant-drift \{ to \{ translate:/, css)
-    assert_match(/@keyframes elephant-ink-loosen \{ 0% \{ opacity: 1; \} 55% \{ opacity: var\(--elephant-scatter-ink\); \}/, css)
-    assert_match(/@keyframes elephant-fill-loosen \{ 0%, 40% \{ opacity: 1; \}/, css)
-    css.scan(/animation: elephant-(?:drift|ink-loosen|fill-loosen)[^;]*;/).each do |animation|
-      assert_match(/forwards;\z/, animation, "흩어진 뒤 제자리로 돌아온다")
-      assert_no_match(/infinite|alternate/, animation, "흩어짐이 되풀이된다")
+    [ new_sitting_path, new_sitting_path, guide_chapter_path("abidings") ].each do |page|
+      get page
+      assert_no_match(/scatter|dispers|흩어/, Nokogiri::HTML(response.body).css(".elephant-field, .elephants").to_html,
+                      "#{page} 의 코끼리에 흩어짐이 나타났다")
     end
-    PARTS.each { |part| assert_match(/\.elephant__#{part} \{ --dx: -?\d+px; --dy: -?\d+px; \}/, css, "#{part} 가 밀리는 쪽이 없다") }
+
+    css = CSS.read.gsub(%r{/\*.*?\*/}m, "")
+    css.scan(/([^{}]+)\{([^{}]*)\}/).each do |selector, body|
+      next unless body.match?(/animation:\s*void-(?:part|ink|vanish)/)
+      assert_match(/\.void__elephant/, selector, "무위 밖에서 흩어진다: #{selector.strip}")
+    end
+    assert_no_match(/elephant--scatter|elephant-drift|elephant-ink-loosen|elephant-fill-loosen/, css, "아홉째의 흩어짐이 남아 있다")
+    assert_match(/--elephant-ink-white: 0\.3;/, css[/:root \{.*?\n\}/m], "흰 코끼리의 먹선 바닥이 없다")
+  end
+
+  # 강원의 코끼리 아홉은 그림 한 벌을 가리킨다 — 서 있으니 무리마다 CSS 가 닿을 일이 없다.
+  test "강원 여섯째 장에는 코끼리 그림이 한 벌만 들어 있고, 아홉이 가리킨다" do
+    get guide_chapter_path("abidings")
+    html = response.body
+
+    assert_equal 1, html.scan('class="elephant__body"').size, "그림이 여러 벌이다"
+    assert_select ".elephants svg.elephant__defs #elephant-parts", count: 1
+    assert_select ".elephants .elephant--used svg.elephant__art use[href='#elephant-parts']", count: 9
+    assert_select ".elephants .elephant--walking-legs", false
   end
 
   private
