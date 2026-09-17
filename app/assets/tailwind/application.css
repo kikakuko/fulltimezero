@@ -81,6 +81,8 @@
      5.18:1)로 WCAG 본문 4.5:1 을 넘는다. 먹과 섞어 만들지 않는다 — 먹이 청록이라
      섞으면 올리브가 된다. */
   --ocher-ink: #7f6634;
+  /* 먹틀의 바탕 — 부품 「먹틀」(수묵 그림이 앉는 자리) */
+  --ink-frame: #efeae0;
 
   /* 첫째 문의 빛 — 둥근 빛이 먼 문에서 앞의 문으로 다가오고, 흰빛이 한 번
      넘쳤다가 가라앉는다. 매일의 문은 같은 장면을 짧게 줄인다. */
@@ -189,6 +191,36 @@ a:hover { text-decoration-color: var(--ink); }
   text-decoration: none;
 }
 .action:hover { border-color: var(--ink); }
+
+/* ── 부품 다섯 — 피그마 design-tokens ────────────────────────────────
+   카드 · 먹 알약 버튼 · 조용한 버튼 · 인용 · 먹틀. 이 밖의 부품은 만들지 않는다
+   (태그 · 배지 · 진행 막대 · 아이콘 줄 · 그림자 카드는 palette_test 가 막는다).
+   화면마다 차례로 옮긴다 — 지금은 마당. */
+
+/* 카드 — 한 화면에 하나까지. 그림자를 두르지 않는다. */
+.card { background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 20px; }
+
+/* 먹 알약 버튼 — 한 화면에 하나. 둘은 같은 무게일 때만(앉기의 두 길처럼). */
+.button-primary {
+  display: inline-block; font: var(--type-ui); text-decoration: none; cursor: pointer;
+  padding: 0.75rem 2.25rem; border: 1px solid var(--ink); border-radius: 999px;
+  background: var(--ink); color: var(--paper);
+}
+.button-primary:hover { background: color-mix(in srgb, var(--ink) 86%, var(--paper)); }
+
+/* 조용한 버튼 — 글자뿐. 피그마는 --mute 였으나 한지 위 3.19:1 이라 읽히지 않아
+   옅은 먹(7.02:1)으로 둔다. */
+.button-quiet {
+  border: 0; padding: 0; background: transparent; cursor: pointer;
+  font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-soft);
+  text-decoration: underline; text-underline-offset: 0.35em; text-decoration-color: var(--rule);
+}
+
+/* 인용 — 경의 말. 명조 18, 글씨의 황토. 한 화면에 하나. */
+.verse { font: 400 1.125rem/1.5 var(--serif); color: var(--ocher-ink); }
+
+/* 먹틀 — 수묵 그림이 앉는 자리. */
+.ink-frame { background: var(--ink-frame); border-radius: 16px; }
 
 .chrome {
   display: flex; justify-content: space-between; gap: 1rem;
@@ -1043,7 +1075,7 @@ input[type="text"].threshold__field {
 
 .compound__card {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; height: 300px;
-  background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 24px 24px 0 0;
+  border-bottom: 0; border-radius: 20px 20px 0 0;
   box-sizing: border-box; padding: 1.75rem 2rem 2rem;
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.35rem;
   transform: translateY(100%); transition: transform 0.35s ease-out;
@@ -1057,9 +1089,9 @@ input[type="text"].threshold__field {
 .compound__card-name { font: var(--type-title); color: var(--ink); margin: 0.75rem 0 0; }
 .compound__card-han { font: var(--type-ui); color: var(--mute); margin: 0; }
 .compound__card-line { font: var(--type-body); color: var(--ink-soft); margin: 0.6rem 0 0; }
-.compound__card-verse { font: 400 1.125rem/1.5 var(--serif); color: var(--ocher-ink); margin: 0.6rem 0 0; }
+.compound__card-verse { margin: 0.6rem 0 0; }
 .compound__card-source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
-.compound__card .action { margin-top: 1rem; }
+.compound__card .button-primary { margin-top: 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .compound--zooming .compound__scene,

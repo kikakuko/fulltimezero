@@ -57,11 +57,12 @@ class PaletteTest < ActionDispatch::IntegrationTest
     "--plaque-wood" => "#241a14", "--plaque-gold" => "#d8c48a",   # 문의 현판
     "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
     "--obang-red" => "#7a3b30",                                   # 무위의 오방색 가운데 적
-    "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
+    "--ocher-ink" => "#7f6634",                                   # 글씨의 황토 — 경의 인용문
+    "--ink-frame" => "#efeae0"                                    # 부품 「먹틀」의 바탕
   }.freeze
 
   # 누런 하나 — 황토가 닿는 곳. 글씨의 황토는 경의 인용문에만, 단청 황토는 그림에만.
-  OCHER_INK_PLACES = [ ".compound__card-verse" ].freeze
+  OCHER_INK_PLACES = [ ".verse" ].freeze
   OCHER_PICTURE_PLACES = /\A\.(?:void__bloom|compound__halo|maitreya__[\w-]+(?: [\w-]+)?|pagoda__[\w-]+|elephant[\w-]*)\z/
 
   # 낮의 화면은 따뜻하고, 몰입은 차다. 찬 빛은 몰입 어둠 하나뿐이다 — 한지 · 먹은 흙의
@@ -70,7 +71,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
     root, = palette_and_rest
     warm = ->(token) { r, _, b = root[/#{token}:\s*#(\h{6})/, 1].scan(/../).map(&:hex); r > b }
 
-    %w[--paper --paper-deep --ink --cinnabar --gilt --dancheong-ocher --seokganju-deep --ocher-ink].each do |token|
+    %w[--paper --paper-deep --ink --cinnabar --gilt --dancheong-ocher --seokganju-deep --ocher-ink --ink-frame --paper-card].each do |token|
       assert warm.(token), "#{token} 가 따뜻하지 않다 — 낮의 화면에 찬 색이 들어왔다"
     end
     rules.each do |selector, body|
