@@ -20,10 +20,18 @@
   </head>
 
   <body>
-    <%# 매일 지나는 문. 숨 한 번의 어둠이 지나가고, 누르면 곧장 걷힌다. %>
+    <%# 매일 지나는 문. 첫째 문의 빛이 짧게 다가와 한 번 넘치고, 가라앉으면
+        그대로 마당이다. 글은 없다. 아무 곳이나 누르면 곧장 끝난다. %>
     <% if daily_door_due? %>
-      <div class="daily-door" data-controller="daily-door"
-           data-action="click->daily-door#pass animationend->daily-door#pass" aria-hidden="true"></div>
+      <div class="daily-door" data-controller="daily-door" data-light="<%= Current.user.gate_light %>"
+           data-action="click->daily-door#pass animationend->daily-door#settled" aria-hidden="true">
+        <div class="gates__frame">
+          <%= image_tag "gates.png", class: "gates__image", alt: "", draggable: false %>
+          <span class="gates__light"></span>
+        </div>
+        <span class="gates__flood"></span>
+        <span class="gates__dim"></span>
+      </div>
     <% end %>
 
     <% unless content_for?(:no_chrome) %>

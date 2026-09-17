@@ -7,6 +7,15 @@
 // 걸쳐 옮기고, 그림은 한 번도 움직이지 않는다.
 import { Controller } from "@hotwired/stimulus"
 
+// 빛의 때 — 계정이 없어 시간대를 모를 때 브라우저의 시계로 고른다.
+// 경계는 GateLight::HOURS 와 같다. 어떤 빛을 보았는지 적어 두지 않는다.
+const HOURS = { dawn: [5, 8], day: [8, 17], evening: [17, 20] }
+
+function lightAt(hour) {
+  const found = Object.entries(HOURS).find(([, [from, to]]) => hour >= from && hour < to)
+  return found ? found[0] : "night"
+}
+
 export default class extends Controller {
   static values = { state: String }
 
@@ -19,6 +28,9 @@ export default class extends Controller {
   disconnect() { cancelAnimationFrame(this.frame) }
 
   shift() {
+    const gates = document.getElementById("gates")
+    if (gates && !gates.dataset.light) gates.dataset.light = lightAt(new Date().getHours())
+
     const veil = document.querySelector("#gates .gates__veil")
     if (!veil || veil.dataset.state === this.stateValue) return
 

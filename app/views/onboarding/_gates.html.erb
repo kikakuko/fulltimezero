@@ -1,10 +1,18 @@
 <%# 그림 한 장과 그 위의 장막. 문을 옮겨 가는 동안 그림은 그대로 남고
     (data-turbo-permanent), 장막만 다음 상태로 옮아간다.
-    그림은 꾸밈이 아니라 자리이지만, 이름을 붙이지 않으므로 대체 글도 없다. %>
-<div id="gates" class="gates" data-turbo-permanent aria-hidden="true">
+    그림은 꾸밈이 아니라 자리이지만, 이름을 붙이지 않으므로 대체 글도 없다.
+
+    첫째 문에는 장막 대신 빛이 다가온다 — 둥근 빛이 먼 문에서 앞의 문으로
+    내려오고, 흰빛이 한 번 넘쳤다가 가라앉는다. 그림은 움직이지 않는다.
+    빛의 색은 때를 따른다(GateLight). 계정이 없으면 브라우저가 정한다. %>
+<div id="gates" class="gates" data-turbo-permanent aria-hidden="true"
+     <% if authenticated? %>data-light="<%= Current.user.gate_light %>"<% end %>>
   <div class="gates__frame">
     <%= image_tag "gates.png", class: "gates__image", alt: "", draggable: false %>
     <div class="gates__veil" data-state="<%= state %>"></div>
+    <span class="gates__light"></span>
     <div class="gates__scrim"></div>
   </div>
+  <span class="gates__flood"></span>
+  <span class="gates__dim"></span>
 </div>

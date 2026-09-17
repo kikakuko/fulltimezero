@@ -53,6 +53,28 @@
   /* 처음의 문 셋 — 그림(gates.png)의 어둠 */
   --night-gate: #0b1216;
 
+  /* 첫째 문의 빛 — 둥근 빛이 먼 문에서 앞의 문으로 다가오고, 흰빛이 한 번
+     넘쳤다가 가라앉는다. 매일의 문은 같은 장면을 짧게 줄인다. */
+  --light-arrive: 3.8s;
+  --light-daily: 1.6s;
+  /* 때마다 (세로 자리 cy · 반지름 r · 어둠 dark). r 은 그림의 가로 기준이다.
+     0초 · 0.9초 · 1.8초 · 2.6초 · 3.0초 · 3.8초 */
+  --light-cy-0: 0.13; --light-r-0: 0.16; --light-dark-0: 0.95;
+  --light-cy-1: 0.28; --light-r-1: 0.30; --light-dark-1: 0.90;
+  --light-cy-2: 0.45; --light-r-2: 0.48; --light-dark-2: 0.82;
+  --light-cy-3: 0.66; --light-r-3: 0.72; --light-dark-3: 0.66;
+  --light-cy-4: 0.72; --light-r-4: 1.30; --light-dark-4: 0.30;
+  --light-cy-5: 0.72; --light-r-5: 1.60; --light-dark-5: 0.16;
+  /* 넘치는 한 번 — 3.0초에 화면 전체가 이만큼 흰빛이 되었다가 사라진다. */
+  --light-flood-peak: 0.55;
+  /* 빛의 색은 때를 따른다(GateLight). 세는 것도 보상도 아니다. */
+  --light-dawn: #eef2f5;
+  --light-day: #fbf7ec;
+  --light-evening: #f7e6d6;
+  --light-night: #e8ecf2;
+  /* 밤에는 전체 밝기 0.85배 — 그림의 어둠을 그만큼 한 겹 얹는다. */
+  --light-night-dim: 0.15;
+
   /* 무위의 오색 — 코끼리가 흩어지며 잠깐 번지는 빛. 청은 단청의 청록, 황은
      황토, 백은 어둠 속 먹빛, 흑은 어둠 그 자체다. 적만 따로 둔다 — 주사가
      아니다. 주사는 하루 한 점이고, 이것은 점이 아니라 번짐이다. */
@@ -516,7 +538,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
    #gates 는 Turbo 가 문을 옮겨 가는 동안 그대로 남는다(data-turbo-permanent).
    그림은 한 번 놓이면 다시 그려지지 않고, 장막만 다음 상태로 옮아간다. */
 
-.gates, .threshold {
+.gates, .threshold, .daily-door {
   /* 그림의 비율 — 가로 390 · 세로 844. */
   --gates-w: min(100vw, calc(100svh * 390 / 844));
   --gates-h: min(100svh, calc(100vw * 844 / 390));
@@ -526,10 +548,10 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .gates {
   position: fixed; inset: 0; z-index: 9;
   background: var(--night-gate);
-  /* 첫째 문 장막의 위쪽 두 겹. 위 삼분의 일만 옅게 — 반을 넘지 않는다.
-     아래는 그림 그대로다. 멀리 있는 문 둘은 안개 속에 있되 보인다. */
-  --veil-stop-top: 0.5;
-  --veil-stop-upper: 0.4;
+  /* 첫째 문에는 장막이 없다 — 빛이 대신 다가온다(.gates__light).
+     둘째 · 셋째 문의 장막은 그대로다. */
+  --veil-stop-top: 0;
+  --veil-stop-upper: 0;
 }
 .gates__frame {
   position: absolute; inset: 0; margin: auto;
@@ -576,7 +598,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 장막은 위 삼분의 일에만 있고, 문을 지날수록 위로 물러난다. 아래는 그림 그대로.
    나는 멈추었다 — 0% · 20% · 28% · 34% */
 .gates__veil[data-state="stop"] {
-  --veil-a1: var(--veil-stop-top); --veil-a2: var(--veil-stop-upper); --veil-a3: 0.15;
+  --veil-a1: var(--veil-stop-top); --veil-a2: var(--veil-stop-upper); --veil-a3: 0;
   --veil-p2: 20%; --veil-p3: 28%; --veil-p4: 34%;
 }
 /* 무엇이 움직이는가 — 0% · 10% · 18% · 24% */
@@ -592,6 +614,61 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 }
 /* 열림 — 장막이 걷히고 그림 전체가 드러난다. */
 .gates__veil[data-state="open"] { opacity: 0; transition: opacity 1.6s ease-out; }
+
+/* 첫째 문의 빛 — 방사형. 가운데는 트여 그림이 보이고, 둘레로 갈수록 그림의
+   어둠이 짙다. 중심은 가로 50% 에 고정되고, 세로 자리 · 반지름 · 어둠만
+   때를 따라 옮아간다. 그림은 움직이지 않는다 — 빛만 다가온다. */
+@property --light-cy { syntax: "<number>"; inherits: false; initial-value: 0.72; }
+@property --light-r { syntax: "<number>"; inherits: false; initial-value: 1.6; }
+@property --light-dark { syntax: "<number>"; inherits: false; initial-value: 0.16; }
+
+/* 움직임이 없으면 처음부터 닿은 자리 — 3.8초의 값이다. */
+.gates__light {
+  position: absolute; inset: 0; pointer-events: none;
+  --light-cy: var(--light-cy-5); --light-r: var(--light-r-5); --light-dark: var(--light-dark-5);
+  background: radial-gradient(circle calc(var(--light-r) * 100cqw) at 50% calc(var(--light-cy) * 100%),
+    transparent 0%,
+    color-mix(in srgb, var(--night-gate) calc(var(--light-dark) * 25%), transparent) 45%,
+    color-mix(in srgb, var(--night-gate) calc(var(--light-dark) * 75%), transparent) 78%,
+    color-mix(in srgb, var(--night-gate) calc(var(--light-dark) * 100%), transparent) 100%);
+  transition: opacity 1.2s ease-out;
+}
+/* 첫째 문을 지나면 빛은 물러나고 둘째 문의 장막이 들어선다. */
+.gates__veil:not([data-state="stop"]) ~ .gates__light { opacity: 0; }
+
+/* 넘치는 한 번 — 화면 전체. 이것이 빠지면 그냥 밝아지는 것에 지나지 않는다. */
+.gates__flood {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: var(--light-day);
+}
+[data-light="dawn"] .gates__flood { background: var(--light-dawn); }
+[data-light="evening"] .gates__flood { background: var(--light-evening); }
+[data-light="night"] .gates__flood { background: var(--light-night); }
+.gates__dim { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: var(--night-gate); }
+[data-light="night"] .gates__dim { opacity: var(--light-night-dim); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .gates__veil[data-state="stop"] ~ .gates__light { animation: gate-light var(--light-arrive) ease-out both; }
+  .gates:has(.gates__veil[data-state="stop"]) .gates__flood { animation: gate-flood var(--light-arrive) ease-out both; }
+  .daily-door .gates__light { animation: gate-light var(--light-daily) ease-out both; }
+  .daily-door .gates__flood { animation: gate-flood var(--light-daily) ease-out both; }
+}
+
+/* 때의 비율 — 0초 · 0.9초 · 1.8초 · 2.6초 · 3.0초 · 3.8초 를 3.8초로 나눈 자리.
+   매일의 문은 같은 비율로 1.6초 안에 줄어든다. */
+@keyframes gate-light {
+  0%     { --light-cy: var(--light-cy-0); --light-r: var(--light-r-0); --light-dark: var(--light-dark-0); }
+  23.68% { --light-cy: var(--light-cy-1); --light-r: var(--light-r-1); --light-dark: var(--light-dark-1); }
+  47.37% { --light-cy: var(--light-cy-2); --light-r: var(--light-r-2); --light-dark: var(--light-dark-2); }
+  68.42% { --light-cy: var(--light-cy-3); --light-r: var(--light-r-3); --light-dark: var(--light-dark-3); }
+  78.95% { --light-cy: var(--light-cy-4); --light-r: var(--light-r-4); --light-dark: var(--light-dark-4); }
+  100%   { --light-cy: var(--light-cy-5); --light-r: var(--light-r-5); --light-dark: var(--light-dark-5); }
+}
+@keyframes gate-flood {
+  0%, 68.42% { opacity: 0; }
+  78.95%     { opacity: var(--light-flood-peak); }
+  100%       { opacity: 0; }
+}
 
 /* 그림 전체를 한 숨 보여 준 뒤, 한지빛 오늘로 옅어진다. */
 .gates.gates--leaving { opacity: 0; transition: opacity 0.8s ease-in 1s; }
@@ -614,6 +691,36 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   color: var(--ink);
 }
 .gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--ink); }
+
+/* 첫째 문의 글 — 빛이 가라앉으면 한 줄, 한 박 뒤 경의 한 줄과 출전, 그 뒤 길.
+   「너도 멈추어라」는 앱이 하는 말이 아니라 경이 하는 말이다. 출전이 늘 곁에 있다. */
+.threshold--stop { gap: 1.25rem; }
+/* 글 뒤의 한지빛 안개 — 둘째 문과 같은 결. 글은 돌길과 기둥 위에 서므로
+   가장자리에서 온전히 사라지는 안개 한 겹을 깐다. 그림은 그대로다. */
+.threshold--stop::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: 0; right: 0; bottom: calc(var(--gates-edge) + 1.5rem); height: 22rem;
+  background: radial-gradient(58% 50% at 50% 50%,
+    color-mix(in srgb, var(--paper) 86%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 66%, transparent) 48%,
+    transparent 80%);
+}
+.threshold--stop .gates__line { font-size: 1.5rem; line-height: 1.6; }
+.threshold__quote { margin: 0; display: grid; gap: 0.2rem; justify-items: center; }
+.threshold__verse { margin: 0; font-family: var(--serif); font-size: 1.125rem; line-height: 1.6; color: var(--ink); }
+.threshold__source { font-family: var(--sans); font-size: 0.75rem; color: var(--mute); }
+.threshold__source cite { font-style: normal; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .threshold--stop::before,
+  .threshold--stop .gates__line { animation: gate-word 0.9s ease-out var(--light-arrive) both; }
+  .threshold--stop .threshold__quote { animation: gate-word 0.9s ease-out calc(var(--light-arrive) + 1s) both; }
+  .threshold--stop .threshold__way { animation: gate-word 0.9s ease-out calc(var(--light-arrive) + 2.2s) both; }
+  /* 「나중에」는 빛이 닿기 전엔 아주 옅게 — 그래도 누를 수는 있다. 붙잡지 않는다. */
+  .threshold--stop .threshold__later { animation: gate-later 0.9s ease-out var(--light-arrive) both; }
+}
+@keyframes gate-word { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+@keyframes gate-later { from { opacity: 0.2; } to { opacity: 1; } }
 
 .threshold__way { margin: 0; min-height: 3rem; }
 .threshold .action, .threshold input[type="submit"] { color: var(--ink); border-color: var(--ink-soft); }
@@ -661,12 +768,14 @@ input[type="text"].threshold__field {
 .threshold__flank--left { left: calc((100vw - var(--gates-w)) / 2); }
 .threshold__flank--right { right: calc((100vw - var(--gates-w)) / 2); }
 
-/* 매일 지나는 문 — 숨 한 번의 어둠. 어두워졌다가 밝아지며 걷힌다. */
+/* 매일 지나는 문 — 첫째 문의 빛을 1.6초로 줄인 장면. 글은 없다. 빛이 가라앉으면
+   문 전체가 옅어지며 그대로 마당이다. 옅어짐은 움직임이 아니므로 움직임을
+   줄인 화면에서도 걷힌다(그때 빛은 처음부터 닿아 있다). */
 .daily-door {
-  position: fixed; inset: 0; z-index: 40; background: var(--night);
-  opacity: 0; animation: daily-door 0.8s ease-in-out forwards;
+  position: fixed; inset: 0; z-index: 40; background: var(--night-gate);
+  animation: daily-door 0.4s ease-in var(--light-daily) forwards;
 }
-@keyframes daily-door { 0% { opacity: 0 } 45% { opacity: 1 } 100% { opacity: 0 } }
+@keyframes daily-door { from { opacity: 1 } to { opacity: 0 } }
 
 /* ── 경내 조감도 ──────────────────────────────────────────────────────
    마당 맨 위, 화면 폭 전체. 전각을 누르면 그 자리로 — 누르는 자리는 그림 위의

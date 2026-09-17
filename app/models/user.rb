@@ -47,6 +47,8 @@ class User < ApplicationRecord
 
   def cleared_today? = clearings.exists?(cleared_on: today)
 
+  def gate_light = GateLight.at(hour_now)
+
   def morning? = (5...11).cover?(hour_now)
   def evening? = hour_now >= 18
 

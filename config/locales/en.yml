@@ -352,6 +352,9 @@ en:
     later: "Later"
     stop:
       line: "I have stopped"
+      # 경이 하는 말이다 — 인용 원문은 예외(§5). 출전과 늘 함께 보인다.
+      quote: "You stop too"
+      source: "Aṅgulimāla Sutta"
       go: "Go in"
     naming:
       question: "What is moving"

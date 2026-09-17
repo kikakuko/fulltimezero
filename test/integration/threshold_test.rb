@@ -17,13 +17,38 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert_redirected_to threshold_path
   end
 
-  # 기다리게 하지 않는다 — 그림이 대신 말한다.
-  test "첫째 문 — 한 줄뿐이고, 길은 처음부터 거기 있다" do
+  # 빛이 다가와 한 번 넘치고 가라앉으면 한 줄, 한 박 뒤 경의 한 줄과 출전,
+  # 그 뒤 길. 순서는 CSS 의 늦춤뿐이다 — 스크립트가 붙잡고 기다리게 하지 않고,
+  # 길은 처음부터 문서 안에 있다.
+  test "첫째 문 — 빛이 가라앉은 뒤 한 줄, 경의 한 줄, 그 뒤 길" do
     get threshold_path
 
     assert_select ".gates__line", count: 1, text: I18n.t("threshold.stop.line")
     assert_select "a[href=?]:not([hidden])", threshold_naming_path
-    assert_select "[data-wait-after-value], [data-controller~=wait]", false, "첫째 문이 다시 기다리게 한다"
+    assert_select "[data-wait-after-value], [data-controller~=wait]", false, "첫째 문이 스크립트로 기다리게 한다"
+
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    line = css[/\.threshold--stop \.gates__line \{ animation: gate-word [\d.]+s ease-out var\(--light-arrive\) both; \}/]
+    quote = css[/\.threshold--stop \.threshold__quote \{ animation: gate-word [\d.]+s ease-out calc\(var\(--light-arrive\) \+ 1s\) both; \}/]
+    way = css[/\.threshold--stop \.threshold__way \{ animation: gate-word [\d.]+s ease-out calc\(var\(--light-arrive\) \+ ([\d.]+)s\) both; \}/]
+    assert line, "한 줄이 빛이 가라앉기를 기다리지 않는다"
+    assert quote, "경의 한 줄이 한 박 뒤가 아니다"
+    assert way && $1.to_f > 1, "길이 경의 한 줄보다 먼저 온다"
+    assert_match(/\.threshold--stop \.threshold__later \{ animation: gate-later /, css)
+    assert_match(/@keyframes gate-later \{ from \{ opacity: 0\.2; \}/, css, "「나중에」가 빛이 닿기 전에 눈에 띈다")
+  end
+
+  # 「너도 멈추어라」는 명령형이지만 앱의 말이 아니라 경의 말이다. 인용 원문은
+  # 예외(§5)이고, 그래서 출전이 반드시 곁에 있어야 한다.
+  test "경의 한 줄은 출전과 함께만 선다" do
+    I18n.available_locales.each do |locale|
+      get threshold_path(locale: locale)
+
+      assert_select "figure.threshold__quote blockquote.threshold__verse", text: I18n.t("threshold.stop.quote", locale: locale)
+      assert_select "figure.threshold__quote figcaption.threshold__source cite", text: I18n.t("threshold.stop.source", locale: locale)
+    end
+
+    assert_equal 1, Rails.root.glob("app/views/**/*.erb").count { |path| path.read.include?("threshold.stop.quote") }
   end
 
   # 『앙굴리말라경』의 「나는 멈추었다」 — 선언이지 명령이 아니다. 앱이
@@ -36,7 +61,9 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     end
 
     I18n.available_locales.each do |locale|
-      lines = I18n.t("threshold", locale: locale).values.flat_map { |value| value.is_a?(Hash) ? value.values : value }.join("\n")
+      # 경의 한 줄(quote)은 앱의 말이 아니다 — 아래 「출전과 함께만 선다」가 지킨다.
+      doors = I18n.t("threshold", locale: locale).transform_values { |value| value.is_a?(Hash) ? value.except(:quote) : value }
+      lines = doors.values.flat_map { |value| value.is_a?(Hash) ? value.values : value }.join("\n")
       assert_no_match(/멈추어라|멈춰라|멈추세요|\bstop(?! ?ped)\b/i, lines, "문이 사용자에게 멈추라고 한다")
       assert_no_match(/문 앞에 섰다|무엇에서 쉬려|화면에 손을 얹는다|come to the gate|resting from|Rest your hand/, lines)
     end
@@ -47,7 +74,11 @@ class ThresholdTest < ActionDispatch::IntegrationTest
   # 동작으로도 지켜져야 한다. 바뀌는 것은 장막뿐이다.
   test "그림은 움직이지 않는다 — 스크롤도 확대도 카메라 이동도 없다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "")
-    still = css.scan(/([^{}]+)\{([^{}]*)\}/).select { |selector, _| selector.match?(/\.gates(?:__image|__frame)?\b(?!__|--)/) }
+    # 선택자가 가리키는 것(마지막 대상)이 그림 · 그 틀 · 문 전체일 때만 본다.
+    # 그 위에 얹히는 빛과 넘침은 그림이 아니다.
+    still = css.scan(/([^{}]+)\{([^{}]*)\}/).select do |selector, _|
+      selector.split(",").any? { |one| one.strip.split(/\s+/).last.to_s.match?(/\A\.gates(?:__image|__frame)?(?![\w-])/) }
+    end
 
     assert_not_empty still
     still.each do |selector, body|

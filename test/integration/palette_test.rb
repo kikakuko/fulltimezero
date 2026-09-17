@@ -112,11 +112,14 @@ class PaletteTest < ActionDispatch::IntegrationTest
                  "옅어짐이 끝나기 전에 문이 넘어간다")
   end
 
-  test "매일의 문은 어두워졌다가 밝아지며 걷힌다" do
-    door = CSS.read[/@keyframes daily-door \{[^\n]*\}/]
+  # 첫째 문의 빛을 짧게 줄인 장면이다. 빛이 가라앉은 뒤에 문 전체가 옅어진다.
+  test "매일의 문은 빛이 다가와 가라앉은 뒤 옅어지며 걷힌다" do
+    css = CSS.read
 
-    assert_match(/0% \{ opacity: 0 \}.*\{ opacity: 1 \}.*100% \{ opacity: 0 \}/, door)
-    assert_match(/animation: daily-door 0\.8s /, CSS.read)
+    assert_match(/@keyframes daily-door \{ from \{ opacity: 1 \} to \{ opacity: 0 \} \}/, css)
+    assert_match(/animation: daily-door [\d.]+s ease-in var\(--light-daily\) forwards;/, css, "빛이 가라앉기 전에 걷힌다")
+    assert_match(/\.daily-door \.gates__light \{ animation: gate-light var\(--light-daily\)/, css)
+    assert_match(/\.daily-door \.gates__flood \{ animation: gate-flood var\(--light-daily\)/, css)
   end
 
   test "문에는 이름을 붙이지 않는다 — 형상으로만" do

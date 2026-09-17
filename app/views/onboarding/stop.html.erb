@@ -1,12 +1,19 @@
-<%# 첫째 문 — 멈춤. 한 줄만 있다. 명령이 아니라 선언이다 — 읽는 사람이
-    스스로 자기에게 옮겨 오게 둔다. 기다리게 하지 않는다. 그림이 대신 말한다. %>
+<%# 첫째 문 — 멈춤. 빛이 다가와 한 번 넘치고 가라앉으면 한 줄이 선다.
+    「나는 멈추었다」는 선언이다. 이어지는 「너도 멈추어라」는 앱이 하는 말이
+    아니라 경이 하는 말이다 — 인용 원문은 예외(§5)이고, 출전이 늘 곁에 있다.
+    그 뒤에 길이 떠오른다. 「나중에」는 빛이 닿기 전엔 아주 옅게. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
 <%= render "gates", state: "stop" %>
 
-<div class="threshold" data-controller="gates" data-gates-state-value="stop">
+<div class="threshold threshold--stop" data-controller="gates" data-gates-state-value="stop">
   <p class="gates__line"><%= t("threshold.stop.line") %></p>
+
+  <figure class="threshold__quote">
+    <blockquote class="threshold__verse"><%= t("threshold.stop.quote") %></blockquote>
+    <figcaption class="threshold__source"><cite><%= t("threshold.stop.source") %></cite></figcaption>
+  </figure>
 
   <p class="threshold__way">
     <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "action" %>
