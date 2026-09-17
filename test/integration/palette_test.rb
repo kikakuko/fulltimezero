@@ -16,9 +16,11 @@ class PaletteTest < ActionDispatch::IntegrationTest
   CSS = Rails.root.join("app/assets/tailwind/application.css")
   COLOR = /#\h{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/
 
-  # 주사를 쓸 수 있는 자리 — 탑의 그림뿐이다. 사경실에서는 탑이 그날의 붉은 한 점이고,
-  # 탑은 한 점이 놓이는 자리 그 자체다. 글씨(pagoda__ink · pagoda__fresh)는 먹이다.
-  CINNABAR_PLACES = [ /\A\.pagoda__(?!ink|fresh|settling|camera)[\w-]+\z/ ].freeze
+  # 주사(朱砂)를 쓸 수 있는 자리 — 탑 안의 「오늘 쓴 한 자」 하나뿐이다(§2 하루 한 번).
+  CINNABAR_PLACES = [ ".pagoda__today path" ].freeze
+
+  # 석간주(石間硃)를 쓸 수 있는 자리 — 탑 그림의 클래스뿐이다. 건물의 색이라 §2 와 상관없다.
+  SEOKGANJU_PLACES = /\A\.pagoda__(?:wash|pillar|under|eave|eave-light|eave-shade|base|base-shade|finial|ring|mast|jewel)\z/
 
   # 주사가 결코 닿아서는 안 되는 것.
   NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:action|quiet|plain|flash|errors|notice|alert|door)\b/
@@ -31,7 +33,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
     assert_match(/--paper:/, root)
     assert_match(/--ink:/, root)
-    %w[--cinnabar-deep --cinnabar-hi --cinnabar-shadow --gilt].each { |token| assert_match(/#{token}:/, root) }
+    %w[--cinnabar --seokganju-deep --seokganju-hi --seokganju-shadow --gilt].each { |token| assert_match(/#{token}:/, root) }
     assert_match(/--dancheong-green:/, root)
     assert_match(/--dancheong-ocher:/, root)
 
@@ -72,26 +74,63 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "주사는 탑에만 쓴다 — 방금 쓴 글씨도 탑에 앉는 순간 먹이다" do
-    uses = rules.select { |_, body| body.match?(/var\(--cinnabar/) }
+  # 1. 주사는 탑 안의 오늘 쓴 한 자에만 — 버튼 · 글꼴 · 테두리 · 아이콘 어디에도 없다.
+  test "주사가 쓰인 곳은 탑 안의 오늘 쓴 한 자 하나뿐이다" do
+    uses = rules.select { |_, body| body.match?(/var\(--cinnabar\)/) }.flat_map { |selector, _| selector.split(",").map(&:strip) }
 
-    assert_not_empty uses, "주사가 어디에도 없다"
-    uses.each do |selector, _|
+    assert_equal CINNABAR_PLACES, uses, "주사가 오늘의 한 자 밖에 쓰였다: #{uses - CINNABAR_PLACES}"
+    uses.each { |one| assert_no_match NEVER_RED, one, "주사가 버튼 · 링크 · 오류에 닿았다" }
+
+    elsewhere = Rails.root.glob("app/{views,javascript,helpers}/**/*.{erb,js,rb}").select { |file| file.read.include?("--cinnabar") }
+    assert_empty elsewhere.map { |file| file.relative_path_from(Rails.root).to_s }, "화면이나 스크립트가 주사를 직접 칠한다"
+  end
+
+  # 2. 탑 그림은 석간주 — 주사가 닿으면 걸린다.
+  test "탑 그림에는 석간주만 — 주사가 닿지 않는다" do
+    rules.each do |selector, body|
       selector.split(",").map(&:strip).each do |one|
-        assert CINNABAR_PLACES.any? { |place| one.match?(place) }, "주사가 #{one} 에 쓰였다"
-        assert_no_match NEVER_RED, one, "주사가 버튼 · 링크 · 오류에 닿았다"
+        if body.match?(/var\(--seokganju-/)
+          assert_match SEOKGANJU_PLACES, one, "석간주가 탑 그림 밖에 쓰였다: #{one}"
+        end
+        if one.match?(SEOKGANJU_PLACES)
+          assert_no_match(/--cinnabar/, body, "탑 그림에 주사가 닿았다: #{one}")
+        end
       end
     end
+  end
 
+  # 3. 어제 이전의 글씨는 먹이다 — 오늘의 한 자만 today 로 실린다.
+  test "어제 이전의 글씨에는 주사가 닿지 않는다" do
     css = CSS.read
-    assert_no_match(/\.pagoda__(?:fresh|ink)[^{]*\{[^}]*cinnabar/, css, "글씨가 붉다")
-    art = Rails.root.join("app/assets/images/pagoda_cinnabar.svg").read
-    assert_no_match(/#\h{3,8}\b|\s(?:fill|stroke|opacity|style)="/, art, "탑 그림에 색이나 옅기가 박혀 있다")
-    assert_not Rails.root.join("app/assets/images/pagoda_outline.svg").exist?, "옛 윤곽이 남아 있다"
+    assert_no_match(/\.pagoda__(?:ink|fresh|settling)[^{]*\{[^}]*--cinnabar/, css, "어제의 글씨도 붉다")
+    assert_match(/\.pagoda__ink path \{ fill: var\(--ink\); \}/, css)
 
     scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
-    assert_equal 1, scene.scan(/"pagoda__fresh"/).size, "방금 올린 자의 자리가 여럿이다"
-    assert_no_match(/cinnabar|#\h{6}/, scene, "장면 스크립트가 주사를 칠한다")
+    assert_match(/cell\.today && "pagoda__today"/, scene, "주사가 오늘의 한 자에 매이지 않았다")
+    assert_equal 1, scene.scan(/"pagoda__today"/).size
+
+    user = users(:one)
+    heart_sutra.chars.where(pos: 1..2).each do |char|
+      user.copyings.create!(sutra_char: char, copied_on: user.today - (3 - char.pos), glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
+    end
+    today = user.copyings.create!(sutra_char: user.pagoda.next_char, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
+
+    cells = PagodaLayout.scene(user.copyings.includes(:sutra_char), today: user.today)[:cells]
+    assert_equal [ false, false, true ], cells.map { |cell| cell[:today] }
+    assert_equal today.sutra_char.pos, cells.find { |cell| cell[:today] }[:pos]
+
+    travel 1.day do
+      cells = PagodaLayout.scene(user.copyings.includes(:sutra_char), today: user.today)[:cells]
+      assert_empty cells.select { |cell| cell[:today] }, "어제의 주사가 마르지 않는다"
+    end
+  end
+
+  # 4. 그림 파일에는 색이 없다.
+  test "탑 그림 파일 안에 # 으로 시작하는 색이 없다" do
+    art = Rails.root.join("app/assets/images/pagoda.svg").read
+    assert_no_match(/#\h{3,8}\b|\s(?:fill|stroke|opacity|style)="/, art, "탑 그림에 색이나 옅기가 박혀 있다")
+    assert_not Rails.root.join("app/assets/images/pagoda_cinnabar.svg").exist?, "그림 이름에 색이 붙어 있다"
+    assert_not Rails.root.join("app/assets/images/pagoda_outline.svg").exist?, "옛 윤곽이 남아 있다"
   end
 
   # 한 자는 하루에 한 번만 올라가므로, 붉은 자는 하루에 하나를 넘지 않는다.

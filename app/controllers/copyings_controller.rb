@@ -22,7 +22,7 @@ class CopyingsController < ApplicationController
     respond_to do |format|
       format.json do
         if saved
-          render json: { scene: PagodaLayout.scene(written, fresh: copying) }, status: :created
+          render json: { scene: PagodaLayout.scene(written, fresh: copying, today: Current.user.today) }, status: :created
         else
           head :unprocessable_entity
         end

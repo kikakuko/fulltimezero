@@ -4,10 +4,10 @@
 # 그것을 그대로 심기만 한다 — 좌표도 곡선도 이 쪽에서 만들지 않는다.
 #
 # 파일로 불러오지 않고 심는 까닭: 장면은 잠깐이고, 그때 가서 그림을
-# 부르면 탑이 한 박자 늦게 선다. 색은 그림에 없다(CSS 가 준다) — 주사 탑의
-# 붉은빛도 :root 의 세 값에서 온다.
+# 부르면 탑이 한 박자 늦게 선다. 색은 그림에 없다(CSS 가 준다) — 탑의 석간주도
+# :root 의 세 값에서 온다.
 module PagodaHelper
-  ART = Rails.root.join("app/assets/images/pagoda_cinnabar.svg")
+  ART = Rails.root.join("app/assets/images/pagoda.svg")
 
   # 화면에 심을 때는 이름공간(xmlns)을 뗀다. HTML 안의 SVG 에는 필요 없고,
   # 남겨 두면 화면이 바깥 주소를 품은 것처럼 보인다(제6조 검사).

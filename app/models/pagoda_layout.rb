@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 탑의 칸 배치. 탑의 그림은 app/assets/images/pagoda_cinnabar.svg 가 맡고,
+# 탑의 칸 배치. 탑의 그림은 app/assets/images/pagoda.svg 가 맡고,
 # 여기서는 그 그림의 층에 맞춰 글자가 앉을 자리만 센다. 그림을 다시 그리면
 # 아래 상수만 고친다 — 그리는 쪽은 손대지 않는다.
 #
@@ -14,7 +14,7 @@
 # 빈 칸은 화면으로 보내지 않는다. 쓴 자리의 좌표만 나간다 — 빈 격자가
 # 보이면 몇 칸 남았는지가 세어지고, 그것은 숫자 금지의 취지에 걸린다.
 class PagodaLayout
-  VIEW = [ 390, 980 ].freeze # 그림틀 — 주사 탑 그림의 viewBox 와 같다
+  VIEW = [ 390, 980 ].freeze # 그림틀 — 탑 그림의 viewBox 와 같다
   PITCH = 24                # 칸과 칸 사이
   GLYPH = 22                # 한 자가 차지하는 크기
   BREATH = 12               # 처마 바로 아래의 숨
@@ -37,12 +37,14 @@ class PagodaLayout
 
     def floor_of(pos) = floors.find { |floor| pos.between?(floor.first, floor.last) }
 
-    # 쓴 사경만으로 탑의 장면을 만든다. fresh 는 방금 올린 자.
-    # 칸마다 사용자가 쓴 획이 그대로 실린다.
+    # 쓴 사경만으로 탑의 장면을 만든다. fresh 는 방금 올린 자, today 는 사용자의 오늘.
+    # 칸마다 사용자가 쓴 획이 그대로 실린다. 오늘 쓴 한 자만 today 로 실려 주사로
+    # 찍힌다 — 하루에 한 자만 쓰므로 탑에는 언제나 붉은 점이 하나뿐이다. 날이 바뀌면
+    # 그 자는 today 로 실리지 않아 먹으로 마른다.
     #
     # 탑의 윤곽은 여기서 그리지 않는다. 어느 층이 찼는지만 알려 주면,
     # 그리는 쪽이 그 층의 풍경만 남기고 나머지 풍경은 지운다.
-    def scene(copyings, fresh: nil)
+    def scene(copyings, fresh: nil, today: nil)
       written = copyings.sort_by { |copying| copying.sutra_char.pos }
       last = written.last&.sutra_char&.pos.to_i
       landing = fresh && floor_of(fresh.sutra_char.pos)
@@ -53,16 +55,16 @@ class PagodaLayout
           filled: floors.select { |floor| last >= floor.last }.map(&:layer),
           fresh: (landing.layer if landing && fresh.sutra_char.pos == landing.last)
         },
-        cells: written.map { |copying| cell_of(copying, fresh: copying == fresh) }
+        cells: written.map { |copying| cell_of(copying, fresh: copying == fresh, today: today && copying.copied_on == today) }
       }
     end
 
     private
-      def cell_of(copying, fresh:)
+      def cell_of(copying, fresh:, today:)
         cell = cells.fetch(copying.sutra_char.pos - 1)
 
         { pos: cell.pos, x: cell.x, y: cell.y, size: cell.size, glyph: copying.sutra_char.glyph,
-          paths: copying.glyph_paths, fresh: fresh }
+          paths: copying.glyph_paths, fresh: fresh, today: today }
       end
 
       def geometry

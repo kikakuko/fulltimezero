@@ -9,6 +9,6 @@
 # 몇 층인지 적지 않는다. 쓴 자리만 그린다.
 class PagodasController < ApplicationController
   def show
-    @scene = PagodaLayout.scene(Current.user.copyings.includes(:sutra_char))
+    @scene = PagodaLayout.scene(Current.user.copyings.includes(:sutra_char), today: Current.user.today)
   end
 end

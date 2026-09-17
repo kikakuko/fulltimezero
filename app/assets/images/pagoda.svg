@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 980" class="pagoda__art" aria-hidden="true">
-  <!-- 주사 탑. 색과 옅기는 그림에 없다 — :root 의 --cinnabar-deep · -hi · -shadow 와
+  <!-- 탑. 색과 옅기는 그림에 없다 — :root 의 석간주 셋(--seokganju-deep · -hi · -shadow)과
        .pagoda__* 의 옅기 상수가 준다. 좌표는 옛 윤곽과 같다(기단 910, 처마 730 · 550 · 394 · 238 · 82). -->
   <g class="pagoda__floor" data-layer="1">
     <path class="pagoda__wash" d="M319 738H71V910H319V738Z"/>

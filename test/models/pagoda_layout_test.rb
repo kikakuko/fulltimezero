@@ -47,7 +47,7 @@ class PagodaLayoutTest < ActiveSupport::TestCase
 
   # 칸은 그림의 층에 맞춰 앉는다. 그림을 다시 그리면 이 값들이 함께 바뀐다.
   test "층은 그림의 자리에 선다 — 처마 아래 숨 한 칸을 두고" do
-    drawing = Rails.root.join("app/assets/images/pagoda_cinnabar.svg").read
+    drawing = Rails.root.join("app/assets/images/pagoda.svg").read
     doc = Nokogiri::XML(drawing)
     _, height = PagodaLayout::VIEW
 

@@ -6,7 +6,7 @@
 // 보였다가 사라진다. 잠깐이어야 한다 — 머물게 하면 사용자가 자기 탑을
 // 세게 된다. 그래서 장면이 끝나면 탑은 어디에도 남지 않는다.
 //
-// 탑의 그림(주사 탑 — 탑신 · 옥개석 · 상륜 · 기단 · 풍경)은 그린 것을 그대로
+// 탑의 그림(석간주 탑 — 탑신 · 옥개석 · 상륜 · 기단 · 풍경)은 그린 것을 그대로
 // 심는다. 여기서는 어느 층이 찼는지에 따라 풍경을 남기거나 지우고, 서버가
 // 보낸 쓴 칸의 글씨를 그 위에 얹을 뿐이다. 빈 격자는 그리고 싶어도 그릴
 // 수 없다 — 서버가 쓴 칸만 보낸다.
@@ -120,10 +120,11 @@ function nearView(cell, [width, height]) {
 }
 
 // 한 자 — 사용자가 쓴 획 그대로. 활자로 대신 채우지 않는다.
-// 방금 올린 자(pagoda__fresh)도 먹으로 앉는다 — 사경실의 붉은 한 점은 탑 자체다.
+// 오늘 쓴 한 자(pagoda__today)만 주사로 찍힌다 — 탑다라니의 붉은 인쇄처럼. 어제까지의
+// 글씨는 모두 먹이다. 방금 올린 자는 먹으로 날아가 앉는 순간 주사가 된다.
 // 앉는 순간 한 번 움츠렸다 펴진다 — 먹이 종이에 닿아 번지듯이.
 function glyph(cell, { settling = false } = {}) {
-  const kind = [ "pagoda__ink", cell.fresh && "pagoda__fresh", cell.fresh && settling && "pagoda__settling" ]
+  const kind = [ "pagoda__ink", cell.today && "pagoda__today", cell.fresh && "pagoda__fresh", cell.fresh && settling && "pagoda__settling" ]
   const box = node("svg", { x: cell.x, y: cell.y, width: cell.size, height: cell.size, viewBox: `0 0 ${VIEW} ${VIEW}`,
                             class: kind.filter(Boolean).join(" ") })
   box.style.transformOrigin = `${cell.x + cell.size / 2}px ${cell.y + cell.size / 2}px`
