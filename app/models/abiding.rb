@@ -27,6 +27,14 @@ class Abiding < ApplicationRecord
     6 => [ 76, 50 ], 7 => [ 62, 12 ], 8 => [ 84, 26 ], 9 => [ 46, 8 ]
   }.freeze
 
+  # 강원 여섯째 장의 발자국 — footprint.svg(390 × 600)의 돌 모양 아홉의 중심.
+  # 「걷는 짐승의 어떤 발자국도 코끼리 발자국 안에 들어간다」. 여기서도 가로로도
+  # 세로로도 차례를 따르지 않고, 등지(아홉째)를 발자국 가운데 두지 않는다.
+  FOOTPRINT = {
+    1 => [ 165, 360 ], 2 => [ 265, 260 ], 3 => [ 115, 405 ], 4 => [ 215, 205 ], 5 => [ 100, 310 ],
+    6 => [ 245, 410 ], 7 => [ 205, 310 ], 8 => [ 135, 230 ], 9 => [ 290, 340 ]
+  }.freeze
+
   has_many :sittings, dependent: :nullify
 
   validates :pos, inclusion: { in: 1..COUNT }, uniqueness: true
@@ -37,6 +45,7 @@ class Abiding < ApplicationRecord
   def to_param = pos.to_s
 
   def stone = STONES.fetch(pos)
+  def footprint = FOOTPRINT.fetch(pos)
 
   # 이 자리의 이름 — 한국어는 한글, 다른 언어는 그 언어의 풀이(없으면 영어).
   def name_ko = ko

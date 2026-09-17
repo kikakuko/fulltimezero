@@ -82,6 +82,10 @@
   --plaque-wood: #241a14;
   --plaque-gold: #d8c48a;
 
+  /* 코끼리의 흰빛 — 밝기의 두 끝. 앉기의 코끼리와 강원의 코끼리 아홉이 같이 쓴다. */
+  --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
+  --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
+
   /* 미륵이 솟을 때 하늘의 금빛 */
   --maitreya-gold: #f3e2b8;
 
@@ -1199,8 +1203,6 @@ input[type="text"].threshold__field {
    자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
 .elephant-field {
   --elephant-width: 80px;   /* 폭. 그림 속 길의 너비에 맞춘 값이다 */
-  --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
-  --elephant-light: 2.4;    /* 흰빛 1 — 흼. 이보다 밝으면 윤곽이 사라진다 */
   /* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
   position: relative; width: calc(100% + 3rem); aspect-ratio: 864 / 1184; margin: 0 -1.5rem 1rem;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
@@ -1277,6 +1279,28 @@ input[type="text"].threshold__field {
 .stone:has(:checked) { color: var(--ink); }
 .stone input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .stone:has(input:focus-visible) .stone__pebble { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ── 강원 여섯째 장 — 코끼리 발자국 ───────────────────────────────
+   아홉 자리의 돌이 코끼리 발자국 하나 안에 흩어져 있다. 그림의 색은 여기서
+   칠한다(footprint.svg 의 색은 쓰지 않는다). 돌은 그림이고, 누르는 자리는 그
+   아래의 이름이다. */
+.footprint { position: relative; width: 100%; aspect-ratio: 330 / 380; margin: 1.5rem 0 2rem; }
+.footprint__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.footprint__sole { fill: var(--paper-deep); stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; opacity: 0.9; }
+.footprint__shadow { fill: none; stroke: var(--ink); stroke-width: 1.2; opacity: 0.3; }
+.footprint__toe { fill: var(--ink); opacity: 0.85; }
+.footprint__stone { fill: var(--paper); stroke: var(--ink); stroke-width: 1.6; opacity: 0.95; }
+.stone--footprint { transform: translate(-50%, calc(-50% + 1.35rem)); color: var(--ink); font: var(--type-label); }
+.stone--footprint:hover .stone__name { text-decoration: underline; text-underline-offset: 0.25em; }
+.footprint__verse { margin: 2rem 0 0; }
+.footprint__verse p { margin: 0; }
+
+/* 탕카의 코끼리 아홉 — 검정에서 흼으로. 안내일 뿐, 앉기의 코끼리와 잇지 않는다. */
+.elephants { display: grid; grid-template-columns: repeat(9, 1fr); gap: 0.2rem; align-items: end; margin: 2.5rem 0 0.5rem; }
+.elephants__one {
+  width: 100%; height: auto; aspect-ratio: 347 / 243; object-fit: contain; user-select: none; -webkit-user-drag: none;
+  filter: grayscale(1) brightness(calc(var(--elephant-dark) + var(--whiteness, 0) * (var(--elephant-light) - var(--elephant-dark))));
+}
 
 /* Turbo 의 기본 진행 막대는 파랑이라 이 앱의 먹색과 어긋난다. */
 .turbo-progress-bar { background-color: var(--ink-soft); height: 2px; }

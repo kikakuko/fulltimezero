@@ -1,15 +1,30 @@
 <%# 여섯째 장 — 아홉 자리. 오르는 사다리가 아니라 쉼이 깊어지는 아홉 가지
-    결이다. 돌은 흩어 놓는다. 어느 돌부터 들어도 된다. %>
+    결이다. 돌은 코끼리 발자국 하나 안에 흩어져 있다. 어느 돌부터 들어도 된다.
+
+    아래의 코끼리 아홉은 탕카의 그림을 옮긴 것이다 — 검은 코끼리가 희어지는
+    결. 안내일 뿐이다. 앉기 화면의 코끼리와 잇지 않고, 「지금 여기」를 표시하지
+    않는다. 읽는 사람의 자리는 이 장이 모른다. %>
 <h1 class="title"><%= t("guide.chapters.abidings") %></h1>
 
 <div class="guide">
   <p><%= Abiding.epigraph %></p>
 
-  <%= render "abidings/stones", abidings: @abidings, mode: :links %>
+  <blockquote class="footprint__verse">
+    <p><%= t("abidings.footprint.line") %></p>
+    <p class="source"><%= t("abidings.footprint.source") %></p>
+  </blockquote>
+
+  <%= render "abidings/footprint", abidings: @abidings %>
+
+  <div class="elephants" aria-hidden="true">
+    <% 9.times do |step| %>
+      <%= image_tag "elephant.png", class: "elephants__one", alt: "", draggable: false,
+                    style: "--whiteness: #{(step / 8.0).round(3)};" %>
+    <% end %>
+  </div>
+  <p><%= t("abidings.thangka") %></p>
 
   <p class="aside"><%= t("abidings.sources") %></p>
-
-  <p><%= t("abidings.invitation") %></p>
 </div>
 
 <p class="tiny" style="margin-top:4rem">

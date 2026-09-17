@@ -117,6 +117,12 @@ en:
     none: No particular place
     sources: From Asaṅga's Śrāvakabhūmi and the fourteenth chapter of the Mahāyānasūtrālaṃkāra. The pairing with the six powers and four kinds of engagement, and the elephant picture, are the Tibetan lamrim reading.
     invitation: Any stone can be picked up first. There is no order.
+    # 발자국 — 앞 문장은 경의 말(인용 원문 예외), 뒤는 이 장의 말이다.
+    footprint:
+      line: "The footprint of every creature that walks fits inside the elephant's footprint. So it is with the nine abidings — any stone can be picked up first. There is no order."
+      source: "Majjhima Nikāya, the twenty-eighth discourse · Mahāhatthipadopama Sutta"
+    # 탕카의 그림 — 원숭이와 불꽃. 안내이지 읽는 이의 자리를 말하지 않는다.
+    thangka: "In the thangka, the dark elephant grows white a little at a time along the path. At first a monkey leads it from the front; later the monkey follows behind; then it is nowhere to be seen. The flame beside the path burns large at first, grows smaller, and at the end has gone out. The elephant, white all through, sits beside the person without a rope."
 
   pagodas:
     back: "Go and write a character"
