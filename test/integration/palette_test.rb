@@ -44,7 +44,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
   # 피그마 design-tokens — 밑색은 여덟 색, 몰입 어둠, 석간주 셋, 황토. 그 밖의 색은
   # 자리마다 따로 정한 「이름 붙은 예외」뿐이다. 둘 다 아닌 색이 :root 에 생기면 깨진다.
   BASE_COLORS = {
-    "--paper" => "#f4f1ea", "--paper-deep" => "#eae5d8", "--ink" => "#1f2a28", "--ink-soft" => "#4a524f",
+    "--paper" => "#f5efe2", "--paper-deep" => "#eae5d8", "--ink" => "#1c1a17", "--ink-soft" => "#4a524f",
     "--mute" => "#8c8579", "--cinnabar" => "#d9432f", "--verdigris" => "#4f7f78", "--gilt" => "#b8a06a",
     "--night" => "#0b1216",
     "--seokganju-deep" => "#8c3a2c", "--seokganju-hi" => "#a8523e", "--seokganju-shadow" => "#6b2a1f",
@@ -60,25 +60,30 @@ class PaletteTest < ActionDispatch::IntegrationTest
     "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
   }.freeze
 
-  # 한지와 먹의 빛깔은 아직 결정 전이다(2026-09-17). 세 벌 가운데 하나를 고르면 그 한 쌍만
-  # 남기고 이 목록을 걷는다 — 그때 밑색 자물쇠가 최종으로 잠긴다.
-  PAPER_INK_CANDIDATES = [
-    { "--paper" => "#f4f1ea", "--ink" => "#1f2a28" },  # 가) 지금 값
-    { "--paper" => "#f5efe2", "--ink" => "#1c1a17" },  # 나) 옛 값
-    { "--paper" => "#f4f1ea", "--ink" => "#1e2630" }   # 다) 푸른 먹
-  ].freeze
-
   # 누런 하나 — 황토가 닿는 곳. 글씨의 황토는 경의 인용문에만, 단청 황토는 그림에만.
   OCHER_INK_PLACES = [ ".compound__card-verse" ].freeze
   OCHER_PICTURE_PLACES = /\A\.(?:void__bloom|compound__halo|maitreya__[\w-]+(?: [\w-]+)?|pagoda__[\w-]+|elephant[\w-]*)\z/
+
+  # 낮의 화면은 따뜻하고, 몰입은 차다. 찬 빛은 몰입 어둠 하나뿐이다 — 한지 · 먹은 흙의
+  # 계열이고(빨강이 파랑보다 높다), 청록은 몰입 화면(무위)에만 쓰인다.
+  test "낮의 화면은 따뜻하고 찬 빛은 몰입 어둠 하나뿐이다" do
+    root, = palette_and_rest
+    warm = ->(token) { r, _, b = root[/#{token}:\s*#(\h{6})/, 1].scan(/../).map(&:hex); r > b }
+
+    %w[--paper --paper-deep --ink --cinnabar --gilt --dancheong-ocher --seokganju-deep --ocher-ink].each do |token|
+      assert warm.(token), "#{token} 가 따뜻하지 않다 — 낮의 화면에 찬 색이 들어왔다"
+    end
+    rules.each do |selector, body|
+      next unless body.match?(/var\(--verdigris\)/)
+      assert_match(/\A\.(?:void|night|gates|daily-door)/, selector, "청록이 낮의 화면에 쓰였다: #{selector}")
+    end
+  end
 
   test "밑색 열셋과 이름 붙은 예외 말고는 색이 없다 — 나머지는 섞어 만든다" do
     root, = palette_and_rest
     colors = root.scan(/(--[\w-]+):\s*(#\h{3,8})\b/).to_h
 
-    paper_ink = colors.slice("--paper", "--ink")
-    assert_includes PAPER_INK_CANDIDATES, paper_ink, "한지 · 먹이 세 후보 밖의 값이다"
-    assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS).merge(paper_ink), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
+    assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
     %w[--rule --night-deep --night-dusk --night-ink --night-soft --night-faint --night-void-ink
        --night-rule --night-line --night-focus --night-gate].each do |derived|
       assert_match(/#{derived}:\s*(?:var\(--|color-mix\(in srgb, var\(--)/, root, "#{derived} 가 밑색에서 나오지 않는다")
