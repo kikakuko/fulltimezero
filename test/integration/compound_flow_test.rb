@@ -183,7 +183,7 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
       assert_match(/--compound-#{name}: [\d.]+;/, root, "--compound-#{name} 가 :root 에 없다")
       assert_equal 1, css.scan(/#{name}\(var\(--compound-#{name}\)\)/).size, "#{name} 이 한 곳이 아니다"
     end
-    assert_match(/\.compound__map \{\s*filter: saturate\(var/, css)
+    assert_match(/\.compound__map, \.maitreya__yard \{\s*filter: saturate\(var/, css)
     assert_no_match(/\.compound(--zooming)? (\.compound__scene )?\{[^}]*filter/, css, "톤이 그림 밖에 걸렸다")
   end
 

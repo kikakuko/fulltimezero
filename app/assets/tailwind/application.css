@@ -82,6 +82,9 @@
   --plaque-wood: #241a14;
   --plaque-gold: #d8c48a;
 
+  /* 미륵이 솟을 때 하늘의 금빛 */
+  --maitreya-gold: #f3e2b8;
+
   /* 무위의 오색 — 코끼리가 흩어지며 잠깐 번지는 빛. 청은 단청의 청록, 황은
      황토, 백은 어둠 속 먹빛, 흑은 어둠 그 자체다. 적만 따로 둔다 — 주사가
      아니다. 주사는 하루 한 점이고, 이것은 점이 아니라 번짐이다. */
@@ -865,7 +868,9 @@ input[type="text"].threshold__field {
 /* 톤은 그림 자체에만, 한 곳에서. 투명하게 걷어 낸 뒤에 걸리므로 바탕은 물들지
    않는다. 「드는 중」의 확대도 이 그림을 키우는 것이라 같은 톤이 따라간다.
    .compound 에 걸면 그 안의 고정 카드가 조감도에 갇히고 카드까지 물든다. */
-.compound__map {
+/* 미륵당 마당 그림도 같은 결로 나온 채색본이라, 나란히 보니 흙바닥의 주황이 한
+   단계 강했다 — 같은 톤을 같은 규칙에서 건다. */
+.compound__map, .maitreya__yard {
   filter: saturate(var(--compound-saturate)) sepia(var(--compound-sepia))
           brightness(var(--compound-brightness)) contrast(var(--compound-contrast));
 }
@@ -953,53 +958,207 @@ input[type="text"].threshold__field {
 .hall-header__name { font: var(--type-title); color: var(--ink); margin: 0; }
 .hall-header__line { font: var(--type-body); color: var(--ink-soft); margin: 0.3rem 0 0; }
 
-/* ── 미륵 ────────────────────────────────────────────────────────────
-   땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나 올라왔는지는
-   --rise(0 ~ 1) 하나로 온다 — 몇 번인지는 여기서 모른다.
-   허공(ground)의 아래 가장자리가 땅의 선이다. 그 선 아래로 내려간 것은
-   잘려서 보이지 않는다 — 그것이 묻힘이다. 땅 · 흙먼지 · 물결은 여기서
-   그리고, 미륵은 그림 한 장이다. 도상은 말하지 않는다. */
-.maitreya { position: relative; width: min(11rem, 60%); margin: 0 auto 3rem; }
-.maitreya__ground { position: relative; overflow: hidden; aspect-ratio: 5 / 6; }
+/* ── 미륵 — 묻혀 있다가 드러난다 ───────────────────────────────────
+   미륵당 마당 그림(390 × 560) 위, 땅선(y 470) 아래로 내려간 미륵은 잘려서
+   보이지 않는다 — 그것이 묻힘이다. 한 단위(--m-u)는 390 폭 그림의 1px 이다.
+   미륵 그림의 틀은 폭 340 — 잘라 낸 그림(534 × 755)은 그 틀의 534/768 폭이다.
+   드러난 비율(--shown)과 흙 둔덕의 높이(--mound)는 서버가 비율로만 건넨다.
+   날들에서는 그 자리에 가만히 있고, 솟는 장면에서는 before → after 로 옮아간다.
+   도상은 말하지 않는다. */
+@property --shown { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --mound { syntax: "<number>"; inherits: true; initial-value: 1; }
+
+.maitreya {
+  position: relative; width: calc(100% + 3rem); margin: 0 -1.5rem 2.5rem;
+  aspect-ratio: 390 / 560; overflow: hidden; container-type: inline-size;
+  --m-u: calc(100cqw / 390);
+  --shown: var(--shown-to); --mound: var(--mound-to);
+}
+.maitreya__yard { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+
+/* 흙 둔덕 — 미륵 뒤에서 땅선 위로 솟은 흙. 드러날수록 낮아진다. */
+.maitreya__heap {
+  position: absolute; left: calc(15 * var(--m-u)); width: calc(360 * var(--m-u));
+  top: calc((470 - var(--mound) * 48) * var(--m-u)); height: calc(var(--mound) * 96 * var(--m-u));
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    color-mix(in srgb, var(--dancheong-ocher) 62%, var(--ink)) 0%,
+    color-mix(in srgb, var(--dancheong-ocher) 80%, var(--paper)) 70%, transparent 100%);
+}
+
+/* 땅 위의 허공 — 이 틀 밖(땅선 아래)으로 나간 것은 묻힌 것이다. */
+.maitreya__earth { position: absolute; left: 0; right: 0; top: 0; height: calc(470 * var(--m-u)); overflow: hidden; }
 .maitreya__figure {
-  position: absolute; left: 50%; bottom: 0; width: 78%; height: auto;
-  /* 0 이면 땅의 선 아래로 온전히 내려가고, 1 이면 온전히 드러난다. */
-  transform: translate(-50%, calc((1 - var(--rise, 0)) * 100%));
+  position: absolute; left: 50%; translate: -50% 0;
+  width: calc(340 * 534 / 768 * var(--m-u)); height: auto;
+  top: calc((470 - var(--shown) * 340) * var(--m-u));
   user-select: none; -webkit-user-drag: none;
 }
-.maitreya--moving .maitreya__figure { transition: transform 1.2s ease-out; }
 
-/* 땅 — 선 아래의 흙. 위쪽 가장자리가 땅의 선이다. */
-.maitreya__soil {
-  display: block; height: 0.9rem; border-radius: 0 0 40% 40% / 0 0 100% 100%;
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--dancheong-ocher) 34%, var(--paper)),
-    color-mix(in srgb, var(--dancheong-ocher) 18%, var(--paper)));
+/* 금 · 물결 — 땅선에서 번진다. 날들에서는 금만 옅게 남아 있다. */
+.maitreya__marks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.maitreya__cracks path {
+  fill: none; stroke: color-mix(in srgb, var(--dancheong-ocher) 45%, var(--ink)); stroke-width: 1.3;
+  stroke-linecap: round; stroke-linejoin: round; opacity: 0.35;
+}
+.maitreya__ripples ellipse {
+  fill: none; stroke: color-mix(in srgb, var(--dancheong-ocher) 60%, var(--ink)); stroke-width: 1;
+  opacity: 0; transform-box: fill-box; transform-origin: center;
 }
 
-/* 흙먼지 — 올라오는 순간 땅의 선에서 한 번 일었다 가라앉는다. */
-.maitreya__dust {
-  position: absolute; left: 50%; bottom: 0.6rem; width: 70%; height: 1.6rem;
-  transform: translateX(-50%) scale(0.6); opacity: 0; border-radius: 50%;
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--dancheong-ocher) 45%, transparent), transparent 70%);
-  pointer-events: none;
+/* 앞쪽 흙의 입술 — 잘린 선이 곧게 보이지 않게 땅선을 덮는다. */
+.maitreya__lip {
+  position: absolute; left: calc(95 * var(--m-u)); width: calc(200 * var(--m-u));
+  top: calc(462 * var(--m-u)); height: calc(18 * var(--m-u)); border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--dancheong-ocher) 70%, var(--paper)) 55%, transparent 100%);
 }
-.maitreya--rising .maitreya__dust { animation: maitreya-dust 1.2s ease-out both; }
+
+/* 먼지는 흙이지 축하가 아니다 — 흙빛 안개 네 덩이. 입자도 반짝임도 없다. */
+.maitreya__dust { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.maitreya__dust span {
+  position: absolute; border-radius: 50%; filter: blur(calc(6 * var(--m-u)));
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--dancheong-ocher) 75%, var(--paper)), transparent);
+}
+.maitreya__dust span:nth-child(1) { left: calc(70 * var(--m-u)); top: calc(420 * var(--m-u)); width: calc(120 * var(--m-u)); height: calc(70 * var(--m-u)); }
+.maitreya__dust span:nth-child(2) { left: calc(200 * var(--m-u)); top: calc(410 * var(--m-u)); width: calc(130 * var(--m-u)); height: calc(80 * var(--m-u)); }
+.maitreya__dust span:nth-child(3) { left: calc(130 * var(--m-u)); top: calc(380 * var(--m-u)); width: calc(130 * var(--m-u)); height: calc(90 * var(--m-u)); }
+.maitreya__dust span:nth-child(4) { left: calc(20 * var(--m-u)); top: calc(455 * var(--m-u)); width: calc(350 * var(--m-u)); height: calc(50 * var(--m-u)); }
+
+/* 하늘의 금빛 — 가장 크게 흔들릴 때 가장 밝다. */
+.maitreya__sky {
+  position: absolute; left: 0; right: 0; top: 0; height: calc(470 * var(--m-u)); opacity: 0; pointer-events: none;
+  background: linear-gradient(to bottom, var(--maitreya-gold), color-mix(in srgb, var(--maitreya-gold) 40%, transparent) 70%, transparent);
+}
+
+/* 지용 — 지평선 곳곳의 작은 미륵들. 같은 그림을 작게, 옅게. */
+.maitreya__one {
+  position: absolute; overflow: hidden; opacity: 0.5;
+  left: calc((var(--x) - var(--w) / 2) * var(--m-u)); width: calc(var(--w) * var(--m-u));
+  top: calc((var(--y) - var(--w) * 1.42) * var(--m-u)); height: calc(var(--w) * 1.42 * var(--m-u));
+}
+.maitreya__one img { position: absolute; left: 0; width: 100%; height: auto; top: 100%; }
+
+/* ── 솟는 장면 ─────────────────────────────────────────────────────
+   누르면 마당이 0.3초에 물러나고 땅과 미륵만 남는다. 넉 초의 결:
+     0.5초 ±3px · 금 다섯 갈래 · 물결 세 겹 · 먼지 0.35
+     1.2초 ±5px · 미륵이 한 뼘 솟는다 · 하늘의 금빛이 가장 밝다(0.5)
+     2.0초 ±2px · 먼지가 가장 짙다(1.0)
+     3.0초 흔들림 멎음 · 먼지 0.35 · 금빛 0.1
+     4.0초 전부 멎는다. 금만 옅게 남는다.
+   흔들리는 것은 미륵만이 아니라 땅까지 — 땅이 울린다. */
+.maitreya-scene {
+  position: fixed; inset: 0; z-index: 60; background: var(--paper);
+  display: flex; flex-direction: column; align-items: center; overflow: hidden;
+  opacity: 0; transition: opacity 0.3s ease-out;
+}
+.maitreya-scene--playing { opacity: 1; }
+.maitreya-scene__ground { width: min(100vw, 30rem); }
+.maitreya-scene__ground .maitreya { width: 100%; margin: 0; --shown: var(--shown-from); --mound: var(--mound-from); }
+.maitreya-scene__below {
+  flex: 1; display: grid; align-content: center; justify-items: center; gap: 1.5rem;
+  padding: 1rem 1.5rem 2rem; text-align: center;
+}
+.maitreya-scene__line { font: var(--type-voice); color: var(--ink); margin: 0; opacity: 0; transition: opacity 0.9s ease-out; }
+.maitreya-scene__back { font: var(--type-label); margin: 0; opacity: 0; transition: opacity 0.9s ease-out 0.6s; }
+.maitreya-scene--still .maitreya-scene__line,
+.maitreya-scene--still .maitreya-scene__back { opacity: 1; }
+
+/* 미륵이 솟고 둔덕이 낮아진다 — 움직임을 줄여도 조용히 올라온다. */
+.maitreya-scene--playing .maitreya {
+  --shown: var(--shown-to); --mound: var(--mound-to);
+  transition: --shown 1.1s ease-out 0.8s, --mound 1.1s ease-out 0.8s;
+}
+.maitreya-scene--playing .maitreya__one img { top: 50%; transition: top 2s ease-out 2.3s; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .maitreya-scene--playing .maitreya-scene__ground { animation: maitreya-shake 4s linear 0.3s both; }
+  .maitreya-scene--playing .maitreya__dust { animation: maitreya-dust 4s ease-in-out 0.3s both; }
+  .maitreya-scene--playing .maitreya__sky { animation: maitreya-sky 4s ease-in-out 0.3s both; }
+  .maitreya-scene--playing .maitreya__cracks path {
+    stroke-dasharray: 260; animation: maitreya-crack 4s ease-out 0.3s both;
+  }
+  .maitreya-scene--playing .maitreya__ripples ellipse { animation: maitreya-ripple 2.2s ease-out both; }
+  .maitreya-scene--playing .maitreya__ripples ellipse:nth-child(1) { animation-delay: 0.8s; }
+  .maitreya-scene--playing .maitreya__ripples ellipse:nth-child(2) { animation-delay: 1.1s; }
+  .maitreya-scene--playing .maitreya__ripples ellipse:nth-child(3) { animation-delay: 1.4s; }
+}
+
+@keyframes maitreya-shake {
+  0.00% { transform: translateX(0.0px); }
+  1.25% { transform: translateX(-0.3px); }
+  2.50% { transform: translateX(0.6px); }
+  3.75% { transform: translateX(-0.9px); }
+  5.00% { transform: translateX(1.2px); }
+  6.25% { transform: translateX(-1.5px); }
+  7.50% { transform: translateX(1.8px); }
+  8.75% { transform: translateX(-2.1px); }
+  10.00% { transform: translateX(2.4px); }
+  11.25% { transform: translateX(-2.7px); }
+  12.50% { transform: translateX(3.0px); }
+  13.75% { transform: translateX(-3.1px); }
+  15.00% { transform: translateX(3.3px); }
+  16.25% { transform: translateX(-3.4px); }
+  17.50% { transform: translateX(3.6px); }
+  18.75% { transform: translateX(-3.7px); }
+  20.00% { transform: translateX(3.9px); }
+  21.25% { transform: translateX(-4.0px); }
+  22.50% { transform: translateX(4.1px); }
+  23.75% { transform: translateX(-4.3px); }
+  25.00% { transform: translateX(4.4px); }
+  26.25% { transform: translateX(-4.6px); }
+  27.50% { transform: translateX(4.7px); }
+  28.75% { transform: translateX(-4.9px); }
+  30.00% { transform: translateX(5.0px); }
+  31.25% { transform: translateX(-4.8px); }
+  32.50% { transform: translateX(4.6px); }
+  33.75% { transform: translateX(-4.4px); }
+  35.00% { transform: translateX(4.2px); }
+  36.25% { transform: translateX(-4.1px); }
+  37.50% { transform: translateX(3.9px); }
+  38.75% { transform: translateX(-3.7px); }
+  40.00% { transform: translateX(3.5px); }
+  41.25% { transform: translateX(-3.3px); }
+  42.50% { transform: translateX(3.1px); }
+  43.75% { transform: translateX(-2.9px); }
+  45.00% { transform: translateX(2.8px); }
+  46.25% { transform: translateX(-2.6px); }
+  47.50% { transform: translateX(2.4px); }
+  48.75% { transform: translateX(-2.2px); }
+  50.00% { transform: translateX(2.0px); }
+  51.25% { transform: translateX(-1.9px); }
+  52.50% { transform: translateX(1.8px); }
+  53.75% { transform: translateX(-1.7px); }
+  55.00% { transform: translateX(1.6px); }
+  56.25% { transform: translateX(-1.5px); }
+  57.50% { transform: translateX(1.4px); }
+  58.75% { transform: translateX(-1.3px); }
+  60.00% { transform: translateX(1.2px); }
+  61.25% { transform: translateX(-1.1px); }
+  62.50% { transform: translateX(1.0px); }
+  63.75% { transform: translateX(-0.9px); }
+  65.00% { transform: translateX(0.8px); }
+  66.25% { transform: translateX(-0.7px); }
+  67.50% { transform: translateX(0.6px); }
+  68.75% { transform: translateX(-0.5px); }
+  70.00% { transform: translateX(0.4px); }
+  71.25% { transform: translateX(-0.3px); }
+  72.50% { transform: translateX(0.2px); }
+  73.75% { transform: translateX(-0.1px); }
+  75%, 100% { transform: translateX(0); }
+}
 @keyframes maitreya-dust {
-  0% { opacity: 0; transform: translateX(-50%) scale(0.6) }
-  25% { opacity: 0.9; transform: translateX(-50%) scale(1) }
-  100% { opacity: 0; transform: translateX(-50%) scale(1.35) translateY(-40%) }
+  0% { opacity: 0; } 12.5% { opacity: 0.35; } 50% { opacity: 1; translate: 0 calc(-14 * var(--m-u)); }
+  75% { opacity: 0.35; } 100% { opacity: 0; translate: 0 calc(-24 * var(--m-u)); }
 }
-
-/* 물결 — 땅 아래 물이 있다는 한 줄. */
-.maitreya__ripple {
-  position: absolute; left: 6%; right: 6%; bottom: -0.7rem; height: 0.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--dancheong-green) 55%, transparent);
-  border-radius: 50%;
+@keyframes maitreya-sky { 0% { opacity: 0; } 30% { opacity: 0.5; } 75% { opacity: 0.1; } 100% { opacity: 0; } }
+@keyframes maitreya-crack {
+  0%, 12.5% { stroke-dashoffset: 260; opacity: 0.8; }
+  30% { stroke-dashoffset: 0; opacity: 0.8; }
+  100% { stroke-dashoffset: 0; opacity: 0.35; }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .maitreya--moving .maitreya__figure { transition: none; }
-  .maitreya--rising .maitreya__dust { animation: none; }
+@keyframes maitreya-ripple {
+  0% { opacity: 0.7; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(2.8); }
 }
 
 /* ── 코끼리의 길 ─────────────────────────────────────────────────────

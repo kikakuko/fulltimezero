@@ -6,12 +6,9 @@ class DaysController < ApplicationController
   def index
     @calendar = Calendar.for(Current.user, month: month)
 
-    # 달력 위의 미륵. 비운 날 아침 첫 화면에서만 한 뼘 올라온다 —
-    # 오늘의 달이 한 번 숨 쉬는 것과 같은 짜임이다.
+    # 달력 위의 미륵. 여기서는 솟지 않는다 — 지금 드러난 만큼 그 자리에 있다.
+    # 솟는 것은 오늘을 비워 두는 그 순간의 장면이다(마당).
     @maitreya = Maitreya.for(Current.user)
-    @maitreya_rising = @maitreya.moved? && Current.user.cleared_today? && Current.user.morning? &&
-                       session[:maitreya_seen_on] != Current.user.today.to_s
-    session[:maitreya_seen_on] = Current.user.today.to_s if @maitreya_rising
   end
 
   def show
@@ -30,6 +27,10 @@ class DaysController < ApplicationController
     clearing = Current.user.clearings.find_by(cleared_on: date)
 
     clearing ? clearing.destroy! : Current.user.clearings.create!(cleared_on: date)
+
+    # 미륵이 솟는 장면은 하루 한 번이다. 오늘을 한 번 비웠으면 거두었다가
+    # 다시 비워도 장면은 다시 오지 않는다.
+    session[:maitreya_scene_on] = Current.user.today.to_s if !clearing && date == Current.user.today
 
     redirect_to params[:from] == "today" ? today_path : day_path(date)
   end

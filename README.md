@@ -71,7 +71,7 @@ bin/rubocop
 | `palette_test` | 색은 `:root` 한 곳, 다크 모드 없음, 주사는 하루 한 번 |
 | `languages_test` | 화면의 글은 로케일에만, 언어 목록은 한 곳, 언어마다 금지어 목록 |
 | `copy_locks` (도우미) | 언어별 금지어 — 가르침 · 등급 · 명령 · 칭찬 · 나무람 · 셈 |
-| `abiding_test` · `elephant_test` · `maitreya_test` | 자리는 판정이 아님, 코끼리와 자리는 잇지 않음, 그리는 쪽은 열둘을 모름 |
+| `abiding_test` · `elephant_test` · `maitreya_test` | 자리는 판정이 아님, 코끼리와 자리는 잇지 않음, 그리는 쪽은 몇 번인지 모름 |
 | `rest_test` · `sitting_test` | 컬럼 목록 고정 — 점수 · 완주 · 분이 뒷문으로 못 들어옴 |
 
 자물쇠를 고치려면 SPIRIT 개정이 먼저다(§6). 개정은 별도 커밋으로, 이유를

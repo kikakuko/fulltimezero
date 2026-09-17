@@ -4,6 +4,11 @@
 # 수묵 그림의 흰 배경을 진짜 투명으로 바꾼다. 그러면 어떤 바탕에도 그대로 얹힌다.
 #
 #   bin/knockout app/assets/images/compound_src.png app/assets/images/compound.png
+#   bin/knockout app/assets/images/maitreya_src.png app/assets/images/maitreya.png --connected --crop
+#
+#   --connected  가장자리에서 이어진 바탕만 걷는다. 그림 안에 바탕과 거의 같은
+#                흰빛이 있을 때(미륵의 몸) 그 안이 뚫리지 않게 한다.
+#   --crop       남은 그림의 경계(알파가 있는 곳)에 맞춰 여백을 자른다.
 #
 # 배경색(기본 #F5F5F5) 언저리(±TOLERANCE)는 투명, 거기서 FEATHER 만큼 떨어질
 # 때까지 알파를 서서히 올린다. 가장자리의 반투명 화소는 배경과 섞이기 전의
@@ -11,10 +16,13 @@
 # 그림이 바뀌면 다시 돌린다. 바깥 것은 쓰지 않는다 — zlib 뿐이다.
 require "zlib"
 
-SRC, OUT = ARGV
-abort "쓰는 법: bin/knockout 원본.png 결과.png [배경색 #RRGGBB]" unless SRC && OUT
+flags, args = ARGV.partition { |arg| arg.start_with?("--") }
+SRC, OUT, COLOR = args
+abort "쓰는 법: bin/knockout 원본.png 결과.png [배경색 #RRGGBB] [--connected] [--crop]" unless SRC && OUT
 
-BACKGROUND = (ARGV[2] || "#F5F5F5").delete("#").scan(/../).map { |h| h.to_i(16) }
+BACKGROUND = (COLOR || "#F5F5F5").delete("#").scan(/../).map { |h| h.to_i(16) }
+CONNECTED = flags.include?("--connected")
+CROP = flags.include?("--crop")
 TOLERANCE = 8
 FEATHER = 28
 
@@ -73,15 +81,49 @@ height.times do
   rows << line
 end
 
+# 배경에서 얼마나 떨어졌는가 — 세 채널 가운데 가장 먼 것을 알파로.
+alphas = rows.map do |line|
+  (0...width).map do |x|
+    r, g, b = line[x * bpp, 3]
+    distance = [ (r - BACKGROUND[0]).abs, (g - BACKGROUND[1]).abs, (b - BACKGROUND[2]).abs ].max
+    ((distance - TOLERANCE).clamp(0, FEATHER) * 255.0 / FEATHER).round
+  end
+end
+
+# 이어진 바탕만 — 가장자리의 바탕빛에서 출발해 바탕빛(알파가 온전하지 않은
+# 곳)을 따라서만 번진다. 먹선에 막힌 안쪽의 흰빛은 그대로 남는다.
+if CONNECTED
+  reached = Array.new(height) { Array.new(width, false) }
+  queue = []
+  seed = ->(x, y) { queue << [ x, y ] if alphas[y][x] < 255 && !reached[y][x] && (reached[y][x] = true) }
+  (0...width).each { |x| seed.call(x, 0); seed.call(x, height - 1) }
+  (0...height).each { |y| seed.call(0, y); seed.call(width - 1, y) }
+  until queue.empty?
+    x, y = queue.pop
+    seed.call(x - 1, y) if x > 0
+    seed.call(x + 1, y) if x < width - 1
+    seed.call(x, y - 1) if y > 0
+    seed.call(x, y + 1) if y < height - 1
+  end
+  alphas.each_with_index { |row, y| row.each_index { |x| row[x] = 255 unless reached[y][x] } }
+end
+
+left, top, right, bottom = 0, 0, width - 1, height - 1
+if CROP
+  kept = alphas.each_with_index.flat_map { |row, y| row.each_index.select { |x| row[x] > 0 }.map { |x| [ x, y ] } }
+  abort "남는 그림이 없다" if kept.empty?
+  left, right = kept.map(&:first).minmax
+  top, bottom = kept.map(&:last).minmax
+end
+
 out = +""
 cleared = 0
-rows.each do |line|
+(top..bottom).each do |y|
+  line = rows[y]
   out << "\0"
-  (0...width).each do |x|
+  (left..right).each do |x|
     r, g, b = line[x * bpp, 3]
-    # 배경에서 얼마나 떨어졌는가 — 세 채널 가운데 가장 먼 것.
-    distance = [ (r - BACKGROUND[0]).abs, (g - BACKGROUND[1]).abs, (b - BACKGROUND[2]).abs ].max
-    alpha = ((distance - TOLERANCE).clamp(0, FEATHER) * 255.0 / FEATHER).round
+    alpha = alphas[y][x]
     if alpha.zero?
       cleared += 1
       out << [ 0, 0, 0, 0 ].pack("C4")
@@ -95,6 +137,8 @@ rows.each do |line|
     end
   end
 end
+width = right - left + 1
+height = bottom - top + 1
 
 chunk = ->(type, data) { [ data.bytesize ].pack("N") + type + data + [ Zlib.crc32(type + data) ].pack("N") }
 File.binwrite(OUT, "\x89PNG\r\n\x1a\n".b +

@@ -1,15 +1,54 @@
-<%# 미륵. 땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나
-    드러났는지는 그림이 말한다 — 숫자도 눈금도 없다. 땅 · 흙먼지 · 물결은
-    앱이 그리고, 미륵은 그림 한 장이다. 도상은 말하지 않는다. %>
-<div class="maitreya<%= " maitreya--rising" if rising %>" data-controller="maitreya"
-     data-maitreya-rise-value="<%= reading.rise %>"
-     data-maitreya-before-value="<%= reading.before %>"
-     data-maitreya-rising-value="<%= rising %>" aria-hidden="true">
-  <%# 땅 위의 허공 — 여기 밖으로 나간 것은 땅 아래 묻힌 것이다. %>
-  <div class="maitreya__ground">
-    <%= image_tag "maitreya.png", class: "maitreya__figure", alt: "", draggable: false, data: { maitreya_target: "figure" } %>
+<%# 미륵. 미륵당 마당에 하반신이 묻힌 상반신이 비운 날마다 조금씩 드러난다.
+    얼마나 드러났는지는 그림이 말한다 — 숫자도 눈금도 없다.
+    마당 그림 · 흙 둔덕 · 금 · 물결 · 먼지는 앱이 그리고, 미륵은 그림 한 장이다.
+    땅선 아래로 내려간 부분은 잘려 보이지 않는다 — 그것이 묻힘이다.
+    도상은 말하지 않는다.
+
+    before 가 있으면 솟는 장면(오늘을 비워 두는 순간)이다. 없으면 날들의 한 장. %>
+<% before ||= nil %>
+<% scene = before.present? %>
+<% shown_from = scene ? before.shown : reading.shown %>
+<% mound_from = scene ? before.mound : reading.mound %>
+<div class="maitreya"
+     style="--shown-from: <%= shown_from %>; --shown-to: <%= reading.shown %>; --mound-from: <%= mound_from %>; --mound-to: <%= reading.mound %>;"
+     aria-hidden="true">
+  <%= image_tag "mireukdang.png", class: "maitreya__yard", alt: "", draggable: false %>
+  <span class="maitreya__sky"></span>
+  <span class="maitreya__heap"></span>
+
+  <% if scene && reading.whole %>
+    <%# 지용(地涌) — 『법화경』 종지용출품. 땅이 갈라지며 헤아릴 수 없는 보살이
+        솟아 나온다. 다 올라오는 그 날에만, 지평선 곳곳에서 작은 미륵들이
+        함께 솟고 함께 멎는다. 보상이 아니라 형태의 완성이다.
+        큰 미륵보다 뒤에 선다 — 먼 땅의 것이다. %>
+    <div class="maitreya__many">
+      <% [ [ 22, 366, 22 ], [ 58, 388, 32 ], [ 80, 404, 20 ], [ 310, 404, 20 ], [ 334, 388, 32 ], [ 370, 366, 22 ] ].each do |x, y, w| %>
+        <span class="maitreya__one" style="--x: <%= x %>; --y: <%= y %>; --w: <%= w %>;">
+          <%= image_tag "maitreya.png", alt: "", draggable: false %>
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="maitreya__earth">
+    <%= image_tag "maitreya.png", class: "maitreya__figure", alt: "", draggable: false %>
   </div>
-  <span class="maitreya__dust"></span>
-  <span class="maitreya__soil"></span>
-  <span class="maitreya__ripple"></span>
+
+  <svg class="maitreya__marks" viewBox="0 0 390 560" preserveAspectRatio="none">
+    <g class="maitreya__cracks">
+      <path d="M195 472 L168 481 L150 478 L121 492 L96 489 L63 503" />
+      <path d="M190 474 L176 492 L180 507 L161 524 L152 546" />
+      <path d="M198 474 L207 494 L203 512 L219 533 L214 553" />
+      <path d="M201 472 L229 483 L247 480 L276 496 L308 497 L331 510" />
+      <path d="M196 473 L186 486 L191 499 L184 515" />
+    </g>
+    <g class="maitreya__ripples">
+      <ellipse cx="195" cy="471" rx="70" ry="11" />
+      <ellipse cx="195" cy="471" rx="70" ry="11" />
+      <ellipse cx="195" cy="471" rx="70" ry="11" />
+    </g>
+  </svg>
+
+  <span class="maitreya__lip"></span>
+  <span class="maitreya__dust"><span></span><span></span><span></span><span></span></span>
 </div>

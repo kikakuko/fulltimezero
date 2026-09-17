@@ -374,6 +374,12 @@ en:
         han: "不二門"
         reading: "Gate of Non-Duality"
 
+  # 미륵이 솟는 장면의 한 줄 — 문 셋의 「나는 멈추었다」를 이어받는다.
+  # 되는 것이 아니라 이미 그렇다는 것. 처음 비운 날과 다 올라온 날에만 뜬다.
+  maitreya:
+    line: "Stopping is already Maitreya"
+    back: "Back to the courtyard"
+
   privacy:
     title: Privacy
     collect: We take one email address and nothing else. No other personal data is collected.

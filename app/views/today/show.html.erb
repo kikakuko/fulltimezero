@@ -36,14 +36,33 @@
         하루 화면까지 세 번 눌러 들어가 있을 일이 아니다.
         일정이 있어도 비울 수 있다. 비움은 사실의 보고가 아니라 선언이다.
         지키지 못해도 아무 일 없다(제5조 · 제6조). %>
-    <p class="tiny clearing" id="clearing">
+    <div class="tiny clearing" id="clearing" data-controller="maitreya">
       <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
                     day_path(Current.user.today, from: "today"), method: :patch, class: "quiet",
-                    data: { action: "click->clearing#declare click->bell#open" },
+                    data: { action: "click->clearing#declare click->bell#open click->maitreya#rise" },
                     form: { data: { controller: "clearing bell",
                                     clearing_vibrate_value: @vibrate, clearing_declaring_value: !@cleared_today,
                                     bell_enabled_value: @clearing_bell && !@cleared_today,
                                     bell_start_url_value: bell_source(:start) } } %>
-    </p>
+
+      <%# 미륵이 솟는 장면. 누르는 순간 마당이 물러나고 땅과 미륵만 남는다.
+          넉 초에 전부 멎는다. 한 줄은 처음 비운 날과 다 올라온 날에만. %>
+      <% if @maitreya_rise %>
+        <% before, after = @maitreya_rise %>
+        <template data-maitreya-target="scene">
+          <div class="maitreya-scene" role="presentation">
+            <div class="maitreya-scene__ground">
+              <%= render "days/maitreya", reading: after, before: before %>
+            </div>
+            <div class="maitreya-scene__below">
+              <% if after.first || after.whole %>
+                <p class="maitreya-scene__line"><%= t("maitreya.line") %></p>
+              <% end %>
+              <p class="maitreya-scene__back"><%= link_to t("maitreya.back"), today_path, class: "soft" %></p>
+            </div>
+          </div>
+        </template>
+      <% end %>
+    </div>
   </div>
 <% end %>
