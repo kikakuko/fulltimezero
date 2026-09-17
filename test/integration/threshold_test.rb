@@ -38,19 +38,6 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert_match(/@keyframes gate-later \{ from \{ opacity: 0\.2; \}/, css, "「나중에」가 빛이 닿기 전에 눈에 띈다")
   end
 
-  # 「너도 멈추어라」는 명령형이지만 앱의 말이 아니라 경의 말이다. 인용 원문은
-  # 예외(§5)이고, 그래서 출전이 반드시 곁에 있어야 한다.
-  test "경의 한 줄은 출전과 함께만 선다" do
-    I18n.available_locales.each do |locale|
-      get threshold_path(locale: locale)
-
-      assert_select "figure.threshold__quote blockquote.threshold__verse", text: I18n.t("threshold.stop.quote", locale: locale)
-      assert_select "figure.threshold__quote figcaption.threshold__source cite", text: I18n.t("threshold.stop.source", locale: locale)
-    end
-
-    assert_equal 1, Rails.root.glob("app/views/**/*.erb").count { |path| path.read.include?("threshold.stop.quote") }
-  end
-
   # 『앙굴리말라경』의 「나는 멈추었다」 — 선언이지 명령이 아니다. 앱이
   # 사용자에게 멈추라고 하지 않는다. 읽는 사람이 스스로 옮겨 오게 둔다.
   test "문의 세 줄 — 멈추었다, 무엇이 움직이는가, 한 번도 움직인 적 없다" do
@@ -61,7 +48,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     end
 
     I18n.available_locales.each do |locale|
-      # 경의 한 줄(quote)은 앱의 말이 아니다 — 아래 「출전과 함께만 선다」가 지킨다.
+      # 경의 한 줄(quote)은 앱의 말이 아니다 — 인용 부품의 자물쇠(verse_test)가 출전과 함께만 서게 지킨다.
       doors = I18n.t("threshold", locale: locale).transform_values { |value| value.is_a?(Hash) ? value.except(:quote) : value }
       lines = doors.values.flat_map { |value| value.is_a?(Hash) ? value.values : value }.join("\n")
       assert_no_match(/멈추어라|멈춰라|멈추세요|\bstop(?! ?ped)\b/i, lines, "문이 사용자에게 멈추라고 한다")
