@@ -6,8 +6,9 @@
 require "test_helper"
 
 class DependencyTest < ActiveSupport::TestCase
-  # Gemfile 의 gem 줄 수(2026-09-17 기준).
-  GEMS = 26
+  # Gemfile 의 gem 줄 수(2026-09-17 기준). image_processing 을 빼서 스물여섯에서 스물다섯 —
+  # 어디에서도 쓰지 않는데 메이저 올림을 받으려면 ruby-vips 를 더해야 했다.
+  GEMS = 25
   # package.json 의 dependencies · devDependencies 항목 수. 지금은 파일이 없다 — importmap 으로 간다.
   PACKAGES = 0
 
