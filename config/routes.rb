@@ -1,6 +1,8 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
+  # 홈 화면에 더했을 때의 이름 · 바탕 · 전체 화면. 서비스 워커는 두지 않는다.
+  get "manifest.json" => "rails/pwa#manifest", as: :pwa_manifest
 
   # 언어의 목록은 config/application.rb 한 곳에서 온다.
   scope "/:locale", locale: Regexp.union(I18n.available_locales.map(&:to_s)) do

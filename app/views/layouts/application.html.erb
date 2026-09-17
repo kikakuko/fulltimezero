@@ -14,6 +14,7 @@
     <%= yield :head %>
 
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= tag.link rel: "manifest", href: "/manifest.json" %>
 
     <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
