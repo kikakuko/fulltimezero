@@ -144,12 +144,12 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
   end
 
   # 경구의 강조는 --cinnabar 를 쓰지 않는다 — 하루 한 번의 규칙과 부딪힌다.
-  test "카드의 경구는 주사가 아니라 단청 황토를 쓴다" do
+  test "카드의 경구는 주사가 아니라 글씨의 황토를 쓴다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
     verse = css[/\.compound__card-verse \{[^}]*\}/]
     halo = css[/\.compound__halo \{[^}]*\}/m]
 
-    assert_match(/color: var\(--dancheong-ocher\)/, verse)
+    assert_match(/color: var\(--ocher-ink\)/, verse)
     assert_no_match(/--cinnabar/, verse)
     assert_no_match(/--cinnabar/, halo)
   end

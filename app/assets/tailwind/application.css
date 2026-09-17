@@ -42,7 +42,8 @@
   --verdigris: #4f7f78;
   /* 금빛 */
   --gilt: #b8a06a;
-  /* 황토 — 단청의 황토. 코끼리 길의 바탕과 이어진다. */
+  /* 황토 — 단청의 황토. 그림에만 쓴다(미륵의 흙 · 오방색 · 전각의 후광). 글씨에는
+     --ocher-ink 를 쓴다. */
   --dancheong-ocher: #b88a4a;
 
   /* 경내 채색본의 톤 — 파일에 굽지 않고 여기서 내린다. 기와의 청록과 마당의
@@ -71,6 +72,11 @@
      여기 없는 색이 생기면 palette_test 가 깨진다. */
   /* 카드의 바탕 — 부품 「카드」(피그마 design-tokens) */
   --paper-card: #fbf9f4;
+  /* 글씨의 황토 — 경의 인용문에만 쓴다. 단청 황토(--dancheong-ocher)는 한지 위에서
+     대비가 2.75:1 이라 글씨가 되지 못한다. 이 값은 한지 위에서 4.83:1(카드 바탕 위
+     5.18:1)로 WCAG 본문 4.5:1 을 넘는다. 먹과 섞어 만들지 않는다 — 먹이 청록이라
+     섞으면 올리브가 된다. */
+  --ocher-ink: #7f6634;
 
   /* 첫째 문의 빛 — 둥근 빛이 먼 문에서 앞의 문으로 다가오고, 흰빛이 한 번
      넘쳤다가 가라앉는다. 매일의 문은 같은 장면을 짧게 줄인다. */
@@ -1047,7 +1053,7 @@ input[type="text"].threshold__field {
 .compound__card-name { font: var(--type-title); color: var(--ink); margin: 0.75rem 0 0; }
 .compound__card-han { font: var(--type-ui); color: var(--mute); margin: 0; }
 .compound__card-line { font: var(--type-body); color: var(--ink-soft); margin: 0.6rem 0 0; }
-.compound__card-verse { font: 400 1.125rem/1.5 var(--serif); color: var(--dancheong-ocher); margin: 0.6rem 0 0; }
+.compound__card-verse { font: 400 1.125rem/1.5 var(--serif); color: var(--ocher-ink); margin: 0.6rem 0 0; }
 .compound__card-source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
 .compound__card .action { margin-top: 1rem; }
 

@@ -56,14 +56,29 @@ class PaletteTest < ActionDispatch::IntegrationTest
     "--light-evening" => "#f7e6d6", "--light-night" => "#e8ecf2",
     "--plaque-wood" => "#241a14", "--plaque-gold" => "#d8c48a",   # 문의 현판
     "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
-    "--obang-red" => "#7a3b30"                                    # 무위의 오방색 가운데 적
+    "--obang-red" => "#7a3b30",                                   # 무위의 오방색 가운데 적
+    "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
   }.freeze
+
+  # 한지와 먹의 빛깔은 아직 결정 전이다(2026-09-17). 세 벌 가운데 하나를 고르면 그 한 쌍만
+  # 남기고 이 목록을 걷는다 — 그때 밑색 자물쇠가 최종으로 잠긴다.
+  PAPER_INK_CANDIDATES = [
+    { "--paper" => "#f4f1ea", "--ink" => "#1f2a28" },  # 가) 지금 값
+    { "--paper" => "#f5efe2", "--ink" => "#1c1a17" },  # 나) 옛 값
+    { "--paper" => "#f4f1ea", "--ink" => "#1e2630" }   # 다) 푸른 먹
+  ].freeze
+
+  # 누런 하나 — 황토가 닿는 곳. 글씨의 황토는 경의 인용문에만, 단청 황토는 그림에만.
+  OCHER_INK_PLACES = [ ".compound__card-verse" ].freeze
+  OCHER_PICTURE_PLACES = /\A\.(?:void__bloom|compound__halo|maitreya__[\w-]+(?: [\w-]+)?|pagoda__[\w-]+|elephant[\w-]*)\z/
 
   test "밑색 열셋과 이름 붙은 예외 말고는 색이 없다 — 나머지는 섞어 만든다" do
     root, = palette_and_rest
     colors = root.scan(/(--[\w-]+):\s*(#\h{3,8})\b/).to_h
 
-    assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
+    paper_ink = colors.slice("--paper", "--ink")
+    assert_includes PAPER_INK_CANDIDATES, paper_ink, "한지 · 먹이 세 후보 밖의 값이다"
+    assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS).merge(paper_ink), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
     %w[--rule --night-deep --night-dusk --night-ink --night-soft --night-faint --night-void-ink
        --night-rule --night-line --night-focus --night-gate].each do |derived|
       assert_match(/#{derived}:\s*(?:var\(--|color-mix\(in srgb, var\(--)/, root, "#{derived} 가 밑색에서 나오지 않는다")
@@ -87,6 +102,28 @@ class PaletteTest < ActionDispatch::IntegrationTest
       next unless body.match?(/(?<![\w-])box-shadow\s*:/)
       assert_match(/:active/, selector, "그림자를 두른 것이 있다: #{selector}")
     end
+  end
+
+  # 붉은 하나, 누런 하나 — 주사는 오늘의 한 자, 황토는 경전의 말. 둘 다 장식이 아니라
+  # 제 일이 있는 색이다. 황토가 버튼 · 머리글 · 본문 · 안내글에 닿으면 깨진다.
+  test "황토는 경의 인용문과 그림에만 — 단청 황토는 글씨가 되지 못한다" do
+    rules.each do |selector, body|
+      one_by_one = selector.split(",").map(&:strip)
+
+      if body.match?(/var\(--ocher-ink\)/)
+        one_by_one.each { |one| assert_includes OCHER_INK_PLACES, one, "글씨의 황토가 인용문 밖에 쓰였다: #{one}" }
+      end
+
+      next unless body.match?(/var\(--dancheong-ocher\)/)
+      assert_no_match(/(?<![\w-])color:\s*[^;]*--dancheong-ocher/, body, "단청 황토가 글자에 닿았다: #{selector}")
+      one_by_one.each do |one|
+        assert_match OCHER_PICTURE_PLACES, one, "단청 황토가 그림 밖에 쓰였다: #{one}"
+        assert_no_match NEVER_RED, one, "황토가 버튼 · 링크 · 오류에 닿았다"
+      end
+    end
+
+    views = Rails.root.glob("app/{views,javascript,helpers}/**/*.{erb,js,rb}").select { |file| file.read.match?(/--(?:dancheong-ocher|ocher-ink)/) }
+    assert_empty views.map { |file| file.relative_path_from(Rails.root).to_s }, "화면이나 스크립트가 황토를 직접 칠한다"
   end
 
   test "화면과 스크립트에는 색 값이 없다" do
