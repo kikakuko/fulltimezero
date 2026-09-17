@@ -1,4 +1,6 @@
-<%# 무위. 달마저 잠든다. 진행도, 끝도, 알림도 없다. %>
+<%# 무위. 달마저 잠든다. 진행도, 끝도, 알림도 없다.
+    들어오면 코끼리가 천천히 흩어져 사라진다. 잠깐 오색이 번지고 이내 어둠.
+    쌓아서 닿는 상태가 아니다 — 누구든 매번 본다. 흰빛과 무관하다. %>
 <% content_for :no_chrome, true %>
 <% content_for :no_locales, true %>
 
@@ -7,6 +9,13 @@
      data-action="click->nothing#reveal bell:open->bell#opening"
      data-bell-enabled-value="<%= @bell %>"
      data-bell-start-url-value="<%= bell_source(:start) %>">
+
+  <div class="void__scene" data-controller="dispersal" aria-hidden="true">
+    <span class="void__bloom" data-dispersal-target="bloom"></span>
+    <div class="void__elephant" data-dispersal-target="figure">
+      <%= image_tag "elephant.png", class: "void__whole", alt: "", draggable: false, data: { dispersal_target: "image" } %>
+    </div>
+  </div>
 
   <p class="void-line"><%= t("nothing.line") %></p>
 
