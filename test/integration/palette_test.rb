@@ -16,8 +16,9 @@ class PaletteTest < ActionDispatch::IntegrationTest
   CSS = Rails.root.join("app/assets/tailwind/application.css")
   COLOR = /#\h{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/
 
-  # 주사를 쓸 수 있는 자리. 미륵이 올라오는 순간이 생기면 여기에 더한다.
-  CINNABAR_PLACES = [ /\A\.pagoda__fresh\b/ ].freeze
+  # 주사를 쓸 수 있는 자리 — 탑의 그림뿐이다. 사경실에서는 탑이 그날의 붉은 한 점이고,
+  # 탑은 한 점이 놓이는 자리 그 자체다. 글씨(pagoda__ink · pagoda__fresh)는 먹이다.
+  CINNABAR_PLACES = [ /\A\.pagoda__(?!ink|fresh|settling|camera)[\w-]+\z/ ].freeze
 
   # 주사가 결코 닿아서는 안 되는 것.
   NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:action|quiet|plain|flash|errors|notice|alert|door)\b/
@@ -30,7 +31,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
     assert_match(/--paper:/, root)
     assert_match(/--ink:/, root)
-    assert_match(/--cinnabar:/, root)
+    %w[--cinnabar-deep --cinnabar-hi --cinnabar-shadow --gilt].each { |token| assert_match(/#{token}:/, root) }
     assert_match(/--dancheong-green:/, root)
     assert_match(/--dancheong-ocher:/, root)
 
@@ -71,8 +72,8 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "주사는 방금 올린 한 자에만 쓴다" do
-    uses = rules.select { |_, body| body.include?("var(--cinnabar)") }
+  test "주사는 탑에만 쓴다 — 방금 쓴 글씨도 탑에 앉는 순간 먹이다" do
+    uses = rules.select { |_, body| body.match?(/var\(--cinnabar/) }
 
     assert_not_empty uses, "주사가 어디에도 없다"
     uses.each do |selector, _|
@@ -82,9 +83,15 @@ class PaletteTest < ActionDispatch::IntegrationTest
       end
     end
 
+    css = CSS.read
+    assert_no_match(/\.pagoda__(?:fresh|ink)[^{]*\{[^}]*cinnabar/, css, "글씨가 붉다")
+    art = Rails.root.join("app/assets/images/pagoda_cinnabar.svg").read
+    assert_no_match(/#\h{3,8}\b|\s(?:fill|stroke|opacity|style)="/, art, "탑 그림에 색이나 옅기가 박혀 있다")
+    assert_not Rails.root.join("app/assets/images/pagoda_outline.svg").exist?, "옛 윤곽이 남아 있다"
+
     scene = Rails.root.join("app/javascript/lib/pagoda_scene.js").read
-    assert_match(/cell\.fresh && "pagoda__fresh"/, scene, "주사가 방금 올린 자에 매이지 않았다")
-    assert_equal 1, scene.scan(/"pagoda__fresh"/).size, "주사의 자리가 여럿이다"
+    assert_equal 1, scene.scan(/"pagoda__fresh"/).size, "방금 올린 자의 자리가 여럿이다"
+    assert_no_match(/cinnabar|#\h{6}/, scene, "장면 스크립트가 주사를 칠한다")
   end
 
   # 한 자는 하루에 한 번만 올라가므로, 붉은 자는 하루에 하나를 넘지 않는다.

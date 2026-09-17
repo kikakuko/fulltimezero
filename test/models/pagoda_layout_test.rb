@@ -47,10 +47,13 @@ class PagodaLayoutTest < ActiveSupport::TestCase
 
   # 칸은 그림의 층에 맞춰 앉는다. 그림을 다시 그리면 이 값들이 함께 바뀐다.
   test "층은 그림의 자리에 선다 — 처마 아래 숨 한 칸을 두고" do
-    drawing = Rails.root.join("app/assets/images/pagoda_outline.svg").read
+    drawing = Rails.root.join("app/assets/images/pagoda_cinnabar.svg").read
+    doc = Nokogiri::XML(drawing)
     _, height = PagodaLayout::VIEW
 
     assert_match(/viewBox="0 0 #{PagodaLayout::VIEW[0]} #{height}"/, drawing, "그림틀이 그림과 다르다")
+    base_top = numbers(doc.at_css(".pagoda__base")["d"])[1]
+    assert_equal PagodaLayout::GROUND, base_top.round, "기단 윗선이 칸의 바닥에 있지 않다"
 
     PagodaLayout.floors.each do |floor|
       rows = PagodaLayout::FLOORS[floor.layer - 1].last
@@ -61,7 +64,9 @@ class PagodaLayoutTest < ActiveSupport::TestCase
         "#{floor.layer}층의 칸이 처마 아래 숨을 두고 앉지 않는다"
       assert_equal floor.y + floor.height, cells.map { |cell| cell.y + PagodaLayout::GLYPH }.max +
         (PagodaLayout::PITCH - PagodaLayout::GLYPH) / 2, "#{floor.layer}층의 칸이 바닥에 붙어 앉지 않는다"
-      assert_match(/M \d+(?:\.\d+)? #{floor.y.to_i} /, drawing, "#{floor.layer}층의 처마가 그림에 없다")
+
+      eave = numbers(doc.at_css(".pagoda__floor[data-layer='#{floor.layer}'] .pagoda__eave")["d"]).each_slice(2).map(&:last)
+      assert_includes (eave.min..eave.max), floor.y, "#{floor.layer}층의 처마가 그림의 그 자리에 없다"
     end
   end
 
@@ -112,4 +117,7 @@ class PagodaLayoutTest < ActiveSupport::TestCase
       end
       Copying.insert_all!(rows)
     end
+
+  private
+    def numbers(path) = path.scan(/-?\d+(?:\.\d+)?/).map(&:to_f)
 end

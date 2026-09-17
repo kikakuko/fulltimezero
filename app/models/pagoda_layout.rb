@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 탑의 칸 배치. 탑의 그림은 app/assets/images/pagoda_outline.svg 가 맡고,
+# 탑의 칸 배치. 탑의 그림은 app/assets/images/pagoda_cinnabar.svg 가 맡고,
 # 여기서는 그 그림의 층에 맞춰 글자가 앉을 자리만 센다. 그림을 다시 그리면
 # 아래 상수만 고친다 — 그리는 쪽은 손대지 않는다.
 #
@@ -14,7 +14,7 @@
 # 빈 칸은 화면으로 보내지 않는다. 쓴 자리의 좌표만 나간다 — 빈 격자가
 # 보이면 몇 칸 남았는지가 세어지고, 그것은 숫자 금지의 취지에 걸린다.
 class PagodaLayout
-  VIEW = [ 390, 980 ].freeze # 그림틀 — 윤곽 그림의 viewBox 와 같다
+  VIEW = [ 390, 980 ].freeze # 그림틀 — 주사 탑 그림의 viewBox 와 같다
   PITCH = 24                # 칸과 칸 사이
   GLYPH = 22                # 한 자가 차지하는 크기
   BREATH = 12               # 처마 바로 아래의 숨

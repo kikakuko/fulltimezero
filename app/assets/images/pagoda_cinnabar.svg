@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 980" class="pagoda__art" aria-hidden="true">
+  <!-- 주사 탑. 색과 옅기는 그림에 없다 — :root 의 --cinnabar-deep · -hi · -shadow 와
+       .pagoda__* 의 옅기 상수가 준다. 좌표는 옛 윤곽과 같다(기단 910, 처마 730 · 550 · 394 · 238 · 82). -->
+  <g class="pagoda__floor" data-layer="1">
+    <path class="pagoda__wash" d="M319 738H71V910H319V738Z"/>
+    <path class="pagoda__pillar" d="M71.2998 910L77.8089 738M318.595 910L312.208 738"/>
+    <path class="pagoda__under" d="M195 752C266.797 752 325 749.314 325 746C325 742.686 266.797 740 195 740C123.203 740 65 742.686 65 746C65 749.314 123.203 752 195 752Z"/>
+    <path class="pagoda__eave" d="M43.8528 716.561C105.4 728 284.6 728 343.617 715.631C291 747 99.0001 747 44.8223 721.082L43.8528 716.561Z"/>
+    <path class="pagoda__eave-light" d="M43.8528 716.561C105.4 728 284.6 728 343.617 715.631"/>
+    <path class="pagoda__eave-shade" d="M51 722C105.4 752 284.6 752 339 722"/>
+  </g>
+  <g class="pagoda__floor" data-layer="2">
+    <path class="pagoda__wash" d="M307 558H83V730H307V558Z"/>
+    <path class="pagoda__pillar" d="M82.4563 730L89.5189 558M306.39 730L300.655 558"/>
+    <path class="pagoda__under" d="M195 572C260.17 572 313 569.314 313 566C313 562.686 260.17 560 195 560C129.83 560 77 562.686 77 566C77 569.314 129.83 572 195 572Z"/>
+    <path class="pagoda__eave" d="M57.2839 536.308C113.8 548 276.2 548 333.705 535.743C282 567 108 567 58.0127 540.076L57.2839 536.308Z"/>
+    <path class="pagoda__eave-light" d="M57.2839 536.308C113.8 548 276.2 548 333.705 535.743"/>
+    <path class="pagoda__eave-shade" d="M63 542C113.8 572 276.2 572 327 542"/>
+  </g>
+  <g class="pagoda__floor" data-layer="3">
+    <path class="pagoda__wash" d="M295 402H95V550H295V402Z"/>
+    <path class="pagoda__pillar" d="M95.6047 550L100.678 402M295.238 550L289.686 402"/>
+    <path class="pagoda__under" d="M195 416C253.542 416 301 413.314 301 410C301 406.686 253.542 404 195 404C136.458 404 89 406.686 89 410C89 413.314 136.458 416 195 416Z"/>
+    <path class="pagoda__eave" d="M67.6873 379.815C122.2 392 267.8 392 322.099 379.169C273 411 117 411 69.8419 385.274L67.6873 379.815Z"/>
+    <path class="pagoda__eave-light" d="M67.6873 379.815C122.2 392 267.8 392 322.099 379.169"/>
+    <path class="pagoda__eave-shade" d="M75 386C122.2 416 267.8 416 315 386"/>
+  </g>
+  <g class="pagoda__floor" data-layer="4">
+    <path class="pagoda__wash" d="M283 246H107V394H283V246Z"/>
+    <path class="pagoda__pillar" d="M107.906 394L113.038 246M282.596 394L276.906 246"/>
+    <path class="pagoda__under" d="M195 260C246.915 260 289 257.314 289 254C289 250.686 246.915 248 195 248C143.085 248 101 250.686 101 254C101 257.314 143.085 260 195 260Z"/>
+    <path class="pagoda__eave" d="M82.0628 223.748C130.6 236 259.4 236 309.799 224.577C264 255 126 255 81.3101 229.342L82.0628 223.748Z"/>
+    <path class="pagoda__eave-light" d="M82.0627 223.748C130.6 236 259.4 236 309.799 224.577"/>
+    <path class="pagoda__eave-shade" d="M87 230C130.6 260 259.4 260 303 230"/>
+  </g>
+  <g class="pagoda__floor" data-layer="5">
+    <path class="pagoda__wash" d="M271 90H119V238H271V90Z"/>
+    <path class="pagoda__pillar" d="M118.889 238L125.168 90M270.514 238L265.625 90"/>
+    <path class="pagoda__under" d="M195 104C240.287 104 277 101.314 277 98C277 94.6863 240.287 92 195 92C149.713 92 113 94.6863 113 98C113 101.314 149.713 104 195 104Z"/>
+    <path class="pagoda__eave" d="M92.4104 68.7724C139 80 251 80 297.804 68.6326C255 99 135 99 93.4169 72.9475L92.4104 68.7724Z"/>
+    <path class="pagoda__eave-light" d="M92.4104 68.7724C139 80 251 80 297.804 68.6326"/>
+    <path class="pagoda__eave-shade" d="M99 74C139 104 251 104 291 74"/>
+  </g>
+  <path class="pagoda__base" d="M43.7304 910C95 906 295 906 346.335 910L353 926C285 932 105 932 37 926L43.7304 910Z"/>
+  <path class="pagoda__base-shade" d="M23 926H367L373 940C285 946 105 946 17 940L23 926Z"/>
+  <path class="pagoda__finial" d="M211 68H179V78H211V68Z"/>
+  <path class="pagoda__finial" d="M181 68C190.333 57.3333 199.667 57.3333 209 68H181Z"/>
+  <path class="pagoda__mast" d="M195 54V16"/>
+  <path class="pagoda__ring" d="M195 46.5999C201.075 46.5999 206 45.4358 206 43.9999C206 42.564 201.075 41.3999 195 41.3999C188.925 41.3999 184 42.564 184 43.9999C184 45.4358 188.925 46.5999 195 46.5999Z"/>
+  <path class="pagoda__ring" d="M195 38.5999C199.971 38.5999 204 37.4358 204 35.9999C204 34.564 199.971 33.3999 195 33.3999C190.029 33.3999 186 34.564 186 35.9999C186 37.4358 190.029 38.5999 195 38.5999Z"/>
+  <path class="pagoda__ring" d="M195 30.5999C198.866 30.5999 202 29.4358 202 27.9999C202 26.564 198.866 25.3999 195 25.3999C191.134 25.3999 188 26.564 188 27.9999C188 29.4358 191.134 30.5999 195 30.5999Z"/>
+  <path class="pagoda__jewel" d="M195 4C202 10 201 18 195 20C189 18 188 10 195 4Z"/>
+  <!-- 풍경 — 처마 끝마다 둘. 층이 차면 남고, 막 찬 층의 것만 한 번 흔들린다. -->
+  <g class="bell" data-layer="1">
+    <path class="pagoda__bell-cord" d="M 43.9 716.6 L 43.9 723.6"/>
+    <path class="pagoda__bell" d="M 40.5 723.6 Q 43.9 731.6 47.3 723.6 Z"/>
+  </g>
+  <g class="bell" data-layer="1">
+    <path class="pagoda__bell-cord" d="M 343.6 715.6 L 343.6 722.6"/>
+    <path class="pagoda__bell" d="M 340.2 722.6 Q 343.6 730.6 347.0 722.6 Z"/>
+  </g>
+  <g class="bell" data-layer="2">
+    <path class="pagoda__bell-cord" d="M 57.3 536.3 L 57.3 543.3"/>
+    <path class="pagoda__bell" d="M 53.9 543.3 Q 57.3 551.3 60.7 543.3 Z"/>
+  </g>
+  <g class="bell" data-layer="2">
+    <path class="pagoda__bell-cord" d="M 333.7 535.7 L 333.7 542.7"/>
+    <path class="pagoda__bell" d="M 330.3 542.7 Q 333.7 550.7 337.1 542.7 Z"/>
+  </g>
+  <g class="bell" data-layer="3">
+    <path class="pagoda__bell-cord" d="M 67.7 379.8 L 67.7 386.8"/>
+    <path class="pagoda__bell" d="M 64.3 386.8 Q 67.7 394.8 71.1 386.8 Z"/>
+  </g>
+  <g class="bell" data-layer="3">
+    <path class="pagoda__bell-cord" d="M 322.1 379.2 L 322.1 386.2"/>
+    <path class="pagoda__bell" d="M 318.7 386.2 Q 322.1 394.2 325.5 386.2 Z"/>
+  </g>
+  <g class="bell" data-layer="4">
+    <path class="pagoda__bell-cord" d="M 82.1 223.8 L 82.1 230.8"/>
+    <path class="pagoda__bell" d="M 78.7 230.8 Q 82.1 238.8 85.5 230.8 Z"/>
+  </g>
+  <g class="bell" data-layer="4">
+    <path class="pagoda__bell-cord" d="M 309.8 224.6 L 309.8 231.6"/>
+    <path class="pagoda__bell" d="M 306.4 231.6 Q 309.8 239.6 313.2 231.6 Z"/>
+  </g>
+  <g class="bell" data-layer="5">
+    <path class="pagoda__bell-cord" d="M 92.4 68.8 L 92.4 75.8"/>
+    <path class="pagoda__bell" d="M 89.0 75.8 Q 92.4 83.8 95.8 75.8 Z"/>
+  </g>
+  <g class="bell" data-layer="5">
+    <path class="pagoda__bell-cord" d="M 297.8 68.6 L 297.8 75.6"/>
+    <path class="pagoda__bell" d="M 294.4 75.6 Q 297.8 83.6 301.2 75.6 Z"/>
+  </g>
+</svg>

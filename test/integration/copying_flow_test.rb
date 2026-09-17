@@ -134,16 +134,22 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
       "차지 않은 층에도 풍경이 걸린다")
   end
 
-  # 글씨가 주인공이고 탑은 자리다. 옅기는 손으로 고칠 수 있게 상수로 둔다.
-  test "윤곽은 옅게 깔린다" do
+  # 글씨가 주인공이고 탑은 자리다. 탑이 붉어졌으니 탑신의 바탕은 아주 옅게 — 먹 글씨가
+  # 그 위에서 읽혀야 한다 — 옥개석만 진하게. 옅기는 손으로 고칠 수 있게 상수로 둔다.
+  test "주사 탑은 탑신이 아주 옅고 옥개석만 진하다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
-    art = css[/\.pagoda__art \{.*?\n\}/m]
+    art = css[/\.pagoda__art \{.*?\n\}/m].to_s
+    value = ->(name) { art[/--pagoda-#{name}: ([\d.]+);/, 1].to_f }
 
-    assert_match(/--art: 0\.3;/, art.to_s)
-    assert_match(/--art-pillar: [\d.]+;/, art.to_s, "기둥선을 따로 옅게 할 수 없다")
-    assert_match(/--art-bell: [\d.]+;/, art.to_s, "풍경의 진하기를 따로 정할 수 없다")
-    assert_match(/\.pagoda__eave \{[^}]*opacity: var\(--art\)/, css)
-    assert_match(/\.pagoda__pillar \{[^}]*opacity: calc\(var\(--art\) \* var\(--art-pillar\)\)/, css)
+    assert_equal 0.04, value.("wash")
+    assert_equal 0.94, value.("eave")
+    assert_operator value.("wash"), :<, value.("pillar")
+    assert_operator value.("pillar"), :<, value.("eave")
+    { "wash" => "wash", "eave" => "eave", "pillar" => "pillar", "base" => "base", "jewel" => "jewel" }.each do |part, name|
+      assert_match(/\.pagoda__#{part} \{[^}]*opacity: var\(--pagoda-#{name}\)/, css)
+    end
+    assert_match(/\.bell \{ opacity: var\(--pagoda-bell\); \}/, css)
+    assert_match(/\.pagoda__bell \{ fill: var\(--gilt\); \}/, css, "풍경이 금빛이 아니다")
   end
 
   # 탑은 통째로 보여야 탑이다. 앉는 동안만 다가가고, 끝에는 물러난다.
@@ -154,8 +160,8 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_match(/camera\.setAttribute\("transform", "translate\(0 0\) scale\(1\)"\)/, scene,
       "물러나 탑 전체가 되지 않는다")
     assert_match(/\.pagoda__camera--widening \{ transition: transform \d+ms /, css)
-    assert_match(/\.pagoda \{ height: min\(84vh, 48rem\); width: auto; max-width: 92vw; \}/, css,
-      "탑이 화면에 다 들어오지 않는다")
+    assert_match(/\.pagoda \{ display: block; margin-inline: auto; height: min\(84vh, 48rem\); width: auto; max-width: 92vw; \}/, css,
+      "탑이 화면에 다 들어오지 않거나 가운데에 서지 않는다")
   end
 
   # 날아가는 결. 밋밋하지 않게 넷을 얹되, 길이는 그대로 팔 할 초다.

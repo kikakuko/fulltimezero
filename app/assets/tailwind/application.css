@@ -24,9 +24,12 @@
   --mute: #8c8579;
   --rule: #e0d7c5;
 
-  /* 주사(朱砂) — 탑다라니의 붉은 인쇄. 하루에 한 번만 보인다.
-     버튼 · 링크 · 오류에 쓰지 않는다. */
-  --cinnabar: #b5412e;
+  /* 주사(朱砂) — 탑다라니의 붉은 인쇄. 사경실에서는 탑이 그날의 붉은 한 점이다 —
+     탑은 한 점이 놓이는 자리 그 자체다. 탑 밖에서는 쓰지 않는다(버튼 · 링크 ·
+     오류 · 글씨 어디에도). 방금 쓴 글씨도 탑에 앉는 순간 먹이다. */
+  --cinnabar-deep: #b0301f;    /* 옥개석 · 기단 몸통 · 상륜 */
+  --cinnabar-hi: #d9573f;      /* 처마 윗선의 광 · 보주 */
+  --cinnabar-shadow: #8c2316;  /* 처마 아래 그늘 · 기단 아랫단 */
 
   /* 단청 — 청록과 황토. 코끼리 길의 바탕과 이어진다. */
   --dancheong-green: #2f6b62;
@@ -527,26 +530,44 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .pagoda-scene.is-open { opacity: 1; }
 .pagoda-scene.is-closing { opacity: 0; transition-duration: 300ms; }
 
-.pagoda { height: min(84vh, 48rem); width: auto; max-width: 92vw; }
+/* 탑은 가운데에 선다 — 그림은 블록이라 글줄 가운데 맞춤이 먹지 않으므로 양옆을 비운다. */
+.pagoda { display: block; margin-inline: auto; height: min(84vh, 48rem); width: auto; max-width: 92vw; }
 /* 보는 자리의 탑은 조금 낮다 — 아래의 길이 함께 보여야 한다. */
 .pagoda-look .pagoda { height: min(70vh, 40rem); }
 
-/* 탑의 그림 — 손으로 그린 윤곽을 그대로 심는다. 옅게 깔린다:
-   글씨가 주인공이고 탑은 자리다. 처마가 글씨보다 눈에 띄면
-   아래 둘을 내린다(전체 0.3 → 0.2 같은 식으로). */
+/* 주사 탑 — 그림(pagoda_cinnabar.svg)을 그대로 심는다. 색도 옅기도 그림에 없고
+   여기서 준다. 탑이 붉어졌으므로 옅기를 다시 잡았다: 탑신의 바탕(wash)은 아주
+   옅게 — 먹 글씨가 그 위에서 읽혀야 한다 — 옥개석만 진하게. 글씨가 주인공이고
+   탑은 자리다. 처마가 글씨보다 눈에 띄면 --pagoda-eave 부터 내린다. */
 .pagoda__art {
-  --art: 0.3;         /* 그림의 옅기 — 처마 · 상륜 · 기단 */
-  --art-pillar: 0.75; /* 기둥선은 그 안에서 조금 더 옅게 */
-  --art-bell: 0.55;   /* 풍경만 조금 진하게 — 층이 찬 표이므로 보여야 한다 */
+  --pagoda-wash: 0.04;        /* 탑신의 바탕 */
+  --pagoda-pillar: 0.45;      /* 기둥선 */
+  --pagoda-under: 0.07;       /* 처마 밑 그늘 */
+  --pagoda-eave: 0.94;        /* 옥개석 — 진하게 */
+  --pagoda-eave-light: 0.55;  /* 처마 윗선의 광 */
+  --pagoda-eave-shade: 0.4;   /* 처마 아랫선 */
+  --pagoda-base: 0.88;        /* 기단 몸통 */
+  --pagoda-base-shade: 0.8;   /* 기단 아랫단 */
+  --pagoda-finial: 0.85;      /* 상륜 · 노반 */
+  --pagoda-jewel: 0.95;       /* 보주 */
+  --pagoda-bell: 0.8;         /* 풍경 — 층이 찬 표이므로 보여야 한다 */
   overflow: visible;
 }
-.pagoda__art path, .pagoda__art circle { fill: none; }
-.pagoda__pillar { stroke: var(--ink-soft); opacity: calc(var(--art) * var(--art-pillar)); }
-.pagoda__eave { stroke: var(--ink-soft); stroke-linecap: round; opacity: var(--art); }
-.pagoda__gilt { stroke: var(--dancheong-ocher); opacity: var(--art); }
-.pagoda__gilt--solid { fill: var(--dancheong-ocher); stroke: none; }
-.bell { opacity: var(--art-bell); }
-.bell .pagoda__pillar, .bell .pagoda__gilt { opacity: 1; }
+.pagoda__wash { fill: var(--cinnabar-deep); opacity: var(--pagoda-wash); }
+.pagoda__pillar { fill: none; stroke: var(--cinnabar-deep); stroke-width: 2.2; stroke-linecap: round; opacity: var(--pagoda-pillar); }
+.pagoda__under { fill: var(--cinnabar-shadow); opacity: var(--pagoda-under); }
+.pagoda__eave { fill: var(--cinnabar-deep); opacity: var(--pagoda-eave); }
+.pagoda__eave-light { fill: none; stroke: var(--cinnabar-hi); stroke-width: 2; stroke-linecap: round; opacity: var(--pagoda-eave-light); }
+.pagoda__eave-shade { fill: none; stroke: var(--cinnabar-shadow); stroke-width: 3; stroke-linecap: round; opacity: var(--pagoda-eave-shade); }
+.pagoda__base { fill: var(--cinnabar-deep); opacity: var(--pagoda-base); }
+.pagoda__base-shade { fill: var(--cinnabar-shadow); opacity: var(--pagoda-base-shade); }
+.pagoda__finial, .pagoda__ring { fill: var(--cinnabar-deep); opacity: var(--pagoda-finial); }
+.pagoda__mast { fill: none; stroke: var(--cinnabar-deep); stroke-width: 3; stroke-linecap: round; opacity: var(--pagoda-finial); }
+.pagoda__jewel { fill: var(--cinnabar-hi); opacity: var(--pagoda-jewel); }
+/* 풍경은 그림에 없던 것이라 금빛으로 단다. */
+.bell { opacity: var(--pagoda-bell); }
+.pagoda__bell-cord { fill: none; stroke: var(--gilt); stroke-width: 1; }
+.pagoda__bell { fill: var(--gilt); }
 
 /* 다가갔다 물러나는 틀. 앉는 자리가 손톱만 하지 않도록 잠깐 다가갔다가,
    앉고 나면 물러나 탑 전체를 보인다. 탑을 잘라 보이지는 않는다. */
@@ -555,11 +576,8 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 
 .pagoda__ink path { fill: var(--ink); }
 
-/* 방금 올린 한 자만 주사로 찍힌다 — 탑다라니의 붉은 인쇄처럼.
-   붉은색이 보이는 하루 한 번의 자리다(SPIRIT §2). 다음 날 탑에서는
-   이 자도 먹빛이다. 이 규칙 밖에서 --cinnabar 를 쓰면
-   palette_test 가 깨진다. */
-.pagoda__fresh path { fill: var(--cinnabar); }
+/* 방금 올린 한 자도 먹이다 — 탑에 앉는 순간 먹으로 앉는다. 사경실의 붉은 한 점은
+   탑 자체다. 주사를 글씨에 쓰면 palette_test 가 깨진다. */
 
 /* 앉는 순간 — 먹이 종이에 닿아 번지듯 한 번 움츠렸다 펴진다.
    움츠러드는 가운데는 칸마다 다르므로 자리에서 정한다. */

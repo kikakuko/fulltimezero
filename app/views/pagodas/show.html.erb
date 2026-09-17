@@ -4,7 +4,7 @@
   <div data-controller="pagoda"
        data-pagoda-scene-value="<%= @scene.to_json %>"
        data-pagoda-label-value="<%= t("copyings.pagoda") %>">
-    <template data-pagoda-target="art"><%= pagoda_outline %></template>
+    <template data-pagoda-target="art"><%= pagoda_art %></template>
   </div>
 
   <p class="tiny"><%= link_to t("pagodas.back"), new_copying_path, class: "soft" %></p>
