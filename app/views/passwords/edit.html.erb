@@ -9,5 +9,5 @@
     <%= f.label :password_confirmation, t("users.password_confirmation") %>
     <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
   </div>
-  <p style="margin-top:2rem"><%= f.submit t("passwords.edit.submit") %></p>
+  <p style="margin-top:2rem"><%= f.button t("passwords.edit.submit"), class: "button-primary" %></p>
 <% end %>

@@ -21,7 +21,7 @@
 
   <%= f.hidden_field :time_zone, data: { controller: "time-zone" } %>
 
-  <p style="margin-top:2.5rem"><%= f.submit t("users.new.submit") %></p>
+  <p style="margin-top:2.5rem"><%= f.button t("users.new.submit"), class: "button-primary" %></p>
 <% end %>
 
-<p class="tiny"><%= link_to t("sessions.new.forgot"), new_password_path %></p>
+<p class="tiny"><%= link_to t("sessions.new.forgot"), new_password_path, class: "button-quiet" %></p>

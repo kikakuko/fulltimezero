@@ -11,12 +11,12 @@
     <%= f.password_field :password, autocomplete: "current-password", required: true %>
   </div>
 
-  <p style="margin-top:2.5rem"><%= f.submit t("sessions.new.submit") %></p>
+  <p style="margin-top:2.5rem"><%= f.button t("sessions.new.submit"), class: "button-primary" %></p>
 <% end %>
 
 <hr class="rule">
 <p class="tiny">
-  <%= link_to t("sessions.new.no_account"), new_user_path %>
+  <%= link_to t("sessions.new.no_account"), new_user_path, class: "button-quiet" %>
   &nbsp;·&nbsp;
-  <%= link_to t("sessions.new.forgot"), new_password_path %>
+  <%= link_to t("sessions.new.forgot"), new_password_path, class: "button-quiet" %>
 </p>

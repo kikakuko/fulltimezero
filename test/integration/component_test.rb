@@ -8,6 +8,30 @@ class ComponentTest < ActionDispatch::IntegrationTest
   # 옛 이름. 이 파일 밖의 코드에 나타나면 깨진다.
   OLD = %w[action quiet plain].freeze
 
+  # 제출은 어느 화면에서나 먹 알약이다 — 기본 제출 칸의 모양으로 남은 화면이 없다.
+  test "뷰에 제출 input 이 없다 — 가입 · 로그인 · 비밀번호 · 쉼 기록까지" do
+    Rails.root.glob("app/views/**/*.erb").each do |file|
+      source = file.read
+      name = file.relative_path_from(Rails.root)
+
+      assert_no_match(/\bf\.submit\b|submit_tag|<input[^>]*type="submit"/, source, "#{name} 에 기본 제출 칸이 남아 있다")
+    end
+  end
+
+  test "새로 오는 사람의 화면도 부품으로 선다" do
+    get new_user_path
+    assert_select "form button[type=submit].button-primary", count: 1
+    assert_select "a.button-quiet[href=?]", new_password_path
+
+    get new_session_path
+    assert_select "form button[type=submit].button-primary", count: 1
+    assert_select "a.button-quiet", count: 2
+
+    get new_password_path
+    assert_select "form button[type=submit].button-primary", count: 1
+    assert_select "input[type=submit]", false
+  end
+
   test "옛 버튼은 코드 어디에도 없다 — 뷰 · 스타일 · 스크립트 · 헬퍼 · 로케일" do
     files = Rails.root.glob("{app,config}/**/*.{erb,css,js,rb,yml}").reject { |file| file.to_s.include?("/builds/") }
 

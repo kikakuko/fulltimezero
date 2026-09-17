@@ -5,5 +5,5 @@
     <%= f.label :email_address, t("users.email") %>
     <%= f.email_field :email_address, autofocus: true, autocomplete: "username", required: true %>
   </div>
-  <p style="margin-top:2rem"><%= f.submit t("passwords.new.submit") %></p>
+  <p style="margin-top:2rem"><%= f.button t("passwords.new.submit"), class: "button-primary" %></p>
 <% end %>
