@@ -109,3 +109,8 @@ bin/rubocop
 
 그림 파일은 `app/assets/images/` — 문 셋(gates.png), 코끼리와 청록 산수,
 미륵, 탑(pagoda.svg, 색과 옅기는 CSS 가 준다).
+
+---
+
+이 저장소는 보아 주십사 열어 둔 것이지, 가져다 쓰시라고 연 것이 아닙니다.
+This repository is open to be read, not to be reused.
