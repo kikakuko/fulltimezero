@@ -128,7 +128,7 @@ en:
     back: "Go and write a character"
 
   settings:
-    daily_door: "Light comes when the app opens"
+    daily_door: "The daily door"
     clearing_sound: "A bell when keeping today clear"
     threshold_again: "Pass through the first gates again"
     title: Settings

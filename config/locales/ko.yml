@@ -129,7 +129,7 @@ ko:
     back: "한 자 쓰러 간다"
 
   settings:
-    daily_door: "앱을 열 때 빛이 온다"
+    daily_door: "매일의 문"
     clearing_sound: "오늘을 비울 때 종성"
     threshold_again: "처음의 문을 다시 지난다"
     title: 설정

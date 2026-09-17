@@ -11,7 +11,7 @@
     <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>
     <%= f.text_field :what_moves, value: @what_moves, maxlength: User::WHAT_MOVES_MOST, autocomplete: "off",
                      class: "threshold__field" %>
-    <p class="threshold__way"><%= f.submit t("threshold.naming.go") %></p>
+    <p class="threshold__way"><%= f.button t("threshold.naming.go"), class: "button-primary" %></p>
   <% end %>
 
   <%= render "later" %>

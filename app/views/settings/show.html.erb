@@ -37,7 +37,7 @@
     </li>
   </ul>
 
-  <p style="margin-top:2rem"><%= f.submit t("settings.save") %></p>
+  <p style="margin-top:2rem"><%= f.button t("settings.save"), class: "button-primary" %></p>
 <% end %>
 
 <p class="tiny"><%= link_to t("settings.threshold_again"), threshold_path %></p>
@@ -57,8 +57,8 @@
 <hr class="rule">
 
 <p class="tiny"><%= link_to t("settings.privacy"), privacy_path %></p>
-<p class="tiny"><%= button_to t("settings.sign_out"), session_path, method: :delete, class: "plain" %></p>
+<p class="tiny"><%= button_to t("settings.sign_out"), session_path, method: :delete, class: "button-quiet" %></p>
 <p class="tiny">
-  <%= button_to t("settings.delete_account"), account_path, method: :delete, class: "plain",
+  <%= button_to t("settings.delete_account"), account_path, method: :delete, class: "button-quiet",
         form: { data: { turbo_confirm: t("settings.delete_confirm") } } %>
 </p>

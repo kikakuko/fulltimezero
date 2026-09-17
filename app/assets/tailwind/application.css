@@ -199,7 +199,7 @@ a:hover { text-decoration-color: var(--ink); }
 /* ── 부품 다섯 — 피그마 design-tokens ────────────────────────────────
    카드 · 먹 알약 버튼 · 조용한 버튼 · 인용 · 먹틀. 이 밖의 부품은 만들지 않는다
    (태그 · 배지 · 진행 막대 · 아이콘 줄 · 그림자 카드는 palette_test 가 막는다).
-   화면마다 차례로 옮긴다 — 마당 · 날들 · 앉기 · 사경. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
+   화면마다 차례로 옮긴다 — 마당 · 날들 · 앉기 · 사경 · 문 셋 · 설정. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
 
 /* 카드 — 한 화면에 하나까지. 그림자를 두르지 않는다. */
 .card { background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 20px; }
@@ -962,7 +962,9 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 @keyframes gate-later { from { opacity: 0.2; } to { opacity: 1; } }
 
 .threshold__way { margin: 0; min-height: 3rem; }
-.threshold .action, .threshold input[type="submit"] { color: var(--ink); border-color: var(--ink-soft); }
+/* 문의 먹 알약은 옛 버튼의 크기 그대로 — 둘째 문의 입력칸 · 버튼과 사천왕의 자리
+   (높이 116 · 발끝 300 · 좌우 52)가 이 크기에 맞춰져 있다. */
+.threshold__way .button-primary { padding: 0.65rem 2rem; }
 .threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
 .threshold__form label { color: var(--ink); margin: 0; }
 input[type="text"].threshold__field {
@@ -971,7 +973,9 @@ input[type="text"].threshold__field {
 }
 .threshold__field:focus { outline: none; border-color: var(--ink); }
 .threshold__later { position: fixed; bottom: calc(var(--gates-edge) + 1.25rem); left: 0; right: 0; text-align: center; }
-.threshold__later .quiet { color: var(--ink-soft); text-decoration-color: var(--rule); }
+/* 「나중에」 — 조용한 버튼. 앉기의 밤빛처럼 자리에 맞춘 색을 이 자리에서 준다.
+   문 셋은 빛이 다가온 그림 위라 바탕이 밝다 — 옅은 먹이 읽힌다. */
+.threshold__later .button-quiet { color: var(--ink-soft); text-decoration-color: var(--rule); }
 
 /* 둘째 문 — 물음과 입력칸을 키보드가 올라오는 자리 위에 둔다.
    아이폰의 사파리는 키보드가 입력칸을 가릴 때에만 화면 전체를 밀어

@@ -306,4 +306,20 @@ class ThresholdTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to threshold_path
   end
+
+  # 톤 정비 — 문 셋의 부품. 길은 먹 알약, 「나중에」는 조용한 버튼. 둘째 문의 먹 알약은
+  # 옛 버튼의 크기 그대로라 입력칸 · 사천왕의 자리가 흔들리지 않는다.
+  test "문 셋은 부품 다섯으로 선다 — 옛 버튼 없이" do
+    get threshold_path
+    assert_select ".threshold__way a.button-primary", count: 1
+    assert_select ".threshold__later button.button-quiet", count: 1
+    get threshold_naming_path
+    assert_select ".threshold__way button[type=submit].button-primary", count: 1
+    get threshold_breath_path
+    assert_select ".threshold__later button.button-quiet", count: 1
+    assert_select "input[type=submit], .action, button.quiet", false
+
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    assert_match(/\.threshold__way \.button-primary \{ padding: 0\.65rem 2rem; \}/, css, "문의 먹 알약이 커져 사천왕의 자리에 닿는다")
+  end
 end
