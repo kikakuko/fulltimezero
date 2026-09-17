@@ -7,7 +7,8 @@
 - hj-* 로 시작하는 바깥 스킬은 이 저장소에서 부르지 않는다.
   주제가 겹쳐 보여도 마찬가지다(가입·알림·다국어·디자인).
 - 새 젬이나 바깥 서비스를 더하기 전에 반드시 먼저 묻는다.
-  `test/integration/dependency_test.rb` 가 Gemfile · package.json 의 항목 수를 지킨다.
+  `test/integration/dependency_test.rb` 가 Gemfile · package.json 의 항목 수를,
+  `test/integration/importmap_test.rb` 가 importmap 의 pin 수와 그 자리(저장소 안)를 지킨다.
 
 # CLAUDE.md — 이 저장소에서 일하는 법
 
