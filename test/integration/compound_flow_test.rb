@@ -172,6 +172,20 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 채색본의 톤은 파일이 아니라 :root 의 네 값에서 온다. 그림 한 곳에만 걸려
+  # 확대 장면에도 같은 톤이 따라가고, 값이 두 곳으로 흩어지지 않는다.
+  test "경내 그림의 톤은 :root 네 값에서, 그림 한 곳에만 걸린다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    root = css[/:root \{.*?\n\}/m]
+
+    %w[saturate sepia brightness contrast].each do |name|
+      assert_match(/--compound-#{name}: [\d.]+;/, root, "--compound-#{name} 가 :root 에 없다")
+      assert_equal 1, css.scan(/#{name}\(var\(--compound-#{name}\)\)/).size, "#{name} 이 한 곳이 아니다"
+    end
+    assert_match(/\.compound__map \{\s*filter: saturate\(var/, css)
+    assert_no_match(/\.compound(--zooming)? (\.compound__scene )?\{[^}]*filter/, css, "톤이 그림 밖에 걸렸다")
+  end
+
   test "조감도는 배경이 투명하다 — 어떤 바탕에도 얹힌다" do
     png = Rails.root.join("app/assets/images/compound.png").binread
     assert_equal 6, png.byteslice(25, 1).unpack1("C"), "RGBA 가 아니다"

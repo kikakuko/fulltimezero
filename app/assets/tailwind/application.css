@@ -31,6 +31,14 @@
   --dancheong-green: #2f6b62;
   --dancheong-ocher: #b88a4a;
 
+  /* 경내 채색본의 톤 — 파일에 굽지 않고 여기서 내린다. 기와의 청록과 마당의
+     노란 흙이 문 셋보다 한 단계 짙다. 기와가 아직 푸르면 saturate 0.62까지,
+     노랑이 남으면 sepia 0.06으로. */
+  --compound-saturate: 0.62;
+  --compound-sepia: 0.10;
+  --compound-brightness: 1.04;
+  --compound-contrast: 0.96;
+
   /* 어둠 — 문과 몰입 화면의 것 */
   --night: #0b0a08;
   --night-deep: #050505;
@@ -617,6 +625,13 @@ input[type="text"].threshold__field {
 /* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
 .compound { position: relative; width: calc(100% + 3rem); margin: 0 -1.5rem 1.5rem; }
 .compound__map { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+/* 톤은 그림 자체에만, 한 곳에서. 투명하게 걷어 낸 뒤에 걸리므로 바탕은 물들지
+   않는다. 「드는 중」의 확대도 이 그림을 키우는 것이라 같은 톤이 따라간다.
+   .compound 에 걸면 그 안의 고정 카드가 조감도에 갇히고 카드까지 물든다. */
+.compound__map {
+  filter: saturate(var(--compound-saturate)) sepia(var(--compound-sepia))
+          brightness(var(--compound-brightness)) contrast(var(--compound-contrast));
+}
 .compound__hall {
   position: absolute; display: block;
   font-family: var(--serif); font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1;
