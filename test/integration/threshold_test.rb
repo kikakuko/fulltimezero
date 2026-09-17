@@ -321,5 +321,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
 
     css = Rails.root.join("app/assets/tailwind/application.css").read
     assert_match(/\.threshold__way \.button-primary \{ padding: 0\.65rem 2rem; \}/, css, "문의 먹 알약이 커져 사천왕의 자리에 닿는다")
+    assert_match(/\.threshold__form \{[^}]*width: min\(22rem, 100%, calc\(var\(--gates-w\) - 2rem\)\);/, css,
+      "둘째 문의 입력줄이 그림 틀 밖으로 나간다 — 짧은 화면(667)에서 틀보다 넓어진다")
   end
 end

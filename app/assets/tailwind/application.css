@@ -950,7 +950,9 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 문의 먹 알약은 옛 버튼의 크기 그대로 — 둘째 문의 입력칸 · 버튼과 사천왕의 자리
    (높이 116 · 발끝 300 · 좌우 52)가 이 크기에 맞춰져 있다. */
 .threshold__way .button-primary { padding: 0.65rem 2rem; }
-.threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
+/* 입력칸과 길의 묶음은 그림 틀 안에 든다 — 짧은 화면에서 그림이 좁아져도 틀 양옆으로
+   1rem 씩 들어온다. 넓은 화면에서는 본문 여백(1.75rem)이 먼저 닿는다. */
+.threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%, calc(var(--gates-w) - 2rem)); }
 .threshold__form label { color: var(--ink); margin: 0; }
 input[type="text"].threshold__field {
   width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--ink-soft);
