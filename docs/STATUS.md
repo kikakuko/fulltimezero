@@ -88,6 +88,7 @@ DB        SQLite 하나. 경전 · 아홉 자리는 시드(앱의 것)
   아직 만들지 않았다.
 - **둘째 문의 신장 둘.** 자리만 비어 있다.
 - **절하는 자리.** [bowing-candidate.md](bowing-candidate.md). 실제 사용자가 생긴 뒤.
+- **물건을 비운다.** [emptying-things-candidate.md](emptying-things-candidate.md). 같은 조건 — 지금 있는 것들이 쓰이는 것을 본 뒤.
 
 ## 7. 남은 빚
 
