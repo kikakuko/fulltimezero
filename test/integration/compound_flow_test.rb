@@ -55,7 +55,10 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
     # 그림 위의 이름은 작다 — 명조는 18px 이상에만 쓰므로 고딕이다.
     assert_match(/font-family: var\(--sans\); font-size: 13px; color: var\(--ink\)/, rule)
     assert_match(/\.compound__name \{[^}]*top: 100%/, css, "이름이 전각 바로 아래가 아니다")
-    assert_match(/\.compound \{[^}]*calc\(100% \+ 3rem\)/, css, "조감도가 화면 폭 전체가 아니다")
+    # 먹틀은 가장자리가 있어야 틀이다 — 화면 양옆에 16px 을 남긴다(한지 여백 1.5rem 에서 0.5rem 만 편다).
+    %w[compound maitreya].each do |frame|
+      assert_match(/\.#{frame} \{[^}]*width: calc\(100% \+ 1rem\); margin: 0 -0\.5rem/, css, "#{frame} 먹틀에 가장자리가 없다")
+    end
   end
 
   test "자리와 크기는 한 곳에서 온다" do

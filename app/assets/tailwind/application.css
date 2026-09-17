@@ -1018,7 +1018,9 @@ input[type="text"].threshold__field {
    마당 맨 위, 화면 폭 전체. 전각을 누르면 그 자리로 — 누르는 자리는 그림 위의
    이름뿐이고 테두리도 버튼 모양도 없다. 자리와 크기는 Compound::HALLS 에서 온다. */
 /* 본문 여백 밖으로 나가 화면 폭 전체를 쓴다. */
-.compound { position: relative; width: calc(100% + 3rem); margin: 0 -1.5rem 1.5rem; }
+/* 먹틀은 가장자리가 있어야 틀이다 — 한지의 여백(1.5rem)보다 조금 넓게 펴되, 화면 양옆에
+   16px 을 남긴다. 미륵당의 그림도 같다. */
+.compound { position: relative; width: calc(100% + 1rem); margin: 0 -0.5rem 1.5rem; }
 .compound__map { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
 /* 톤은 그림 자체에만, 한 곳에서. 투명하게 걷어 낸 뒤에 걸리므로 바탕은 물들지
    않는다. 「드는 중」의 확대도 이 그림을 키우는 것이라 같은 톤이 따라간다.
@@ -1126,7 +1128,7 @@ input[type="text"].threshold__field {
 @property --mound { syntax: "<number>"; inherits: true; initial-value: 1; }
 
 .maitreya {
-  position: relative; width: calc(100% + 3rem); margin: 0 -1.5rem 2.5rem;
+  position: relative; width: calc(100% + 1rem); margin: 0 -0.5rem 2.5rem;
   aspect-ratio: 390 / 560; overflow: hidden; container-type: inline-size;
   --m-u: calc(100cqw / 390);
   --shown: var(--shown-to); --mound: var(--mound-to);
