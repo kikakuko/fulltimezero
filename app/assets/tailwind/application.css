@@ -976,14 +976,17 @@ input[type="text"].threshold__field {
 }
 .maitreya__yard { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
 
-/* 흙 둔덕 — 미륵 뒤에서 땅선 위로 솟은 흙. 드러날수록 낮아진다. */
+/* 흙 둔덕 — 미륵 뒤에서 땅선 위로 솟은 흙더미. 그늘이 아니라 솟은 흙으로
+   읽히게, 둥근 등성이에 먹빛 윤곽과 윗면의 밝은 흙빛을 둔다. 드러날수록 낮아진다. */
 .maitreya__heap {
-  position: absolute; left: calc(15 * var(--m-u)); width: calc(360 * var(--m-u));
-  top: calc((470 - var(--mound) * 48) * var(--m-u)); height: calc(var(--mound) * 96 * var(--m-u));
-  border-radius: 50%;
-  background: radial-gradient(closest-side,
-    color-mix(in srgb, var(--dancheong-ocher) 62%, var(--ink)) 0%,
-    color-mix(in srgb, var(--dancheong-ocher) 80%, var(--paper)) 70%, transparent 100%);
+  position: absolute; left: calc(60 * var(--m-u)); width: calc(270 * var(--m-u));
+  top: calc((471 - var(--mound) * 46) * var(--m-u)); height: calc(var(--mound) * 46 * var(--m-u));
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  border: calc(1.2 * var(--m-u)) solid color-mix(in srgb, var(--dancheong-ocher) 55%, var(--ink)); border-bottom: 0;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--dancheong-ocher) 48%, var(--paper)),
+    color-mix(in srgb, var(--dancheong-ocher) 78%, var(--paper)) 70%,
+    color-mix(in srgb, var(--dancheong-ocher) 88%, var(--ink)));
 }
 
 /* 땅 위의 허공 — 이 틀 밖(땅선 아래)으로 나간 것은 묻힌 것이다. */
@@ -1068,7 +1071,8 @@ input[type="text"].threshold__field {
   --shown: var(--shown-to); --mound: var(--mound-to);
   transition: --shown 1.1s ease-out 0.8s, --mound 1.1s ease-out 0.8s;
 }
-.maitreya-scene--playing .maitreya__one img { top: 50%; transition: top 2s ease-out 2.3s; }
+/* 작은 미륵들도 가슴까지 — 큰 미륵의 다 올라온 모습과 같은 비율(0.70 / 0.983). */
+.maitreya-scene--playing .maitreya__one img { top: 29%; transition: top 2s ease-out 2.3s; }
 
 @media (prefers-reduced-motion: no-preference) {
   .maitreya-scene--playing .maitreya-scene__ground { animation: maitreya-shake 4s linear 0.3s both; }

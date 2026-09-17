@@ -21,8 +21,8 @@ class MaitreyaTest < ActiveSupport::TestCase
     assert_equal Maitreya::MOUND_HIGH, reading.mound
   end
 
-  test "묻힘의 단계 — 여섯에 갓, 열둘에 얼굴, 스물넷에 가슴까지" do
-    { 0 => 0.055, 6 => 0.28, 12 => 0.38, 24 => 0.50 }.each do |count, shown|
+  test "묻힘의 단계 — 여섯에 갓과 이마, 열둘에 얼굴, 스물넷에 가슴까지" do
+    { 0 => 0.055, 6 => 0.30, 12 => 0.50, 24 => 0.70 }.each do |count, shown|
       assert_equal shown, Maitreya.at(count).shown, "#{count}회"
     end
     assert_equal 24, Maitreya::FULL
@@ -46,7 +46,7 @@ class MaitreyaTest < ActiveSupport::TestCase
   test "스물넷이면 다 올라오고, 그 뒤로도 더 올라가지 않는다" do
     clear(30)
 
-    assert_equal 0.50, Maitreya.for(@user).shown
+    assert_equal 0.70, Maitreya.for(@user).shown
   end
 
   test "앞으로 비워 둘 날은 그 날이 와야 올라온다" do
