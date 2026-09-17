@@ -52,7 +52,8 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
 
     assert rule
     assert_no_match(/border(?!-)|background|box-shadow|border-radius/, rule, "전각에 상자를 그렸다")
-    assert_match(/font-family: var\(--serif\); font-size: 13px; color: var\(--ink\)/, rule)
+    # 그림 위의 이름은 작다 — 명조는 18px 이상에만 쓰므로 고딕이다.
+    assert_match(/font-family: var\(--sans\); font-size: 13px; color: var\(--ink\)/, rule)
     assert_match(/\.compound__name \{[^}]*top: 100%/, css, "이름이 전각 바로 아래가 아니다")
     assert_match(/\.compound \{[^}]*calc\(100% \+ 3rem\)/, css, "조감도가 화면 폭 전체가 아니다")
   end

@@ -19,7 +19,8 @@
   --paper-card: #fbf9f4;
   /* 먹 */
   --ink: #1c1a17;
-  --ink-soft: #6b655c;
+  /* 읽는 글의 색. 옅은 --mute 는 날짜 · 출전 같은 보조에만 쓴다. */
+  --ink-soft: #4a524f;
   --mute: #8c8579;
   --rule: #e0d7c5;
 
@@ -82,8 +83,17 @@
   /* 어둠 속 코끼리의 밝기 — 흰빛과 무관한 하나의 값 */
   --void-elephant: 1.7;
 
-  --serif: "Nanum Myeongjo", "AppleMyungjo", "Noto Serif KR", "Batang", "Songti SC", serif;
-  --sans: system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+  --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
+  --sans: "Noto Sans KR", system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+
+  /* 글꼴 다섯. 한글 명조는 가로획이 가늘어 작은 크기에서 먼저 사라진다 —
+     명조는 짧고 큰 글(18px 이상)에만 쓰고, 읽는 글은 모두 고딕이다.
+     웹폰트는 내려받지 않는다. 기기에 있는 글꼴을 이 순서로 찾는다. */
+  --type-voice: 400 1.5rem/1.6 var(--serif);    /* 문의 한 줄 · 축하 한 줄 */
+  --type-title: 700 1.25rem/1.5 var(--serif);   /* 화면 제목 */
+  --type-body: 400 0.9375rem/1.7 var(--sans);   /* 본문 · 설명 — 색은 --ink-soft */
+  --type-ui: 400 0.9375rem/1.4 var(--sans);     /* 버튼 · 설정 */
+  --type-label: 400 0.75rem/1.5 var(--sans);    /* 날짜 · 보조 */
 }
 
 html { background: var(--paper); }
@@ -93,6 +103,8 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   line-height: 1.85;
+  /* 한글은 음절마다 끊길 수 있다 — 낱말 가운데서 접히지 않게 한다. */
+  word-break: keep-all; overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -100,13 +112,9 @@ body {
 .sheet { max-width: 34rem; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
 .center { text-align: center; }
 
-.lead {
-  font-family: var(--serif);
-  font-size: 1.4rem;
-  line-height: 2.1;
-  margin: 2.75rem 0;
-}
-.title { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 2rem; }
+/* 큰 명조가 두 줄로 접히면 끝 글자 하나만 떨어지지 않게 줄 길이를 고른다. */
+.lead { font: var(--type-voice); margin: 2.75rem 0; text-wrap: balance; }
+.title { font: var(--type-title); margin-bottom: 2rem; }
 .tiny { font-size: 0.8125rem; color: var(--ink-soft); }
 .soft { color: var(--ink-soft); }
 
@@ -117,7 +125,7 @@ a { color: inherit; text-decoration: underline; text-underline-offset: 0.35em;
 a:hover { text-decoration-color: var(--ink); }
 
 .action {
-  display: inline-block; font-family: var(--serif); font-size: 1.05rem;
+  display: inline-block; font: var(--type-ui);
   padding: 0.7rem 2.25rem; border: 1px solid var(--rule); border-radius: 999px;
   text-decoration: none;
 }
@@ -151,7 +159,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--i
 .choices input { margin-right: 0.8rem; accent-color: var(--ink); }
 
 button, input[type="submit"] {
-  font-family: var(--serif); font-size: 1rem; background: transparent; color: var(--ink);
+  font: var(--type-ui); background: transparent; color: var(--ink);
   border: 1px solid var(--rule); border-radius: 999px; padding: 0.65rem 2rem; cursor: pointer;
 }
 button:hover { border-color: var(--ink); }
@@ -167,7 +175,7 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
 .trail .on { background: var(--ink); }
 .trail .off { background: var(--rule); }
 
-.flash { text-align: center; font-family: var(--serif); margin-bottom: 2.5rem; }
+.flash { text-align: center; font: var(--type-body); color: var(--ink); margin-bottom: 2.5rem; }
 .rule { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0; }
 .locales { margin-top: 5rem; text-align: right; font-size: 0.75rem; color: var(--ink-soft); }
 .errors { font-size: 0.8125rem; color: var(--ink-soft); margin-bottom: 1.5rem; }
@@ -342,7 +350,7 @@ button:active, input[type="submit"]:active, .action:active {
 }
 
 .calendar .weekday {
-  font-size: 0.6875rem; color: var(--ink-soft);
+  font: var(--type-label); color: var(--ink-soft);
   text-align: center; padding-bottom: 0.6rem;
 }
 
@@ -385,18 +393,20 @@ input[type="text"] {
 
 .chapters { list-style: none; padding: 0; margin: 2rem 0; }
 .chapters li { display: flex; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
-.chapters .mark { font-family: var(--serif); }
+.chapters .mark { font: var(--type-body); }
 
 .guide { margin-top: 2.5rem; }
 .guide p { margin: 1.6rem 0; }
+/* 읽는 글 — 안내의 본문과 인용, 아홉 자리의 설명. */
+.guide > p:not(.lead):not(.aside), .guide blockquote p { font: var(--type-body); color: var(--ink-soft); }
 
 .guide blockquote {
   margin: 2.5rem 0; padding-left: 1.25rem;
   border-left: 1px solid var(--rule);
 }
-.guide blockquote p { font-family: var(--serif); line-height: 2; margin: 0; }
+.guide blockquote p { margin: 0; }
 .guide .source {
-  font-family: var(--sans); font-size: 0.75rem; color: var(--ink-soft);
+  font: var(--type-label); color: var(--mute);
   margin-top: 0.75rem; line-height: 1.7;
 }
 
@@ -448,8 +458,9 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 
 .copy-notes { max-width: 22rem; margin: 2.5rem auto 1.5rem; }
 .copy-notes dt { font-size: 0.75rem; color: var(--ink-soft); margin-top: 1rem; }
-.copy-notes dd { margin: 0.2rem 0 0; }
-.copy-phrase { font-family: var(--serif); font-size: 1.15rem; letter-spacing: 0.15em; color: var(--ink-soft); }
+/* 사경의 글자 풀이는 읽는 글이다. 구절의 한자만 명조로, 18px 에. */
+.copy-notes dd { margin: 0.2rem 0 0; font: var(--type-body); color: var(--ink-soft); }
+.copy-notes dd.copy-phrase { font: 400 1.125rem/1.6 var(--serif); letter-spacing: 0.15em; color: var(--ink-soft); }
 .copy-phrase strong { color: var(--ink); font-weight: 700; }
 
 .copy-glyph { font-family: var(--serif); font-size: 7rem; line-height: 1; margin: 2rem 0 0; }
@@ -690,7 +701,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   padding: 0 1.75rem calc(var(--gates-edge) + 4.5rem); text-align: center;
   color: var(--ink);
 }
-.gates__line { font-family: var(--serif); font-size: 1.3rem; line-height: 2; margin: 0; color: var(--ink); }
+.gates__line { font: var(--type-voice); margin: 0; color: var(--ink); text-wrap: balance; }
 
 /* 첫째 문의 글 — 빛이 가라앉으면 한 줄, 한 박 뒤 경의 한 줄과 출전, 그 뒤 길.
    「너도 멈추어라」는 앱이 하는 말이 아니라 경이 하는 말이다. 출전이 늘 곁에 있다. */
@@ -705,7 +716,6 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
     color-mix(in srgb, var(--paper) 66%, transparent) 48%,
     transparent 80%);
 }
-.threshold--stop .gates__line { font-size: 1.5rem; line-height: 1.6; }
 .threshold__quote { margin: 0; display: grid; gap: 0.2rem; justify-items: center; }
 .threshold__verse { margin: 0; font-family: var(--serif); font-size: 1.125rem; line-height: 1.6; color: var(--ink); }
 .threshold__source { font-family: var(--sans); font-size: 0.75rem; color: var(--mute); }
@@ -725,7 +735,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 .threshold__way { margin: 0; min-height: 3rem; }
 .threshold .action, .threshold input[type="submit"] { color: var(--ink); border-color: var(--ink-soft); }
 .threshold__form { display: grid; justify-items: center; gap: 1.25rem; width: min(22rem, 100%); }
-.threshold__form label { font-size: 1.3rem; color: var(--ink); margin: 0; }
+.threshold__form label { color: var(--ink); margin: 0; }
 input[type="text"].threshold__field {
   width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--ink-soft);
   color: var(--ink); font-size: 1.05rem; padding: 0.5rem 0; text-align: center; border-radius: 0;
@@ -792,7 +802,7 @@ input[type="text"].threshold__field {
 }
 .compound__hall {
   position: absolute; display: block;
-  font-family: var(--serif); font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1;
+  font-family: var(--sans); font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1;
 }
 /* 이름은 전각 바로 아래. 먹선 위에서도 읽히게 한지빛 테를 두른다. */
 .compound__name {
@@ -856,11 +866,11 @@ input[type="text"].threshold__field {
   position: absolute; top: 0.6rem; right: 0.9rem; border: 0; background: none; cursor: pointer;
   font-size: 1.4rem; line-height: 1; color: var(--mute); padding: 0.4rem;
 }
-.compound__card-name { font-family: var(--serif); font-weight: 700; font-size: 1.375rem; color: var(--ink); margin: 0.75rem 0 0; }
-.compound__card-han { font-family: var(--serif); font-size: 0.9375rem; color: var(--mute); margin: 0; }
-.compound__card-line { font-family: var(--serif); font-size: 0.9375rem; color: var(--ink-soft); margin: 0.6rem 0 0; }
-.compound__card-verse { font-family: var(--serif); font-size: 0.875rem; color: var(--dancheong-ocher); margin: 0.75rem 0 0; }
-.compound__card-source { font-family: var(--sans); font-size: 0.6875rem; color: var(--mute); margin: 0.15rem 0 0; }
+.compound__card-name { font: var(--type-title); color: var(--ink); margin: 0.75rem 0 0; }
+.compound__card-han { font: var(--type-ui); color: var(--mute); margin: 0; }
+.compound__card-line { font: var(--type-body); color: var(--ink-soft); margin: 0.6rem 0 0; }
+.compound__card-verse { font: 400 1.125rem/1.5 var(--serif); color: var(--dancheong-ocher); margin: 0.6rem 0 0; }
+.compound__card-source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
 .compound__card .action { margin-top: 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -871,8 +881,8 @@ input[type="text"].threshold__field {
 
 /* 방 머리 — 전각 이름과 한 줄. 경내에서 들어온 자리임을 알린다. */
 .hall-header { margin-bottom: 2rem; }
-.hall-header__name { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; color: var(--ink); margin: 0; }
-.hall-header__line { font-family: var(--sans); font-size: 0.75rem; color: var(--mute); margin: 0.3rem 0 0; }
+.hall-header__name { font: var(--type-title); color: var(--ink); margin: 0; }
+.hall-header__line { font: var(--type-body); color: var(--ink-soft); margin: 0.3rem 0 0; }
 
 /* ── 미륵 ────────────────────────────────────────────────────────────
    땅에 묻힌 상반신이 비운 날마다 조금씩 올라온다. 얼마나 올라왔는지는
@@ -943,7 +953,7 @@ input[type="text"].threshold__field {
 .elephant-field__stop:hover .elephant-field__station, .elephant-field__stop:focus .elephant-field__station { text-decoration: underline; }
 
 /* 한 줄 — 코끼리가 어디 곁을 지나는지, 그 자리의 한 줄과 함께. */
-.quote { font-family: var(--serif); font-size: 1.05rem; line-height: 1.8; color: var(--ink-soft); text-align: center; margin: 0 0 2rem; }
+.quote { font: var(--type-body); color: var(--ink-soft); text-align: center; margin: 0 0 2rem; }
 
 /* 두 길이 같은 무게로 나란히. */
 .ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin: 2rem 0 1rem; }
