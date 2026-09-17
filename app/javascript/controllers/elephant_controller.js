@@ -17,6 +17,8 @@ export const ANCHORS = [
   [ 325, 470 ], [ 575, 395 ], [ 355, 320 ], [ 450, 120 ]
 ]
 export const VIEW = [ 864, 1184 ]
+// 틀 위쪽의 자리(그림 단위) — Elephant::ROOM 과 같다. 아홉째의 머리가 틀 밖으로 나가지 않게.
+export const ROOM = 124
 
 // 정거장이 아닌 굽이 — 그림의 기하다. 정거장 아홉은 뜻이 있는 자리고,
 // 길 점은 그림 속 길이 굽는 곳이다. 배경을 바꾸면 정거장은 두고 이것만
@@ -78,7 +80,7 @@ export default class extends Controller {
 
     const style = this.figureTarget.style
     style.setProperty("--x", `${(here.x / VIEW[0]) * 100}%`)
-    style.setProperty("--y", `${(here.y / VIEW[1]) * 100}%`)
+    style.setProperty("--y", `${((here.y + ROOM) / (VIEW[1] + ROOM)) * 100}%`)
     style.setProperty("--angle", `${tilt}deg`)
     style.setProperty("--flip", facingLeft ? 1 : -1)
   }

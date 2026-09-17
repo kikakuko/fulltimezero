@@ -59,7 +59,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
     assert_match(/--elephant-dark: 0\.35;/, css)
     assert_match(/--elephant-light: 2\.4;/, css)
-    assert_match(/--elephant-width: 80px;/, css)
+    assert_match(%r{--elephant-width: calc\(80 / 390 \* 100%\);}, css, "코끼리 폭이 그림 폭의 비율이 아니다")
+    assert_match(%r{aspect-ratio: 864 / #{Elephant::VIEW[1] + Elephant::ROOM};}, css, "틀 위쪽의 자리가 그림과 어긋난다")
     assert_match(/--e-light: calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\) \* \(var\(--elephant-light\) - var\(--elephant-dark\)\)\) \/ var\(--elephant-light\)\);/, css)
     assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\) calc\(var\(--e-light\) \* 100%\), var\(--ink\)\);/, css)
 
@@ -73,6 +74,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
     assert_equal Elephant::ANCHORS, anchors
     assert_equal Elephant::VIEW, js[/export const VIEW = \[ (\d+), (\d+) \]/, 0].scan(/\d+/).map(&:to_i)
+    assert_equal Elephant::ROOM, js[/export const ROOM = (\d+)/, 1].to_i
     assert_match(/getPointAtLength/, js, "길 위의 점을 재지 않는다")
 
     # 굽이는 정거장과 따로 산다 — 정거장 아홉은 그대로, 길 점만 그림을 따른다.

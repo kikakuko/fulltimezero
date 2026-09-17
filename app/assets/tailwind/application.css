@@ -1329,11 +1329,19 @@ input[type="text"].threshold__field {
    검은 코끼리가 앉은 날만큼 희어지며 길을 오른다. 길은 그리지 않는다.
    자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
 .elephant-field {
-  --elephant-width: 80px;   /* 폭. 그림 속 길의 너비에 맞춘 값이다 */
+  /* 폭 — 그림 폭에 대한 비율. 그림 속 길의 너비에 맞춘 값이다(폭 390 의 그림에서 80px).
+     비율로 두어야 틀이 좁아지거나 화면이 커져도 코끼리와 길의 비가 같다. */
+  --elephant-width: calc(80 / 390 * 100%);
   /* 먹틀 — 본문 여백 밖으로 조금 나가되, 틀의 가장자리로 화면 양옆 16px 을 남긴다. */
-  position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1184; margin: 0 -0.5rem 1rem;
-  /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
-  background: url("elephant_field.png") center / cover no-repeat;
+  /* 틀 위쪽에 코끼리 한 마리 높이의 자리(Elephant::ROOM = 124, 그림 단위)를 둔다 —
+     864 / (1184 + 124). 아홉째의 머리가 틀 밖으로 나가지 않는다. */
+  position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1308; margin: 0 -0.5rem 1rem;
+  /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다.
+     그림은 아래에 붙이고, 위의 자리는 같은 그림의 맨 윗줄을 세로로 늘여 채운다 —
+     족자의 축과 하늘이 끊기지 않는다. */
+  background:
+    url("elephant_field.png") bottom / 100% auto no-repeat,
+    url("elephant_field.png") top / 100% 20000% no-repeat;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
@@ -1366,7 +1374,7 @@ input[type="text"].threshold__field {
 }
 /* 접지 그림자 — 발밑. */
 .elephant-place__shadow {
-  position: absolute; left: 50%; bottom: -4px; width: 44px; height: 8px;
+  position: absolute; left: 50%; bottom: -4px; width: 55%; height: 8px;
   transform: translateX(-50%); border-radius: 50%;
   background: color-mix(in srgb, var(--ink) 22%, transparent);
 }
