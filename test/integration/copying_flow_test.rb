@@ -223,6 +223,18 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/on_paper/, response.body)
   end
 
+  # 톤 정비 — 사경의 부품. 쓰는 자리는 카드 한 장, 올리는 것은 먹 알약 하나.
+  test "사경은 부품 다섯으로 선다 — 카드 하나, 먹 알약 하나, 옛 버튼 없이" do
+    get new_copying_path
+
+    assert_select ".card", count: 1
+    assert_select ".copy-sheet.card", count: 1
+    assert_select ".button-primary", count: 1
+    assert_select ".copy-offer button.button-primary[data-copying-target=offer]", text: I18n.t("copyings.offer")
+    assert_select ".copy-offer button.button-quiet", text: I18n.t("copyings.rewrite")
+    assert_select "input[type=submit], .action, button.quiet, .verse", false, "옛 버튼이나 인용이 남아 있다"
+  end
+
   test "쓰지 않았다는 선언으로는 한 자가 되지 않는다" do
     assert_no_difference -> { @user.copyings.count } do
       post copyings_path, params: { on_paper: 1 }
@@ -243,7 +255,7 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
 
   test "한 획도 긋지 않고는 올릴 수 없다" do
     get new_copying_path
-    assert_select "input[type=submit][disabled][data-copying-target=offer]"
+    assert_select "button[type=submit][disabled][data-copying-target=offer]"
 
     assert_no_difference -> { @user.copyings.count } do
       post copyings_path, params: { copying: { glyph_paths: "[]" } }

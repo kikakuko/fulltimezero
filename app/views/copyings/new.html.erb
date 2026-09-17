@@ -19,7 +19,8 @@
   <div class="copying" data-controller="copying"
        data-copying-vibrate-value="<%= @vibrate %>"
        data-copying-pagoda-value="<%= t("copyings.pagoda") %>">
-    <div class="copy-sheet">
+    <%# 쓰는 자리는 카드 한 장 — 한 화면에 하나. %>
+    <div class="copy-sheet card">
       <svg viewBox="0 0 1000 1000" role="img" aria-label="<%= t("copyings.surface", glyph: @char.glyph) %>"
            data-copying-target="surface"
            data-action="pointerdown->copying#down pointermove->copying#move pointerup->copying#up pointercancel->copying#up">
@@ -29,11 +30,11 @@
     </div>
 
     <div class="copy-offer">
-      <button type="button" class="quiet" data-action="copying#clear"><%= t("copyings.rewrite") %></button>
+      <button type="button" class="button-quiet" data-action="copying#clear"><%= t("copyings.rewrite") %></button>
 
       <%= form_with url: copyings_path, scope: :copying, data: { action: "submit->copying#offer" } do |f| %>
         <%= f.hidden_field :glyph_paths, value: "", data: { copying_target: "field" } %>
-        <%= f.submit t("copyings.offer"), disabled: true, data: { copying_target: "offer" } %>
+        <%= f.button t("copyings.offer"), class: "button-primary", disabled: true, data: { copying_target: "offer" } %>
       <% end %>
     </div>
 
