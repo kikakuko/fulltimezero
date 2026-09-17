@@ -7,11 +7,11 @@
 </h1>
 
 <% if @plans.any? %>
-  <ul class="plans">
+  <ul class="plans card">
     <% @plans.each do |plan| %>
       <li>
         <span><%= plan.what %></span>
-        <%= button_to t("days.remove"), plan_path(plan), method: :delete, class: "quiet" %>
+        <%= button_to t("days.remove"), plan_path(plan), method: :delete, class: "button-quiet" %>
       </li>
     <% end %>
   </ul>
@@ -25,7 +25,7 @@
     <%= f.label :what, t("days.add") %>
     <%= f.text_field :what, maxlength: Plan::MOST, autocomplete: "off" %>
   </div>
-  <p><%= f.submit t("days.save") %></p>
+  <p><%= f.button t("days.save"), class: "button-primary" %></p>
 <% end %>
 
 <%# 그 날 남긴 쉼과 앉음. 쉼 기록은 사용자의 것이므로 한 줄씩 지울 수
@@ -39,7 +39,7 @@
       <li>
         <span><%= [ t("rests.durations.#{rest.duration}"),
                     (t("rests.textures.#{rest.texture}") if rest.texture) ].compact.join(" · ") %></span>
-        <%= button_to t("days.remove"), rest_path(rest), method: :delete, class: "quiet",
+        <%= button_to t("days.remove"), rest_path(rest), method: :delete, class: "button-quiet",
                       form: { data: { turbo_confirm: t("days.forget_confirm") } } %>
       </li>
     <% end %>
@@ -47,7 +47,7 @@
     <% @sittings.each do |sitting| %>
       <li>
         <span><%= t("days.kinds.#{sitting.mode}") %></span>
-        <%= button_to t("days.remove"), sitting_path(sitting), method: :delete, class: "quiet",
+        <%= button_to t("days.remove"), sitting_path(sitting), method: :delete, class: "button-quiet",
                       form: { data: { turbo_confirm: t("days.forget_confirm") } } %>
       </li>
     <% end %>
@@ -57,7 +57,7 @@
 <hr class="rule">
 
 <%= button_to @cleared ? t("days.unclear") : t("days.clear"),
-              day_path(@date), method: :patch, class: "quiet" %>
+              day_path(@date), method: :patch, class: "button-quiet" %>
 
 <p class="tiny" style="margin-top:2.5rem">
   <%= link_to t("days.back"), days_path(month: @date.strftime("%Y-%m")), class: "soft" %>

@@ -6,10 +6,12 @@
 
     before 가 있으면 솟는 장면(오늘을 비워 두는 순간)이다. 없으면 날들의 한 장. %>
 <% before ||= nil %>
+<%# 날들의 한 장은 먹틀에 앉는다. 솟는 장면은 화면 가득이라 틀이 없다. %>
+<% framed ||= false %>
 <% scene = before.present? %>
 <% shown_from = scene ? before.shown : reading.shown %>
 <% mound_from = scene ? before.mound : reading.mound %>
-<div class="maitreya"
+<div class="<%= class_names("maitreya", "ink-frame": framed) %>"
      style="--shown-from: <%= shown_from %>; --shown-to: <%= reading.shown %>; --mound-from: <%= mound_from %>; --mound-to: <%= reading.mound %>;"
      aria-hidden="true">
   <%= image_tag "mireukdang.png", class: "maitreya__yard", alt: "", draggable: false %>

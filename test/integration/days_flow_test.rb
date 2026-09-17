@@ -16,6 +16,23 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/\d/, text_outside_dates, "달력 밖에 숫자가 있다")
   end
 
+  # 톤 정비 — 날들의 부품. 카드 한 장, 먹 알약 하나, 그림은 먹틀에.
+  test "날들은 부품 다섯으로 선다 — 카드 하나, 먹 알약 하나, 옛 버튼 없이" do
+    get days_path
+    assert_select ".maitreya.ink-frame", count: 1
+    assert_select ".card", count: 1
+    assert_select ".calendar.card", count: 1
+
+    @user.plans.create!(planned_on: @user.today, what: "치과")
+    get day_path(@user.today)
+    assert_select ".card", count: 1
+    assert_select ".plans.card", count: 1
+    assert_select ".button-primary", count: 1
+    assert_select "button.button-primary", text: I18n.t("days.save")
+    assert_select "input[type=submit], .action, button.quiet", false, "옛 버튼이 남아 있다"
+    assert_select "button.button-quiet", minimum: 2
+  end
+
   test "적고 지운다 — 그것뿐이다" do
     assert_difference -> { @user.plans.count }, 1 do
       post plans_path, params: { plan: { planned_on: @user.today.iso8601, what: "치과" } }

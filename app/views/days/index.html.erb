@@ -3,7 +3,7 @@
     개수도 합계도 연속기록도 두지 않는다 — 있고 없음뿐이다. %>
 <%= render "compound/hall_header", key: :maitreya %>
 
-<%= render "maitreya", reading: @maitreya %>
+<%= render "maitreya", reading: @maitreya, framed: true %>
 
 <h1 class="title"><%= month_name(@calendar.month) %></h1>
 
@@ -12,7 +12,7 @@
   <%= link_to t("days.next"), days_path(month: @calendar.following.strftime("%Y-%m")) %>
 </nav>
 
-<div class="calendar">
+<div class="calendar card">
   <% Calendar::WEEK.times do |index| %>
     <span class="weekday"><%= weekday_name(index) %></span>
   <% end %>

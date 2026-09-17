@@ -199,7 +199,7 @@ a:hover { text-decoration-color: var(--ink); }
 /* ── 부품 다섯 — 피그마 design-tokens ────────────────────────────────
    카드 · 먹 알약 버튼 · 조용한 버튼 · 인용 · 먹틀. 이 밖의 부품은 만들지 않는다
    (태그 · 배지 · 진행 막대 · 아이콘 줄 · 그림자 카드는 palette_test 가 막는다).
-   화면마다 차례로 옮긴다 — 지금은 마당. */
+   화면마다 차례로 옮긴다 — 마당 · 날들. 옛 .action 은 모든 화면이 옮긴 뒤 마지막에 걷는다. */
 
 /* 카드 — 한 화면에 하나까지. 그림자를 두르지 않는다. */
 .card { background: var(--paper-card); border: 1px solid var(--paper-deep); border-radius: 20px; }
@@ -460,6 +460,8 @@ button:active, input[type="submit"]:active, .action:active {
   display: grid; grid-template-columns: repeat(7, 1fr);
   gap: 0.35rem; margin: 1.5rem 0 2.5rem;
 }
+/* 달력은 카드 한 장에 앉는다. 칸이 좁아지지 않게 옆 여백은 얕게. */
+.calendar.card { padding: 1rem 0.5rem 0.75rem; }
 
 .calendar .weekday {
   font: var(--type-label); color: var(--ink-soft);
@@ -492,6 +494,9 @@ button:active, input[type="submit"]:active, .action:active {
   padding: 0.7rem 0; border-bottom: 1px solid var(--rule);
 }
 .plans form { margin: 0; }
+/* 그 날 적어 둔 일은 카드 한 장. 마지막 줄의 금은 카드의 테두리가 대신한다. */
+.plans.card { padding: 0.25rem 1.25rem; }
+.plans.card li:last-child { border-bottom: 0; }
 
 input[type="text"] {
   width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--rule);
