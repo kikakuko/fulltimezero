@@ -72,17 +72,21 @@
   --night-focus: color-mix(in srgb, var(--paper) 40%, var(--night));
   --night-ink: color-mix(in srgb, var(--paper) 80%, var(--night));
 
+  /* 한지의 파생 — 부품의 바탕. 새 색이 아니라 한지를 흰 쪽이나 먹 쪽으로 조금 민 것이다.
+     카드 바탕은 한지를 흰 쪽으로 60%(#FBF9F3 — 피그마의 #FBF9F4 와 1 차이),
+     먹틀 바탕은 한지에 먹 2%(#F1EBDE — 피그마의 #EFEAE0 와 2 차이). */
+  --paper-card: color-mix(in srgb, var(--paper) 40%, white);
+  --ink-frame: color-mix(in srgb, var(--paper) 98%, var(--ink));
+
   /* ── 이름 붙은 예외 — 밑색 밖의 색. 자리마다 사용자가 따로 정한 값이다.
-     여기 없는 색이 생기면 palette_test 가 깨진다. */
-  /* 카드의 바탕 — 부품 「카드」(피그마 design-tokens) */
-  --paper-card: #fbf9f4;
+     여기 없는 색이 생기면 palette_test 가 깨진다. 예외를 더하기 전에 밑색을 섞어
+     만들 수 있는지 먼저 따진다 — 예외가 늘면 밑색 열셋의 자물쇠가 뜻을 잃는다. */
   /* 글씨의 황토 — 경의 인용문에만 쓴다. 단청 황토(--dancheong-ocher)는 한지 위에서
      대비가 2.71:1 이라 글씨가 되지 못한다. 이 값은 한지 위에서 4.76:1(카드 바탕 위
      5.18:1)로 WCAG 본문 4.5:1 을 넘는다. 먹과 섞어 만들지 않는다 — 먹이 청록이라
      섞으면 올리브가 된다. */
   --ocher-ink: #7f6634;
-  /* 먹틀의 바탕 — 부품 「먹틀」(수묵 그림이 앉는 자리) */
-  --ink-frame: #efeae0;
+
 
   /* 첫째 문의 빛 — 둥근 빛이 먼 문에서 앞의 문으로 다가오고, 흰빛이 한 번
      넘쳤다가 가라앉는다. 매일의 문은 같은 장면을 짧게 줄인다. */

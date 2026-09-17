@@ -154,14 +154,14 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/--cinnabar/, halo)
   end
 
-  test "카드의 바탕색은 :root 토큰에서 온다" do
+  test "카드의 바탕색은 :root 토큰에서 온다 — 한지의 파생이다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
 
-    assert_match(/--paper-card: #fbf9f4;/, css)
+    assert_match(/--paper-card: color-mix\(in srgb, var\(--paper\) 40%, white\);/, css)
     assert_match(/\.card \{ background: var\(--paper-card\);/, css)
+    assert_no_match(/#fbf9f4/i, css.gsub(%r{/\*.*?\*/}m, ""), "카드 바탕색이 새 색으로 박혀 있다")
     get today_path
     assert_select ".compound__card.card", count: 1
-    assert_no_match(/#fbf9f4/i, css.sub(/--paper-card: #fbf9f4;/, ""), "카드 바탕색이 :root 밖에도 있다")
   end
 
   # 방 머리 — 전각 이름과 한 줄이 카드의 것과 같다(같은 로케일 키).

@@ -51,14 +51,12 @@ class PaletteTest < ActionDispatch::IntegrationTest
     "--dancheong-ocher" => "#b88a4a"
   }.freeze
   NAMED_EXCEPTIONS = {
-    "--paper-card" => "#fbf9f4",                                  # 부품 「카드」의 바탕
     "--light-dawn" => "#eef2f5", "--light-day" => "#fbf7ec",      # 첫째 문의 빛 — 때의 색
     "--light-evening" => "#f7e6d6", "--light-night" => "#e8ecf2",
     "--plaque-wood" => "#241a14", "--plaque-gold" => "#d8c48a",   # 문의 현판
     "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
     "--obang-red" => "#7a3b30",                                   # 무위의 오방색 가운데 적
-    "--ocher-ink" => "#7f6634",                                   # 글씨의 황토 — 경의 인용문
-    "--ink-frame" => "#efeae0"                                    # 부품 「먹틀」의 바탕
+    "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
   }.freeze
 
   # 누런 하나 — 황토가 닿는 곳. 글씨의 황토는 경의 인용문에만, 단청 황토는 그림에만.
@@ -71,7 +69,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
     root, = palette_and_rest
     warm = ->(token) { r, _, b = root[/#{token}:\s*#(\h{6})/, 1].scan(/../).map(&:hex); r > b }
 
-    %w[--paper --paper-deep --ink --cinnabar --gilt --dancheong-ocher --seokganju-deep --ocher-ink --ink-frame --paper-card].each do |token|
+    %w[--paper --paper-deep --ink --cinnabar --gilt --dancheong-ocher --seokganju-deep --ocher-ink].each do |token|
       assert warm.(token), "#{token} 가 따뜻하지 않다 — 낮의 화면에 찬 색이 들어왔다"
     end
     rules.each do |selector, body|
@@ -86,12 +84,15 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
     assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
     %w[--rule --night-deep --night-dusk --night-ink --night-soft --night-faint --night-void-ink
-       --night-rule --night-line --night-focus --night-gate].each do |derived|
+       --night-rule --night-line --night-focus --night-gate --paper-card --ink-frame].each do |derived|
       assert_match(/#{derived}:\s*(?:var\(--|color-mix\(in srgb, var\(--)/, root, "#{derived} 가 밑색에서 나오지 않는다")
     end
 
     _, rest = palette_and_rest
     assert_no_match(/(?<![\w-])(?:black|white|red|gray|grey|silver|navy|maroon|beige)(?![\w-])/i, rest, "이름 색이 쓰였다")
+    # 흰 쪽으로 미는 것은 카드 바탕 하나뿐이다.
+    assert_equal [ "--paper-card" ], root.scan(/(--[\w-]+):[^;]*\bwhite\b/).flatten, "흰색으로 만든 색이 늘었다"
+    assert_equal 9, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
   end
 
   # 부품은 다섯뿐이다. 이 앱에 없는 것 — 태그, 대문자 영문 라벨, 아이콘 줄, 진행 막대,
