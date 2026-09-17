@@ -22,6 +22,7 @@
                             compound_name_param: t("compound.halls.#{hall.key}"), compound_han_param: hall.han,
                             compound_line_param: t("compound.detail.#{hall.key}.line"),
                             compound_verse_param: t("compound.detail.#{hall.key}.verse"),
+                            compound_scripture_param: hall.scripture,
                             # 미륵당의 출전은 숫자가 없어 로케일에 둘 수 있다. 나머지 넷은
                             # 숫자를 담고 있어 로케일에 둘 수 없고(카피에 숫자 0), 자리 쪽
                             # 스크립트의 상수에서 온다(compound_controller.js 의 SOURCES).
@@ -43,7 +44,8 @@
     <p class="compound__card-name" data-compound-target="cardName"></p>
     <p class="compound__card-han" data-compound-target="cardHan"></p>
     <p class="compound__card-line" data-compound-target="cardLine"></p>
-    <p class="compound__card-verse verse" data-compound-target="cardVerse"></p>
+    <%# 경의 말일 때만 스크립트가 .verse 를 붙인다(황토). 경이 아닌 한 줄은 먹이다. %>
+    <p class="compound__card-verse" data-compound-target="cardVerse"></p>
     <p class="compound__card-source" data-compound-target="cardSource"></p>
     <button type="button" class="button-primary" data-compound-target="cardEnter" data-action="click->compound#enter"></button>
   </div>

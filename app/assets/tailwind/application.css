@@ -1099,6 +1099,8 @@ input[type="text"].threshold__field {
 .compound__card-han { font: var(--type-ui); color: var(--mute); margin: 0; }
 .compound__card-line { font: var(--type-body); color: var(--ink-soft); margin: 0.6rem 0 0; }
 .compound__card-verse { margin: 0.6rem 0 0; }
+/* 경이 아닌 한 줄 — 같은 명조 18 이되 먹으로 선다. */
+.compound__card-verse:not(.verse) { font: 400 1.125rem/1.5 var(--serif); color: var(--ink); }
 .compound__card-source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
 .compound__card .button-primary { margin-top: 1rem; }
 

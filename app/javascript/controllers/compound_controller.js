@@ -42,7 +42,7 @@ export default class extends Controller {
   open(event) {
     event.preventDefault()
 
-    const { key, name, han, line, verse, source, enter, cx, cy } = event.params
+    const { key, name, han, line, verse, scripture, source, enter, cx, cy } = event.params
     const locale = document.documentElement.lang
     // 넷은 여기서, 나머지 하나는 로케일에서 이미 온 채로 있다.
     const cited = source || (SOURCES[locale] || SOURCES.ko)[key] || ""
@@ -53,6 +53,8 @@ export default class extends Controller {
     this.cardHanTarget.textContent = han
     this.cardLineTarget.textContent = line
     this.cardVerseTarget.textContent = verse
+    // 황토는 경의 말에만. 경이 아닌 한 줄은 먹.
+    this.cardVerseTarget.classList.toggle("verse", scripture === true)
     this.cardSourceTarget.textContent = cited
     this.cardEnterTarget.textContent = enter
 
