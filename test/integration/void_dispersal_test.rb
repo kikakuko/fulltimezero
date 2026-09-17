@@ -50,7 +50,7 @@ class VoidDispersalTest < ActionDispatch::IntegrationTest
     css = CSS.read
     bloom = css[/\.void__bloom \{.*?\n\}/m]
 
-    %w[--dancheong-green --obang-red --dancheong-ocher --night-ink --night-deep].each do |token|
+    %w[--verdigris --obang-red --dancheong-ocher --night-ink --night-deep].each do |token|
       assert_includes bloom, "var(#{token})"
     end
     assert_no_match(/--cinnabar/, bloom)

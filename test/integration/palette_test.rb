@@ -34,11 +34,59 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_match(/--paper:/, root)
     assert_match(/--ink:/, root)
     %w[--cinnabar --seokganju-deep --seokganju-hi --seokganju-shadow --gilt].each { |token| assert_match(/#{token}:/, root) }
-    assert_match(/--dancheong-green:/, root)
+    assert_match(/--verdigris:/, root)
     assert_match(/--dancheong-ocher:/, root)
 
     strays = rest.lines.each_with_index.select { |line, _| line.match?(COLOR) }
     assert_empty strays.map { |line, n| "#{n}: #{line.strip}" }, ":root 밖에 색 값이 흩어져 있다"
+  end
+
+  # 피그마 design-tokens — 밑색은 여덟 색, 몰입 어둠, 석간주 셋, 황토. 그 밖의 색은
+  # 자리마다 따로 정한 「이름 붙은 예외」뿐이다. 둘 다 아닌 색이 :root 에 생기면 깨진다.
+  BASE_COLORS = {
+    "--paper" => "#f4f1ea", "--paper-deep" => "#eae5d8", "--ink" => "#1f2a28", "--ink-soft" => "#4a524f",
+    "--mute" => "#8c8579", "--cinnabar" => "#d9432f", "--verdigris" => "#4f7f78", "--gilt" => "#b8a06a",
+    "--night" => "#0b1216",
+    "--seokganju-deep" => "#8c3a2c", "--seokganju-hi" => "#a8523e", "--seokganju-shadow" => "#6b2a1f",
+    "--dancheong-ocher" => "#b88a4a"
+  }.freeze
+  NAMED_EXCEPTIONS = {
+    "--paper-card" => "#fbf9f4",                                  # 부품 「카드」의 바탕
+    "--light-dawn" => "#eef2f5", "--light-day" => "#fbf7ec",      # 첫째 문의 빛 — 때의 색
+    "--light-evening" => "#f7e6d6", "--light-night" => "#e8ecf2",
+    "--plaque-wood" => "#241a14", "--plaque-gold" => "#d8c48a",   # 문의 현판
+    "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
+    "--obang-red" => "#7a3b30"                                    # 무위의 오방색 가운데 적
+  }.freeze
+
+  test "밑색 열셋과 이름 붙은 예외 말고는 색이 없다 — 나머지는 섞어 만든다" do
+    root, = palette_and_rest
+    colors = root.scan(/(--[\w-]+):\s*(#\h{3,8})\b/).to_h
+
+    assert_equal BASE_COLORS.merge(NAMED_EXCEPTIONS), colors, "밑색이나 예외 밖의 색이 :root 에 있다"
+    %w[--rule --night-deep --night-dusk --night-ink --night-soft --night-faint --night-void-ink
+       --night-rule --night-line --night-focus --night-gate].each do |derived|
+      assert_match(/#{derived}:\s*(?:var\(--|color-mix\(in srgb, var\(--)/, root, "#{derived} 가 밑색에서 나오지 않는다")
+    end
+
+    _, rest = palette_and_rest
+    assert_no_match(/(?<![\w-])(?:black|white|red|gray|grey|silver|navy|maroon|beige)(?![\w-])/i, rest, "이름 색이 쓰였다")
+  end
+
+  # 부품은 다섯뿐이다. 이 앱에 없는 것 — 태그, 대문자 영문 라벨, 아이콘 줄, 진행 막대,
+  # 배지, 그림자를 두른 카드.
+  test "금지된 부품이 없다 — 태그 · 대문자 라벨 · 아이콘 줄 · 진행 막대 · 배지 · 그림자 카드" do
+    css = CSS.read.gsub(%r{/\*.*?\*/}m, "")
+    views = Rails.root.glob("app/views/**/*.erb").map(&:read).join
+
+    assert_no_match(/text-transform:\s*uppercase/, css, "대문자 라벨")
+    assert_no_match(/<progress|role="progressbar"|progress-bar|progressbar/, views, "진행 막대")
+    assert_no_match(/class="[^"]*\b(?:badge|tag|chip|pill-label|icon-row|icons)\b/, views, "배지 · 태그 · 아이콘 줄")
+    assert_no_match(/\.(?:badge|tag|chip|icon-row|progress)\b/, css.gsub(/\.turbo-progress-bar/, ""), "배지 · 태그 · 진행 막대의 규칙")
+    rules.each do |selector, body|
+      next unless body.match?(/(?<![\w-])box-shadow\s*:/)
+      assert_match(/:active/, selector, "그림자를 두른 것이 있다: #{selector}")
+    end
   end
 
   test "화면과 스크립트에는 색 값이 없다" do

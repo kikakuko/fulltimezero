@@ -10,19 +10,21 @@
    앱 전체를 어둡게 하지 않는다.
    웹폰트를 내려받지 않는다 — 제3자 요청 없음(SPIRIT 제6조). */
 :root {
+  /* ── 밑색 — 피그마 design-tokens 의 여덟, 몰입 어둠, 석간주 셋, 황토.
+     이 열셋 밖의 색은 아래 「이름 붙은 예외」에만 있고, 나머지는 모두 이 색들을
+     섞어 만든다(palette_test 가 목록째 지킨다). */
+
   /* 한지 — 사경지, 전각의 벽 */
-  --paper: #f5efe2;
-  /* 한지 짙은 곳 — 카드 테두리 같은 자리. 9번 톤 정비의 여덟 토큰 가운데
-     둘을 전각 카드를 위해 먼저 들인다. 값은 그때와 같다. */
+  --paper: #f4f1ea;
+  /* 한지 짙은 곳 — 카드 테두리 같은 자리 */
   --paper-deep: #eae5d8;
-  /* 카드의 바탕 — 한지보다도 밝다. 마찬가지로 9번 톤 정비에서 다시 나올 값. */
-  --paper-card: #fbf9f4;
   /* 먹 */
-  --ink: #1c1a17;
+  --ink: #1f2a28;
   /* 읽는 글의 색. 옅은 --mute 는 날짜 · 출전 같은 보조에만 쓴다. */
   --ink-soft: #4a524f;
   --mute: #8c8579;
-  --rule: #e0d7c5;
+  /* 금 — 한지 위의 옅은 선. 먹을 한지에 조금 섞는다. */
+  --rule: color-mix(in srgb, var(--ink) 13%, var(--paper));
 
   /* 주사(朱砂) — 황화수은. 사경의 계선과 글씨에 쓰는 선홍, 탑다라니의 붉은 인쇄.
      하루에 한 번만 보인다(§2): 쓰는 곳은 탑 안의 「오늘 쓴 한 자」 하나뿐이다.
@@ -36,8 +38,11 @@
   --seokganju-hi: #a8523e;      /* 처마 윗선의 광 · 보주 */
   --seokganju-shadow: #6b2a1f;  /* 처마 아래 그늘 · 기단 아랫단 */
 
-  /* 단청 — 청록과 황토. 코끼리 길의 바탕과 이어진다. */
-  --dancheong-green: #2f6b62;
+  /* 청록(verdigris) — 단청의 녹청 */
+  --verdigris: #4f7f78;
+  /* 금빛 */
+  --gilt: #b8a06a;
+  /* 황토 — 단청의 황토. 코끼리 길의 바탕과 이어진다. */
   --dancheong-ocher: #b88a4a;
 
   /* 경내 채색본의 톤 — 파일에 굽지 않고 여기서 내린다. 기와의 청록과 마당의
@@ -48,19 +53,24 @@
   --compound-brightness: 1.04;
   --compound-contrast: 0.96;
 
-  /* 어둠 — 문과 몰입 화면의 것 */
-  --night: #0b0a08;
-  --night-deep: #050505;
-  --night-dusk: #14120f;
-  --night-ink: #cfc7b6;
-  --night-soft: #3f3a33;
-  --night-faint: #45403a;
-  --night-void-ink: #4a463f;
-  --night-rule: #2a2620;
-  --night-line: #1e1b16;
-  --night-focus: #6b655c;
-  /* 처음의 문 셋 — 그림(gates.png)의 어둠 */
-  --night-gate: #0b1216;
+  /* 몰입 어둠 — 문과 몰입 화면(앉는 중 · 무위)의 것. 아홉째 밑색. */
+  --night: #0b1216;
+  /* 어둠의 여러 단 — 몰입 어둠에 한지를 조금씩 섞는다. 새 색을 들이지 않는다. */
+  --night-deep: var(--night);
+  --night-gate: var(--night);
+  --night-dusk: color-mix(in srgb, var(--paper) 4%, var(--night));
+  --night-line: color-mix(in srgb, var(--paper) 8%, var(--night));
+  --night-rule: color-mix(in srgb, var(--paper) 13%, var(--night));
+  --night-soft: color-mix(in srgb, var(--paper) 22%, var(--night));
+  --night-faint: color-mix(in srgb, var(--paper) 25%, var(--night));
+  --night-void-ink: color-mix(in srgb, var(--paper) 28%, var(--night));
+  --night-focus: color-mix(in srgb, var(--paper) 40%, var(--night));
+  --night-ink: color-mix(in srgb, var(--paper) 80%, var(--night));
+
+  /* ── 이름 붙은 예외 — 밑색 밖의 색. 자리마다 사용자가 따로 정한 값이다.
+     여기 없는 색이 생기면 palette_test 가 깨진다. */
+  /* 카드의 바탕 — 부품 「카드」(피그마 design-tokens) */
+  --paper-card: #fbf9f4;
 
   /* 첫째 문의 빛 — 둥근 빛이 먼 문에서 앞의 문으로 다가오고, 흰빛이 한 번
      넘쳤다가 가라앉는다. 매일의 문은 같은 장면을 짧게 줄인다. */
@@ -84,9 +94,7 @@
   /* 밤에는 전체 밝기 0.85배 — 그림의 어둠을 그만큼 한 겹 얹는다. */
   --light-night-dim: 0.15;
 
-  /* 문의 현판 — 검은 목판, 금빛 테두리, 금빛 한자. --gilt 는 9번 톤 정비의
-     값을 먼저 들인다. */
-  --gilt: #b8a06a;
+  /* 문의 현판 — 검은 목판, 금빛 테두리(--gilt), 금빛 한자. */
   --plaque-wood: #241a14;
   --plaque-gold: #d8c48a;
 
@@ -256,7 +264,7 @@ button.plain { border: 0; padding: 0; text-decoration: underline;
   position: absolute; left: 50%; top: 50%; width: 340px; height: 340px; pointer-events: none;
   transform: translate(-50%, -50%) scale(0.6); opacity: 0; filter: blur(28px);
   background:
-    radial-gradient(circle at 36% 40%, color-mix(in srgb, var(--dancheong-green) 70%, transparent), transparent 42%),
+    radial-gradient(circle at 36% 40%, color-mix(in srgb, var(--verdigris) 70%, transparent), transparent 42%),
     radial-gradient(circle at 64% 38%, color-mix(in srgb, var(--obang-red) 70%, transparent), transparent 42%),
     radial-gradient(circle at 50% 64%, color-mix(in srgb, var(--dancheong-ocher) 60%, transparent), transparent 44%),
     radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--night-ink) 35%, transparent), transparent 30%),
