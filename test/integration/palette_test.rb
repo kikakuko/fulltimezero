@@ -165,16 +165,49 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 훗날 두 신장이 설 자리. 지금은 만들지 않는다.
-  test "둘째 문의 양쪽 자리는 비어 있다" do
+  # 둘째 문(천왕문)의 사천왕 둘 — 그림 안의 인물이지 앱의 도상이 아니다.
+  # 이름을 적지 않고, 움직이지 않고, 둘째 문에서만 장막이 걷히는 대로 드러난다.
+  test "사천왕은 둘째 문을 사이에 두고 서고, 이름도 움직임도 없다" do
     sign_in_as users(:one)
-    get threshold_naming_path
 
-    assert_select ".threshold__flank", count: 2
-    css_select(".threshold__flank").each do |flank|
-      assert_equal "true", flank["aria-hidden"]
-      assert_empty flank.children.reject { |child| child.text? && child.text.strip.empty? }, "빈 자리에 무언가 서 있다"
+    [ threshold_path, threshold_naming_path, threshold_breath_path ].each do |door|
+      get door
+
+      assert_select "#gates .gates__frame .gates__kings img.gates__king[alt='']", count: 2
+      assert_select "#gates .gates__king--left[src*=four_king_left]", count: 1
+      assert_select "#gates .gates__king--right[src*=four_king_right]", count: 1
+      assert_no_match(/사천왕|증장|다문|광목|지국|천왕(?!문)|Four Kings(?! ?\z)|Virūḍhaka|Vaiśravaṇa/,
+                      Nokogiri::HTML(response.body).tap { |page| page.css(".gate-plaque").each(&:remove) }.css("body").text,
+                      "#{door} 에 사천왕의 이름이 적혔다")
     end
+    assert_select ".threshold__flank", false
+
+    css = CSS.read
+    kings = css[/\.gates__kings \{[^}]*\}/m]
+    assert_match(/--kings-height: 116;/, kings)
+    assert_match(/--kings-feet: 300;/, kings)
+    assert_match(/--kings-apart: 52;/, kings)
+    assert_match(/opacity: 0; transition: opacity 1\.2s ease-out;/, kings, "장막이 걷히는 것과 같은 때가 아니다")
+    assert_match(/\.gates__frame:has\(\.gates__veil\[data-state="naming"\]\) \.gates__kings \{ opacity: 1; \}/, css)
+    assert_no_match(/\.gates__veil\[data-state="(?:stop|breath|open)"\]\) \.gates__kings/, css, "둘째 문 밖에서 드러난다")
+
+    css.scan(/([^{}]*\.gates__king[^{}]*)\{([^{}]*)\}/).each do |selector, body|
+      assert_no_match(/animation|filter|drop-shadow|box-shadow|rotate|scale/, body, "사천왕이 움직이거나 빛난다: #{selector.strip}")
+    end
+  end
+
+  test "사천왕은 한 장에서 나눠 자르고, 가장자리에서 이어진 바탕만 걷는다" do
+    %w[left right].each do |side|
+      png = Rails.root.join("app/assets/images/four_king_#{side}.png").binread
+      width, height = png.byteslice(16, 8).unpack("NN")
+
+      assert_equal 6, png.byteslice(25, 1).unpack1("C"), "#{side} 가 RGBA 가 아니다"
+      assert_in_delta 0.492, width / height.to_f, 0.01
+    end
+
+    knockout = Rails.root.join("bin/knockout").read
+    assert_match(/--region=0\.163,0\.283,0\.192,0\.585 --connected/, knockout, "자르는 값이 기록되어 있지 않다")
+    assert Rails.root.join("app/assets/images/four_kings.png").exist?
   end
 
   private

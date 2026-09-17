@@ -9,6 +9,11 @@
 #   --connected  가장자리에서 이어진 바탕만 걷는다. 그림 안에 바탕과 거의 같은
 #                흰빛이 있을 때(미륵의 몸) 그 안이 뚫리지 않게 한다.
 #   --crop       남은 그림의 경계(알파가 있는 곳)에 맞춰 여백을 자른다.
+#   --region=x,y,w,h  걷기 전에 원본의 이 부분만 쓴다(원본 대비 비율). 한 장에
+#                여럿이 그려져 있을 때 하나씩 나누어 쓴다.
+#
+#   bin/knockout app/assets/images/four_kings.png app/assets/images/four_king_left.png \
+#     --region=0.163,0.283,0.192,0.585 --connected
 #
 # 배경색(기본 #F5F5F5) 언저리(±TOLERANCE)는 투명, 거기서 FEATHER 만큼 떨어질
 # 때까지 알파를 서서히 올린다. 가장자리의 반투명 화소는 배경과 섞이기 전의
@@ -18,11 +23,12 @@ require "zlib"
 
 flags, args = ARGV.partition { |arg| arg.start_with?("--") }
 SRC, OUT, COLOR = args
-abort "쓰는 법: bin/knockout 원본.png 결과.png [배경색 #RRGGBB] [--connected] [--crop]" unless SRC && OUT
+abort "쓰는 법: bin/knockout 원본.png 결과.png [배경색 #RRGGBB] [--connected] [--crop] [--region=x,y,w,h]" unless SRC && OUT
 
 BACKGROUND = (COLOR || "#F5F5F5").delete("#").scan(/../).map { |h| h.to_i(16) }
 CONNECTED = flags.include?("--connected")
 CROP = flags.include?("--crop")
+REGION = flags.find { |flag| flag.start_with?("--region=") }&.delete_prefix("--region=")&.split(",")&.map(&:to_f)
 TOLERANCE = 8
 FEATHER = 28
 
@@ -79,6 +85,16 @@ height.times do
   end
   prev = line.pack("C*")
   rows << line
+end
+
+if REGION
+  rx, ry, rw, rh = REGION
+  left = (rx * width).round
+  top = (ry * height).round
+  cut_w = (rw * width).round.clamp(1, width - left)
+  cut_h = (rh * height).round.clamp(1, height - top)
+  rows = rows[top, cut_h].map { |line| line[left * bpp, cut_w * bpp] }
+  width, height = cut_w, cut_h
 end
 
 # 배경에서 얼마나 떨어졌는가 — 세 채널 가운데 가장 먼 것을 알파로.

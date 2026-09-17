@@ -6,10 +6,6 @@
 <%= render "gates", state: "naming" %>
 
 <div class="threshold threshold--naming" data-controller="gates" data-gates-state-value="naming">
-  <%# 문의 양쪽 — 훗날 두 신장이 설 자리. 지금은 비워 둔다. %>
-  <div class="threshold__flank threshold__flank--left" aria-hidden="true"></div>
-  <div class="threshold__flank threshold__flank--right" aria-hidden="true"></div>
-
   <%# 계정이 있든 없든 같은 칸이다. 없으면 세션이 들고 있는다. %>
   <%= form_with scope: :user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
     <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>

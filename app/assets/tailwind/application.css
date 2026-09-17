@@ -703,6 +703,33 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   .gates__veil, .gates__veil[data-state="open"], .gates.gates--leaving { transition: none; }
 }
 
+/* ── 둘째 문의 사천왕 ───────────────────────────────────────────────
+   둘째 문(천왕문)을 사이에 두고 담 위에 마주 선다 — 담보다 위라 다리가
+   가려지지 않고, 문 지붕과 어깨 높이가 비슷하다. 둘째 문보다 조금 크고
+   첫째 문보다 작다. 값은 390 × 844 그림의 px 이다. 그림자는 원본에 있으니
+   따로 그리지 않는다.
+   둘째 문에 서면 장막이 걷히는 그 1.2초에 함께 드러나고, 첫째 문과 셋째
+   문에서는 어둠에 든다. 움직이지 않는다 — 흔들리거나 빛나지 않는다. */
+.gates__kings {
+  --kings-height: 116;   /* 높이. 비율은 그림 그대로(폭 ÷ 높이 ≈ 0.49) */
+  --kings-feet: 300;     /* 발끝의 y */
+  --kings-apart: 52;     /* 가운데(195)에서 좌우로 떨어진 거리 */
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: 0; transition: opacity 1.2s ease-out;
+}
+.gates__king {
+  position: absolute; width: auto; user-select: none; -webkit-user-drag: none;
+  height: calc(var(--kings-height) * 100cqh / 844);
+  top: calc((var(--kings-feet) - var(--kings-height)) * 100cqh / 844);
+  translate: -50% 0;
+}
+.gates__king--left { left: calc((195 - var(--kings-apart)) * 100cqw / 390); }
+.gates__king--right { left: calc((195 + var(--kings-apart)) * 100cqw / 390); }
+.gates__frame:has(.gates__veil[data-state="naming"]) .gates__kings { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .gates__kings { transition: none; }
+}
+
 /* ── 문의 현판 ─────────────────────────────────────────────────────
    설명이 아니라 건축이다. 그림 속 문의 자리에 그림의 비율로 걸린다 —
    한 단위(--plaque-u)는 390 폭 그림의 1px 이다. 지금 선 문의 현판만 보이고,
@@ -822,16 +849,24 @@ input[type="text"].threshold__field {
    괜찮지만 그림이 밀리는 것은 이 화면의 원칙에 어긋난다.
    그래서 글이 화면 위쪽 절반 안에서 끝난다.
    글자가 읽히도록, 아래의 장막 대신 글 뒤에 옅은 그늘을 깐다. */
+/* 물음 · 입력칸 · 길은 사천왕의 머리(그림 높이의 184/844)보다 위에서 끝난다 —
+   적는 동안 양옆 아래에서 사천왕이 지켜본다. 겹치지 않게 조금 올리고 좁힌다. */
 .threshold--naming {
   justify-content: flex-start;
-  padding-top: calc(var(--gates-edge) + var(--gates-h) * 0.07);
+  padding-top: calc(var(--gates-edge) + var(--gates-h) * 0.03);
 }
-.threshold--naming .threshold__form { position: relative; }
+.threshold--naming .threshold__form { position: relative; gap: 0.6rem; }
+/* 짧은 화면 — 그림이 줄어 사천왕의 머리가 올라온다. 길을 입력칸 곁에 두어 한 줄을 아낀다. */
+@media (max-height: 800px) {
+  .threshold--naming .threshold__form { grid-template-columns: 1fr auto; align-items: end; column-gap: 0.75rem; }
+  .threshold--naming .threshold__form label { grid-column: 1 / -1; }
+  .threshold--naming .threshold__way { min-height: 0; }
+}
 /* 글 뒤의 안개. 그림이 밝아졌으니 그늘이 아니라 한지빛 안개다 — 글은 먹빛으로.
    테두리가 보이면 상자가 되므로 가장자리에서 온전히 사라지게 하고, 글보다
    넉넉히 넓게 편다. */
 .threshold--naming .threshold__form::before {
-  content: ""; position: absolute; inset: -3.5rem -4rem -4.5rem; z-index: -1;
+  content: ""; position: absolute; inset: -2rem -4rem -1rem; z-index: -1;
   background: radial-gradient(62% 55% at 50% 52%,
     color-mix(in srgb, var(--paper) 82%, transparent) 0%,
     color-mix(in srgb, var(--paper) 60%, transparent) 45%,
@@ -841,14 +876,6 @@ input[type="text"].threshold__field {
 /* 셋째 문 — 할 일이 없다. 잠시 뒤 글이 옅어지고 장막이 걷힌다. */
 .threshold--breath.opening > * { animation: fade-away 1.2s ease-in forwards; }
 
-/* 둘째 문의 양쪽 — 훗날 두 신장(활 든 이 · 창 든 이)이 설 자리.
-   지금은 비어 있다. 자리만 잡고 아무것도 그리지 않는다. */
-.threshold__flank {
-  position: fixed; top: 0; bottom: 0; width: calc(var(--gates-w) * 0.18);
-  pointer-events: none;
-}
-.threshold__flank--left { left: calc((100vw - var(--gates-w)) / 2); }
-.threshold__flank--right { right: calc((100vw - var(--gates-w)) / 2); }
 
 /* 매일 지나는 문 — 첫째 문의 빛을 1.6초로 줄인 장면. 글은 없다. 빛이 가라앉으면
    문 전체가 옅어지며 그대로 마당이다. 옅어짐은 움직임이 아니므로 움직임을
