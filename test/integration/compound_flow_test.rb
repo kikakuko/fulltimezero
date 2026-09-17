@@ -123,7 +123,7 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
 
     assert_match(/const SOURCES = \{/, js)
-    %w[14 12 204 86].each { |digit| assert_match(/#{digit}/, js, "#{digit} 이 출전 상수에 없다") }
+    %w[35 12 204 86].each { |digit| assert_match(/#{digit}/, js, "#{digit} 이 출전 상수에 없다") }
     assert_no_match(/maitreya/, js, "미륵당이라는 낱말이 숫자를 담은 파일에 있다")
   end
 

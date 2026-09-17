@@ -19,13 +19,13 @@ const LABEL = 250  // 가운데 이름이 뜬 채로 머무는 동안
 // 가진 이 파일과 한 자리에 있으면 안 되는 자물쇠가 있기 때문이다.
 const SOURCES = {
   ko: {
-    sitting: "『대승장엄경론』 제14장 · 구주심",
+    sitting: "『법구경』 35",
     copying: "『금강경』 제12 존중정교분",
     lecture: "『법구경』 204",
     gate: "『앙굴리말라경』 MN 86"
   },
   en: {
-    sitting: "Mahāyānasūtrālaṃkāra, ch. 14",
+    sitting: "Dhammapada 35",
     copying: "Diamond Sūtra, ch. 12",
     lecture: "Dhammapada 204",
     gate: "Aṅgulimāla Sutta, MN 86"
