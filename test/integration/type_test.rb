@@ -33,11 +33,16 @@ class TypeTest < ActiveSupport::TestCase
     assert_match(/--ink-soft: #4a524f;/, root)
   end
 
+  # 문의 현판 위 한자는 읽는 글이 아니라 그림의 일부다 — 그림의 비율로
+  # 줄어든다(먼 문일수록 작게). 획이 단순한 옛 이름 세 자뿐이다.
+  DRAWN = %w[.gate-plaque__board].freeze
+
   test "명조는 18px 이상에만 쓴다" do
     serif_classes = []
 
     rules.each do |selector, body|
       next unless serif?(body)
+      next if DRAWN.include?(selector)
 
       size = size_of(body)
       assert size, "명조의 크기가 정해지지 않았다(물려받으면 작아진다): #{selector}"

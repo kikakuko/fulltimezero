@@ -362,6 +362,18 @@ ko:
       go: "지나간다"
     breath:
       line: "한 번도 움직인 적 없다"
+    # 현판 — 설명이 아니라 건축이다. 옛 이름이므로 인용 원문 예외(§5).
+    # 한자는 언어와 무관하게 그대로, 아래의 읽기만 그 언어로. 뜻풀이는 쓰지 않는다.
+    plaques:
+      stop:
+        han: "一柱門"
+        reading: "일주문"
+      naming:
+        han: "天王門"
+        reading: "천왕문"
+      breath:
+        han: "不二門"
+        reading: "불이문"
 
   privacy:
     title: 개인정보 처리방침

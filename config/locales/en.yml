@@ -361,6 +361,18 @@ en:
       go: "Pass through"
     breath:
       line: "It has never moved"
+    # 현판 — 설명이 아니라 건축이다. 옛 이름이므로 인용 원문 예외(§5).
+    # 한자는 언어와 무관하게 그대로, 아래의 읽기만 그 언어로. 뜻풀이는 쓰지 않는다.
+    plaques:
+      stop:
+        han: "一柱門"
+        reading: "One-Pillar Gate"
+      naming:
+        han: "天王門"
+        reading: "Gate of the Four Kings"
+      breath:
+        han: "不二門"
+        reading: "Gate of Non-Duality"
 
   privacy:
     title: Privacy

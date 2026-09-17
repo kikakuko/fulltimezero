@@ -76,6 +76,12 @@
   /* 밤에는 전체 밝기 0.85배 — 그림의 어둠을 그만큼 한 겹 얹는다. */
   --light-night-dim: 0.15;
 
+  /* 문의 현판 — 검은 목판, 금빛 테두리, 금빛 한자. --gilt 는 9번 톤 정비의
+     값을 먼저 들인다. */
+  --gilt: #b8a06a;
+  --plaque-wood: #241a14;
+  --plaque-gold: #d8c48a;
+
   /* 무위의 오색 — 코끼리가 흩어지며 잠깐 번지는 빛. 청은 단청의 청록, 황은
      황토, 백은 어둠 속 먹빛, 흑은 어둠 그 자체다. 적만 따로 둔다 — 주사가
      아니다. 주사는 하루 한 점이고, 이것은 점이 아니라 번짐이다. */
@@ -694,6 +700,51 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   .gates__veil, .gates__veil[data-state="open"], .gates.gates--leaving { transition: none; }
 }
 
+/* ── 문의 현판 ─────────────────────────────────────────────────────
+   설명이 아니라 건축이다. 그림 속 문의 자리에 그림의 비율로 걸린다 —
+   한 단위(--plaque-u)는 390 폭 그림의 1px 이다. 지금 선 문의 현판만 보이고,
+   빛이 그 문에 닿을 때 0.6초에 걸쳐 떠오른다. 먼 문에는 걸지 않는다.
+   목판 위의 한자는 그림의 일부라 글꼴의 18px 하한(type_test) 밖에 있다. */
+.gate-plaque {
+  position: absolute; left: 50%; top: calc(var(--plaque-y) / 844 * 100%);
+  width: 0; height: 0; pointer-events: none; opacity: 0;
+  --plaque-u: calc(100cqw / 390);
+}
+.gate-plaque--stop { --plaque-y: 566; --plaque-scale: 1; }
+.gate-plaque--naming { --plaque-y: 300; --plaque-scale: 0.62; }
+.gate-plaque--breath { --plaque-y: 126; --plaque-scale: 0.42; }
+.gate-plaque__board {
+  --k: calc(var(--plaque-u) * var(--plaque-scale));
+  position: absolute; left: 0; top: 0; translate: -50% -50%;
+  display: grid; place-items: center; box-sizing: border-box;
+  width: calc(104 * var(--k)); height: calc(34 * var(--k));
+  background: var(--plaque-wood); color: var(--plaque-gold);
+  border: calc(1.5 * var(--k)) solid var(--gilt); border-radius: calc(3 * var(--k));
+  font-family: var(--serif); font-weight: 700; font-size: calc(17 * var(--k)); line-height: 1;
+  letter-spacing: calc(3 * var(--k)); text-indent: calc(3 * var(--k)); white-space: nowrap;
+}
+/* 읽기 — 뜻풀이가 아니다. 그림 위에서도 읽히게 한지빛 테를 두른다. */
+.gate-plaque__reading {
+  position: absolute; left: 0; top: calc(17 * var(--plaque-u) * var(--plaque-scale) + 0.35rem); translate: -50% 0;
+  font: var(--type-label); color: var(--ink); white-space: nowrap;
+  text-shadow: 0 0 6px var(--paper), 0 0 3px var(--paper), 0 0 1px var(--paper);
+}
+
+.gates__veil[data-state="stop"] ~ .gate-plaque--stop,
+.gates__veil[data-state="naming"] ~ .gate-plaque--naming,
+.gates__veil[data-state="breath"] ~ .gate-plaque--breath,
+.daily-door .gate-plaque--stop { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 첫째 문 — 빛이 발밑에 닿는 때(3.8초의 2.6초 자리). 매일의 문도 같은 비율. */
+  .gates__veil[data-state="stop"] ~ .gate-plaque--stop { animation: plaque-rise 0.6s ease-out calc(var(--light-arrive) * 0.6842) both; }
+  .daily-door .gate-plaque--stop { animation: plaque-rise 0.6s ease-out calc(var(--light-daily) * 0.6842) both; }
+  /* 둘째 · 셋째 문 — 장막이 그 문으로 옮아가는 1.2초의 한가운데. */
+  .gates__veil[data-state="naming"] ~ .gate-plaque--naming,
+  .gates__veil[data-state="breath"] ~ .gate-plaque--breath { animation: plaque-rise 0.6s ease-out 0.6s both; }
+}
+@keyframes plaque-rise { from { opacity: 0; } to { opacity: 1; } }
+
 /* 문 위의 글 — 그림 틀의 아래쪽, 장막과 어둠 위에. */
 .threshold {
   position: fixed; inset: 0; z-index: 10;
@@ -705,12 +756,30 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 
 /* 첫째 문의 글 — 빛이 가라앉으면 한 줄, 한 박 뒤 경의 한 줄과 출전, 그 뒤 길.
    「너도 멈추어라」는 앱이 하는 말이 아니라 경이 하는 말이다. 출전이 늘 곁에 있다. */
-.threshold--stop { gap: 1.25rem; }
+/* 첫째 문의 글은 현판의 읽기 아래에서 시작한다 — 그림은 화면 높이를 따라
+   줄지만 글은 줄지 않으므로, 아래에서 쌓아 올리면 짧은 화면에서 현판을 덮는다.
+   현판 아래 읽기가 끝나는 자리(그림 높이의 0.725)부터 위에서 내려 적는다.
+   다만 「나중에」는 언제나 화면 안에 있어야 한다(붙잡지 않는다) — 글 묶음
+   전체(한 줄 · 경의 한 줄 · 길 · 나중에)의 높이만큼은 바닥에서 비워 둔다. */
+.threshold--stop {
+  justify-content: flex-start; gap: 0.75rem;
+  padding-bottom: 0;
+  padding-top: min(calc(var(--gates-edge) + var(--gates-h) * 0.725), calc(100svh - 13.5rem));
+}
+.threshold--stop .threshold__later { position: static; }
+/* 짧은 화면 — 읽기를 현판 오른쪽 곁으로 옮겨 세로 자리를 아낀다. */
+@media (max-height: 800px) {
+  .gate-plaque--stop .gate-plaque__reading { top: 0; left: calc(52 * var(--plaque-u) + 0.5rem); translate: 0 -50%; }
+  .threshold--stop { padding-top: min(calc(var(--gates-edge) + var(--gates-h) * 0.70), calc(100svh - 13.5rem)); }
+}
+@media (max-height: 700px) {
+  .threshold--stop { gap: 0.4rem; padding-top: min(calc(var(--gates-edge) + var(--gates-h) * 0.70), calc(100svh - 12.5rem)); }
+}
 /* 글 뒤의 한지빛 안개 — 둘째 문과 같은 결. 글은 돌길과 기둥 위에 서므로
    가장자리에서 온전히 사라지는 안개 한 겹을 깐다. 그림은 그대로다. */
 .threshold--stop::before {
   content: ""; position: absolute; z-index: -1; pointer-events: none;
-  left: 0; right: 0; bottom: calc(var(--gates-edge) + 1.5rem); height: 22rem;
+  left: 0; right: 0; top: calc(var(--gates-edge) + var(--gates-h) * 0.725 - 3rem); height: 17rem;
   background: radial-gradient(58% 50% at 50% 50%,
     color-mix(in srgb, var(--paper) 86%, transparent) 0%,
     color-mix(in srgb, var(--paper) 66%, transparent) 48%,

@@ -109,7 +109,12 @@ class GateLightTest < ActionDispatch::IntegrationTest
     assert_select ".daily-door[data-light] .gates__frame img.gates__image[alt='']", count: 1
     assert_select ".daily-door .gates__light", count: 1
     assert_select ".daily-door .gates__flood", count: 1
-    assert_select ".daily-door", text: ""
+    # 글은 없다 — 첫째 문의 현판(옛 이름)만 빛과 함께 떠오른다.
+    door = css_select(".daily-door").first.dup
+    door.css(".gate-plaque").each(&:remove)
+    assert_empty door.text.strip, "매일의 문에 글이 있다"
+    assert_select ".daily-door .gate-plaque--stop", count: 1
+    assert_select ".daily-door .gate-plaque", count: 1
     assert_select ".daily-door[data-action*='animationend->daily-door#settled']"
 
     js = Rails.root.join("app/javascript/controllers/daily_door_controller.js").read

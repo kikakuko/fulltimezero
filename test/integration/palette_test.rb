@@ -122,17 +122,46 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_match(/\.daily-door \.gates__flood \{ animation: gate-flood var\(--light-daily\)/, css)
   end
 
-  test "문에는 이름을 붙이지 않는다 — 형상으로만" do
-    # 「문」이라는 낱말은 괜찮다. 이름이 안 된다 — 일주문, 천왕문 같은.
+  # 문의 이름은 글로 붙이지 않는다 — 현판으로만 건다. 현판은 설명이 아니라
+  # 건축이고(실제 일주문의 편액), 옛 이름이라 인용 원문 예외(§5) 아래 있다.
+  # 그러니 이름은 현판 안에만, 한자 한 줄과 읽기 한 줄뿐이다. 뜻풀이도 순서도 없다.
+  test "문의 이름은 현판에만 있다 — 글에도, 뜻풀이에도, 순서에도 없다" do
     names = CopyLocks.pattern(:gate_names)
     sign_in_as users(:one)
 
     I18n.available_locales.each do |locale|
       [ threshold_path(locale: locale), threshold_naming_path(locale: locale), threshold_breath_path(locale: locale) ].each do |door|
         get door
+        page = Nokogiri::HTML(response.body)
 
-        assert_no_match names, Nokogiri::HTML(response.body).css("body").text, "#{door} 에 문의 이름이 있다"
+        page.css(".gate-plaque").each do |plaque|
+          parts = plaque.css(".gate-plaque__board, .gate-plaque__reading").map { |part| part.text.strip }
+          assert_equal parts.join(" "), plaque.text.split.join(" "), "현판에 한자와 읽기 말고 다른 것이 있다"
+          assert_match(/\A\p{Han}{3}\z/, parts.first, "현판의 한자가 옛 이름 세 자가 아니다")
+          assert_no_match(/\d|제.문|첫째|둘째|셋째|first|second|third|\//i, plaque.text, "현판에 순서가 적혔다")
+          assert_operator parts.last.split.size, :<=, 5, "읽기가 뜻풀이가 되었다: #{parts.last}"
+        end
+
+        page.css(".gate-plaque").each(&:remove)
+        assert_no_match names, page.css("body").text, "#{door} 의 현판 밖에 문의 이름이 있다"
       end
+    end
+  end
+
+  test "현판은 지금 선 문의 것만 보인다" do
+    css = CSS.read
+
+    %w[stop naming breath].each do |door|
+      assert_match(/\.gates__veil\[data-state="#{door}"\] ~ \.gate-plaque--#{door}/, css)
+    end
+    assert_match(/\.gate-plaque \{[^}]*opacity: 0;/, css, "현판이 처음부터 모두 보인다")
+    assert_no_match(/\.gates__veil\[data-state="(\w+)"\] ~ \.gate-plaque--(?!\1)\w+/, css, "먼 문에 현판이 걸린다")
+
+    # 빛이 그 문에 닿을 때 0.6초에 걸쳐 — 첫째 문은 빛이 발밑에 닿는 2.6초(3.8초의 0.6842).
+    assert_match(/\.gate-plaque--stop \{ animation: plaque-rise 0\.6s ease-out calc\(var\(--light-arrive\) \* 0\.6842\) both; \}/, css)
+    assert_match(/\.daily-door \.gate-plaque--stop \{ animation: plaque-rise 0\.6s ease-out calc\(var\(--light-daily\) \* 0\.6842\) both; \}/, css)
+    { "stop" => [ 566, 1 ], "naming" => [ 300, 0.62 ], "breath" => [ 126, 0.42 ] }.each do |door, (y, scale)|
+      assert_match(/\.gate-plaque--#{door} \{ --plaque-y: #{y}; --plaque-scale: #{scale}; \}/, css)
     end
   end
 
