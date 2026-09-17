@@ -29,8 +29,9 @@ class DaysController < ApplicationController
     clearing ? clearing.destroy! : Current.user.clearings.create!(cleared_on: date)
 
     # 미륵이 솟는 장면은 하루 한 번이다. 오늘을 한 번 비웠으면 거두었다가
-    # 다시 비워도 장면은 다시 오지 않는다.
-    session[:maitreya_scene_on] = Current.user.today.to_s if !clearing && date == Current.user.today
+    # 다시 비워도 장면은 다시 오지 않는다. 본 날은 브라우저가 아니라 계정에 적는다 —
+    # 한 기기를 둘이 써도 각자 제 장면을 본다.
+    Current.user.update!(maitreya_seen_on: Current.user.today) if !clearing && date == Current.user.today
 
     redirect_to params[:from] == "today" ? today_path : day_path(date)
   end

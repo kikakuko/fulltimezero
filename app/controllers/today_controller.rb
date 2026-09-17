@@ -28,8 +28,8 @@ class TodayController < ApplicationController
     @clearing_bell = Current.user.clearing_sound && SilenceGate.allow?(:bell, user: Current.user)
 
     # 미륵이 솟는 장면 — 오늘을 비워 두는 그 순간, 하루 한 번. 오늘 이미
-    # 장면을 보았으면(비웠다가 거둔 날) 다시 오지 않는다.
-    @maitreya_rise = Maitreya.declaring(Current.user) unless session[:maitreya_scene_on] == Current.user.today.to_s
+    # 장면을 보았으면(비웠다가 거둔 날) 다시 오지 않는다. 본 날은 계정에 있다.
+    @maitreya_rise = Maitreya.declaring(Current.user) unless Current.user.maitreya_seen_on == Current.user.today
 
     # 비운 날의 아침 첫 화면에서만, 달이 살짝 크게 한 번 숨 쉰다.
     @cleared_morning = @empty && Current.user.morning? &&

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_17_120000) do
   create_table "abidings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "engagement", null: false
@@ -153,6 +153,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_120000) do
     t.boolean "daily_door", default: true, null: false
     t.string "email_address", null: false
     t.string "locale", default: "ko", null: false
+    t.date "maitreya_seen_on"
     t.datetime "onboarded_at"
     t.string "password_digest", null: false
     t.string "time_zone", default: "Asia/Seoul", null: false

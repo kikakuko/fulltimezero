@@ -63,6 +63,7 @@ class Export
         locale: user.locale,
         time_zone: user.time_zone,
         what_moves: user.what_moves,
+        maitreya_seen_on: user.maitreya_seen_on&.iso8601,
         joined_on: user.created_at.in_time_zone(user.time_zone).to_date.iso8601
       }
     end

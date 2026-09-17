@@ -95,6 +95,24 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
     assert_select "template[data-maitreya-target=scene]", false, "같은 날 다시 장면이 온다"
   end
 
+  # 하루 한 번은 브라우저가 아니라 계정에 붙는다 — 한 기기를 둘이 써도 둘 다 제 장면을 본다.
+  test "하루 한 번은 계정에 붙는다 — 한 브라우저에서 두 계정이 각자 제 장면을 본다" do
+    two = users(:two)
+    two.clearings.destroy_all
+
+    get today_path
+    assert_select "template[data-maitreya-target=scene]", count: 1
+    patch day_path(@user.today, from: "today")
+    assert_equal @user.today, @user.reload.maitreya_seen_on
+
+    sign_in_as two # 같은 브라우저 세션에서 다른 계정으로
+    get today_path
+    assert_select "template[data-maitreya-target=scene]", count: 1, message: "앞사람이 본 장면 때문에 뒷사람이 못 본다"
+
+    source = Rails.root.glob("app/**/*.rb").map(&:read).join
+    assert_no_match(/session\[:maitreya/, source, "장면을 본 날이 아직 세션에 남는다")
+  end
+
   test "앞날을 비워 두는 것은 장면을 쓰지 않는다" do
     patch day_path(@user.today + 2)
     get today_path

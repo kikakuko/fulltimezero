@@ -27,6 +27,12 @@ class ExportTest < ActiveSupport::TestCase
     assert_equal "끝나지 않는 생각", JSON.parse(Export.new(@user).json).dig("account", "what_moves")
   end
 
+  test "미륵의 장면을 본 날도 들고 나간다" do
+    @user.update!(maitreya_seen_on: Date.new(2026, 9, 17))
+
+    assert_equal "2026-09-17", JSON.parse(Export.new(@user).json).dig("account", "maitreya_seen_on")
+  end
+
   test "쉼의 결과 메모까지 남김없이 담긴다 — 반쪽짜리 내보내기는 내보내기가 아니다" do
     rest = JSON.parse(Export.new(@user).json)["rests"].first
 
