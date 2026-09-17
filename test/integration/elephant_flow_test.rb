@@ -60,7 +60,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_match(/--elephant-dark: 0\.35;/, css)
     assert_match(/--elephant-light: 2\.4;/, css)
     assert_match(%r{--elephant-width: calc\(80 / 390 \* 100%\);}, css, "코끼리 폭이 그림 폭의 비율이 아니다")
-    assert_match(%r{aspect-ratio: 864 / #{Elephant::VIEW[1] + Elephant::ROOM};}, css, "틀 위쪽의 자리가 그림과 어긋난다")
+    assert_match(/\.elephant-field \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "산수 틀이 그림의 비율이 아니다 — 위에 덧댄 자리가 있다")
+    assert_no_match(/ROOM|20000%/, css, "틀 위에 덧댄 자리가 남아 있다")
     assert_match(/--e-light: calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\) \* \(var\(--elephant-light\) - var\(--elephant-dark\)\)\) \/ var\(--elephant-light\)\);/, css)
     assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\) calc\(var\(--e-light\) \* 100%\), var\(--ink\)\);/, css)
 
@@ -74,7 +75,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
     assert_equal Elephant::ANCHORS, anchors
     assert_equal Elephant::VIEW, js[/export const VIEW = \[ (\d+), (\d+) \]/, 0].scan(/\d+/).map(&:to_i)
-    assert_equal Elephant::ROOM, js[/export const ROOM = (\d+)/, 1].to_i
+    assert_no_match(/ROOM/, js, "틀 위에 덧댄 자리가 스크립트에 남아 있다")
     assert_match(/getPointAtLength/, js, "길 위의 점을 재지 않는다")
 
     # 굽이는 정거장과 따로 산다 — 정거장 아홉은 그대로, 길 점만 그림을 따른다.
@@ -85,6 +86,9 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     # 앵커는 그림 안에 있고, 아래에서 위로 오른다.
     Elephant::ANCHORS.each { |x, y| assert x.between?(0, Elephant::VIEW[0]) && y.between?(0, Elephant::VIEW[1]) }
     assert_equal Elephant::ANCHORS.map(&:last).sort.reverse, Elephant::ANCHORS.map(&:last), "길이 올라가지 않는다"
+    # 아홉째의 코끼리는 봉우리를 밟지 않는다 — 코끼리 한 마리 높이(그림 좌표 124)가 그 위에
+    # 들어야 머리가 틀 안에 온전히 든다. 그림 높이의 11% 아래.
+    assert_operator Elephant::ANCHORS.last.last, :>=, (Elephant::VIEW[1] * 0.11).ceil, "아홉째가 봉우리에 올라 머리가 틀 밖으로 나간다"
   end
 
   # 코끼리는 길 위에서 걷는다. 흰빛이 바뀐 날 곡선 위를 가는 동안에도 걸음은 이어진다.

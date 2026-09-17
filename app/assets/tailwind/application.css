@@ -1324,15 +1324,12 @@ input[type="text"].threshold__field {
   /* 폭 — 그림 폭에 대한 비율. 그림 속 길의 너비에 맞춘 값이다(폭 390 의 그림에서 80px).
      비율로 두어야 틀이 좁아지거나 화면이 커져도 코끼리와 길의 비가 같다. */
   --elephant-width: calc(80 / 390 * 100%);
-  /* 먹틀 — 본문 여백 밖으로 조금 나가되, 틀의 가장자리로 화면 양옆 16px 을 남긴다. */
-  /* 틀 위쪽에 코끼리 한 마리 높이의 자리(Elephant::ROOM = 124, 그림 단위)를 둔다 —
-     864 / (1184 + 124). 아홉째의 머리가 틀 밖으로 나가지 않는다. */
-  position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1308; margin: 0 -0.5rem 1rem;
-  /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다.
-     그림은 아래에 붙인다. 위의 자리는 아직 먹틀 바탕 그대로다 — 그림의 하늘에 세로
-     그러데이션과 가로 결이 있어 늘이거나 단색으로 칠하면 이음매가 선다. 위쪽까지
-     그려진 그림을 다시 받아 채운다(NEXT). */
-  background: url("elephant_field.png") bottom / 100% auto no-repeat, var(--ink-frame);
+  /* 먹틀 — 본문 여백 밖으로 조금 나가되, 틀의 가장자리로 화면 양옆 16px 을 남긴다.
+     그림은 원래 비율(864 × 1184) 그대로 든다. 위에 무엇을 덧대지 않는다 — 그림이 틀을
+     꽉 채우게 그려져 있어 덧댄 것은 띠로 보인다. 아홉째의 머리는 자리로 맞춘다(Elephant). */
+  position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1184; margin: 0 -0.5rem 1rem;
+  /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
+  background: url("elephant_field.png") center / cover no-repeat;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }

@@ -14,17 +14,16 @@ import { Controller } from "@hotwired/stimulus"
 // 여기 둔다. 정거장 아홉이 이 점 위에 선다.
 export const ANCHORS = [
   [ 555, 1085 ], [ 175, 905 ], [ 660, 770 ], [ 300, 640 ], [ 640, 555 ],
-  [ 325, 470 ], [ 575, 395 ], [ 355, 320 ], [ 450, 120 ]
+  [ 325, 470 ], [ 575, 395 ], [ 355, 320 ], [ 464, 150 ]
 ]
 export const VIEW = [ 864, 1184 ]
-// 틀 위쪽의 자리(그림 단위) — Elephant::ROOM 과 같다. 아홉째의 머리가 틀 밖으로 나가지 않게.
-export const ROOM = 124
 
 // 정거장이 아닌 굽이 — 그림의 기하다. 정거장 아홉은 뜻이 있는 자리고,
 // 길 점은 그림 속 길이 굽는 곳이다. 배경을 바꾸면 정거장은 두고 이것만
 // 손본다. 열쇠는 그 굽이가 뒤따르는 정거장의 차례(0 부터).
 export const BENDS = {
-  7: [ [ 480, 250 ], [ 395, 190 ] ] // 전주일취를 지나 봉우리로 오르며 두 번 더 굽는다
+  // 전주일취를 지나 봉우리의 가는 길을 따라 굽는다 — 그림 속 흰 줄의 가운데를 짚었다.
+  7: [ [ 480, 250 ], [ 420, 222 ], [ 450, 195 ], [ 432, 172 ] ]
 }
 
 // 비스듬함은 접선각을 따르되 이만큼을 넘지 않는다 — 앵커 근처에서 길이
@@ -80,7 +79,7 @@ export default class extends Controller {
 
     const style = this.figureTarget.style
     style.setProperty("--x", `${(here.x / VIEW[0]) * 100}%`)
-    style.setProperty("--y", `${((here.y + ROOM) / (VIEW[1] + ROOM)) * 100}%`)
+    style.setProperty("--y", `${(here.y / VIEW[1]) * 100}%`)
     style.setProperty("--angle", `${tilt}deg`)
     style.setProperty("--flip", facingLeft ? 1 : -1)
   }

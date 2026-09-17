@@ -6,7 +6,7 @@
      data-elephant-whiteness-value="<%= reading.whiteness %>"
      data-elephant-yesterday-value="<%= reading.yesterday %>"
      data-elephant-moving-value="<%= moving %>">
-  <svg class="elephant-field__map" viewBox="0 <%= -Elephant::ROOM %> <%= Elephant::VIEW[0] %> <%= Elephant::VIEW[1] + Elephant::ROOM %>" aria-hidden="false">
+  <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="false">
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
     <% abidings.each_with_index do |abiding, index| %>
       <% x, y = anchors.fetch(index) %>
