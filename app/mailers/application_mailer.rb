@@ -3,7 +3,8 @@
 # 모든 메일은 자신이 어떤 갈래인지 게이트에 밝혀야 한다.
 # 밝히지 않은 메일은 SilenceGate::Interceptor 에서 죽는다.
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  # 보내는 이는 환경변수로 온다 — 코드에 적지 않는다(config/environments/production.rb).
+  default from: ENV.fetch("MAIL_FROM", "no-reply@localhost")
   layout "mailer"
 
   before_action :stamp_for_gate

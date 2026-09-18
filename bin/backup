@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# This app is a raft. — 이 앱도 뗏목이다.
+#
+# 밤마다 한 번. 뜨기 → 암호화 → 서버 밖으로.
+#
+# 열쇠는 만든 사람만 갖는다. 서버에는 공개키(인증서)만 둔다 — 서버가 털려도 백업은
+# 열리지 않는다. 앱이 실행할 때 부르는 것이 아니라 서버의 도구이므로 §6 와 무관하다.
+# 백업에는 사용자의 것이 통째로 들어 있다(§4) — 암호화하지 않은 채로 서버 밖에 두지 않는다.
+#
+#   bin/backup                  뜨고 암호화한다(보낼 곳이 정해졌으면 보낸다)
+#   BACKUP_KEEP=14 bin/backup   서버에 남기는 날수(기본 7)
+#
+# 필요한 것
+#   BACKUP_CERT   공개키 인증서의 자리(기본 /rails/backup/backup-cert.pem)
+#   BACKUP_DIR    뜬 것을 두는 자리(기본 /rails/backup)
+#   BACKUP_REMOTE 보낼 곳. 비어 있으면 보내지 않고 서버에 둔다(아래 「보내기」).
+set -euo pipefail
+
+DB="${DATABASE_PATH:-/rails/storage/production.sqlite3}"
+DIR="${BACKUP_DIR:-/rails/backup}"
+CERT="${BACKUP_CERT:-$DIR/backup-cert.pem}"
+KEEP="${BACKUP_KEEP:-7}"
+STAMP="$(date -u +%Y%m%d-%H%M%S)"
+NAME="fulltimezero-$STAMP.sqlite3"
+
+mkdir -p "$DIR"
+[ -f "$DB" ] || { echo "데이터베이스가 없다: $DB" >&2; exit 1; }
+[ -f "$CERT" ] || { echo "공개키 인증서가 없다: $CERT (DEPLOY.md 의 「백업의 열쇠」)" >&2; exit 1; }
+
+# 1. 뜨기 — 쓰는 중에도 안전한 방법은 .backup 뿐이다. 파일을 그냥 복사하지 않는다.
+sqlite3 "$DB" ".backup '$DIR/$NAME'"
+
+# 2. 암호화 — 공개키로. 서버에는 여는 열쇠가 없다.
+openssl cms -encrypt -binary -aes-256-cbc -in "$DIR/$NAME" -outform DER \
+            -out "$DIR/$NAME.cms" -recip "$CERT"
+rm -f "$DIR/$NAME"
+echo "떴다: $DIR/$NAME.cms ($(du -h "$DIR/$NAME.cms" | cut -f1))"
+
+# 3. 보내기 — 서버 밖으로. 보낼 곳이 정해지면 BACKUP_REMOTE 에 rclone 의 이름을 적는다.
+#    (예: BACKUP_REMOTE=backup:fulltimezero — rclone 은 서버에 한 번 깔고 한 번 설정한다)
+#    아직 없으면 서버에 둔 채로 둔다. 서버가 사라지면 백업도 사라진다는 뜻이다.
+if [ -n "${BACKUP_REMOTE:-}" ]; then
+  rclone copy "$DIR/$NAME.cms" "$BACKUP_REMOTE" --no-traverse
+  echo "보냈다: $BACKUP_REMOTE/$NAME.cms"
+else
+  echo "보낼 곳이 없다(BACKUP_REMOTE). 서버에만 남는다 — DEPLOY.md 의 「백업을 둘 곳」."
+fi
+
+# 4. 서버에 남기는 것은 며칠 치뿐. 밖에 보낸 것은 그쪽 규칙을 따른다.
+find "$DIR" -name "fulltimezero-*.sqlite3.cms" -type f -mtime "+$KEEP" -delete
