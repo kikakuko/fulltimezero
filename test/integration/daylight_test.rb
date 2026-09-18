@@ -79,8 +79,66 @@ class DaylightTest < ActionDispatch::IntegrationTest
     assert_empty css_select(".daylight").map { |span| span.text.strip }.reject(&:empty?), "빛의 겹에 글이 있다"
   end
 
+  # 이름이 땅 위에 놓이는 전각 넷 — 흙빛 바탕이라 글자 둘레의 한지빛 테를 빼고 재도 읽힌다.
+  # 강원(담)과 사경실(나무)은 바탕이 어두워 테가 읽힘을 맡는다(아래 주석).
+  ON_GROUND = %w[sitting maitreya courtyard gate].freeze
+  # 13px 고딕이므로 본문의 잣대를 쓴다. 테를 바탕으로 잡으면 15.15:1 로 높게 잡히는데,
+  # 테는 바탕이 아니라 글자 둘레라 그 값으로는 밤을 더 어둡게 할 때 안전선이 걸리지 않는다.
+  FLOOR = 4.5
+
+  test "밤에도 전각 이름이 읽힌다 — 글자 둘레의 테를 빼고 잰다" do
+    ink = resolve("--ink")
+
+    TIMES.each do |time|
+      ON_GROUND.each do |hall|
+        ground = washed(hall_ground(hall), time)
+
+        assert_operator contrast(ground, ink), :>=, FLOOR,
+          "#{time} 에 #{hall} 의 이름이 읽히지 않는다 — 바탕 #{format('#%02x%02x%02x', *ground)}, " \
+          "대비 #{contrast(ground, ink)}:1(테 없이 잰 값)"
+      end
+    end
+  end
+
   private
     def root = CSS.read[/:root \{.*?\n\}/m]
+
+    # 이름이 놓이는 자리의 바탕 — 조감도 원본(docs/sources)에서 그 자리의 픽셀 중앙값.
+    # 화면에 나가는 WebP 는 손실 압축이라 값이 조금 흔들리므로 원본에서 잰다.
+    def hall_ground(key)
+      @map ||= png_read(Rails.root.join("docs/sources/compound.png"))
+      hall = Compound::HALLS.find { |one| one.key.to_s == key }
+      x = (hall.cx / 100.0 * @map.width).round
+      y = ((hall.cy + hall.h / 2) / 100.0 * @map.height).round + 4
+
+      points = (y...[ y + 14, @map.height ].min).flat_map do |row|
+        ([ x - 40, 0 ].max...[ x + 40, @map.width ].min).map { |column| @map.at(column, row) }
+      end
+      opaque = points.select { |pixel| @map.channels == 3 || pixel[3] > 200 }
+      (0..2).map { |channel| opaque.map { |pixel| pixel[channel] }.sort[opaque.size / 2] }
+    end
+
+    # 그림 위에 때의 빛을 곱해 얹은 뒤의 바탕.
+    def washed(ground, time)
+      wash = resolve("--daylight-#{time}")
+      veil = root[/--daylight-veil-#{time}: ([\d.]+)/, 1].to_f
+
+      ground.each_with_index.map do |value, channel|
+        multiplied = value * wash[channel] / 255.0
+        (multiplied * veil + value * (1 - veil)).round
+      end
+    end
+
+    def contrast(one, other)
+      light, dark = [ luminance(one), luminance(other) ].minmax.reverse
+      ((light + 0.05) / (dark + 0.05)).round(2)
+    end
+
+    def luminance(color)
+      red, green, blue = color.map { |value| value / 255.0 }
+                              .map { |value| value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055)**2.4 }
+      0.2126 * red + 0.7152 * green + 0.0722 * blue
+    end
 
     # color-mix(in srgb, var(--a) N%, var(--b)) 를 밑색까지 따라가 풀어 [r, g, b] 로.
     def resolve(token)

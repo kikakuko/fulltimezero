@@ -6,6 +6,7 @@ require_relative "test_helpers/session_test_helper"
 require_relative "test_helpers/stubbing"
 require_relative "test_helpers/copy_locks"
 require_relative "test_helpers/webp_info"
+require_relative "test_helpers/png_pixels"
 
 module ActiveSupport
   class TestCase
@@ -15,8 +16,9 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # 그림의 크기와 투명은 WebP 머리에서 읽는다 — 재려고 젬을 더하지 않는다.
+    # 그림의 크기와 투명은 WebP 머리에서, 픽셀은 PNG 에서 읽는다 — 재려고 젬을 더하지 않는다.
     include WebpInfo
+    include PngPixels
 
     # 경전은 앱의 것이라 테스트에도 파일에서 심는다. 값을 테스트에 적지 않는다.
     parallelize_setup { |_worker| Sutra.seed_from(Sutra::HEART_FILE); Abiding.seed_from }

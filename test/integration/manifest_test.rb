@@ -51,7 +51,7 @@ class ManifestTest < ActionDispatch::IntegrationTest
         assert_no_match(/#{CINNABAR.map { |c| format('%02x', c) }.join}|\bred\b|rgb\(/i, svg, "#{name} 에 주사가 닿았다")
         assert_no_match(/<script|href=|https?:\/\/(?!www\.w3\.org)/i, svg, "#{name} 이 바깥을 부르거나 스크립트를 품는다")
       else
-        reds = png_pixels(file).count { |r, g, b| red?(r, g, b) }
+        reds = png_read(file).pixels.count { |r, g, b, _| red?(r, g, b) }
         assert_equal 0, reds, "#{name} 에 붉은 점이 #{reds} 개 있다"
       end
     end
@@ -61,59 +61,5 @@ class ManifestTest < ActionDispatch::IntegrationTest
     def red?(r, g, b)
       near_cinnabar = [ r, g, b ].zip(CINNABAR).sum { |a, c| (a - c)**2 } < 60**2
       near_cinnabar || (r > 150 && r - g > 60 && r - b > 60)
-    end
-
-    # PNG 를 표준 zlib 만으로 푼다(젬을 더하지 않는다). 8비트 RGB · RGBA, 인터레이스 없음.
-    def png_pixels(file)
-      data = file.binread
-      assert_equal "\x89PNG\r\n\x1A\n".b, data[0, 8]
-      width = height = depth = color = nil
-      idat = +"".b
-      at = 8
-      while at < data.bytesize
-        length = data[at, 4].unpack1("N")
-        type = data[at + 4, 4]
-        body = data[at + 8, length]
-        case type
-        when "IHDR" then width, height, depth, color, _, _, interlace = body.unpack("NNCCCCC")
-        when "IDAT" then idat << body
-        end
-        at += 12 + length
-      end
-      assert_equal 8, depth
-      assert_includes [ 2, 6 ], color
-      assert_equal 0, interlace
-
-      channels = color == 6 ? 4 : 3
-      raw = Zlib::Inflate.inflate(idat).bytes
-      stride = width * channels
-      previous = Array.new(stride, 0)
-      pixels = []
-      height.times do |row|
-        start = row * (stride + 1)
-        filter = raw[start]
-        line = raw[start + 1, stride]
-        line.each_index do |i|
-          left = i >= channels ? line[i - channels] : 0
-          up = previous[i]
-          upper_left = i >= channels ? previous[i - channels] : 0
-          line[i] = (line[i] + case filter
-                     when 0 then 0
-                     when 1 then left
-                     when 2 then up
-                     when 3 then (left + up) / 2
-                     when 4 then paeth(left, up, upper_left)
-                     end) & 0xff
-        end
-        line.each_slice(channels) { |pixel| pixels << pixel.first(3) }
-        previous = line
-      end
-      pixels
-    end
-
-    def paeth(a, b, c)
-      p = a + b - c
-      pa, pb, pc = (p - a).abs, (p - b).abs, (p - c).abs
-      pa <= pb && pa <= pc ? a : (pb <= pc ? b : c)
     end
 end
