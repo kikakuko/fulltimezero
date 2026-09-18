@@ -6,6 +6,8 @@
 <div class="compound ink-frame" data-controller="compound">
   <div class="compound__scene" data-compound-target="scene">
     <%= image_tag "compound.webp", class: "compound__map", alt: t("compound.alt"), draggable: false %>
+    <%# 하루의 때 — 그림 위 한 겹. 전각 이름은 이 겹 위에 놓인다. %>
+    <span class="daylight" data-light="<%= Current.user.gate_light %>" aria-hidden="true"></span>
     <span class="compound__halo" data-compound-target="halo" hidden></span>
 
     <% Compound::HALLS.each do |hall| %>

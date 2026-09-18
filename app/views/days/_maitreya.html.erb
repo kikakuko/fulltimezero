@@ -51,6 +51,10 @@
     </g>
   </svg>
 
+  <%# 하루의 때 — 날들의 한 장에만. 솟는 장면은 그 자체가 빛이라 얹지 않는다. %>
+  <% unless scene %>
+    <span class="daylight" data-light="<%= Current.user.gate_light %>" aria-hidden="true"></span>
+  <% end %>
   <span class="maitreya__lip"></span>
   <span class="maitreya__dust"><span></span><span></span><span></span><span></span></span>
 </div>

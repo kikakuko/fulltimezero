@@ -73,6 +73,18 @@
   --night-focus: color-mix(in srgb, var(--paper) 40%, var(--night));
   --night-ink: color-mix(in srgb, var(--paper) 80%, var(--night));
 
+  /* 하루의 때 — 마당과 미륵당의 그림 위에 얹는 한 겹(곱하기). 문 셋의 빛은 「다가오는
+     빛」이라 찬 쪽도 있지만, 이것은 「해가 있는 자리」라 모두 따뜻한 쪽이다. 낮은 손대지
+     않는다. 밤은 빛깔보다 밝기를 내린다. 값과 옅기를 여기서 고친다. */
+  --daylight-dawn: color-mix(in srgb, var(--paper) 62%, var(--gilt));
+  --daylight-day: var(--paper);
+  --daylight-evening: color-mix(in srgb, var(--dancheong-ocher) 72%, var(--seokganju-hi));
+  --daylight-night: color-mix(in srgb, var(--paper) 45%, var(--ink));
+  --daylight-veil-dawn: 0.3;
+  --daylight-veil-day: 0;
+  --daylight-veil-evening: 0.42;
+  --daylight-veil-night: 0.68;
+
   /* 한지의 파생 — 부품의 바탕. 새 색이 아니라 한지를 흰 쪽이나 먹 쪽으로 조금 민 것이다.
      카드 바탕은 한지를 흰 쪽으로 60%(#FBF9F3 — 피그마의 #FBF9F4 와 1 차이),
      먹틀 바탕은 한지에 먹 2%(#F1EBDE — 피그마의 #EFEAE0 와 2 차이). */
@@ -1104,6 +1116,19 @@ input[type="text"].threshold__field {
   .compound--zooming .compound__veil,
   .compound--zooming .compound__zoom-label { transition: none; }
 }
+
+/* ── 하루의 때 ──────────────────────────────────────────────────────
+   그림 위에 한 겹. 그림 파일은 건드리지 않는다(§2). 때는 화면이 열릴 때 서버가 정하고
+   (GateLight — 문 셋과 같은 계산), 열려 있는 동안 바뀌지 않는다. 시간을 재는 스크립트는
+   없다. 때가 바뀐 것을 글자로 알리지 않는다.
+   전각 이름은 이 겹보다 위에 있고 한지빛 테를 둘러, 밤에도 읽힘이 흔들리지 않는다. */
+.daylight {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+  background: var(--daylight-day); opacity: var(--daylight-veil-day);
+}
+.daylight[data-light="dawn"] { background: var(--daylight-dawn); opacity: var(--daylight-veil-dawn); }
+.daylight[data-light="evening"] { background: var(--daylight-evening); opacity: var(--daylight-veil-evening); }
+.daylight[data-light="night"] { background: var(--daylight-night); opacity: var(--daylight-veil-night); }
 
 /* 방 머리 — 전각 이름과 한 줄. 경내에서 들어온 자리임을 알린다. */
 .hall-header { margin-bottom: 2rem; }

@@ -359,8 +359,11 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
 
     # 가장 안쪽 규칙들 — [선택자, 본문]. @media 안의 규칙도 함께.
+    # :root 는 색을 「쓰는」 곳이 아니라 「만드는」 곳이다 — 섞어 만든 값은 위의 두 검사
+    # (밑색 열셋과 이름 붙은 예외 · 파생)가 따로 지킨다.
     def rules
-      CSS.read.gsub(%r{/\*.*?\*/}m, "").scan(/([^{}]+)\{([^{}]*)\}/).map { |selector, body| [ selector.strip, body ] }
+      CSS.read.gsub(%r{/\*.*?\*/}m, "").sub(/:root \{.*?\n\}/m, "")
+         .scan(/([^{}]+)\{([^{}]*)\}/).map { |selector, body| [ selector.strip, body ] }
     end
 
     # 그 선택자가 홀로 또는 묶여 선 규칙들 가운데 그 속성을 처음 적은 값.
