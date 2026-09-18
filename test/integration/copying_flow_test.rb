@@ -172,7 +172,8 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_match(/const x = dx \* t$/, scene, "가로가 고르게 가지 않는다")
     assert_match(/Math\.sin\(Math\.PI \* t\)/, scene, "솟았다 내려앉는 호가 없다")
     assert_match(/const OVERSHOOT = 2\b/, scene, "지나쳤다 되돌아오지 않는다")
-    assert_match(/easing = "ease-out"/, scene, "되돌아오는 끝이 느려지지 않는다")
+    # 되돌아와 앉는 끝의 결은 :root 의 --ease-land 에서 온다 — 도착이라 넘쳤다 돌아온다(motion_test).
+    assert_match(/frame\.easing = landing\(\)/, scene, "되돌아오는 끝의 결이 :root 에서 오지 않는다")
   end
 
   test "앉는 순간과 층이 차는 순간에만 한 번씩 움직인다" do

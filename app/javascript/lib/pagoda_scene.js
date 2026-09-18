@@ -176,13 +176,18 @@ function flightPath(dx, dy, scale) {
     const y = beyond * (1 - (1 - t) ** 2) - lift * Math.sin(Math.PI * t)
     const frame = { offset, transform: `translate(${x}px, ${y}px) scale(${1 + (scale - 1) * t})` }
 
-    // 마지막 한 칸 — 되돌아와 앉는 동안은 느려진다.
-    if (step === steps) frame.easing = "ease-out"
+    // 마지막 한 칸 — 되돌아와 앉는 동안의 결은 :root 의 --ease-land 가 정한다(도착이다).
+    if (step === steps) frame.easing = landing()
     frames.push(frame)
   }
 
   frames.push({ offset: 1, transform: `translate(${dx}px, ${dy}px) scale(${scale})` })
   return frames
+}
+
+// 닿는 것의 결 — 곡선은 CSS 의 :root 한 곳에 있다. 여기서 값을 적지 않는다.
+function landing() {
+  return getComputedStyle(document.documentElement).getPropertyValue("--ease-land").trim() || "ease-out"
 }
 
 // 탑 그림 안의 칸이 화면의 어디에 있는지 — 다가가 있는 지금의 틀에서.
