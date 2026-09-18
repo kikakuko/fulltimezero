@@ -193,12 +193,13 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "조감도는 배경이 투명하다 — 어떤 바탕에도 얹힌다" do
-    png = Rails.root.join("app/assets/images/compound.png").binread
-    assert_equal 6, png.byteslice(25, 1).unpack1("C"), "RGBA 가 아니다"
+    image = Rails.root.join("app/assets/images/compound.webp")
 
-    # 처리본은 원본과 다르고, 처리하는 손이 저장소에 있다.
-    assert Rails.root.join("app/assets/images/compound_src.png").exist?
+    assert webp_info(image)[:alpha], "조감도에 투명이 없다"
+
+    # 처리본은 원본과 다르고, 처리하는 손이 저장소에 있다. 원본은 파이프라인 밖(docs/sources)에 둔다.
+    assert Rails.root.join("docs/sources/compound_src.png").exist?
     assert Rails.root.join("bin/knockout").executable?
-    assert_not_equal png, Rails.root.join("app/assets/images/compound_src.png").binread
+    assert_not_equal image.binread, Rails.root.join("docs/sources/compound_src.png").binread
   end
 end

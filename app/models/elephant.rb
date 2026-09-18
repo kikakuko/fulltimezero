@@ -16,7 +16,7 @@ class Elephant
   # 길 위의 정거장 아홉 — 지명이지 경지가 아니다.
   STATIONS = 9
 
-  # 길의 틀과 앵커 — 배경 그림(elephant_field.png) 속 흰 길의 굽이마다
+  # 길의 틀과 앵커 — 배경 그림(elephant_field.webp) 속 흰 길의 굽이마다
   # 한 점. 그리는 쪽(elephant_controller.js)과 같은 값이어야 한다
   # (elephant_flow_test 가 지킨다). 정거장의 이름이 이 위에 선다.
   VIEW = [ 864, 1184 ].freeze

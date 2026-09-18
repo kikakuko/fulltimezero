@@ -107,7 +107,7 @@ bin/rubocop
 
 피그마: _(링크 자리)_
 
-그림 파일은 `app/assets/images/` — 문 셋(gates.png), 코끼리와 청록 산수,
+그림 파일은 `app/assets/images/`(WebP · SVG) — 문 셋(gates.webp), 코끼리와 청록 산수,
 미륵, 탑(pagoda.svg, 색과 옅기는 CSS 가 준다).
 
 ---

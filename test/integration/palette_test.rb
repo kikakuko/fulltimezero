@@ -339,16 +339,15 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
   test "사천왕은 한 장에서 나눠 자르고, 가장자리에서 이어진 바탕만 걷는다" do
     %w[left right].each do |side|
-      png = Rails.root.join("app/assets/images/four_king_#{side}.png").binread
-      width, height = png.byteslice(16, 8).unpack("NN")
+      king = webp_info(Rails.root.join("app/assets/images/four_king_#{side}.webp"))
 
-      assert_equal 6, png.byteslice(25, 1).unpack1("C"), "#{side} 가 RGBA 가 아니다"
-      assert_in_delta 0.492, width / height.to_f, 0.01
+      assert king[:alpha], "#{side} 에 투명이 없다"
+      assert_in_delta 0.492, king[:width] / king[:height].to_f, 0.01
     end
 
     knockout = Rails.root.join("bin/knockout").read
     assert_match(/--region=0\.163,0\.283,0\.192,0\.585 --connected/, knockout, "자르는 값이 기록되어 있지 않다")
-    assert Rails.root.join("app/assets/images/four_kings.png").exist?
+    assert Rails.root.join("docs/sources/four_kings.png").exist?
   end
 
   private

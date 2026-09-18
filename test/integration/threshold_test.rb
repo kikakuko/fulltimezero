@@ -110,10 +110,10 @@ class ThresholdTest < ActionDispatch::IntegrationTest
   end
 
   test "그림은 자르지 않고 통째로 — 틀이 그림의 비율 그대로다" do
-    image = Rails.root.join("app/assets/images/gates.png")
-    assert image.exist?, "그림(gates.png)이 아직 없다"
+    image = Rails.root.join("app/assets/images/gates.webp")
+    assert image.exist?, "그림(gates.webp)이 아직 없다"
 
-    width, height = image.binread(24).unpack("x16NN")
+    width, height = webp_info(image).values_at(:width, :height)
     css = Rails.root.join("app/assets/tailwind/application.css").read
     frame = css[/--gates-w: min\(100vw, calc\(100svh \* (\d+) \/ (\d+)\)\)/] && [ $1.to_i, $2.to_i ]
 

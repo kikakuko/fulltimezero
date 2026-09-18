@@ -658,7 +658,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 }
 
 /* ── 처음의 문 셋 — 그림 한 장 위의 장막 ───────────────────────────
-   그림(gates.png)은 절대 움직이지 않는다. 스크롤도 확대도 카메라 이동도
+   그림(gates.webp)은 절대 움직이지 않는다. 스크롤도 확대도 카메라 이동도
    없다. 사용자가 다가가는 것이 아니라, 보이지 않던 것이 드러날 뿐이다 —
    한 번도 움직인 적 없다는 것이 화면의 동작으로도 지켜진다.
    그래서 그림과 그 틀에는 transform · animation · transition 을 걸지
@@ -1329,7 +1329,7 @@ input[type="text"].threshold__field {
      꽉 채우게 그려져 있어 덧댄 것은 띠로 보인다. 아홉째의 머리는 자리로 맞춘다(Elephant). */
   position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1184; margin: 0 -0.5rem 1rem;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
-  background: url("elephant_field.png") center / cover no-repeat;
+  background: url("elephant_field.webp") center / cover no-repeat;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }

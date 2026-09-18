@@ -29,7 +29,7 @@
       <div class="daily-door" data-controller="daily-door" data-light="<%= Current.user.gate_light %>"
            data-action="click->daily-door#pass animationend->daily-door#settled" aria-hidden="true">
         <div class="gates__frame">
-          <%= image_tag "gates.png", class: "gates__image", alt: "", draggable: false %>
+          <%= image_tag "gates.webp", class: "gates__image", alt: "", draggable: false %>
           <span class="gates__light"></span>
           <%= render "onboarding/plaque", door: "stop" %>
         </div>

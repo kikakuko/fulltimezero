@@ -14,7 +14,7 @@
 <div class="<%= class_names("maitreya", "ink-frame": framed) %>"
      style="--shown-from: <%= shown_from %>; --shown-to: <%= reading.shown %>; --mound-from: <%= mound_from %>; --mound-to: <%= reading.mound %>;"
      aria-hidden="true">
-  <%= image_tag "mireukdang.png", class: "maitreya__yard", alt: "", draggable: false %>
+  <%= image_tag "mireukdang.webp", class: "maitreya__yard", alt: "", draggable: false %>
   <span class="maitreya__sky"></span>
   <span class="maitreya__heap"></span>
 
@@ -26,14 +26,14 @@
     <div class="maitreya__many">
       <% [ [ 22, 366, 22 ], [ 58, 388, 32 ], [ 80, 404, 20 ], [ 310, 404, 20 ], [ 334, 388, 32 ], [ 370, 366, 22 ] ].each do |x, y, w| %>
         <span class="maitreya__one" style="--x: <%= x %>; --y: <%= y %>; --w: <%= w %>;">
-          <%= image_tag "maitreya.png", alt: "", draggable: false %>
+          <%= image_tag "maitreya.webp", alt: "", draggable: false %>
         </span>
       <% end %>
     </div>
   <% end %>
 
   <div class="maitreya__earth">
-    <%= image_tag "maitreya.png", class: "maitreya__figure", alt: "", draggable: false %>
+    <%= image_tag "maitreya.webp", class: "maitreya__figure", alt: "", draggable: false %>
   </div>
 
   <svg class="maitreya__marks" viewBox="0 0 390 560" preserveAspectRatio="none">

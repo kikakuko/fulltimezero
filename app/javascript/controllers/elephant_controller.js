@@ -9,7 +9,7 @@
 // 아홉 자리와 잇지 않는다. 여기에는 골라 둔 자리에 대한 것이 아무것도 없다.
 import { Controller } from "@hotwired/stimulus"
 
-// 길의 앵커 — 배경 그림(elephant_field.png, 864 × 1184) 속 흰 길의
+// 길의 앵커 — 배경 그림(elephant_field.webp, 768 × 1052 — 좌표는 864 × 1184 의 것) 속 흰 길의
 // 굽이마다 한 점. 아래에서 위로 오른다. 브라우저에서 보며 고칠 수 있게
 // 여기 둔다. 정거장 아홉이 이 점 위에 선다.
 export const ANCHORS = [
