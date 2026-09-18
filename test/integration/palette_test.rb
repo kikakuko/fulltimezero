@@ -22,6 +22,9 @@ class PaletteTest < ActionDispatch::IntegrationTest
   # 석간주(石間硃)를 쓸 수 있는 자리 — 탑 그림의 클래스뿐이다. 건물의 색이라 §2 와 상관없다.
   SEOKGANJU_PLACES = /\A\.pagoda__(?:wash|pillar|under|eave|eave-light|eave-shade|base|base-shade|finial|ring|mast|jewel)\z/
 
+  # 이름으로 부르는 색 — CSS 의 것이든 우리 눈의 것이든 :root 밖에서도 안에서도 쓰지 않는다.
+  NAMED_COLOR = /(?<![\w-])(?:black|white|red|green|blue|yellow|orange|purple|pink|brown|gray|grey|silver|navy|teal|olive|maroon|beige|gold|ivory|tan|cyan|magenta|aqua|lime|fuchsia)(?![\w-])/i
+
   # 주사가 결코 닿아서는 안 되는 것.
   NEVER_RED = /\b(?:a|button|input|select|textarea|label)\b|\.(?:button-primary|button-quiet|flash|errors|notice|alert|door)\b/
 
@@ -91,7 +94,18 @@ class PaletteTest < ActionDispatch::IntegrationTest
     end
 
     _, rest = palette_and_rest
-    assert_no_match(/(?<![\w-])(?:black|white|red|gray|grey|silver|navy|maroon|beige)(?![\w-])/i, rest, "이름 색이 쓰였다")
+    assert_no_match(NAMED_COLOR, rest, "이름 색이 쓰였다")
+
+    # :root 안에도 같은 잣대를 댄다 — 여기는 색을 「만드는」 곳이라 다른 검사가 선택자만
+    # 보고 지나친다. 16진수 밖의 길(rgb() · hsl() · 이름 색 · 찬 색을 섞기)로 새 색이
+    # 들어오지 못하게 한다.
+    assert_no_match(/(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i, root, ":root 에 색 함수로 만든 색이 있다")
+    root.scan(/(--[\w-]+):\s*([^;]+);/) do |token, value|
+      next if token == "--paper-card" # 흰 쪽으로 미는 하나(위에서 따로 못박는다)
+
+      assert_no_match NAMED_COLOR, value, ":root 의 #{token} 이 이름 색으로 만들어졌다"
+    end
+    assert_no_match(/var\(--verdigris\)/, root, "찬 청록이 :root 의 다른 색에 섞였다 — 청록은 몰입 화면의 규칙에서만 쓴다")
     # 흰 쪽으로 미는 것은 카드 바탕 하나뿐이다.
     assert_equal [ "--paper-card" ], root.scan(/(--[\w-]+):[^;]*\bwhite\b/).flatten, "흰색으로 만든 색이 늘었다"
     assert_equal 9, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
