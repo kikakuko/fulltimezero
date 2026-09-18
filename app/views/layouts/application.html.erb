@@ -8,6 +8,10 @@
     <meta name="color-scheme" content="light">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="fulltimezero">
+    <%# 아직 보여 줄 때가 아니다 — 기본은 검색에 막음(SearchGate). %>
+    <% if SearchGate.closed? %>
+      <meta name="robots" content="noindex, nofollow">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

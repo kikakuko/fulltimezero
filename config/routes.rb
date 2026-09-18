@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   # 홈 화면에 더했을 때의 이름 · 바탕 · 전체 화면. 서비스 워커는 두지 않는다.
   get "manifest.json" => "rails/pwa#manifest", as: :pwa_manifest
+  # 검색에 보일 것인가 — 기본은 막음. SEARCHABLE=true 한 줄로 푼다(SearchGate).
+  get "robots.txt" => "pages#robots", as: :robots
 
   # 언어의 목록은 config/application.rb 한 곳에서 온다.
   scope "/:locale", locale: Regexp.union(I18n.available_locales.map(&:to_s)) do
