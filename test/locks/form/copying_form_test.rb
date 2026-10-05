@@ -1,9 +1,10 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 사경 — 하루 한 자. 채점도 인식도 없다. 쓰면 그걸로 한 자다.
+# 사경의 결 — 탑의 그림과 주사, 날아가 앉는 결, 부품 다섯, 채점하지 않음.
+# 사경이 도는지는 기능 쪽이다 — test/integration/copying_flow_test.rb.
 require "test_helper"
 
-class CopyingFlowTest < ActionDispatch::IntegrationTest
+class CopyingFormTest < ActionDispatch::IntegrationTest
   STROKES = [ [ [ 0.2, 0.3 ], [ 0.5, 0.35 ], [ 0.8, 0.4 ] ], [ [ 0.5, 0.1 ], [ 0.5, 0.9 ] ] ].freeze
 
   setup do
@@ -12,86 +13,6 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @user
   end
 
-  test "오늘의 한 자와 그 곁의 글이 보인다" do
-    char = @sutra.chars.first
-    get new_copying_path
-
-    assert_select ".copy-model", text: char.glyph
-    assert_match char.reading, response.body
-    assert_match char.sense_here, response.body
-    assert_match char.gloss_en, response.body
-  end
-
-  test "구절에서 지금 쓰는 자만 진하다" do
-    already_wrote_through(5) # 다음은 여섯째 자 — 行
-    char = @sutra.chars.find_by!(pos: 6)
-    get new_copying_path
-
-    assert_select ".copy-phrase strong", count: 1, text: char.glyph
-    assert_select ".copy-phrase", text: char.phrase.han
-  end
-
-  test "소리를 옮긴 자에는 뜻 대신 산스크리트 원어가 선다" do
-    already_wrote_through(3) # 다음은 넷째 자 — 菩
-    char = @sutra.chars.find_by!(pos: 4)
-    assert char.transliterated?
-
-    get new_copying_path
-
-    assert_match char.sanskrit["word"], response.body
-    assert_match char.sanskrit["syllable"], response.body
-    assert_no_match char.sense_here, response.body
-  end
-
-  # 몇 번째인지, 모두 몇 번인지는 세지 않는다. 다시 온다는 것만 말한다.
-  test "다시 오는 자는 다음에 만날 구절만 말한다" do
-    already_wrote_through(3)
-    char = @sutra.chars.find_by!(pos: 4)
-    again = @sutra.chars.where(glyph: char.glyph).where("pos > ?", char.pos).order(:pos).first.phrase
-
-    get new_copying_path
-
-    assert_match I18n.t("copyings.again", phrase: again.han), response.body
-    assert_no_match(/\d/, Nokogiri::HTML(response.body).css("main").text, "사경 화면에 숫자가 보인다")
-  end
-
-  test "이 경에서 다시 오지 않는 자에는 그 말이 없다" do
-    char = @sutra.chars.first
-    assert_equal 1, @sutra.chars.where(glyph: char.glyph).count
-
-    get new_copying_path
-
-    assert_no_match I18n.t("copyings.again", phrase: "").split("「").first, response.body
-  end
-
-  test "올리면 그어진 획 그대로 한 자가 된다" do
-    assert_difference -> { @user.copyings.count }, 1 do
-      post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
-    end
-
-    assert_equal STROKES, @user.copyings.last.glyph_paths
-    follow_redirect!
-    assert_match I18n.t("today.done"), response.body
-  end
-
-  test "올리면 방금 쓴 글씨가 앉을 탑을 함께 돌려준다" do
-    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
-
-    assert_response :created
-    scene = response.parsed_body["scene"]
-    fresh = scene["cells"].find { |cell| cell["fresh"] }
-
-    assert_equal 1, fresh["pos"]
-    assert_equal STROKES, fresh["paths"]
-    assert_equal 1, scene["cells"].size, "쓰지 않은 칸의 자리가 함께 나갔다"
-  end
-
-  test "이미 쓴 날에는 장면 없이 되돌려 보낸다" do
-    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
-    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }, as: :json
-
-    assert_response :unprocessable_entity
-  end
 
   # 탑은 잠깐 보였다 사라져야 한다. 머물면 자기 탑을 세게 된다.
   test "오늘 몫이 끝난 화면에는 탑이 머물지 않는다" do
@@ -103,19 +24,6 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     # 머리말의 모듈 목록이 아니라, 사용자가 보는 본문에 탑이 있는지를 본다.
     main = Nokogiri::HTML(response.body).at_css("main")
     assert_empty main.css("[class*=pagoda], [data-copying-pagoda-value]"), "몫이 끝난 뒤에도 탑이 화면에 남는다"
-  end
-
-  # 아홉 달을 쌓는 것을 하루 한 번 잠깐만 보게 하는 것은 가혹하다.
-  # 탑은 언제든 볼 수 있다 — 세는 것을 막는 일은 탑 화면이 한다.
-  test "사경에서 탑으로 가는 길이 늘 있다" do
-    get new_copying_path
-    assert_select "a[href=?]", pagoda_path, count: 1
-
-    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
-    get new_copying_path
-
-    assert_match I18n.t("today.done"), response.body
-    assert_select "a[href=?]", pagoda_path, count: 1, message: "오늘 몫이 끝나면 탑으로 가는 길이 사라진다"
   end
 
   # 탑의 그림은 손으로 그린 것이다. 좌표도 곡선도 코드가 만들지 않는다.
@@ -234,49 +142,6 @@ class CopyingFlowTest < ActionDispatch::IntegrationTest
     assert_select ".copy-offer button.button-primary[data-copying-target=offer]", text: I18n.t("copyings.offer")
     assert_select ".copy-offer button.button-quiet", text: I18n.t("copyings.rewrite")
     assert_select "input[type=submit], .verse", false, "옛 제출 칸이나 인용이 남아 있다"
-  end
-
-  test "쓰지 않았다는 선언으로는 한 자가 되지 않는다" do
-    assert_no_difference -> { @user.copyings.count } do
-      post copyings_path, params: { on_paper: 1 }
-    end
-  end
-
-  test "하루 한 자를 이미 썼으면 오늘 몫은 끝났다" do
-    post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
-
-    get new_copying_path
-    assert_match I18n.t("today.done"), response.body
-    assert_select "svg[data-copying-target=surface]", false, "몫이 끝났는데 쓰는 자리가 열려 있다"
-
-    assert_no_difference -> { @user.copyings.count } do
-      post copyings_path, params: { copying: { glyph_paths: STROKES.to_json } }
-    end
-  end
-
-  test "한 획도 긋지 않고는 올릴 수 없다" do
-    get new_copying_path
-    assert_select "button[type=submit][disabled][data-copying-target=offer]"
-
-    assert_no_difference -> { @user.copyings.count } do
-      post copyings_path, params: { copying: { glyph_paths: "[]" } }
-    end
-  end
-
-  test "알아볼 수 없는 획은 받지 않는다" do
-    assert_no_difference -> { @user.copyings.count } do
-      post copyings_path, params: { copying: { glyph_paths: "획이 아니다" } }
-    end
-
-    follow_redirect!
-    assert_select ".flash"
-  end
-
-  test "경을 끝까지 쓰면 그렇게만 말한다" do
-    already_wrote_through(@sutra.total)
-    get new_copying_path
-
-    assert_match I18n.t("copyings.finished"), response.body
   end
 
   # 채점도, 인식도, 정확도도 없다(제3조). 주석은 왜 하지 않는지를 적은 자리라 걷어낸다.

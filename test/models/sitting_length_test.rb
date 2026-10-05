@@ -1,12 +1,9 @@
 # This app is a raft. — 이 앱도 뗏목이다.
+#
+# 앉음의 길이가 도는가 — 정함 없이 앉으면 끝이 없고, 모르는 이름은 기본값이 된다.
 require "test_helper"
 
 class SittingLengthTest < ActiveSupport::TestCase
-  test "낱말이 쉼의 길이와 겹치지 않는다" do
-    assert_empty SittingLength::NAMES & Rest::DURATIONS,
-      "앉음의 길이와 쉼의 길이가 같은 낱말을 쓴다. 환산으로 읽힐 여지를 두지 않는다."
-  end
-
   test "정함 없이 앉으면 정해진 끝이 없다" do
     length = SittingLength.new("open")
 

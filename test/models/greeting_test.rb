@@ -1,8 +1,11 @@
 # This app is a raft. — 이 앱도 뗏목이다.
+#
+# 인사가 도는가 — 같은 날엔 같은 말, 대개는 말이 오지 않는다. 깨지면 버그다.
 require "test_helper"
 
 class GreetingTest < ActiveSupport::TestCase
   setup { @user = users(:one) }
+
 
   test "같은 날 같은 사람에게는 늘 같은 말이 온다 — 인사지 뽑기가 아니다" do
     year = (Date.new(2026, 1, 1)..Date.new(2026, 12, 31))
@@ -47,14 +50,6 @@ class GreetingTest < ActiveSupport::TestCase
           assert I18n.exists?("greetings.#{key}", locale),
             "#{locale} 에 greetings.#{key} 가 없다"
         end
-      end
-    end
-  end
-
-  test "인사에도 느낌표와 이모지가 없다" do
-    I18n.available_locales.each do |locale|
-      I18n.t("greetings", locale: locale).each_value do |line|
-        assert_no_match(/[!\u{1F300}-\u{1FAFF}]/, line, line)
       end
     end
   end

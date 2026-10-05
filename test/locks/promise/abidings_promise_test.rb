@@ -62,4 +62,14 @@ class AbidingsPromiseTest < ActionDispatch::IntegrationTest
 
     assert_equal @abidings.fetch(2).ko, JSON.parse(Export.new(@user).json)["sittings"].last["abiding"]
   end
+
+  # 자리는 사람을 판정하지 않는다. 쉰 날의 수로 자리를 부여하는 코드가 없다.
+  # 쉰 날의 수로 자리를 부여하지 않는다 — 앱이 자리를 정해 주지 않는다는 약속의 모델 쪽이다.
+  test "쉰 날의 수로 자리를 부여하지 않는다" do
+    sources = Rails.root.glob("app/**/*.rb").map(&:read).join
+
+    assert_no_match(/Abiding\.(?:for|of|reached|current|assign|by_count|from_days)/, sources,
+      "코드가 사용자에게 자리를 부여한다")
+    assert_no_match(/sittings\.(?:group|count)\([^)]*abiding/, sources, "자리별로 앉음을 센다")
+  end
 end
