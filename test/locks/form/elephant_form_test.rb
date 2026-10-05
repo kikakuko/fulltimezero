@@ -1,9 +1,10 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 코끼리 — 앉은 흔적. 아홉 자리와 잇지 않는다.
+# 코끼리의 결 — 흰빛이 어떻게 오르내리는지, 정거장이 몇인지. 「아홉 자리와 잇지 않는다」와
+# 「리셋이 없다」는 약속 쪽이다 — test/locks/promise/elephant_promise_test.rb.
 require "test_helper"
 
-class ElephantTest < ActiveSupport::TestCase
+class ElephantFormTest < ActiveSupport::TestCase
   setup do
     @user = users(:one)
     @user.rests.destroy_all
@@ -42,19 +43,6 @@ class ElephantTest < ActiveSupport::TestCase
     assert_in_delta 1 / 28.0, Elephant.for(@user).whiteness, 1e-9, "스물아흐레 전이 창에 들어온다"
   end
 
-  # 쉬지 않으면 서서히 내려갈 뿐이다. 0 으로 떨어지는 일은 없다 — 잊음이지 벌이 아니다.
-  test "안 쉬면 서서히 내려갈 뿐, 리셋은 없다" do
-    5.times { |i| @user.rests.create!(rested_on: @today - i, duration: "a_while") }
-    now = Elephant.for(@user).whiteness
-
-    later = (1..40).map { |days| Elephant.for(@user, today: @today + days).whiteness }
-
-    assert_equal later.sort.reverse, later, "흰빛이 갑자기 오르거나 떨어진다"
-    assert_operator later.first, :<=, now
-    assert_operator later.each_cons(2).map { |a, b| a - b }.max, :<=, 1 / 28.0 + 1e-9, "하루에 하루치보다 더 내려간다"
-    assert_equal 0.0, later.last
-  end
-
   test "어제의 값을 함께 준다" do
     @user.rests.create!(rested_on: @today, duration: "a_while")
     reading = Elephant.for(@user)
@@ -68,18 +56,5 @@ class ElephantTest < ActiveSupport::TestCase
     assert_equal 0, Elephant::Reading.new(whiteness: 0.0, yesterday: 0.0).station
     assert_equal 8, Elephant::Reading.new(whiteness: 1.0, yesterday: 1.0).station
     assert_equal 4, Elephant::Reading.new(whiteness: 0.5, yesterday: 0.5).station
-  end
-
-  # 코끼리는 흔적이고 아홉 자리는 안내다. 둘을 잇는 코드는 있을 수 없다.
-  test "아홉 자리와 잇지 않는다" do
-    elephant = Rails.root.join("app/models/elephant.rb").read
-    assert_no_match(/abiding/i, elephant, "코끼리가 자리를 읽는다")
-
-    # 코끼리 모델(Elephant · @elephant)과 자리가 한 줄에 함께 서면 잇는 것이다.
-    # 정거장 이름의 링크(elephant-field__stop)는 CSS 이름이지 코끼리의 자리가 아니다.
-    sources = Rails.root.glob("app/**/*.{rb,erb,js}").map(&:read).join
-    assert_no_match(/abiding[^\n]*(?:\bElephant\b|@elephant\b)|(?:\bElephant\b|@elephant\b)[^\n]*abiding/, sources,
-      "코끼리의 자리와 골라 둔 자리를 한 줄에서 잇는다")
-    assert_no_match(/station[^\n]*abiding_id|abiding_id[^\n]*station|whiteness[^\n]*abiding/i, sources)
   end
 end

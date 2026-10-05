@@ -6,7 +6,7 @@
 # 이 파일이 지키는 것: 셋째 언어가 올 때 손댈 곳이 정해져 있고, 그 밖의
 # 어디에도 언어가 박혀 있지 않다는 것.
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class LanguagesTest < ActionDispatch::IntegrationTest
   LOCALES = I18n.available_locales.map(&:to_s)

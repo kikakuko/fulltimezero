@@ -2,7 +2,7 @@
 #
 # 코끼리의 길 — 앉기의 자리 맨 위. 흔적이지 경지가 아니다.
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class ElephantFlowTest < ActionDispatch::IntegrationTest
   setup do

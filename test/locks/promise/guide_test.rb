@@ -4,7 +4,7 @@
 # 않지만, 어조 규정은 더 엄하게 건다 — 진단하지 않고, 시키지 않고,
 # 초대로 끝맺는다. 다섯째 장은 앱 밖을 가리키며 끝난다(제7조).
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class GuideTest < ActionDispatch::IntegrationTest
   CHAPTERS = GuideController::CHAPTERS

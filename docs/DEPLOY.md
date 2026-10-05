@@ -43,8 +43,9 @@ export SMTP_ADDRESS=<메일서버>
 
 ## 3. 서버를 만든다
 
-- 어디든 좋다(Hetzner · DigitalOcean · Vultr). **공유 vCPU 2코어 · 메모리 4GB · 디스크 40GB**
-  면 넉넉하다. 한 달 5~10달러 쯤.
+- 어디든 좋다(Hetzner · DigitalOcean · Vultr). **공유 vCPU 2코어 · 메모리 2GB · 디스크 40GB**
+  면 충분하다 — Rails 8 에 SQLite 하나다. 모자라면 그때 올린다.
+- 값은 서울이 유럽보다 비싸다. **서울은 월 12달러 안팎이니 등록 전에 확인한다.**
 - 운영체제는 **Ubuntu 24.04 LTS**.
 - 만들 때 SSH 공개키를 넣는다(맥의 `~/.ssh/id_ed25519.pub`). 비밀번호 접속은 끈다.
 - 만든 뒤 한 번 들어가 도커를 깔고 방화벽을 연다.

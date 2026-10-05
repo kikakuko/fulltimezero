@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class DaysFlowTest < ActionDispatch::IntegrationTest
   setup do

@@ -10,7 +10,7 @@
 #   매일의 문은 어두워졌다 밝아지며 걷힌다
 #   문에는 이름이 없다        — 형상으로만. 둘째 문 양쪽의 자리는 비어 있다
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class PaletteTest < ActionDispatch::IntegrationTest
   CSS = Rails.root.join("app/assets/tailwind/application.css")

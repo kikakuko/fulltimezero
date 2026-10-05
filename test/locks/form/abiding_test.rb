@@ -2,7 +2,7 @@
 #
 # 아홉 자리. 오르는 사다리가 아니라 쉼이 깊어지는 아홉 가지 결이다.
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class AbidingTest < ActiveSupport::TestCase
   setup { @abidings = nine_abidings }

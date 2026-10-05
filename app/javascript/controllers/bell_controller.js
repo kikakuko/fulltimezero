@@ -1,7 +1,7 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
 // 종성. 이 앱에서 소리를 내는 유일한 파일이다 — 다른 어디에도 오디오를
-// 다루는 코드가 있어서는 안 된다(test/integration/silence_test.rb).
+// 다루는 코드가 있어서는 안 된다(test/locks/promise/silence_test.rb).
 // 울릴지 말지는 서버의 침묵 게이트가 이미 정해서 건네준다.
 //
 // 죽비가 먼저, 입정이 다음이다.

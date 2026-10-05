@@ -2,7 +2,7 @@
 #
 # 처음의 문 셋. 튜토리얼은 알려주는 것이고 리츄얼은 거치게 하는 것이다.
 require "test_helper"
-require_relative "../test_helpers/copy_locks"
+require_relative "../../test_helpers/copy_locks"
 
 class ThresholdTest < ActionDispatch::IntegrationTest
   setup do

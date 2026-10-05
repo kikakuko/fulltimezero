@@ -7,6 +7,7 @@ require_relative "test_helpers/stubbing"
 require_relative "test_helpers/copy_locks"
 require_relative "test_helpers/webp_info"
 require_relative "test_helpers/png_pixels"
+require_relative "test_helpers/screens"
 
 module ActiveSupport
   class TestCase

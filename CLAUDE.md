@@ -8,9 +8,12 @@
   주제가 겹쳐 보여도 마찬가지다(가입·알림·다국어·디자인).
 - 자물쇠를 느슨하게 하는 변경은 기능과 같은 커밋에 넣지 않는다.
   따로 커밋하고 커밋문에 까닭을 적는다.
+- `test/locks/promise/` 의 약속 자물쇠를 푸는 변경은 먼저 묻는다.
+  `test/locks/form/` 의 결 자물쇠는 방향을 틀면 풀 수 있다.
+  가르는 기준: 사용자가 배신당했다고 느낄 수 있으면 약속, 취향이 달라졌을 뿐이면 결.
 - 새 젬이나 바깥 서비스를 더하기 전에 반드시 먼저 묻는다.
-  `test/integration/dependency_test.rb` 가 Gemfile · package.json 의 항목 수를,
-  `test/integration/importmap_test.rb` 가 importmap 의 pin 수와 그 자리(저장소 안)를 지킨다.
+  `test/locks/form/dependency_test.rb` 가 Gemfile · package.json 의 항목 수를,
+  `test/locks/promise/importmap_test.rb` 가 importmap 의 pin 수와 그 자리(저장소 안)를 지킨다.
 
 # CLAUDE.md — 이 저장소에서 일하는 법
 
@@ -26,11 +29,11 @@
 
 ## 커밋의 조건
 
-`bin/rails test` 전 항목, 그중에서도 `test/integration/spirit_test.rb` 가
+`bin/rails test` 전 항목, 그중에서도 `test/locks/promise/spirit_promise_test.rb` 가
 통과해야 커밋한다. 예외는 없다. 이 검사는 화면에 숫자·이모지·느낌표가
 없는지, 바깥으로 요청이 나가는지, 알림이 새는지를 본다.
 
-`test/integration/silence_test.rb` 는 침묵 게이트를 우회하는 경로가
+`test/locks/promise/silence_test.rb` 는 침묵 게이트를 우회하는 경로가
 소스 트리에 존재하지 않는지 검사한다. 이 둘은 규율이 아니라 자물쇠다.
 
 ## 외부 스킬 정책

@@ -10,7 +10,7 @@
 #     ended_at 은 끝난 시각일 뿐이고, 시작과의 차를 재는 코드는 없다.
 #   - 삼 분을 앉든 삼십 분을 앉든, 무위에 들든, 그 날은 똑같이 하나다.
 #
-# test/models/sitting_test.rb 가 컬럼 목록을 통째로 못박는다.
+# test/locks/promise/sitting_test.rb 가 컬럼 목록을 통째로 못박는다.
 class Sitting < ApplicationRecord
   # sitting — 명상 타이머. nothing — 무위의 시간.
   MODES = %w[sitting nothing].freeze

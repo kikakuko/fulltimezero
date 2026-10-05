@@ -4,7 +4,7 @@
 #
 # 이 앱에서 바깥으로 나가는 모든 소리와 모든 편지는 여기를 지난다.
 # 게이트를 우회하는 경로는 코드에 존재할 수 없다 — 문서가 아니라
-# 인터셉터와 테스트가 그것을 강제한다(test/integration/silence_test.rb).
+# 인터셉터와 테스트가 그것을 강제한다(test/locks/promise/silence_test.rb).
 #
 # 유일한 기준:
 #
