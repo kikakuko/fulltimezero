@@ -5,7 +5,6 @@
 require "test_helper"
 
 class MaitreyaPromiseTest < ActiveSupport::TestCase
-
   # 숫자는 화면에 나가지 않는다. 세는 코드는 모델 하나뿐이다 —
   # 미륵을 그리는 쪽은 비율만 받고, 몇 번인지는 모른다.
   test "미륵을 그리는 쪽은 몇 번인지 모른다" do
