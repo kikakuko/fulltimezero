@@ -2,6 +2,7 @@
 require "rubygems"
 require "bundler/setup"
 
-ARGV.unshift("--ensure-latest")
+# --ensure-latest 는 두지 않는다. 새 판이 나올 때마다 우리 코드와 무관하게 CI 가 빨개진다.
+# 판을 올리는 일은 Dependabot 이 맡는다(.github/dependabot.yml).
 
 load Gem.bin_path("brakeman", "brakeman")
