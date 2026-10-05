@@ -1,14 +1,16 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 경내 — 삼문을 지났으면 경내에 선다. 마당에서 전각으로 가는 길은 이름뿐이다.
+# 경내의 결 — 조감도 위의 이름, 카드로 드는 손짓, 톤과 색. 전각으로 가는 길이 열리는지는
+# 기능 쪽이다 — test/integration/compound_flow_test.rb.
 require "test_helper"
 
-class CompoundFlowTest < ActionDispatch::IntegrationTest
+class CompoundFormTest < ActionDispatch::IntegrationTest
   setup do
     heart_sutra
     @user = users(:one)
     sign_in_as @user
   end
+
 
   test "자리 넷은 전각이다 — 마당 · 미륵당 · 선방 · 사경실" do
     get today_path
@@ -20,18 +22,12 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
     assert_select "nav.doors a.door", count: 4
   end
 
-  test "마당 맨 위에 경내 조감도가 있고, 전각 여섯이 제 자리로 이어진다" do
+  test "마당 맨 위에 경내 조감도가 있다" do
     get today_path
 
     assert_select ".compound img.compound__map[src*=compound]", count: 1
     main = Nokogiri::HTML(response.body).css("main").to_html
     assert_operator main.index("compound"), :<, main.index("moon"), "조감도가 맨 위가 아니다"
-
-    { sitting: new_sitting_path, maitreya: days_path, copying: new_copying_path,
-      lecture: guide_path, courtyard: "#clearing", gate: threshold_path }.each do |key, href|
-      assert_select "a.compound__hall--#{key}[href=?]", href, count: 1, text: I18n.t("compound.halls.#{key}")
-    end
-    assert_select "#clearing", count: 1, message: "마당을 누르면 내려갈 자리가 없다"
   end
 
   # 방은 장소이지 할 일이 아니다. 이름 말고는 아무것도 붙지 않는다.
