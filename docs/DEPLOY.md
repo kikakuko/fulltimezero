@@ -330,9 +330,13 @@ Workers 는 자바스크립트만 돌고 Rails 가 못 돈다. 그것은 다시 
 | Porkbun 에 CNAME 만 넣는 부분 설정으로 되나 | **안 된다.** 「A CNAME setup (partial) is only available to customers on a Business or Enterprise plan」 — **네임서버를 Cloudflare 로 옮겨야 한다** | 부분 설정 안내 |
 | 방문자의 주소는 | **Cloudflare 를 지나므로 그쪽에 남는다.** 우리 쪽에도 온다 — `CF-Connecting-IP` 와 `X-Forwarded-For` 가 방문자 IP를, `CF-IPCountry` 가 나라를 실어 보낸다. **「Remove visitor IP headers」 매니지드 트랜스폼으로 그 머리말을 떼어 낼 수 있다** | HTTP 머리말 안내 |
 
-**되돌리기 쉽다는 전제가 깨졌다.** 부분 설정이 유료라서, 임시로 쓰려면 **도메인의
-네임서버를 Porkbun 에서 Cloudflare 로 옮겨야** 한다. 진짜 서버로 갈 때 다시 옮겨
-와야 하고, 네임서버 변경은 몇 시간에서 하루가 걸린다.
+**네임서버는 Cloudflare 로 옮기고 되돌리지 않는다(정해 둔 것).** 부분 설정이 유료라서
+옮기는 수밖에 없는데, 되돌릴 일도 없다 — **Porkbun 은 주소의 등기소로 남고, 주소의
+안내판(DNS)은 Cloudflare 가 맡는다.** 진짜 서버가 생기면 레코드를 그 IP로 고치고
+**프록시(주황 구름)만 끄면** 된다. 한 번뿐인 가벼운 일이다.
+
+**다만 순서는 그대로다.** Oracle(또는 카카오)이 먼저이고, 터널은 Oracle 이 계속 막힐
+때의 임시다.
 
 ### 세우는 차례 (아직 하지 않았다 — 설치도 가입도)
 
@@ -370,12 +374,15 @@ cloudflared tunnel delete fulltimezero        # 터널을 지운다
 그다음 Cloudflare 에서 `app` 의 CNAME 을 지우고, **도메인의 네임서버를 Porkbun 으로
 되돌린 뒤**, 진짜 서버의 IP로 A 레코드 셋을 다시 넣는다(§4).
 
-### 옮길 때 되돌릴 것 — 적어 둔다
+### 진짜 서버로 옮길 때 — 적어 둔다
 
-- [ ] 네임서버를 Porkbun 으로
-- [ ] `app` CNAME 을 지우고 A 레코드 셋을 서버 IP로
+네임서버는 그대로 둔다. 안내판만 고쳐 쓰는 일이다.
+
+- [ ] Cloudflare 에서 `app` CNAME 을 지우고 A 레코드 셋(`@` · `www` · `app`)을 서버 IP로
+- [ ] **프록시를 끈다**(주황 구름 → 회색). 그래야 방문자가 Cloudflare 를 지나지 않고
+      서버로 곧장 온다 — 수탁자가 하나 줄고 §4 가 가벼워진다
 - [ ] 터널 정리와 삭제, 맥의 `cloudflared` 제거
-- [ ] 처리방침의 수탁자에서 Cloudflare 를 빼거나 서버 회사로 바꾸기
+- [ ] 처리방침의 수탁자에서 Cloudflare 를 빼고 서버 회사를 넣는다
 - [ ] 백업을 서버의 cron 으로 옮기기(맥에서 돌던 것을 끈다)
 
 ## 12. 복구 — 한 달에 한 번 연습한다
