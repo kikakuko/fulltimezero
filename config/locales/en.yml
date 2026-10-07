@@ -25,6 +25,7 @@ en:
       copying: Copying hall
       lecture: Scripture hall
       bowing: Reverence hall
+      bell: Bell hall
       courtyard: Courtyard
       gate: Gate
     # The card's words when a hall is tapped. The line is used again as the
@@ -52,6 +53,10 @@ en:
         line: Where one bows. Each bow strings a single bead.
         verse: As if they stood before me — honoured in body, speech and mind
         enter: Enter the reverence hall
+      bell:
+        line: Where one strikes and listens. The sound fades.
+        verse: Strike once, and listen until it fades
+        enter: Enter the bell hall
       gate:
         line: Where you came in. It can be crossed again.
         verse: I have stopped
@@ -425,6 +430,10 @@ en:
         - Hands draw back toward the body
         - Knees come up and the body rises
         - Standing again, palms together
+
+  bells:
+    strike: Strike
+    not_yet: The bell is not hung yet.
 
   guest:
     line: A place to look around. Nothing done here is kept.

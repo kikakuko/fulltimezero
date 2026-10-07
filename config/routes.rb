@@ -57,6 +57,9 @@ Rails.application.routes.draw do
 
     # 절 — 두 벌 가운데 하나를 고르고, 한 배마다 알 하나를 꿴다.
     # 속도는 사람이 정한다. 앱이 세는 길은 없다.
+    # 범종각 — 치고 듣는다. 쌓는 것이 없으므로 쓰는 길도 없다.
+    get "bells" => "bells#show", as: :bells
+
     get  "bows" => "bows#show", as: :bows
     get  "bows/:kind" => "bows#bow", as: :bow
     post "beads" => "beads#create", as: :beads

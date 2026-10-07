@@ -1,0 +1,19 @@
+<%# 범종각. 치는 손짓 하나와, 사라지는 소리.
+    숫자가 없다 — 몇 번 쳤는지도, 얼마나 남았는지도. 쌓이는 것도 없다.
+
+    음원은 앉기의 종과 다른 파일이다(bell-temple). 앉기 종은 시작과 끝을
+    알리는 짧은 소리이고 범종은 여운을 듣는 소리라, 같은 소리를 쓰면
+    「앉기가 시작됐나」 하고 헷갈린다. 아직 걸리지 않았으면 치지 않는다 —
+    합성음이 범종인 척하지 않는다. 파일을 넣는 순간 손잡이가 선다. %>
+<%= render "compound/hall_header", key: :bell %>
+
+<% if (source = bell_source(:temple)) %>
+  <div class="bell-hall" data-controller="bell"
+       data-bell-enabled-value="<%= @bell %>"
+       data-bell-start-url-value="<%= source %>">
+    <%= button_tag t("bells.strike"), type: "button", class: "button-primary",
+                   data: { action: "click->bell#open" } %>
+  </div>
+<% else %>
+  <div class="guide"><p><%= t("bells.not_yet") %></p></div>
+<% end %>

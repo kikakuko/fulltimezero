@@ -31,6 +31,8 @@ class Compound
     Hall.new(key: :sitting, cx: 35.0, cy: 43.0, w: 23.0, h: 15.0, han: "禪房"),    # 선방 — 앉기
     Hall.new(key: :courtyard, cx: 57.0, cy: 50.0, w: 20.0, h: 14.0, han: nil, scripture: false),   # 마당 — 아래로, 비움 선언
     Hall.new(key: :lecture, cx: 37.5, cy: 60.5, w: 20.0, h: 17.5, han: "藏經閣"),  # 장경각 — 쉼의 안내
+    # 범종각의 자리는 임시다 — 여섯 채가 그려진 조감도가 오면 한 번에 다시 잰다.
+    Hall.new(key: :bell, cx: 72.0, cy: 64.0, w: 18.0, h: 13.0, han: "梵鐘閣", scripture: false), # 범종각 — 소리
     Hall.new(key: :gate, cx: 51.8, cy: 75.5, w: 8.0, h: 12.5, han: "門")           # 문 — 처음의 문 다시
   ].freeze
 

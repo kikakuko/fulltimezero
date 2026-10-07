@@ -9,6 +9,7 @@ module CompoundHelper
     when :copying then new_copying_path
     when :lecture then guide_path
     when :bowing then bows_path
+    when :bell then bells_path
     when :courtyard then "#clearing"
     when :gate then threshold_path
     end

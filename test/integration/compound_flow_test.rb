@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 경내가 도는가 — 전각 일곱 모두에 가는 길이 있고, 그 길이 열린다. 길이 막히면 앱이
+# 경내가 도는가 — 여덟 자리 모두에 가는 길이 있고, 그 길이 열린다. 길이 막히면 앱이
 # 고장난 것이다. 그 길이 카드로 열리는지(나중에 전체화면이 될 수도 있다)는 결 쪽이다 —
 # test/locks/form/compound_flow_test.rb.
 require "test_helper"
@@ -14,9 +14,10 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
 
   # 마당은 같은 화면 아래로 내려가는 자리라 주소가 아니라 닻이다.
   WAYS = { sitting: :new_sitting_path, maitreya: :days_path, copying: :new_copying_path,
-           lecture: :guide_path, bowing: :bows_path, gate: :threshold_path }.freeze
+           lecture: :guide_path, bowing: :bows_path, bell: :bells_path,
+           gate: :threshold_path }.freeze
 
-  test "전각 일곱 모두에 가는 길이 있고, 그 길이 열린다" do
+  test "여덟 자리 모두에 가는 길이 있고, 그 길이 열린다" do
     get today_path
 
     WAYS.each do |key, way|
