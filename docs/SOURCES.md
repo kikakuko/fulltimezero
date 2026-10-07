@@ -72,7 +72,7 @@ SuttaCentral 에는 **저작권이 살아 있는 역본도 함께 실려 있다*
 
 ### 전각 카드의 넷 — 한글과 영어는 자체 산문이다
 
-마당의 전각 카드에 서는 네 줄(선방 · 사경실 · 강원 · 문)은 **원문을 보고 이 앱이
+마당의 전각 카드에 서는 네 줄(선방 · 사경실 · 장경각 · 문)은 **원문을 보고 이 앱이
 옮긴 자체 산문**이다. 번역본에서 가져오지 않았다 — 위의 규칙 그대로다. 영어도
 수자토 역본과 글자가 다르다(「a tamed mind leads to bliss」 ↔ 「A tamed mind brings
 happiness」, 「extinguishment, the ultimate happiness」 ↔ 「Nibbāna is the highest

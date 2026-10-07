@@ -25,7 +25,7 @@ ko:
       sitting: 선방
       maitreya: 미륵당
       copying: 사경실
-      lecture: 강원
+      lecture: 장경각
       bowing: 예경당
       courtyard: 마당
       gate: 문
@@ -48,7 +48,7 @@ ko:
       lecture:
         line: 읽는 곳. 쉼에 대하여 옛사람들이 남긴 말.
         verse: 열반이 으뜸가는 즐거움
-        enter: 강원으로 든다
+        enter: 장경각으로 든다
       bowing:
         line: 절하는 곳. 한 배마다 알 하나가 꿰인다.
         verse: 눈앞에 뵈온 듯 몸과 말과 뜻으로 공경한다

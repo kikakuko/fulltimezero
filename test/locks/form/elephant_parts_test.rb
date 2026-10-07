@@ -121,7 +121,7 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
   end
 
   # 아홉째(등지)는 형상이 풀리는 자리가 아니다. 흩어짐은 아홉 뒤의 문, 무위에만 있다.
-  test "흩어짐은 무위에만 걸린다 — 앉기와 강원에는 없다" do
+  test "흩어짐은 무위에만 걸린다 — 앉기와 장경각에는 없다" do
     Elephant::WINDOW_DAYS.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_while") }
 
     [ new_sitting_path, new_sitting_path, guide_chapter_path("abidings") ].each do |page|
@@ -139,8 +139,8 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
     assert_match(/--elephant-ink-white: 0\.3;/, css[/:root \{.*?\n\}/m], "흰 코끼리의 먹선 바닥이 없다")
   end
 
-  # 강원의 코끼리 아홉은 그림 한 벌을 가리킨다 — 서 있으니 무리마다 CSS 가 닿을 일이 없다.
-  test "강원 여섯째 장에는 코끼리 그림이 한 벌만 들어 있고, 아홉이 가리킨다" do
+  # 장경각의 코끼리 아홉은 그림 한 벌을 가리킨다 — 서 있으니 무리마다 CSS 가 닿을 일이 없다.
+  test "장경각 여섯째 장에는 코끼리 그림이 한 벌만 들어 있고, 아홉이 가리킨다" do
     get guide_chapter_path("abidings")
     html = response.body
 

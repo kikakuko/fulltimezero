@@ -80,7 +80,7 @@ class DaylightTest < ActionDispatch::IntegrationTest
   end
 
   # 이름이 땅 위에 놓이는 전각 넷 — 흙빛 바탕이라 글자 둘레의 한지빛 테를 빼고 재도 읽힌다.
-  # 강원(담)과 사경실(나무)은 바탕이 어두워 테가 읽힘을 맡는다(아래 주석).
+  # 장경각(담)과 사경실(나무)은 바탕이 어두워 테가 읽힘을 맡는다(아래 주석).
   ON_GROUND = %w[sitting maitreya courtyard gate].freeze
   # 13px 고딕이므로 본문의 잣대를 쓴다. 테를 바탕으로 잡으면 15.15:1 로 높게 잡히는데,
   # 테는 바탕이 아니라 글자 둘레라 그 값으로는 밤을 더 어둡게 할 때 안전선이 걸리지 않는다.

@@ -8,7 +8,7 @@
 # 두 가지로 쓴다.
 #   elephant_figure — 인라인. 걷는 코끼리(앉기)와 흩어지는 코끼리(무위)는 무리마다
 #     클래스 선택자가 닿아야 하므로 그림을 통째로 들인다.
-#   elephant_parts_defs + elephant_use — 서 있는 코끼리 여럿(강원 여섯째 장). 그림을
+#   elephant_parts_defs + elephant_use — 서 있는 코끼리 여럿(장경각 여섯째 장). 그림을
 #     <defs> 에 한 번만 두고 <use> 로 가리킨다. 클래스는 <use> 의 그림자 트리를 넘지
 #     못하지만 사용자 지정 속성은 상속되어 넘어간다 — 색이 그렇게 내려간다.
 module ElephantHelper

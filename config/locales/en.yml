@@ -23,8 +23,8 @@ en:
       sitting: Sitting hall
       maitreya: Maitreya hall
       copying: Copying hall
-      lecture: Lecture hall
-      bowing: Reverence Hall
+      lecture: Scripture hall
+      bowing: Reverence hall
       courtyard: Courtyard
       gate: Gate
     # The card's words when a hall is tapped. The line is used again as the
@@ -47,11 +47,11 @@ en:
       lecture:
         line: Where old words about rest are read.
         verse: Nibbāna is the highest happiness
-        enter: Enter the lecture hall
+        enter: Enter the scripture hall
       bowing:
         line: Where one bows. Each bow strings a single bead.
         verse: As if they stood before me — honoured in body, speech and mind
-        enter: Enter the Reverence Hall
+        enter: Enter the reverence hall
       gate:
         line: Where you came in. It can be crossed again.
         verse: I have stopped

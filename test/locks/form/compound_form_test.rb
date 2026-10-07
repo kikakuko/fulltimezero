@@ -68,7 +68,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     Compound::HALLS.each { |hall| assert hall.left >= 0 && hall.top >= 0 && hall.left + hall.w <= 100 && hall.top + hall.h <= 100 }
   end
 
-  test "강원은 마당에서 들어가는 길이고, 아래 자리에는 없다" do
+  test "장경각은 마당에서 들어가는 길이고, 아래 자리에는 없다" do
     get today_path
 
     assert_select "main a[href=?]", guide_path, count: 1

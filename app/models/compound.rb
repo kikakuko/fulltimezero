@@ -30,7 +30,7 @@ class Compound
     Hall.new(key: :copying, cx: 68.0, cy: 36.5, w: 19.0, h: 14.0, han: "寫經室"),  # 사경실 — 사경
     Hall.new(key: :sitting, cx: 35.0, cy: 43.0, w: 23.0, h: 15.0, han: "禪房"),    # 선방 — 앉기
     Hall.new(key: :courtyard, cx: 57.0, cy: 50.0, w: 20.0, h: 14.0, han: nil, scripture: false),   # 마당 — 아래로, 비움 선언
-    Hall.new(key: :lecture, cx: 37.5, cy: 60.5, w: 20.0, h: 17.5, han: "講院"),    # 강원 — 쉼의 안내
+    Hall.new(key: :lecture, cx: 37.5, cy: 60.5, w: 20.0, h: 17.5, han: "藏經閣"),  # 장경각 — 쉼의 안내
     Hall.new(key: :gate, cx: 51.8, cy: 75.5, w: 8.0, h: 12.5, han: "門")           # 문 — 처음의 문 다시
   ].freeze
 

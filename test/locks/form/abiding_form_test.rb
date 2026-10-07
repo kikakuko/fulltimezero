@@ -44,7 +44,7 @@ class AbidingFormTest < ActiveSupport::TestCase
     Abiding::STONES.values.each { |x, y| assert x.between?(0, 100) && y.between?(0, 60), "돌이 뜰 밖에 있다" }
   end
 
-  # 강원의 발자국에서도 사다리가 아니다. 돌은 footprint.svg 의 돌 모양 아홉 자리에
+  # 장경각의 발자국에서도 사다리가 아니다. 돌은 footprint.svg 의 돌 모양 아홉 자리에
   # 놓이고, 차례를 따르지 않으며, 등지(아홉째)는 발자국 가운데에 있지 않다.
   test "발자국 안의 돌도 차례를 따르지 않고, 등지는 가운데에 없다" do
     xs = Abiding::FOOTPRINT.sort.map { |_, (x, _)| x }
