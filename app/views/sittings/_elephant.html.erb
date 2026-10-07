@@ -2,7 +2,8 @@
     길은 그리지 않는다 — 시각적 길은 배경 그림 안에 있다. 굽이 아홉은 길의
     모양일 뿐이고 이름도 글도 붙지 않는다(§2, 2026-10-08). 아홉의 이름과 글은
     장경각에 있다. 숫자는 없다. %>
-<div class="elephant-field ink-frame" data-controller="elephant"
+<% night ||= false %>
+<div class="<%= class_names("elephant-field", "ink-frame": !night) %>" data-controller="elephant"
      data-elephant-whiteness-value="<%= reading.whiteness %>"
      data-elephant-yesterday-value="<%= reading.yesterday %>"
      data-elephant-moving-value="<%= moving %>">
@@ -11,6 +12,11 @@
   <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
   </svg>
+
+  <%# 앉는 동안에는 밤이다. 새 색을 들이지 않고 하루의 때가 쓰는 그 겹을 그대로 얹는다. %>
+  <% if night %>
+    <span class="daylight" data-light="night" aria-hidden="true"></span>
+  <% end %>
 
   <%# 자리 틀 — 길 위의 자리 · 비스듬함 · 방향. 그 안의 코끼리는 부위별로 걷는다.
       끝에 닿는 일이 없으므로 멈춰 서는 자리도 없다 — 코끼리는 늘 걷는다. %>

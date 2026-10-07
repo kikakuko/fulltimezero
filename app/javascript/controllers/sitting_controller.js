@@ -14,8 +14,8 @@ const OPEN_FILL = 30 * 60 * 1000 // 정함 없이 앉으면 이만큼에 걸쳐 
 const AFTER_BELL = 2600 // 종이 울린 뒤에 화면을 넘긴다. 여운을 자르지 않는다.
 
 export default class extends Controller {
-  static targets = ["terminator", "form"]
-  static values = { elapsed: Number, total: Number, open: Boolean, size: Number }
+  static targets = ["form"]
+  static values = { elapsed: Number, total: Number, open: Boolean }
 
   connect() {
     this.startedAt = Date.now() - this.elapsedValue * 1000
@@ -29,19 +29,10 @@ export default class extends Controller {
     clearTimeout(this.leaving)
   }
 
+  // 화면에 그리는 것은 없다. 앉음이 다 되었는지만 본다 — 남은 시간은 어디에도
+  // 보이지 않는다. 차오르는 도상으로 진행을 보이던 자리를 걷었다(§2, 2026-10-08).
   draw() {
-    const phase = this.phase()
-
-    // 그믐(rx = r, 어둠이 원 전체)에서 보름(rx = r, 빛이 원 전체)으로.
-    // 반달을 지나며 가리개가 그림자에서 빛으로 바뀐다.
-    const radius = this.sizeValue / 2
-    const rx = (radius * Math.abs(1 - 2 * phase)).toFixed(2)
-
-    this.terminatorTarget.style.rx = `${rx}px` // 여기에 CSS 전환이 걸린다.
-    this.terminatorTarget.setAttribute("rx", rx) // 전환을 모르는 브라우저를 위해.
-    this.terminatorTarget.setAttribute("fill", phase < 0.5 ? "black" : "white")
-
-    if (!this.openValue && phase >= 1) this.finish()
+    if (!this.openValue && this.phase() >= 1) this.finish()
   }
 
   // 정함 없이 앉으면 목표 시점이 없다. 아주 완만히 차오르다 보름에 닿으면

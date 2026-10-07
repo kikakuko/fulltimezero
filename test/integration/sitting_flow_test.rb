@@ -16,7 +16,7 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_sitting_path
   end
 
-  test "앉고 마치면 달이 그 날을 센다" do
+  test "앉고 마치면 달이 그 날을 세고, 코끼리가 그 시간을 받는다" do
     assert_difference -> { @user.sittings.count }, 1 do
       post sittings_path, params: { sitting: { length: "incense", bell: "1" } }
     end
@@ -25,13 +25,19 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_select ".night"
-    assert_select ".night .moon"
+    assert_select ".night .moon", false, "앉는 동안 달이 떠 있다"
+    assert_select ".night .elephant-field", count: 1, message: "앉는 동안 길이 없다"
 
+    # 향 한 대만큼 앉았다 치고 마친다 — 코끼리는 앉은 시간을 받는다.
+    before = Elephant.for(@user).whiteness
+    sitting.update!(created_at: 20.minutes.ago)
     patch sitting_path(sitting)
     follow_redirect!
 
     assert_match I18n.t("sittings.done"), visible_text
+    assert_select ".moon", count: 1, message: "앉고 난 뒤에 그날의 달이 없다"
     assert @user.reload.moon.days.last.rested?, "앉은 날이 달에 세어지지 않았다"
+    assert_operator Elephant.for(@user).whiteness, :>, before, "앉음이 끝났는데 코끼리가 그대로다"
   end
 
   test "중간에 마쳐도 실패가 아니다 — 같은 화면, 같은 말" do

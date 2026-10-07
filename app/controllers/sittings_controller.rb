@@ -48,6 +48,8 @@ class SittingsController < ApplicationController
     else
       @length = SittingLength.new(params[:length])
       @elapsed = @length.seconds_done(@sitting.created_at)
+      # 끝나지 않은 앉음은 세지 않으므로, 이 값은 앉기 시작할 때의 값 그대로다.
+      @elephant = Elephant.for(Current.user)
       render :sitting
     end
   end
