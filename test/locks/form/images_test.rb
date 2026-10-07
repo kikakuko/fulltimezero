@@ -7,8 +7,12 @@ require "test_helper"
 
 class ImagesTest < ActiveSupport::TestCase
   IMAGES = Rails.root.join("app/assets/images")
-  # 합계 바이트(2026-09-18). 늘리려면 왜 늘어야 하는지 먼저 따진다.
-  MOST = 690_000
+  # 합계 바이트. 늘리려면 왜 늘어야 하는지 먼저 따진다.
+  # 2026-09-18 에 690,000 으로 잡았고, 2026-10-07 에 960,000 으로 올렸다 —
+  # 산수화의 구름 셋(안개띠 · 구름무리 · 가장자리 흐름, 합쳐 266KB)이 들어온다.
+  # 구름은 화면을 가로질러 떠가므로 화면 폭보다 넓어야 하고(가로 1280), 색이
+  # 그대로 있어야 한다 — 흰 구름이라 마스크로 바꾸면 몸통이 사라진다.
+  MOST = 960_000
 
   test "그림의 합계가 정해 둔 무게를 넘지 않는다" do
     files = IMAGES.children.reject { |file| file.directory? || file.basename.to_s.start_with?(".") }
