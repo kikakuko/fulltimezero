@@ -26,6 +26,34 @@ class SittingFormTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 달은 마당의 것이다. 앉는 동안에는 없고, 앉고 난 뒤에 그날의 달을 본다(§2).
+  test "앉는 동안에는 달이 없다 — 앉고 난 뒤에 그날의 달을 본다" do
+    post sittings_path, params: { sitting: { length: "tea" } }
+    follow_redirect!
+
+    assert_select ".night", count: 1
+    assert_select ".night .moon", false, "앉는 동안 달이 떠 있다"
+    assert_select ".night .elephant-field", count: 1, message: "앉는 동안 길이 없다"
+
+    sitting = users(:one).sittings.last
+    patch sitting_path(sitting)
+    follow_redirect!
+
+    assert_select ".moon", count: 1, message: "앉고 난 뒤에 그날의 달이 없다"
+  end
+
+  # 굽이는 길의 모양이다. 이름이 붙으면 아홉으로 세는 것이 되고, 그것은 §5 가 막는다.
+  test "굽이에 이름이 없다 — 선방에도 앉는 중에도" do
+    get new_sitting_path
+    assert_select ".elephant-field__station", false, "선방의 굽이에 이름이 붙었다"
+
+    post sittings_path, params: { sitting: { length: "tea" } }
+    follow_redirect!
+    assert_select ".elephant-field__station", false, "앉는 중의 굽이에 이름이 붙었다"
+
+    assert_no_match(/station/, Rails.root.join("app/models/elephant.rb").read, "자리를 세는 셈이 되살아났다")
+  end
+
   test "무위에는 달이 없다 — 타이머의 어둠과 결이 다르다" do
     post nothing_path
     follow_redirect!

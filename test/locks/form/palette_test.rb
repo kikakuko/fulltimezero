@@ -119,6 +119,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
     assert_no_match(/text-transform:\s*uppercase/, css, "대문자 라벨")
     assert_no_match(/<progress|role="progressbar"|progress-bar|progressbar/, views, "진행 막대")
+    assert_empty filling_icons, "경과 시간으로 차오르는 도상: #{filling_icons.join(", ")}"
     assert_no_match(/class="[^"]*\b(?:badge|tag|chip|pill-label|icon-row|icons)\b/, views, "배지 · 태그 · 아이콘 줄")
     assert_no_match(/\.(?:badge|tag|chip|icon-row|progress)\b/, css.gsub(/\.turbo-progress-bar/, ""), "배지 · 태그 · 진행 막대의 규칙")
     rules.each do |selector, body|
@@ -129,6 +130,21 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
   # 붉은 하나, 누런 하나 — 주사는 오늘의 한 자, 황토는 경전의 말. 둘 다 장식이 아니라
   # 제 일이 있는 색이다. 황토가 버튼 · 머리글 · 본문 · 안내글에 닿으면 깨진다.
+  # 막대가 아니어도 진행을 보이면 진행 막대다. 달이 그 틈으로 들어왔었다 —
+  # 이름만 달이고, 경과 시간을 모양으로 바꾸어 보이는 일을 했다(§2, 2026-10-08).
+  # 그래서 「도형의 크기를 경과 시간으로 바꾸는 코드」 자체를 막는다.
+  # 기다렸다가 다음 장면으로 넘어가는 것은 진행을 보이는 것이 아니다 —
+  # 모양이 시각에 매여 변하는 것만 걸린다.
+  SHAPE = /setAttribute\(\s*["'](?:rx|ry|cx|cy|r|width|height|d|stroke-dashoffset|stroke-dasharray|opacity)["']|\.style\.(?:rx|ry|width|height|strokeDashoffset|opacity)\s*=/
+  ELAPSED = /(?:Date|performance)\.now\(\)\s*-/
+
+  def filling_icons
+    Rails.root.glob("app/javascript/**/*.js").select { |file|
+      source = file.read.gsub(%r{^\s*//.*$}, "")
+      source.match?(ELAPSED) && source.match?(SHAPE)
+    }.map { |file| file.relative_path_from(Rails.root).to_s }
+  end
+
   test "황토는 경의 인용문과 그림에만 — 단청 황토는 글씨가 되지 못한다" do
     rules.each do |selector, body|
       one_by_one = selector.split(",").map(&:strip)
