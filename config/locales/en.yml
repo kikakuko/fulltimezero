@@ -430,6 +430,13 @@ en:
         - Knees come up and the body rises
         - Standing again, palms together
 
+  credits:
+    title: What was borrowed
+    note: Sources and terms for what this app borrows. It grows as sounds, type and images come in.
+    bell:
+      name: The temple bell
+      notice: "본 저작물은 '국립경주박물관'에서 2016년 작성하여 공공누리 제3유형으로 개방한 '성덕대왕신종 종소리'를 이용하였으며, 해당 저작물은 '국립경주박물관, gyeongju.museum.go.kr'에서 무료로 이용할 수 있습니다."
+
   bells:
     listen: Listen
     not_yet: The bell is not hung yet.

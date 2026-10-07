@@ -82,6 +82,8 @@ Rails.application.routes.draw do
     get "guide/:chapter" => "guide#chapter", as: :guide_chapter
 
     get "privacy" => "pages#privacy", as: :privacy
+    # 쓰인 것들 — 빌려온 것의 출처와 이용조건. 소리 · 글꼴 · 그림이 들어올 때마다 는다.
+    get "credits" => "pages#credits", as: :credits
   end
 
   # 브라우저가 한국어를 선호하면 ko, 그 밖에는 en.

@@ -62,6 +62,7 @@
 <hr class="rule">
 
 <p class="tiny"><%= link_to t("settings.privacy"), privacy_path %></p>
+<p class="tiny"><%= link_to t("credits.title"), credits_path %></p>
 <p class="tiny"><%= button_to t("settings.sign_out"), session_path, method: :delete, class: "button-quiet" %></p>
 <p class="tiny">
   <%= button_to t("settings.delete_account"), account_path, method: :delete, class: "button-quiet",

@@ -17,8 +17,9 @@
                    data: { action: "click->bell#open" } %>
   </div>
 
-  <%# 출처는 밝히되 도상 곁에 설명을 두지 않는다 — 듣는 자리 아래 작게. %>
-  <p class="tiny bell-hall__source"><%= t("bells.source") %></p>
+  <%# 출처는 밝히되 도상 곁에 설명을 두지 않는다 — 듣는 자리 아래 작게.
+      공공누리의 권장 양식 전문은 「쓰인 것들」에 있고, 이 한 줄이 그리로 간다. %>
+  <p class="tiny bell-hall__source"><%= link_to t("bells.source"), credits_path, class: "soft" %></p>
 <% else %>
   <div class="guide"><p><%= t("bells.not_yet") %></p></div>
 <% end %>

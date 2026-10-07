@@ -1,0 +1,18 @@
+<%# 쓰인 것들. 빌려온 것의 출처와 이용조건을 한 자리에 모은다.
+    법이 요구하는 표기는 길다 — 도상 곁에 두면 설명이 되고 §2 와 다툰다.
+    쓰는 화면에는 한 줄만 두고, 그 한 줄이 여기로 온다.
+
+    이 화면에는 숫자가 선다(유형과 연도). 빌려온 표기는 앱의 말이 아니라
+    옮겨 적는 글이라, 달력의 날짜처럼 본질상 불가피한 예외다. 다만 .credit
+    안에만 가둔다 — 그 밖으로 한 자리라도 새면 자물쇠가 깨진다. %>
+<h1 class="title"><%= t("credits.title") %></h1>
+
+<div class="guide">
+  <p><%= t("credits.note") %></p>
+
+  <% if bell_source(:temple) %>
+    <h2 class="section"><%= t("credits.bell.name") %></h2>
+    <p class="credit"><%= t("credits.bell.notice") %></p>
+
+  <% end %>
+</div>

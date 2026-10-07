@@ -155,6 +155,27 @@ class SpiritFormTest < ActionDispatch::IntegrationTest
 
     assert_select ".night .moonlight", false, "앉는 중에 빛이 피었다"
   end
+  # 숫자 금지의 둘째 예외: 빌려온 표기.
+  # 공공누리의 권장 양식에는 유형과 연도가 숫자로 들어 있다. 그것은 앱이 하는
+  # 말이 아니라 옮겨 적는 글이라 고칠 수 없다 — 인용 원문이 §5 의 예외인 것과
+  # 같은 결이다. 다만 .credit 안에만 가둔다. 그 밖으로 한 자리라도 새면 깨진다.
+  test "쓰인 것들의 숫자는 빌려온 표기 안에만 있다" do
+    I18n.available_locales.each do |locale|
+      get credits_path(locale: locale)
+      assert_response :success
+
+      page = Nokogiri::HTML(response.body)
+      borrowed = page.css(".credit")
+      assert_not_empty borrowed, "빌려온 표기가 없다 — 그러면 이 예외도 없어야 한다"
+
+      borrowed.each(&:remove)
+      ours = page.css("body").text.gsub(/\s+/, " ")
+
+      assert_no_match(/\d/, ours, "빌려온 표기 밖에 숫자가 있다(#{locale})")
+      assert_no_match(/!/, ours, "쓰인 것들에 느낌표가 있다")
+    end
+  end
+
   # 숫자 금지의 유일한 예외: 달력의 날짜.
   # 본질상 불가피하므로 허용하되, .date 안에 가둔다. 그 밖으로
   # 한 자리라도 새어 나오면 — 특히 일정의 개수로 — 검사가 깨진다.
