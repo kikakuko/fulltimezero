@@ -61,7 +61,7 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     # 먹으로 서는 둘 — 미륵당의 한 줄은 우리가 지은 말이고 출전은 장소다.
     # 예경당의 한 줄은 보현행원품의 뜻을 우리 말로 옮긴 것이라 출전을 달지 않는다.
     # 역경원 번역본의 문장을 대조해 올리면 그때 경구가 된다(Citation).
-    assert_equal [ :maitreya, :bowing ], Compound::CARD_HALLS.reject(&:scripture).map(&:key)
+    assert_equal [ :maitreya, :bowing ].sort, Compound::CARD_HALLS.reject(&:scripture).map(&:key).sort
   end
 
   test "문의 경 한 줄은 출전과 함께 선다" do

@@ -23,14 +23,15 @@ class Compound
   end
 
   HALLS = [
-    Hall.new(key: :sitting, cx: 17.6, cy: 39.1, w: 26.0, h: 23.4, han: "禪房"),    # 선방 — 앉기
-    Hall.new(key: :maitreya, cx: 52.1, cy: 33.2, w: 14.3, h: 15.6, han: "彌勒堂", scripture: false), # 미륵당 — 날들
-    Hall.new(key: :copying, cx: 80.7, cy: 38.1, w: 28.6, h: 23.4, han: "寫經室"),  # 사경실 — 사경
-    Hall.new(key: :lecture, cx: 28.0, cy: 62.5, w: 32.6, h: 25.4, han: "講院"),    # 강원 — 쉼의 안내
-    Hall.new(key: :courtyard, cx: 52.1, cy: 55.7, w: 28.6, h: 21.5, han: nil, scripture: false),     # 마당 — 아래로, 비움 선언
-    # 예경당의 한 줄은 경의 말이 아니라 우리가 지은 뜻풀이다 — 출전을 달지 않는다.
-    Hall.new(key: :bowing, cx: 78.5, cy: 62.5, w: 24.0, h: 23.4, han: "禮敬堂", scripture: false), # 예경당 — 절
-    Hall.new(key: :gate, cx: 51.4, cy: 79.1, w: 13.0, h: 15.6, han: "門")          # 문 — 처음의 문 다시
+    # 자리와 크기는 조감도(compound.webp, 768×512)에서 잰 백분율이다. 그림이 바뀌면
+    # 여기만 고친다 — 2026-10-07 에 예경당이 선 새 조감도로 갈아 끼우며 일곱을 다시 쟀다.
+    Hall.new(key: :bowing, cx: 39.5, cy: 29.5, w: 12.0, h: 12.0, han: "禮敬堂", scripture: false), # 예경당 — 절
+    Hall.new(key: :maitreya, cx: 51.0, cy: 34.5, w: 9.5, h: 10.0, han: "彌勒堂", scripture: false), # 미륵당 — 날들
+    Hall.new(key: :copying, cx: 68.0, cy: 36.5, w: 19.0, h: 14.0, han: "寫經室"),  # 사경실 — 사경
+    Hall.new(key: :sitting, cx: 35.0, cy: 43.0, w: 23.0, h: 15.0, han: "禪房"),    # 선방 — 앉기
+    Hall.new(key: :courtyard, cx: 57.0, cy: 50.0, w: 20.0, h: 14.0, han: nil, scripture: false),   # 마당 — 아래로, 비움 선언
+    Hall.new(key: :lecture, cx: 37.5, cy: 60.5, w: 20.0, h: 17.5, han: "講院"),    # 강원 — 쉼의 안내
+    Hall.new(key: :gate, cx: 51.8, cy: 75.5, w: 8.0, h: 12.5, han: "門")           # 문 — 처음의 문 다시
   ].freeze
 
   # 카드를 열고 드는 흐름이 있는 전각. 마당은 스스로를 가리키므로 카드가 없다 —
