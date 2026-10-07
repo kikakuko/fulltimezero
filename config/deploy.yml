@@ -22,7 +22,11 @@ servers:
 #
 proxy:
   ssl: true
-  host: <%= ENV.fetch("APP_HOST") %>
+  # 호스트 셋 — 맨 이름 · www · app. 셋 다 이 서버로 오고 인증서도 셋에 난다.
+  hosts:
+    - <%= ENV.fetch("APP_HOST") %>
+    - www.<%= ENV.fetch("APP_HOST") %>
+    - app.<%= ENV.fetch("APP_HOST") %>
   # 프록시가 요청마다 적는 머리말을 비운다 — 기본값이 User-Agent 를 적는다(§4).
   # 접속 주소(remote_addr)는 프록시가 늘 적는다. 그 층은 끌 수 없다 — DEPLOY.md 에 적어 두었다.
   logging:
@@ -42,8 +46,10 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
-    - SMTP_USER_NAME
-    - SMTP_PASSWORD
+    # 메일 회사가 정해지고 가입을 열 때 되살린다. 가입이 닫혀 있는 동안
+    # 편지를 보낼 일이 없고, 없는 비밀값을 적어 두면 배포가 멈춘다.
+    # - SMTP_USER_NAME
+    # - SMTP_PASSWORD
   clear:
     # 도메인 하나가 링크 · 허용 주소 · 편지에 함께 쓰인다.
     APP_HOST: <%= ENV.fetch("APP_HOST") %>

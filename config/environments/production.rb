@@ -85,6 +85,8 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # 이 주소로 온 것만 받는다. 도메인은 환경변수로 온다(APP_HOST).
-  config.hosts = [ ENV.fetch("APP_HOST", "localhost"), "www.#{ENV.fetch('APP_HOST', 'localhost')}" ]
+  # 셋을 받는다 — 맨 이름, www, app. www 는 라우트에서 맨 이름으로 넘기고,
+  # app 은 지금 쓰지 않아도 살려 둔다. 훗날 맨 이름에 소개가 들어와도 이사가 없다.
+  config.hosts = [ "", "www.", "app." ].map { |prefix| "#{prefix}#{ENV.fetch('APP_HOST', 'localhost')}" }
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

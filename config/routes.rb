@@ -1,5 +1,11 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 Rails.application.routes.draw do
+  # 호스트는 셋이고 앱은 하나다. www 로 온 발길은 맨 이름으로 넘긴다 —
+  # 영구 넘김(301)이라 검색과 브라우저가 한 번만 배운다. app 은 넘기지 않는다.
+  match "(*path)", to: redirect(subdomain: "", status: 301), via: :all, constraints: lambda { |request|
+    ENV["APP_HOST"].present? && request.host == "www.#{ENV['APP_HOST']}"
+  }
+
   get "up" => "rails/health#show", as: :rails_health_check
   # 홈 화면에 더했을 때의 이름 · 바탕 · 전체 화면. 서비스 워커는 두지 않는다.
   get "manifest.json" => "rails/pwa#manifest", as: :pwa_manifest
