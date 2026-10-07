@@ -14,6 +14,13 @@ class SearchGateTest < ActionDispatch::IntegrationTest
 
     get new_session_path
     assert_select "head meta[name=robots][content='noindex, nofollow']", count: 1
+
+    # 화면의 meta 는 글에만 붙는다. 머리말은 앱이 내는 모든 응답에 붙는다 —
+    # 로봇에게 하는 말, 내보낸 파일, 글이 아닌 것까지.
+    assert_equal "noindex, nofollow, noarchive", response.headers["X-Robots-Tag"]
+
+    get robots_path
+    assert_equal "noindex, nofollow, noarchive", response.headers["X-Robots-Tag"]
   end
 
   test "한 줄로 푼다 — SEARCHABLE=true 면 로봇을 들이고 noindex 를 걷는다" do
@@ -25,6 +32,7 @@ class SearchGateTest < ActionDispatch::IntegrationTest
 
       get new_session_path
       assert_select "head meta[name=robots]", false, "열었는데 noindex 가 남아 있다"
+      assert_nil response.headers["X-Robots-Tag"], "열었는데 머리말이 남아 있다"
     end
   end
 

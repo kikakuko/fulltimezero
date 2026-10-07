@@ -23,6 +23,10 @@ servers:
 proxy:
   ssl: true
   host: <%= ENV.fetch("APP_HOST") %>
+  # 프록시가 요청마다 적는 머리말을 비운다 — 기본값이 User-Agent 를 적는다(§4).
+  # 접속 주소(remote_addr)는 프록시가 늘 적는다. 그 층은 끌 수 없다 — DEPLOY.md 에 적어 두었다.
+  logging:
+    request_headers: []
 
 # Where you keep your container images.
 registry:
@@ -51,8 +55,6 @@ env:
     SEARCHABLE: <%= ENV.fetch("SEARCHABLE", "false") %>
     # 가입을 받을 것인가 — 기본은 받지 않음. 앱이 다 되면 true 로 올린다(SignupGate).
     SIGNUPS: <%= ENV.fetch("SIGNUPS", "false") %>
-    # 요청 기록에 접속 주소와 브라우저 정보가 남지 않게 한다(§4).
-    LOG_REQUESTS: "false"
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true

@@ -20,7 +20,15 @@ class ApplicationController < ActionController::Base
   helper_method :daily_door_due?
   after_action :remember_seen
 
+  # 로봇에게 하는 말을 머리말로도 한 번 더. robots.txt 와 화면의 noindex 는
+  # HTML 만 덮지만, 머리말은 그림 · 내보낸 파일 · manifest 까지 덮는다(SearchGate).
+  before_action :keep_robots_out, if: -> { SearchGate.closed? }
+
   private
+    def keep_robots_out
+      response.set_header("X-Robots-Tag", "noindex, nofollow, noarchive")
+    end
+
     def daily_door_due?
       return @daily_door_due if defined?(@daily_door_due)
 

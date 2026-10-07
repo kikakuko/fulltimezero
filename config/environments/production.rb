@@ -30,9 +30,14 @@ Rails.application.configure do
   # 살았는지 묻는 자리는 https 로 돌리지 않는다.
   config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
-  # Log to STDOUT with the current request id as a default log tag.
-  config.log_tags = [ :request_id ]
-  config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
+  # 요청을 적는 자리를 아예 뺀다. 「Started GET "/" for 1.2.3.4」 의 그 줄이
+  # 접속 주소를 남기는 자리다 — 레벨을 올려 가리는 것이 아니라 없앤다(§4).
+  # 남는 것은 터져 나온 오류뿐이고, 거기에는 주소가 없다.
+  config.middleware.delete Rails::Rack::Logger
+
+  # Log to STDOUT. 요청마다의 꼬리표(request_id)는 그 미들웨어가 달던 것이라
+  # 함께 사라진다 — 요청을 적지 않으므로 꼬리표도 달 데가 없다.
+  config.logger = ActiveSupport::TaggedLogging.logger(STDOUT)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!).
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")

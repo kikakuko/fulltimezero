@@ -17,6 +17,23 @@ class SessionTest < ActiveSupport::TestCase
       "IP 를 보는 코드가 들어왔다. 이메일 말고는 모으지 않는다."
   end
 
+  # 레일즈가 요청마다 적는 「Started GET "/" for 1.2.3.4」 의 그 줄. 레벨을 올려
+  # 가리는 것으로는 모자라다 — 운영에서는 그 자리를 아예 뺀다.
+  test "운영은 요청을 적는 자리를 아예 빼 둔다" do
+    production = Rails.root.join("config/environments/production.rb").read
+
+    assert_match(/config\.middleware\.delete Rails::Rack::Logger/, production,
+      "요청을 적는 미들웨어가 운영에 남아 있다 — 그 줄에 접속 주소가 있다")
+  end
+
+  # 프록시는 기본으로 브라우저 정보를 적는다. 접속 주소는 끌 수 없지만 이것은 끈다.
+  test "프록시가 브라우저 정보를 적지 않는다" do
+    deploy = Rails.root.join("config/deploy.yml").read
+
+    assert_match(/logging:\s*\n\s*request_headers: \[\]/, deploy,
+      "프록시가 적는 머리말을 비우지 않았다")
+  end
+
   test "시도를 세는 모든 자리가 IP 대신 이메일을 센다" do
     controllers = Rails.root.join("app/controllers").glob("*.rb").select { |path| path.read.include?("rate_limit") }
 
