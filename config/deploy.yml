@@ -99,9 +99,10 @@ asset_path: /rails/public/assets
 # Configure the image builder.
 builder:
   arch: amd64
-
-  # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
-  # remote: ssh://docker@docker-builder-server
+  # 이미지는 서버에서 짓는다. 맥에는 도커 데몬을 두지 않는다 — 도커 CLI 하나면 된다.
+  # 애플 실리콘에서 amd64 를 흉내내는 것보다 서버에서 제 결로 짓는 것이 빠르고,
+  # 맥에 깔 것이 줄어든다(Docker Desktop 을 쓰지 않는다).
+  remote: ssh://root@<%= ENV.fetch("DEPLOY_SERVER_IP") %>
   #
   # # Pass arguments and secrets to the Docker build process
   # args:

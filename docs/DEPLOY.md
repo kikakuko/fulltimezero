@@ -174,6 +174,9 @@ rclone config          # 새 remote 이름을 backup 으로, 저장소 회사를
 
 ## 10. 첫 배포
 
+이미지는 **서버에서 짓는다**(`builder.remote`). 맥에는 도커 데몬이 필요 없고 CLI 만 있으면
+된다 — `brew install docker docker-buildx`. Docker Desktop 도, 도커 계정도 쓰지 않는다.
+
 ```
 bin/kamal setup                      # 서버를 준비하고 처음 올린다
 bin/kamal app exec 'bin/rails db:seed'   # 경전과 아홉 자리를 심는다
