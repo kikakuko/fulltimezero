@@ -1,13 +1,32 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 가입을 받을 것인가 — 운영의 기본은 「받지 않음」이다. 앱이 다 되면 서버에서
-# SIGNUPS=true 한 줄로 푼다. 「결」 쪽 자물쇠다 — 열 때가 되면 풀린다.
-# 다만 기본이 닫힘인 것과, 닫혔을 때 길까지 없는 것은 손대지 않는다.
-# 화면만 숨기면 봇은 길로 들어온다.
+# 가입을 받지 않는다 — 「하지 않음」이므로 약속 쪽이다.
+#
+# 처음에 결 쪽에 두었다가 옮겼다(2026-10-07). 「나중에 열 것이니 지금 고른 모양」은
+# 까닭이 되지 않는다 — 약속은 일부러 거둘 때 거두는 것이지, 다른 화면의 모양을
+# 손보다가 같이 풀려서는 안 된다. 가입이 실수로 열리면 처리방침이 비어 있는 채로
+# 개인정보가 들어온다. 열 때는 DEPLOY.md §13 의 넷을 먼저 한다.
+#
+# 화면만 숨기면 봇은 길로 들어온다. 그래서 라우트에서 길을 없앤다.
 require "test_helper"
 
-class SignupGateTest < ActionDispatch::IntegrationTest
+class SignupTest < ActionDispatch::IntegrationTest
   setup { nine_abidings }
+
+  # 이메일을 받는 길이 하나라도 열려 있으면 약속이 아니다.
+  test "닫혀 있는 동안 이메일을 묻는 화면이 하나도 열리지 않는다" do
+    with_env("SIGNUPS", "false") do
+      I18n.available_locales.each do |locale|
+        %i[threshold_path threshold_naming_path threshold_breath_path
+           guide_path privacy_path not_yet_path].each do |screen|
+          get public_send(screen, locale: locale)
+
+          assert_select "input[type=email]", false, "#{screen}(#{locale}) 가 이메일을 묻는다"
+          assert_select "input[type=password]", false, "#{screen}(#{locale}) 가 비밀번호를 묻는다"
+        end
+      end
+    end
+  end
 
   test "운영의 기본은 닫힘이다 — 아무것도 적지 않으면 받지 않는다" do
     as_production { assert SignupGate.closed?, "운영에서 기본이 열림이다" }
