@@ -80,6 +80,22 @@ class SignupGateTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 채워야 할 자리({{CPO_NAME}} · {{HOST_NAME}})는 가입을 열 때 선다.
+  # 닫혀 있는 동안 공개 화면에 뜨면 깨진 글자로 보인다.
+  test "닫혀 있는 동안 공개 화면에 채워야 할 빈 자리가 보이지 않는다" do
+    with_env("SIGNUPS", "false") do
+      I18n.available_locales.each do |locale|
+        [ privacy_path(locale: locale), not_yet_path(locale: locale),
+          guide_path(locale: locale), threshold_path(locale: locale) ].each do |path|
+          get path
+          text = Nokogiri::HTML(response.body).css("body").text
+
+          assert_no_match(/\{\{|\}\}/, text, "#{path} 에 채우지 않은 자리가 보인다")
+        end
+      end
+    end
+  end
+
   test "배포 설정에 기본이 닫힘으로 적혀 있다" do
     deploy = Rails.root.join("config/deploy.yml").read
 

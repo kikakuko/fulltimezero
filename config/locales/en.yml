@@ -401,9 +401,12 @@ en:
     keeping:
       title: How long it stays
       body: Only as long as the account exists. It serves one purpose — giving a person their own records back. Delete the account and the records go with it, without delay. The one copy kept apart is a nightly backup, and the next night's backup writes over it.
+    closed_note: No accounts are being taken yet. Nothing personal is gathered, so for now there is nothing to protect. What follows is the policy that applies the moment accounts open.
     rights:
       title: What you can ask for
-      body: You may see your records, correct them, erase them, take them with you, and ask us to stop handling them. Seeing, downloading and erasing are in the settings. Anything else goes to the address below and is answered within ten days. Someone may act on your behalf. A supervisory authority can be told if the answer does not satisfy you.
+      body: You may see your records, correct them, erase them, take them with you, and ask us to stop handling them. Seeing, downloading and erasing are in the settings. Someone may act on your behalf, and a supervisory authority can be told if an answer does not satisfy you.
+      by_mail: Anything else goes to the address below and is answered within ten days.
+      by_mail_not_yet: When accounts open, the address for such requests will be written here.
     disposal:
       title: How it is erased
       body: Erased records are not kept in any form that can be restored. They go from the database, and the next backup writes over what is left. Nothing is copied onto paper.
@@ -413,10 +416,12 @@ en:
     trustees:
       title: Who else handles it
       body: Two companies do work the app cannot do by itself. These are the categories of recipients, and the records go nowhere else.
+      none: Nothing personal is received yet, so nothing is handed to anyone else. When accounts open, the company running the server and the company sending the letters will be named here, with the country they sit in.
       work: The work
       who: The company
       where: Where it sits
       server: Running the server and holding the records
+      server_who: "{{HOST_NAME}}"
       mail: Sending the letter that resets a password
       undecided: Not chosen yet
     age:
@@ -424,7 +429,8 @@ en:
       body: Anyone under fourteen cannot use this. We decided it that way so that no one has to be asked their age — asking for a birthday would make the promise of one email address untrue.
     officer:
       title: Who is answerable
-      body: The person answerable for personal data is {{CPO_NAME}}. Every request and question about personal data arrives here.
+      body: The person answerable for personal data is {{CPO_NAME}}. Requests and questions about personal data arrive here.
+      closed: No accounts are being taken yet. Nothing personal is gathered, so no one is answerable for it yet. When accounts open, the name and the address will be written here.
       mail: privacy@fulltimezero.com
 
   passwords:
