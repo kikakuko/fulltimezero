@@ -19,6 +19,13 @@ module Screens
   # 손잡이다. 화면에 글자로 나타나는 것에만 숫자 금지가 걸린다.
   ADDRESSES = %w[link].freeze
 
+  # 빌려온 표기 — 이용조건이 「이대로 적으라」고 정한 글이다. 공공누리의 권장
+  # 양식에는 유형과 연도가 숫자로 들어 있고, 고치면 그것은 더 이상 그 양식이
+  # 아니다. 앱이 하는 말이 아니라 옮겨 적는 글이므로 카피의 숫자 금지 밖에 둔다 —
+  # 인용 원문이 §5 의 예외인 것과 같은 결이다.
+  # 화면에서는 .credit 안에만 설 수 있다(spirit_form_test 가 가둔다).
+  BORROWED = %w[notice].freeze
+
   # 링크의 href 는 문이므로 세지 않는다. 그 밖에 바깥 주소가 실려
   # 있으면 — src 든 미리 잇는 태그든 — 그것은 부르지 않은 요청이다.
   def assert_no_outward_requests(page, locale)
@@ -78,7 +85,7 @@ module Screens
   def flatten_copy(node)
     case node
     when Hash
-      node.reject { |key, _| key.to_s.in?(ADDRESSES) }.values.flat_map { |v| flatten_copy(v) }
+      node.reject { |key, _| key.to_s.in?(ADDRESSES + BORROWED) }.values.flat_map { |v| flatten_copy(v) }
     when Array then node.flat_map { |v| flatten_copy(v) }
     else [ node.to_s ]
     end
