@@ -22,14 +22,12 @@ const SOURCES = {
     sitting: "『법구경』 35",
     copying: "『금강경』 제12 존중정교분",
     lecture: "『법구경』 204",
-    bowing: "『화엄경』 보현행원품",
     gate: "『앙굴리말라경』 MN 86"
   },
   en: {
     sitting: "Dhammapada 35",
     copying: "Diamond Sūtra, ch. 12",
     lecture: "Dhammapada 204",
-    bowing: "Avataṃsaka Sūtra, Samantabhadra's Vows",
     gate: "Aṅgulimāla Sutta, MN 86"
   }
 }

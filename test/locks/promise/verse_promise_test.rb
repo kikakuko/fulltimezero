@@ -39,7 +39,7 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "전각 카드는 경의 말에만 인용 부품을 붙인다 — 미륵당의 한 줄은 먹이다" do
+  test "전각 카드는 경의 말에만 인용 부품을 붙인다 — 미륵당과 예경당의 한 줄은 먹이다" do
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
     ko = js[/ko: \{(.*?)\}/m, 1]
     get today_path(locale: :ko)
@@ -58,7 +58,10 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
         assert_no_match SCRIPTURE, source.to_s, "#{hall.key} 의 출전이 경인데 먹으로 섰다"
       end
     end
-    assert_equal [ :maitreya ], Compound::CARD_HALLS.reject(&:scripture).map(&:key)
+    # 먹으로 서는 둘 — 미륵당의 한 줄은 우리가 지은 말이고 출전은 장소다.
+    # 예경당의 한 줄은 보현행원품의 뜻을 우리 말로 옮긴 것이라 출전을 달지 않는다.
+    # 역경원 번역본의 문장을 대조해 올리면 그때 경구가 된다(Citation).
+    assert_equal [ :maitreya, :bowing ], Compound::CARD_HALLS.reject(&:scripture).map(&:key)
   end
 
   test "문의 경 한 줄은 출전과 함께 선다" do
@@ -77,7 +80,8 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     get today_path
     doc = Nokogiri::HTML(response.body)
 
-    Compound::CARD_HALLS.each do |hall|
+    # 출전은 경의 말에만 붙는다. 우리 말에는 출전이 없다 — 없는 것이 바른 모양이다.
+    Compound::CARD_HALLS.select(&:scripture).each do |hall|
       anchor = doc.at_css("a.compound__hall--#{hall.key}")
       next if anchor["data-compound-source-param"].present?
 

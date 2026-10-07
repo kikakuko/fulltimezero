@@ -28,7 +28,8 @@ class Compound
     Hall.new(key: :copying, cx: 80.7, cy: 38.1, w: 28.6, h: 23.4, han: "寫經室"),  # 사경실 — 사경
     Hall.new(key: :lecture, cx: 28.0, cy: 62.5, w: 32.6, h: 25.4, han: "講院"),    # 강원 — 쉼의 안내
     Hall.new(key: :courtyard, cx: 52.1, cy: 55.7, w: 28.6, h: 21.5, han: nil, scripture: false),     # 마당 — 아래로, 비움 선언
-    Hall.new(key: :bowing, cx: 78.5, cy: 62.5, w: 24.0, h: 23.4, han: "禮敬堂"),   # 예경당 — 절
+    # 예경당의 한 줄은 경의 말이 아니라 우리가 지은 뜻풀이다 — 출전을 달지 않는다.
+    Hall.new(key: :bowing, cx: 78.5, cy: 62.5, w: 24.0, h: 23.4, han: "禮敬堂", scripture: false), # 예경당 — 절
     Hall.new(key: :gate, cx: 51.4, cy: 79.1, w: 13.0, h: 15.6, han: "門")          # 문 — 처음의 문 다시
   ].freeze
 
