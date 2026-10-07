@@ -11,15 +11,13 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     sign_in_as @user
   end
 
-  test "앉기 맨 위에 코끼리의 길이 있고, 정거장 아홉은 이름뿐이다" do
+  test "앉기 맨 위에 코끼리의 길이 있고, 굽이에는 이름이 없다" do
     get new_sitting_path
 
     assert_select ".elephant-field [data-controller=elephant]", count: 0
     assert_select ".elephant-field[data-controller=elephant]", count: 1
-    assert_select ".elephant-field__station", count: 9
-    @abidings.each do |abiding|
-      assert_select "a.elephant-field__stop[href=?] .elephant-field__station", abiding_path(abiding), text: abiding.ko
-    end
+    assert_select ".elephant-field__station", false, "굽이에 이름이 붙었다"
+    assert_select "a.elephant-field__stop", false, "굽이가 눌러 가는 길이 되었다"
     assert_select ".elephant-place .elephant svg.elephant__art[role=img][aria-label]", count: 1
     assert_select ".elephant-place .elephant.elephant--walking-legs", count: 1
 
@@ -35,23 +33,6 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_select ".elephant-field__path[d='']", count: 1
     css = Rails.root.join("app/assets/tailwind/application.css").read
     assert_match(/\.elephant-field__path \{ fill: none; stroke: none; \}/, css)
-  end
-
-  # 주어는 코끼리다. 정거장은 지명이지 사용자의 경지가 아니다.
-  test "카드의 주어는 코끼리고, 읽는 이를 부르지 않는다" do
-    I18n.available_locales.each do |locale|
-      get new_sitting_path(locale: locale)
-
-      card = I18n.t("sittings.elephant.card", station: "x", line: "y", locale: locale)
-      assert_match(/\A(코끼리가|The elephant)/, card)
-      assert_no_match(CopyLocks.pattern(:addressing), card, "#{locale} 카드가 읽는 이를 부른다")
-      # 이름은 어려운 말 그대로(한자 곁에), 곁에 늘 그 자리의 한 줄.
-      first = @abidings.first
-      expected = I18n.with_locale(locale) do
-        I18n.t("sittings.elephant.card", station: "#{first.name}(#{first.han})", line: first.one_line_here)
-      end
-      assert_select ".quote", text: expected, count: 1
-    end
   end
 
   test "흰빛은 그림의 색으로만 보이고, 양 끝은 상수다" do
@@ -104,31 +85,21 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_no_match(/requestAnimationFrame\(\s*function|setInterval|--whiteness/, js, "스크립트가 걸음을 매 프레임 그린다")
   end
 
-  # 아홉째는 등지(等持) — 애써 붙들지 않아도 흔들리지 않는 자리. 흩어지지 않고 흰빛
-  # 1 로 온전히 서되, 걸음을 멈춘다. 걷다가 서는 것이 유일한 표시다.
-  test "아홉째 정거장에 닿으면 걸음을 멈추고 온전히 선다 — 닿는 날은 올라온 뒤에 선다" do
-    Elephant::WINDOW_DAYS.times { |i| @user.rests.create!(rested_on: @user.today - i, duration: "a_while") }
-    assert_equal Elephant::STATIONS - 1, Elephant.for(@user).station
+  # 끝에 닿는 일이 없으므로 멈춰 서는 자리도 없다. 오래 앉아도 코끼리는 걷는다(§2).
+  test "오래 앉아도 멈춰 서지 않는다 — 끝이 없기 때문이다" do
+    at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
+    @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 1000.hours)
 
     get new_sitting_path
-    assert_select ".elephant-place[data-halt=true] .elephant.elephant--walking-legs", count: 1
 
-    get new_sitting_path
-    assert_select ".elephant-place[data-halt=false] .elephant", count: 1
-    assert_select ".elephant-place .elephant--walking-legs", false, "아홉째에서도 걷는다"
-    assert_select ".elephant-place .elephant[style=?]", "--ele: 1.0;"
-
-    js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
-    assert_match(/dataset\.halt === "true".*transitionend.*this\.halt\(\)/m, js, "올라온 뒤에 서지 않는다")
-    assert_match(/halt\(\) \{\s*this\.figureTarget\.querySelector\("\.elephant"\)\?\.classList\.remove\("elephant--walking-legs"\)/, js)
-
-    @user.rests.destroy_all
-    get new_sitting_path
-    assert_select ".elephant-place .elephant--walking-legs", count: 1, message: "아홉째가 아닌데 서 있다"
+    assert_select ".elephant-place .elephant.elephant--walking-legs", count: 1, message: "오래 앉았다고 섰다"
+    assert_select ".elephant-place[data-halt]", false, "멈춰 서는 표시가 남아 있다"
+    assert_operator Elephant.for(@user).whiteness, :<, 1.0, "흰빛이 하나에 닿았다"
   end
 
   test "흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다" do
-    @user.rests.create!(rested_on: @user.today, duration: "a_while")
+    at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
+    @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 30.minutes)
 
     get new_sitting_path
     assert_select ".elephant-field[data-elephant-moving-value=true]", count: 1
@@ -144,7 +115,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
 
     reading = Elephant.for(@user)
     assert_select ".elephant-field[data-elephant-whiteness-value=?]", reading.whiteness.to_s
-    assert_operator reading.station, :<, 8, "골라 둔 자리가 코끼리를 옮겼다"
+    assert_operator reading.whiteness, :<, 0.01, "골라 둔 자리가 코끼리를 옮겼다"
   end
 
   private

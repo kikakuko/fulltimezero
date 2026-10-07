@@ -1,7 +1,7 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
 # 앉음. 타이머와 무위가 같은 자리를 쓰되, 화면은 서로 다르다 —
-# 타이머에는 달이 있고, 무위에는 없다.
+# 앉는 동안에는 길 위의 코끼리가 있고, 무위에는 아무것도 없다(§2, 2026-10-08).
 class SittingsController < ApplicationController
   before_action :set_sitting, only: %i[show update destroy]
 

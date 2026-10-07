@@ -122,7 +122,9 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
 
   # 아홉째(등지)는 형상이 풀리는 자리가 아니다. 흩어짐은 아홉 뒤의 문, 무위에만 있다.
   test "흩어짐은 무위에만 걸린다 — 앉기와 장경각에는 없다" do
-    Elephant::WINDOW_DAYS.times { |i| users(:one).rests.create!(rested_on: users(:one).today - i, duration: "a_while") }
+    # 오래 앉아 희어진 코끼리로 본다 — 흰빛이 끝에 가도 흩어지지 않는다.
+    at = users(:one).today.in_time_zone(users(:one).time_zone).change(hour: 7)
+    users(:one).sittings.create!(mode: "sitting", sat_on: users(:one).today, created_at: at, ended_at: at + 500.hours)
 
     [ new_sitting_path, new_sitting_path, guide_chapter_path("abidings") ].each do |page|
       get page

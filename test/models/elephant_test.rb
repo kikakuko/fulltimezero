@@ -1,6 +1,7 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 코끼리의 흰빛이 도는가 — 무엇이든 있었던 날이 세어지고, 하루에 여럿이어도 하루다.
+# 코끼리의 흰빛 — 지금까지 앉은 시간 하나에서 온다. 쌓이기만 하고, 끝에 닿지 않는다.
+# 「몇 푼이냐」는 결이고(elephant_white_test), 「쌓이기만 한다」는 성질이라 여기 있다.
 require "test_helper"
 
 class ElephantTest < ActiveSupport::TestCase
@@ -13,34 +14,74 @@ class ElephantTest < ActiveSupport::TestCase
     @today = @user.today
   end
 
-
-  test "아무것도 없으면 검다" do
+  test "앉지 않았으면 검다" do
     assert_equal 0.0, Elephant.for(@user).whiteness
   end
 
-  test "쉼 · 앉음 · 비움 · 사경 — 무엇이든 있었던 날이 흰빛이 된다" do
-    @user.rests.create!(rested_on: @today, duration: "a_while")
-    @user.sittings.create!(sat_on: @today - 1, mode: "nothing", ended_at: Time.current)
-    @user.clearings.create!(cleared_on: @today - 2)
-    @user.copyings.create!(sutra_char: heart_sutra.chars.first, copied_on: @today - 3, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
+  test "앉은 시간이 쌓일수록 희어진다 — 단조롭게" do
+    seen = [ Elephant.for(@user).whiteness ]
 
-    assert_in_delta 4 / 28.0, Elephant.for(@user).whiteness, 1e-9
+    [ 10, 30, 60, 120 ].each do |minutes|
+      sit(minutes: minutes, on: @today)
+      seen << Elephant.for(@user).whiteness
+    end
+
+    assert_equal seen.sort, seen, "앉았는데 흰빛이 내려갔다"
+    assert_equal seen.uniq, seen, "앉았는데 흰빛이 그대로다"
   end
 
-  test "하루에 여럿이어도 하루다" do
-    @user.rests.create!(rested_on: @today, duration: "a_while")
-    @user.rests.create!(rested_on: @today, duration: "a_moment")
-    @user.sittings.create!(sat_on: @today, mode: "sitting", ended_at: Time.current)
+  test "끝에 닿지 않는다 — 몇 해를 앉아도 먹 한 점은 남는다" do
+    sit(minutes: 60 * 1000, on: @today)
 
-    assert_in_delta 1 / 28.0, Elephant.for(@user).whiteness, 1e-9
+    assert_operator Elephant.for(@user).whiteness, :<, 1.0, "흰빛이 하나에 닿았다"
   end
 
-  test "어제의 값을 함께 준다" do
+  test "백오십 시간에 예순세 푼쯤 온다" do
+    sit(minutes: 150 * 60, on: @today)
+
+    assert_in_delta 1 - Math.exp(-1), Elephant.for(@user).whiteness, 1e-6
+  end
+
+  test "끝나지 않은 앉음은 세지 않는다" do
+    @user.sittings.create!(mode: "sitting", sat_on: @today, created_at: 1.hour.ago)
+
+    assert_equal 0.0, Elephant.for(@user).whiteness, "앉는 중에 벌써 희어졌다"
+  end
+
+  test "무위는 세지 않는다 — 형상이 풀리는 자리이지 몸이 쌓이는 자리가 아니다" do
+    at = @today.in_time_zone(@user.time_zone).change(hour: 7)
+    @user.sittings.create!(mode: "nothing", sat_on: @today, created_at: at, ended_at: at + 1.hour)
+
+    assert_equal 0.0, Elephant.for(@user).whiteness
+  end
+
+  test "쉼 · 비움 · 사경은 코끼리를 움직이지 않는다 — 그것은 달과 미륵과 탑의 몫이다" do
     @user.rests.create!(rested_on: @today, duration: "a_while")
+    @user.clearings.create!(cleared_on: @today)
+    @user.copyings.create!(sutra_char: heart_sutra.chars.first, copied_on: @today, glyph_paths: [ [ [ 0.5, 0.5 ] ] ])
+
+    assert_equal 0.0, Elephant.for(@user).whiteness
+  end
+
+  test "어제의 값을 함께 준다 — 오늘 앉았으면 움직였다" do
+    sit(minutes: 30, on: @today)
     reading = Elephant.for(@user)
 
-    assert_in_delta 1 / 28.0, reading.whiteness, 1e-9
-    assert_equal 0.0, reading.yesterday
+    assert_operator reading.whiteness, :>, reading.yesterday
     assert reading.moved?
   end
+
+  test "오늘 앉지 않았으면 어제와 같다 — 가만히 있어도 내려가지 않는다" do
+    sit(minutes: 30, on: @today - 5)
+    reading = Elephant.for(@user)
+
+    assert_in_delta reading.yesterday, reading.whiteness, 1e-12
+    assert_not reading.moved?
+  end
+
+  private
+    def sit(minutes:, on:)
+      at = on.in_time_zone(@user.time_zone).change(hour: 7)
+      @user.sittings.create!(mode: "sitting", sat_on: on, created_at: at, ended_at: at + minutes.minutes)
+    end
 end

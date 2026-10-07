@@ -1,38 +1,23 @@
-<%# 코끼리의 길. 검은 코끼리가 앉은 날만큼 희어지며 길을 오른다.
-    길은 그리지 않는다 — 시각적 길은 배경 그림 안에 있다. 정거장 아홉은
-    지명이지 경지가 아니다. 이름을 누르면 그 자리를 읽는 곳으로 간다.
-    숫자는 없다. 아홉 자리와 코끼리의 자리를 잇는 코드는 없다. %>
+<%# 코끼리의 길. 검은 코끼리가 앉은 시간만큼 희어지며 길을 오른다.
+    길은 그리지 않는다 — 시각적 길은 배경 그림 안에 있다. 굽이 아홉은 길의
+    모양일 뿐이고 이름도 글도 붙지 않는다(§2, 2026-10-08). 아홉의 이름과 글은
+    장경각에 있다. 숫자는 없다. %>
 <div class="elephant-field ink-frame" data-controller="elephant"
      data-elephant-whiteness-value="<%= reading.whiteness %>"
      data-elephant-yesterday-value="<%= reading.yesterday %>"
      data-elephant-moving-value="<%= moving %>">
-  <%# 화면 가장자리에서 흘러드는 구름. 그림의 왼쪽이 잘려 있는 것이 그 모양이다.
-      코끼리와 정거장보다 뒤에 선다 — 배경이지 도상이 아니다. %>
+  <%# 화면 가장자리에서 흘러드는 구름. 코끼리보다 뒤에 선다 — 배경이지 도상이 아니다. %>
   <span class="cloud cloud--drift" aria-hidden="true"></span>
-  <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="false">
+  <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
-    <% abidings.each_with_index do |abiding, index| %>
-      <% x, y = anchors.fetch(index) %>
-      <a href="<%= abiding_path(abiding) %>" class="elephant-field__stop">
-        <text class="elephant-field__station" x="<%= x %>" y="<%= y + 44 %>" text-anchor="middle"><%= abiding.name %></text>
-      </a>
-    <% end %>
   </svg>
 
   <%# 자리 틀 — 길 위의 자리 · 비스듬함 · 방향. 그 안의 코끼리는 부위별로 걷는다.
-      아홉째 정거장(등지)에 닿으면 걸음을 멈춘다 — 흰빛 1 로 온전히 선다. 걷다가
-      서는 것이 아홉째의 유일한 표시이고, 글자도 표시도 붙이지 않는다. 그날 길을
-      걸어 올라왔다면 다 올라온 뒤에 선다. %>
-  <% resting = reading.station == Elephant::STATIONS - 1 %>
-  <div class="elephant-place" data-elephant-target="figure" data-halt="<%= resting && moving %>">
+      끝에 닿는 일이 없으므로 멈춰 서는 자리도 없다 — 코끼리는 늘 걷는다. %>
+  <div class="elephant-place" data-elephant-target="figure">
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
-      <%= elephant_figure ele: reading.whiteness, walking: !resting || moving, label: t("sittings.elephant.alt") %>
+      <%= elephant_figure ele: reading.whiteness, walking: true, label: t("sittings.elephant.alt") %>
     </div>
   </div>
 </div>
-
-<%# 한 줄. 이름은 어려운 말 그대로 두고, 곁에 늘 그 자리의 한 줄. %>
-<% if (station = abidings[reading.station]) %>
-  <p class="quote"><%= t("sittings.elephant.card", station: "#{station.name}(#{station.han})", line: station.one_line_here) %></p>
-<% end %>
