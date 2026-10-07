@@ -54,8 +54,8 @@ en:
         verse: As if they stood before me — honoured in body, speech and mind
         enter: Enter the reverence hall
       bell:
-        line: Where one strikes and listens. The sound fades.
-        verse: Strike once, and listen until it fades
+        line: Where one listens. Sounding and ceasing are both here.
+        verse: A sound arises, and it ceases
         enter: Enter the bell hall
       gate:
         line: Where you came in. It can be crossed again.
@@ -431,8 +431,9 @@ en:
         - Standing again, palms together
 
   bells:
-    strike: Strike
+    listen: Listen
     not_yet: The bell is not hung yet.
+    source: Divine Bell of King Seongdeok · Gyeongju National Museum · KOGL (attribution, no derivatives)
 
   guest:
     line: A place to look around. Nothing done here is kept.

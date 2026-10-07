@@ -575,6 +575,12 @@ input[type="text"] {
   border-bottom: 1px solid var(--rule);
 }
 
+/* ── 범종각 ─────────────────────────────────────────────────────────
+   듣는 자리. 손짓 하나와, 그 아래 작은 출처 한 줄. 종 그림은 없다 —
+   소리가 도상이다. */
+.bell-hall { display: grid; justify-items: center; margin: 2.5rem 0 1rem; }
+.bell-hall__source { color: var(--mute); text-align: center; margin: 0 0 2.5rem; }
+
 /* ── 절과 염주 ───────────────────────────────────────────────────────
    고르는 자리에는 글이 없다 — 그림만 보이고 고른다(§2). 자세 그림은 아직
    오지 않았다. 들어올 것은 그림 여러 장이 아니라 부위별 SVG 한 벌과 자세마다의

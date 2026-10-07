@@ -62,6 +62,28 @@ class BellHallTest < ActionDispatch::IntegrationTest
     assert_no_match(/new Audio|AudioContext|\.play\(\)/, view, "범종각이 제 손으로 소리를 낸다")
   end
 
+  # 여운이 팔십팔 초다. 중간에 나가도 된다 — 다만 다른 화면까지 따라가면
+  # 부르지 않은 소리가 되어 침묵 게이트에 가까워진다(§4). 그래서 약속이다.
+  test "범종각을 떠나면 소리가 멎는다" do
+    get bells_path
+    assert_select ".bell-hall[data-bell-stop-on-leave-value=true]", { count: 1 },
+      "범종각이 떠날 때 멎으라고 이르지 않는다"
+
+    player = Rails.root.join("app/javascript/controllers/bell_controller.js").read
+    assert_match(/disconnect\(\) \{[^}]*stopOnLeaveValue[^}]*\n\s*this\.hush\(\)/m, player,
+      "떠날 때 멎는 자리가 없다")
+    assert_match(/hush\(\) \{.*?this\.playing\.pause\(\)/m, player, "멎는 자리가 소리를 멈추지 않는다")
+  end
+
+  # 앉기의 시작종은 화면을 넘어가며 울려야 한다 — 「앉는다」를 누르는 손짓 안에서
+  # 울리고 다음 화면으로 넘어간다. 거기서 멎으면 종이 울리지 않는다.
+  test "앉기의 종은 떠난다고 멎지 않는다" do
+    get new_sitting_path
+
+    assert_select "[data-bell-stop-on-leave-value]", false,
+      "앉기의 종이 화면을 떠날 때 멎는다 — 시작종이 울리지 못한다"
+  end
+
   private
     # 모든 테이블의 행 수. 하나라도 늘면 쌓인 것이다.
     def tally

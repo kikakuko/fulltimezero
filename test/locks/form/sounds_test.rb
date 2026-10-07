@@ -57,10 +57,29 @@ class SoundsTest < ActiveSupport::TestCase
     assert_no_match(/bell_source\(:start\)|bell_source\(:end\)/, view, "범종이 앉기의 종을 가져다 쓴다")
   end
 
-  # 아직 걸리지 않았으면 치지 않는다 — 합성음이 범종인 척하지 않는다.
-  test "음원이 없으면 치는 손잡이가 서지 않는다" do
-    assert_nil Object.new.extend(BellHelper).bell_file(:temple),
-      "범종의 음원이 들어왔다. docs/SOURCES.md 에 출처와 라이선스를 적어라."
+  # 범종은 성덕대왕신종이다. 변경금지라 받은 그대로 두어야 한다 — 자르지도,
+  # 형식을 바꾸지도, 다시 누르지도 않는다. 바이트 수가 받은 그대로인지로 본다.
+  GIVEN = { name: "bell-temple.mp3", bytes: 1_422_732 }.freeze
+
+  test "범종의 음원은 받은 그대로다 — 변경금지다" do
+    file = Object.new.extend(BellHelper).bell_file(:temple)
+
+    assert_equal GIVEN[:name], file, "범종의 음원이 없거나 형식이 바뀌었다"
+    assert_equal GIVEN[:bytes], SOUNDS.join(file).size,
+      "범종의 음원이 받은 그대로가 아니다. 공공누리 변경금지다 — 자르거나 다시 누르지 않는다."
+  end
+
+  test "음원의 출처가 문서와 화면에 함께 적혀 있다" do
+    ours = Rails.root.join("docs/SOURCES.md").read
+    view = Rails.root.join("app/views/bells/show.html.erb").read
+
+    assert_includes ours, "성덕대왕신종", "SOURCES.md 에 음원의 출처가 없다"
+    assert_includes ours, "공공누리", "SOURCES.md 에 이용 조건이 없다"
+    assert_match(/t\("bells\.source"\)/, view, "화면에 출처가 보이지 않는다")
+    %w[ko en].each do |locale|
+      assert_match(/국립경주박물관|Gyeongju National Museum/, I18n.t("bells.source", locale: locale),
+        "#{locale} 의 출처 한 줄에 내어 준 곳이 없다")
+    end
   end
 
   private

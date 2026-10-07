@@ -50,7 +50,7 @@ function wake() {
 
 export default class extends Controller {
   static targets = ["switch"]
-  static values = { enabled: Boolean, startUrl: String, endUrl: String, measure: Boolean }
+  static values = { enabled: Boolean, startUrl: String, endUrl: String, measure: Boolean, stopOnLeave: Boolean }
 
   // 「앉는다」를 누르는 그 손짓 안에서 불린다. 컨텍스트를 여기서 깨우고,
   // 종은 어둠이 내려앉을 즈음에 울리도록 예약해 둔다.
@@ -101,7 +101,24 @@ export default class extends Controller {
     const audio = new Audio(url)
     const strike = () => audio.play().catch(() => {}) // 막히면 그냥 조용한 것이다.
 
-    after > 0 ? setTimeout(strike, after * 1000) : strike()
+    this.playing = audio
+    this.waiting = after > 0 ? setTimeout(strike, after * 1000) : (strike(), null)
+  }
+
+  // 범종각을 떠나면 멎는다. 여운이 다른 화면까지 따라가면 부르지 않은 소리가
+  // 된다(§4). 앉기의 시작종은 화면을 넘어가며 울려야 하므로 여기서 멎지 않는다 —
+  // 그 자리에서만 stopOnLeave 를 켠다.
+  disconnect() {
+    if (!this.stopOnLeaveValue) return
+
+    this.hush()
+  }
+
+  hush() {
+    if (this.waiting) clearTimeout(this.waiting)
+    if (this.playing) this.playing.pause()
+    this.waiting = null
+    this.playing = null
   }
 
   synthesize(ctx, after) {

@@ -21,8 +21,9 @@ class TypeTest < ActiveSupport::TestCase
   READING = [ ".compound__card-line", ".hall-header__line", ".quote",
               ".guide > p:not(.lead):not(.aside), .guide blockquote p", ".copy-notes dd" ].freeze
 
-  # 옅은 --mute 가 설 수 있는 자리 — 출전 · 한자 곁말 · 닫는 손잡이 같은 보조.
-  MUTE_PLACES = %w[.threshold__source .compound__card-source .guide\ .source .compound__card-han .compound__card-close].freeze
+  # 옅은 --mute 가 설 수 있는 자리 — 출전 · 한자 곁말 · 닫는 손잡이 · 음원의 출처 같은 보조.
+  MUTE_PLACES = %w[.threshold__source .compound__card-source .guide\ .source .compound__card-han
+                   .compound__card-close .bell-hall__source].freeze
 
   test "글꼴 다섯은 :root 의 토큰이다" do
     root = css[/:root \{.*?\n\}/m]
