@@ -26,6 +26,7 @@ ko:
       maitreya: 미륵당
       copying: 사경실
       lecture: 강원
+      bowing: 예경당
       courtyard: 마당
       gate: 문
     # 전각을 누르면 뜨는 카드의 글. 한 줄은 방 안에서도 머리로 다시 쓰인다.
@@ -48,6 +49,10 @@ ko:
         line: 읽는 곳. 쉼에 대하여 옛사람들이 남긴 말.
         verse: 열반이 으뜸가는 즐거움
         enter: 강원으로 든다
+      bowing:
+        line: 절하는 곳. 한 배마다 알 하나가 꿰인다.
+        verse: 눈앞에 계신 듯 공경한다
+        enter: 예경당으로 든다
       gate:
         line: 들어온 자리. 다시 지날 수 있다.
         verse: 나는 멈추었다

@@ -64,7 +64,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
       assert_select "a.compound__hall--#{hall.key}[style=?]",
         "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%"
     end
-    assert_equal 6, Compound::HALLS.size
+    assert_equal 7, Compound::HALLS.size
     Compound::HALLS.each { |hall| assert hall.left >= 0 && hall.top >= 0 && hall.left + hall.w <= 100 && hall.top + hall.h <= 100 }
   end
 
@@ -75,8 +75,8 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     assert_select "nav.doors a[href=?]", guide_path, false
   end
 
-  # 전각에 드는 흐름 — 마당을 뺀 다섯 전각을 누르면 카드가 뜬다.
-  test "다섯 전각에 카드로 드는 손짓이 있고, 마당은 곧장 아래로 간다" do
+  # 전각에 드는 흐름 — 마당을 뺀 여섯 전각을 누르면 카드가 뜬다.
+  test "여섯 전각에 카드로 드는 손짓이 있고, 마당은 곧장 아래로 간다" do
     get today_path
 
     Compound::CARD_HALLS.each do |hall|
@@ -85,7 +85,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
       assert_select "a.compound__hall--#{hall.key}[data-compound-han-param=?]", hall.han
     end
     assert_select "a.compound__hall--courtyard[data-action]", false, "마당이 카드를 연다"
-    assert_equal 5, Compound::CARD_HALLS.size
+    assert_equal 6, Compound::CARD_HALLS.size
   end
 
   # 카드의 글 — 이름 · 한자 · 한 줄 · 경구 · 「드는」 말은 데이터 속성으로,

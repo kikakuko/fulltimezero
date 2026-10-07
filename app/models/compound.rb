@@ -13,6 +13,8 @@
 # han(한자)은 언어를 가르지 않는다 — 글자 자체는 번역할 것이 아니다.
 # 한 줄 · 경구 · 출전 · 「드는」 말은 config/locales 에서 온다(Localized 와
 # 같은 결 — 화면의 글은 로케일 파일에만 있다).
+# 예경당(禮敬堂)은 일곱째로 들어온 전각이다. 조감도에는 아직 건물이 없다 —
+# 자리만 비워 두고 이름 카드로 든다. 그림이 오면 좌표만 맞춘다.
 class Compound
   Hall = Data.define(:key, :cx, :cy, :w, :h, :han, :scripture) do
     def initialize(scripture: true, **rest) = super
@@ -26,6 +28,7 @@ class Compound
     Hall.new(key: :copying, cx: 80.7, cy: 38.1, w: 28.6, h: 23.4, han: "寫經室"),  # 사경실 — 사경
     Hall.new(key: :lecture, cx: 28.0, cy: 62.5, w: 32.6, h: 25.4, han: "講院"),    # 강원 — 쉼의 안내
     Hall.new(key: :courtyard, cx: 52.1, cy: 55.7, w: 28.6, h: 21.5, han: nil, scripture: false),     # 마당 — 아래로, 비움 선언
+    Hall.new(key: :bowing, cx: 78.5, cy: 62.5, w: 24.0, h: 23.4, han: "禮敬堂"),   # 예경당 — 절
     Hall.new(key: :gate, cx: 51.4, cy: 79.1, w: 13.0, h: 15.6, han: "門")          # 문 — 처음의 문 다시
   ].freeze
 

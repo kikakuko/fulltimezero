@@ -8,6 +8,7 @@ module CompoundHelper
     when :maitreya then days_path
     when :copying then new_copying_path
     when :lecture then guide_path
+    when :bowing then bows_path
     when :courtyard then "#clearing"
     when :gate then threshold_path
     end
