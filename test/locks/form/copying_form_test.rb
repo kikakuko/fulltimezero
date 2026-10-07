@@ -42,14 +42,16 @@ class CopyingFormTest < ActionDispatch::IntegrationTest
       "차지 않은 층에도 풍경이 걸린다")
   end
 
-  # 글씨가 주인공이고 탑은 자리다. 탑이 붉어졌으니 탑신의 바탕은 아주 옅게 — 먹 글씨가
+  # 글씨가 주인공이고 탑은 자리다. 탑이 붉어졌으니 탑신의 바탕은 옅게 — 먹 글씨가
   # 그 위에서 읽혀야 한다 — 옥개석만 진하게. 옅기는 손으로 고칠 수 있게 상수로 둔다.
-  test "주사 탑은 탑신이 아주 옅고 옥개석만 진하다" do
+  # 바탕이 곧은 네모였을 때는 0.04 를 넘기면 모서리가 기둥선 밖으로 삐져나왔다.
+  # 사다리꼴이 되어 그 까닭이 없어졌으므로 0.10 으로 옮긴다 — 값은 결이다.
+  test "주사 탑은 탑신이 옅고 옥개석만 진하다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
     art = css[/\.pagoda__art \{.*?\n\}/m].to_s
     value = ->(name) { art[/--pagoda-#{name}: ([\d.]+);/, 1].to_f }
 
-    assert_equal 0.04, value.("wash")
+    assert_equal 0.10, value.("wash")
     assert_equal 0.94, value.("eave")
     assert_operator value.("wash"), :<, value.("pillar")
     assert_operator value.("pillar"), :<, value.("eave")

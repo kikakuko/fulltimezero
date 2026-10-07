@@ -1,8 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 980" class="pagoda__art" aria-hidden="true">
   <!-- 탑. 색과 옅기는 그림에 없다 — :root 의 석간주 셋(--seokganju-deep · -hi · -shadow)과
-       .pagoda__* 의 옅기 상수가 준다. 좌표는 옛 윤곽과 같다(기단 910, 처마 730 · 550 · 394 · 238 · 82). -->
+       .pagoda__* 의 옅기 상수가 준다. 좌표는 옛 윤곽과 같다(기단 910, 처마 730 · 550 · 394 · 238 · 82).
+       탑신의 바탕(.pagoda__wash)은 층마다 그 층 기둥선의 네 끝점을 이은 사다리꼴이다 —
+       아래가 넓고 위가 좁다. 곧은 네모였을 때는 옅기를 올리면 모서리가 기둥선 밖으로
+       삐져나왔다. 윗변은 아랫변의 아흔두~아흔다섯 푼이고, 그 비율은 기둥선이 정한다. -->
   <g class="pagoda__floor" data-layer="1">
-    <path class="pagoda__wash" d="M319 738H71V910H319V738Z"/>
+    <path class="pagoda__wash" d="M77.8089 738H312.208L318.595 910H71.2998L77.8089 738Z"/>
     <path class="pagoda__pillar" d="M71.2998 910L77.8089 738M318.595 910L312.208 738"/>
     <path class="pagoda__under" d="M195 752C266.797 752 325 749.314 325 746C325 742.686 266.797 740 195 740C123.203 740 65 742.686 65 746C65 749.314 123.203 752 195 752Z"/>
     <path class="pagoda__eave" d="M43.8528 716.561C105.4 728 284.6 728 343.617 715.631C291 747 99.0001 747 44.8223 721.082L43.8528 716.561Z"/>
@@ -10,7 +13,7 @@
     <path class="pagoda__eave-shade" d="M51 722C105.4 752 284.6 752 339 722"/>
   </g>
   <g class="pagoda__floor" data-layer="2">
-    <path class="pagoda__wash" d="M307 558H83V730H307V558Z"/>
+    <path class="pagoda__wash" d="M89.5189 558H300.655L306.39 730H82.4563L89.5189 558Z"/>
     <path class="pagoda__pillar" d="M82.4563 730L89.5189 558M306.39 730L300.655 558"/>
     <path class="pagoda__under" d="M195 572C260.17 572 313 569.314 313 566C313 562.686 260.17 560 195 560C129.83 560 77 562.686 77 566C77 569.314 129.83 572 195 572Z"/>
     <path class="pagoda__eave" d="M57.2839 536.308C113.8 548 276.2 548 333.705 535.743C282 567 108 567 58.0127 540.076L57.2839 536.308Z"/>
@@ -18,7 +21,7 @@
     <path class="pagoda__eave-shade" d="M63 542C113.8 572 276.2 572 327 542"/>
   </g>
   <g class="pagoda__floor" data-layer="3">
-    <path class="pagoda__wash" d="M295 402H95V550H295V402Z"/>
+    <path class="pagoda__wash" d="M100.678 402H289.686L295.238 550H95.6047L100.678 402Z"/>
     <path class="pagoda__pillar" d="M95.6047 550L100.678 402M295.238 550L289.686 402"/>
     <path class="pagoda__under" d="M195 416C253.542 416 301 413.314 301 410C301 406.686 253.542 404 195 404C136.458 404 89 406.686 89 410C89 413.314 136.458 416 195 416Z"/>
     <path class="pagoda__eave" d="M67.6873 379.815C122.2 392 267.8 392 322.099 379.169C273 411 117 411 69.8419 385.274L67.6873 379.815Z"/>
@@ -26,7 +29,7 @@
     <path class="pagoda__eave-shade" d="M75 386C122.2 416 267.8 416 315 386"/>
   </g>
   <g class="pagoda__floor" data-layer="4">
-    <path class="pagoda__wash" d="M283 246H107V394H283V246Z"/>
+    <path class="pagoda__wash" d="M113.038 246H276.906L282.596 394H107.906L113.038 246Z"/>
     <path class="pagoda__pillar" d="M107.906 394L113.038 246M282.596 394L276.906 246"/>
     <path class="pagoda__under" d="M195 260C246.915 260 289 257.314 289 254C289 250.686 246.915 248 195 248C143.085 248 101 250.686 101 254C101 257.314 143.085 260 195 260Z"/>
     <path class="pagoda__eave" d="M82.0628 223.748C130.6 236 259.4 236 309.799 224.577C264 255 126 255 81.3101 229.342L82.0628 223.748Z"/>
@@ -34,7 +37,7 @@
     <path class="pagoda__eave-shade" d="M87 230C130.6 260 259.4 260 303 230"/>
   </g>
   <g class="pagoda__floor" data-layer="5">
-    <path class="pagoda__wash" d="M271 90H119V238H271V90Z"/>
+    <path class="pagoda__wash" d="M125.168 90H265.625L270.514 238H118.889L125.168 90Z"/>
     <path class="pagoda__pillar" d="M118.889 238L125.168 90M270.514 238L265.625 90"/>
     <path class="pagoda__under" d="M195 104C240.287 104 277 101.314 277 98C277 94.6863 240.287 92 195 92C149.713 92 113 94.6863 113 98C113 101.314 149.713 104 195 104Z"/>
     <path class="pagoda__eave" d="M92.4104 68.7724C139 80 251 80 297.804 68.6326C255 99 135 99 93.4169 72.9475L92.4104 68.7724Z"/>

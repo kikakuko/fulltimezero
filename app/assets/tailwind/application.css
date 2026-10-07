@@ -631,7 +631,7 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
    옅게 — 먹 글씨가 그 위에서 읽혀야 한다 — 옥개석만 진하게. 글씨가 주인공이고
    탑은 자리다. 처마가 글씨보다 눈에 띄면 --pagoda-eave 부터 내린다. */
 .pagoda__art {
-  --pagoda-wash: 0.04;        /* 탑신의 바탕 */
+  --pagoda-wash: 0.10;        /* 탑신의 바탕 — 사다리꼴이 된 뒤 올렸다(옛 값 0.04) */
   --pagoda-pillar: 0.45;      /* 기둥선 */
   --pagoda-under: 0.07;       /* 처마 밑 그늘 */
   --pagoda-eave: 0.94;        /* 옥개석 — 진하게 */
