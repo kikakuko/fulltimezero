@@ -31,6 +31,9 @@ module Authentication
     end
 
     def request_authentication
+      # 가입이 닫혀 있으면 로그인의 길도 없다 — 한 줄로 말하는 화면으로 보낸다.
+      return redirect_to not_yet_path(locale: I18n.locale) if SignupGate.closed?
+
       session[:return_to_after_authenticating] = request.url
       redirect_to new_session_path(locale: I18n.locale)
     end

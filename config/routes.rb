@@ -10,10 +10,19 @@ Rails.application.routes.draw do
   scope "/:locale", locale: Regexp.union(I18n.available_locales.map(&:to_s)) do
     get "/" => "gate#show", as: :gate
 
-    get  "sign_up" => "users#new",    as: :new_user
-    post "sign_up" => "users#create", as: :users
-    resource  :session, only: %i[new create destroy]
-    resources :passwords, only: %i[new create edit update], param: :token
+    # 가입 · 로그인 · 비밀번호는 문 뒤에 있다(SignupGate). 닫혀 있으면 길이
+    # 없다 — 화면을 숨기는 것으로는 봇을 막지 못한다. 나가기(session#destroy)는
+    # 문 밖에 둔다. 잠근 뒤에도 이미 들어온 사람은 나갈 수 있어야 한다.
+    constraints(SignupGate) do
+      get  "sign_up" => "users#new",    as: :new_user
+      post "sign_up" => "users#create", as: :users
+      resource  :session, only: %i[new create]
+      resources :passwords, only: %i[new create edit update], param: :token
+    end
+    resource :session, only: :destroy
+
+    # 가입이 닫혀 있는 동안 문 셋의 끝과 로그인이 필요한 자리가 닿는 곳.
+    get "not_yet" => "pages#not_yet", as: :not_yet
 
     get "today" => "today#show", as: :today
 

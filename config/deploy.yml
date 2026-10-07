@@ -49,6 +49,8 @@ env:
     SMTP_PORT: <%= ENV.fetch("SMTP_PORT", "587") %>
     # 검색에 보일 것인가 — 기본은 막음. 보여 줄 때가 되면 true 로 올린다(SearchGate).
     SEARCHABLE: <%= ENV.fetch("SEARCHABLE", "false") %>
+    # 가입을 받을 것인가 — 기본은 받지 않음. 앱이 다 되면 true 로 올린다(SignupGate).
+    SIGNUPS: <%= ENV.fetch("SIGNUPS", "false") %>
     # 요청 기록에 접속 주소와 브라우저 정보가 남지 않게 한다(§4).
     LOG_REQUESTS: "false"
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.

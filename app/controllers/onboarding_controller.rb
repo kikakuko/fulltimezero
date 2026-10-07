@@ -54,7 +54,7 @@ class OnboardingController < ApplicationController
       redirect_to today_path
     else
       session[:threshold_passed] = true
-      redirect_to new_user_path
+      redirect_to SignupGate.open? ? new_user_path : not_yet_path
     end
   end
 end

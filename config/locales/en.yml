@@ -386,6 +386,11 @@ en:
     line: "Stopping is already Maitreya"
     back: "Back to the courtyard"
 
+  not_yet:
+    title: No accounts yet
+    body: The app is not finished. No accounts are being taken, so no personal data is gathered. What stands open is the three gates, the guide to rest, and the nine abidings.
+    guide: To the guide
+
   privacy:
     title: Privacy
     collect: We take one email address and nothing else. No other personal data is collected.

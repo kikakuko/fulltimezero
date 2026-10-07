@@ -1,0 +1,10 @@
+<%# 가입이 닫혀 있는 동안의 한 화면. 조르지 않고, 기다리라고도 하지 않는다. %>
+<h1 class="title"><%= t("not_yet.title") %></h1>
+
+<div class="guide">
+  <p><%= t("not_yet.body") %></p>
+</div>
+
+<p class="tiny" style="margin-top:3rem">
+  <%= link_to t("not_yet.guide"), guide_path, class: "soft" %>
+</p>
