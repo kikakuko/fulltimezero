@@ -6,6 +6,9 @@
      data-elephant-whiteness-value="<%= reading.whiteness %>"
      data-elephant-yesterday-value="<%= reading.yesterday %>"
      data-elephant-moving-value="<%= moving %>">
+  <%# 화면 가장자리에서 흘러드는 구름. 그림의 왼쪽이 잘려 있는 것이 그 모양이다.
+      코끼리와 정거장보다 뒤에 선다 — 배경이지 도상이 아니다. %>
+  <span class="cloud cloud--drift" aria-hidden="true"></span>
   <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="false">
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
     <% abidings.each_with_index do |abiding, index| %>

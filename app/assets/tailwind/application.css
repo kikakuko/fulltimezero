@@ -84,6 +84,16 @@
   --press: 0.1s;
   --stagger: 65ms;
 
+  /* 산수화의 구름 — 셋이 저마다 다른 깊이에 있다. 먼 것이 옅고 느리다(공기원근법).
+     색 변수를 두지 않는다: 그림에 색이 그대로 있고, 하루의 때는 구름을 빛 한 겹
+     아래 두어 함께 물들게 한다. 값은 결이고, 「먼 것이 느리다」는 성질은 기능이다. */
+  --cloud-far: 0.38;        /* 안개띠 — 마당의 산 밑. 가장 멀다 */
+  --cloud-mid: 0.46;        /* 가장자리 흐름 — 산수화의 가장자리 */
+  --cloud-near: 0.54;       /* 구름무리 — 미륵당 위. 가장 가깝다 */
+  --cloud-span-far: 310s;
+  --cloud-span-mid: 240s;
+  --cloud-span-near: 180s;
+
   /* 하루의 때 — 마당과 미륵당의 그림 위에 얹는 한 겹(곱하기). 문 셋의 빛은 「다가오는
      빛」이라 찬 쪽도 있지만, 이것은 「해가 있는 자리」라 모두 따뜻한 쪽이다. 낮은 손대지
      않는다. 밤은 빛깔보다 밝기를 내린다. 값과 옅기를 여기서 고친다. */
@@ -563,6 +573,56 @@ input[type="text"] {
   font: var(--type-body); color: var(--ink-soft); text-align: left;
   padding: 0.75rem 0.75rem 0.75rem 0; vertical-align: top;
   border-bottom: 1px solid var(--rule);
+}
+
+/* ── 산수화의 구름 ───────────────────────────────────────────────────
+   그림 셋은 색이 그대로 있다 — 흰 구름이라 밝기를 알파로 바꾸면 몸통이 사라지고
+   가는 먹선만 남는다. 그래서 색 변수를 따로 만들지 않았다. 하루의 때는 구름을
+   빛 한 겹(.daylight) 아래 두어 함께 물들게 한다 — 겹 차례가 색을 대신한다.
+
+   구름은 배경이다. 도상 넷(달 · 코끼리 · 미륵 · 탑) 뒤에 서고 어떤 때에도 그
+   앞으로 나오지 않는다 — 겹을 올리지 않도록 z-index 를 0 으로 못박고, 화면마다
+   그림 바로 뒤에 둔다(cloud_test, 약속 쪽).
+
+   떠가는 것은 CSS 뿐이다. transform 만 움직이고 left · top 은 건드리지 않는다.
+   한 번 건너가는 데 걸리는 시간이 한 바퀴이고, 갔다가 되짚어 온다(alternate) —
+   이어 붙이지 않아도 끊기는 자리가 없다. */
+.cloud {
+  position: absolute; z-index: 0; pointer-events: none;
+  background-repeat: no-repeat; background-size: contain; background-position: center;
+  animation: cloud-drift var(--cloud-span, 300s) linear infinite alternate;
+}
+
+@keyframes cloud-drift {
+  from { transform: translate3d(var(--cloud-from, -7%), 0, 0); }
+  to   { transform: translate3d(var(--cloud-to, 7%), 0, 0); }
+}
+
+/* 멈춘 채로 보인다 — 사라지는 것이 아니다. */
+@media (prefers-reduced-motion: reduce) {
+  .cloud { animation-play-state: paused; }
+}
+
+/* 안개띠 — 마당의 산 밑 지평선. 가장 멀고 가장 느리다. */
+.cloud--mist {
+  left: -28%; top: 44%; width: 156%; aspect-ratio: 1280 / 307;
+  background-image: url("cloud-mist.webp");
+  opacity: var(--cloud-far); --cloud-span: var(--cloud-span-far);
+}
+
+/* 가장자리 흐름 — 산수화의 왼쪽에서 흘러든다. 그림의 왼쪽이 잘려 있는 것이 그 모양이다. */
+.cloud--drift {
+  left: -34%; top: 14%; width: 120%; aspect-ratio: 1280 / 565;
+  background-image: url("cloud-drift.webp");
+  opacity: var(--cloud-mid); --cloud-span: var(--cloud-span-mid);
+  --cloud-from: -4%; --cloud-to: 10%;
+}
+
+/* 구름무리 — 미륵당 위. 가장 가깝고 가장 빠르다. */
+.cloud--scroll {
+  left: -18%; top: 2%; width: 132%; aspect-ratio: 1280 / 594;
+  background-image: url("cloud-scroll.webp");
+  opacity: var(--cloud-near); --cloud-span: var(--cloud-span-near);
 }
 
 /* ── 네 개의 문 ─────────────────────────────────────────────────────
