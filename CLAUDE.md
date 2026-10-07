@@ -14,6 +14,10 @@
   `test/integration/` 과 `test/models/` 는 앱이 하기로 한 것 — 깨지면 버그이므로 고친다.
   가르는 기준: 사용자가 배신당했다고 느낄 수 있으면 약속, 취향이 달라졌을 뿐이면 결.
   성질은 기능이고, 값은 결이다 — 「늘면 더 드러난다」는 기능, 「0.30」은 결.
+- 안쪽 이름은 다루는 것을 가리키고, 화면 이름은 전각을 가리킨다.
+  `/days` 는 날짜를 다루니 맞고, 그 화면에 「미륵당」이 서는 것도 맞다 — 둘은
+  어긋난 것이 아니다. `sutra` · `copying` 과 「사경실」도 같다. 코드의 이름을
+  화면의 이름에 맞추려고 넓은 치환을 하지 않는다.
 - 새 젬이나 바깥 서비스를 더하기 전에 반드시 먼저 묻는다.
   `test/locks/form/dependency_test.rb` 가 Gemfile · package.json 의 항목 수를,
   `test/locks/promise/importmap_test.rb` 가 importmap 의 pin 수와 그 자리(저장소 안)를 지킨다.

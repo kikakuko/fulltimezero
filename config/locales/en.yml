@@ -304,7 +304,6 @@ en:
     new_year: A new year. Nothing has to begin.
 
   days:
-    title: Days
     legend: An ink dot marks a day with something on it. A faint ring marks a day kept clear. A darker date marks a day that was quiet.
     previous: Last month
     next: Next month
