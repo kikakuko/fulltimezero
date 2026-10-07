@@ -14,12 +14,27 @@ class CitationTest < ActionDispatch::IntegrationTest
 
   test "대조한 줄마다 원문과 본 곳과 대조한 날이 있다" do
     Citation::CHECKED.each do |key, checked|
-      %i[ko en source_ko source_en original seen checked_on].each do |field|
+      %i[ko en source_ko source_en original edition seen rendered_by checked_on].each do |field|
         assert checked[field].present?, "#{key} 의 #{field} 가 비었다"
       end
 
       assert_match(%r{\Ahttps://}, checked[:seen], "#{key} 의 본 곳이 주소가 아니다")
       assert_match(/\A\d{4}-\d{2}-\d{2}\z/, checked[:checked_on], "#{key} 의 대조한 날이 날짜가 아니다")
+    end
+  end
+
+  # 원문은 저작권이 없지만 번역은 있다. 화면에 뜨는 것은 옮긴 문장이므로
+  # 그것이 누구의 것인지가 표에 있어야 한다. 남의 번역본을 가져온 줄이 있으면
+  # 역자와 발행처가 SOURCES.md 에도 남아 있어야 한다.
+  test "옮긴 이가 적혀 있고, 남의 번역이면 출처 문서에 남아 있다" do
+    ours = Rails.root.join("docs/SOURCES.md").read
+
+    Citation::CHECKED.each do |key, checked|
+      who = checked[:rendered_by].to_s
+      assert who.present?, "#{key} 의 옮긴 이가 비었다"
+      next if who.start_with?("이 앱")
+
+      assert_includes ours, who, "#{key} 은 남의 번역인데 docs/SOURCES.md 에 역자와 발행처가 없다"
     end
   end
 
