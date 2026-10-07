@@ -7,7 +7,8 @@ Abiding.seed_from
 
 # 구경하는 자리의 씨앗 — 가입이 닫혀 있는 동안 손님 모두가 이것을 함께 본다.
 # 빈 화면이 아니라 살아 있던 자리여야 한다: 달이 차 있고, 탑에 글자가 쌓여 있고,
-# 코끼리가 길을 오르고, 미륵이 조금 드러나 있다. 몇 번을 돌려도 같은 결과가 된다.
+# 코끼리가 길의 앞머리에 서 있고(앉은 시간 서른두 시간 반 — 흰빛 스무 푼쯤),
+# 미륵이 조금 드러나 있다. 몇 번을 돌려도 같은 결과가 된다.
 #
 # 아무도 이 계정으로 들어오지 못한다 — 가입과 로그인의 길이 닫혀 있고, 비밀번호는
 # 아무도 모르는 값이다. 손님에게는 이메일을 묻지 않는다(Guest).
@@ -33,11 +34,16 @@ guest_abidings = Abiding.in_order.to_a
                       texture: Rest::TEXTURES[days_ago % Rest::TEXTURES.size])
 end
 
-# 앉음 — 둘은 자리를 골랐다.
-[ [ 3, guest_abidings[2] ], [ 11, nil ], [ 20, guest_abidings[5] ], [ 38, nil ] ].each do |days_ago, abiding|
+# 앉음 — 지난 반년에 쉰 번, 스무 분에서 한 시간. 합이 서른두 시간 반이라
+# 코끼리의 흰빛이 스무 푼쯤 된다 — 길의 앞머리에서 막 떠난 자리다.
+# 몇몇은 자리를 골랐다(고른 자리는 코끼리와 무관하다 — elephant_promise_test).
+GUEST_SITTINGS = [ 20, 30, 40, 45, 60 ].freeze
+50.times do |nth|
+  days_ago = (178 - nth * 3.5).round
   at = (guest_today - days_ago).in_time_zone(guest.time_zone).change(hour: 7)
-  guest.sittings.create!(mode: "sitting", sat_on: guest_today - days_ago, abiding: abiding,
-                         created_at: at, ended_at: at + 20.minutes)
+  guest.sittings.create!(mode: "sitting", sat_on: guest_today - days_ago,
+                         abiding: (guest_abidings[nth % 9] if nth % 4 == 0),
+                         created_at: at, ended_at: at + GUEST_SITTINGS[nth % 5].minutes)
 end
 
 # 비운 날 셋 — 미륵이 조금 드러난다.
@@ -53,9 +59,10 @@ end
 #
 #   gate@fulltimezero.test / fulltimezero   문을 아직 지나지 않은 계정. 온보딩부터.
 #   look@fulltimezero.test / fulltimezero   지난 두 달을 산 계정 — 쉰 날 열둘,
-#                                           비운 날 다섯, 앉음 여덟(자리 고른 것
-#                                           셋), 사경 예순네 자. 코끼리는 길 중간,
-#                                           미륵은 눈까지, 탑은 첫 층에 여섯 자 남음.
+#                                           비운 날 다섯, 지난 반년에 앉음 마흔다섯
+#                                           (합 스물아홉 시간 반), 사경 예순네 자.
+#                                           코끼리는 길의 앞머리, 미륵은 눈까지,
+#                                           탑은 첫 층에 여섯 자 남음.
 #
 # 몇 번을 돌려도 같은 결과가 된다 — 지우고 다시 심는다.
 if Rails.env.development?
@@ -94,12 +101,18 @@ if Rails.env.development?
     look.rests.create!(rested_on: today - days_ago, duration: Rest::DURATIONS.sample, texture: (Rest::TEXTURES + [ nil ]).sample)
   end
 
-  # 앉음 여덟 — 셋은 자리를 골랐다.
-  [ [ 2, abidings[3] ], [ 12, nil ], [ 19, abidings[0] ], [ 29, abidings[3] ], [ 36, nil ], [ 44, nil ], [ 52, nil ], [ 57, nil ] ].each do |days_ago, abiding|
+  # 앉음 — 지난 반년에 마흔다섯 번, 스무 분에서 한 시간. 합이 스물아홉 시간 반이라
+  # 흰빛이 열여덟 푼쯤이다. 무위 한 번은 따로 — 무위는 코끼리를 움직이지 않는다.
+  lengths = [ 20, 30, 40, 45, 60 ]
+  45.times do |nth|
+    days_ago = (176 - nth * 3.8).round
     at = (today - days_ago).in_time_zone(look.time_zone).change(hour: 7)
-    look.sittings.create!(mode: days_ago == 12 ? "nothing" : "sitting", sat_on: today - days_ago, abiding: abiding,
-                          created_at: at, ended_at: at + 20.minutes)
+    look.sittings.create!(mode: "sitting", sat_on: today - days_ago,
+                          abiding: (abidings[nth % 9] if nth % 3 == 0),
+                          created_at: at, ended_at: at + lengths[nth % 5].minutes)
   end
+  at = (today - 12).in_time_zone(look.time_zone).change(hour: 7)
+  look.sittings.create!(mode: "nothing", sat_on: today - 12, created_at: at, ended_at: at + 20.minutes)
 
   # 비운 날 다섯 — 미륵이 눈까지 올라온다.
   [ 4, 11, 33, 47, 58 ].each { |days_ago| look.clearings.create!(cleared_on: today - days_ago) }
