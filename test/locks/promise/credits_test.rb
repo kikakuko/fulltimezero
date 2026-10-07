@@ -56,7 +56,7 @@ class CreditsTest < ActionDispatch::IntegrationTest
     get credits_path
 
     page = Nokogiri::HTML(response.body)
-    borrowed = Object.new.extend(BellHelper).bell_file(:temple) ? 1 : 0
+    borrowed = (Object.new.extend(BellHelper).bell_file(:temple) ? 1 : 0) + Citation.borrowed.size
 
     assert_equal borrowed, page.css(".credit").size, "빌려온 것과 적힌 줄의 수가 다르다"
   end

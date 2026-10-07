@@ -13,6 +13,17 @@
   <% if bell_source(:temple) %>
     <h2 class="section"><%= t("credits.bell.name") %></h2>
     <p class="credit"><%= t("credits.bell.notice") %></p>
+  <% end %>
 
+  <%# 남이 옮긴 경의 말 — 출처 표시가 허락의 조건이라 여기 저절로 선다(Citation.borrowed).
+      우리가 옮긴 말은 빌려온 것이 아니므로 서지 않는다. 지금은 비어 있다. %>
+  <% if Citation.borrowed.any? %>
+    <h2 class="section"><%= t("credits.scripture.name") %></h2>
+    <% Citation.borrowed.each do |key, row| %>
+      <p class="credit credit--scripture">
+        <%= t("credits.scripture.line", source: t("compound.detail.#{key}.verse"),
+              from: row[:"source_#{I18n.locale}"], by: row[:rendered_by], license: row[:license]) %>
+      </p>
+    <% end %>
   <% end %>
 </div>

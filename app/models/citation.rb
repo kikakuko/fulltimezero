@@ -16,11 +16,21 @@
 #               「이 앱」이면 자체 산문이라 그대로 쓴다(docs/SOURCES.md 의 규칙 —
 #               한국어는 번역을 인용하지 않고 자체 산문으로 쓴다). 남의 번역본을
 #               가져온 줄이 있으면 역자와 발행처를 여기 적고 SOURCES.md 에도 남긴다.
+#   license     그 문장을 쓸 허락. 셋 중 하나이거나 빈 것 — CC0 · CC BY-NC(출처 표시
+#               필요) · own(우리가 옮긴 것). **남이 옮긴 말이면 비어 있을 수 없다**
+#               (citation_test, 약속). CC BY-NC-ND 는 발췌할 수 없으므로 여기 올 수 없다 —
+#               금지 목록은 docs/SOURCES.md 에 있다.
 #   checked_on  대조한 날.
 #
 # 출전을 새로 달려면 먼저 원문을 열어 보고 이 표에 한 줄을 더한다. 표에 없는
 # 출전이 화면에 서면 자물쇠가 깨진다.
 module Citation
+  # 쓸 수 있는 허락. 이 밖의 값이 오면 결 자물쇠가 깨진다(citation_form_test).
+  LICENSES = %w[CC0 CC\ BY-NC own].freeze
+  # 남이 옮긴 말에 붙을 수 있는 허락. own 은 우리 것에만.
+  BORROWABLE = %w[CC0 CC\ BY-NC].freeze
+  OURS = "이 앱"
+
   CHECKED = {
     sitting: {
       ko: "길들여진 마음이 즐거움을 가져온다",
@@ -31,6 +41,7 @@ module Citation
       edition: "Mahāsaṅgīti 판 팔리 원문(SuttaCentral bilara-data, dhp35:3–4)",
       seen: "https://suttacentral.net/api/bilarasuttas/dhp33-43/sujato",
       rendered_by: "이 앱 — 원문을 보고 옮긴 자체 산문",
+      license: "own",
       checked_on: "2026-10-07"
     },
     copying: {
@@ -45,6 +56,7 @@ module Citation
       edition: "대정장 T08n0235 권1, 0750a09–10(구마라집 역) — CBETA 원본 XML",
       seen: "https://raw.githubusercontent.com/cbeta-git/xml-p5/master/T/T08/T08n0235.xml",
       rendered_by: "이 앱 — 원문을 보고 옮긴 자체 산문",
+      license: "own",
       checked_on: "2026-10-07"
     },
     lecture: {
@@ -56,6 +68,7 @@ module Citation
       edition: "Mahāsaṅgīti 판 팔리 원문(SuttaCentral bilara-data, dhp204:4)",
       seen: "https://suttacentral.net/api/bilarasuttas/dhp197-208/sujato",
       rendered_by: "이 앱 — 원문을 보고 옮긴 자체 산문",
+      license: "own",
       checked_on: "2026-10-07"
     },
     gate: {
@@ -67,6 +80,7 @@ module Citation
       edition: "Mahāsaṅgīti 판 팔리 원문(SuttaCentral bilara-data, mn86:5.9)",
       seen: "https://suttacentral.net/api/bilarasuttas/mn86/sujato",
       rendered_by: "이 앱 — 원문을 보고 옮긴 자체 산문",
+      license: "own",
       checked_on: "2026-10-07"
     }
   }.freeze
@@ -74,4 +88,10 @@ module Citation
   def self.[](key) = CHECKED[key.to_sym]
 
   def self.checked?(key) = CHECKED.key?(key.to_sym)
+
+  # 우리가 옮긴 것인가. 옮긴 이가 「이 앱」으로 시작하면 우리 것이다.
+  def self.ours?(row) = row[:rendered_by].to_s.start_with?(OURS)
+
+  # 남에게서 빌려온 줄 — 「쓰인 것들」에 저절로 선다. 지금은 비어 있다.
+  def self.borrowed = CHECKED.select { |_, row| !ours?(row) && BORROWABLE.include?(row[:license].to_s) }
 end

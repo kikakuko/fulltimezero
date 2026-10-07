@@ -40,6 +40,28 @@ class CitationTest < ActionDispatch::IntegrationTest
 
   # 화면에 나가는 문장이 대조한 그 문장인지. 문장을 고치면 여기가 울어 다시
   # 대조하게 한다 — 고친 문장에 옛 출전이 따라붙지 않도록.
+  # 원문은 저작권이 없지만 번역은 있다. 남이 옮긴 말을 허락 없이 쓰면 그 사람에게도,
+  # 그것을 읽는 사람에게도 거짓이다. 우리가 옮긴 것은 own 이거나 비어 있고, 남의 것은
+  # CC0 이거나 CC BY-NC 여야 한다 — 발췌를 막는 허락(CC BY-NC-ND)은 여기 올 수 없다.
+  test "남이 옮긴 경의 말은 허락이 적혀 있다" do
+    Citation::CHECKED.each do |key, row|
+      if Citation.ours?(row)
+        assert_includes [ nil, "", "own" ], row[:license], "#{key} 는 우리가 옮긴 것인데 남의 허락이 붙었다"
+      else
+        assert_includes Citation::BORROWABLE, row[:license].to_s,
+          "#{key} 는 남이 옮긴 말인데 쓸 허락이 적혀 있지 않다(#{row[:license].inspect})"
+      end
+    end
+  end
+
+  # 빌려온 줄은 「쓰인 것들」에 저절로 선다 — 출처 표시가 허락의 조건이기 때문이다.
+  test "빌려온 경의 말마다 쓰인 것들에 한 줄이 선다" do
+    get credits_path(locale: :ko)
+
+    assert_equal Citation.borrowed.size, css_select(".credit--scripture").size,
+      "빌려온 경의 말과 쓰인 것들의 줄 수가 다르다"
+  end
+
   test "화면의 경구는 대조한 문장과 글자 그대로 같다" do
     Citation::CHECKED.each do |key, checked|
       %w[ko en].each do |locale|

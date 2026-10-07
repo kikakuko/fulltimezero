@@ -436,6 +436,9 @@ ko:
     bell: 
       name: 범종의 소리
       notice: "본 저작물은 '국립경주박물관'에서 2016년 공공누리 제3유형으로 개방한 '성덕대왕신종 종소리'를 이용하였으며, 해당 저작물은 '국립경주박물관, gyeongju.museum.go.kr'에서 무료로 이용할 수 있습니다."
+    scripture:
+      name: 경의 말
+      line: "「%{source}」 — %{from}. %{by} 옮김, %{license}."
 
   bells:
     listen: 듣는다
