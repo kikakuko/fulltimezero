@@ -1,4 +1,48 @@
+<%# 법이 적으라 한 것을 이 앱의 말투로 적는다 — PIPA 제30조(필수 기재사항)와
+    GDPR 제13조(수령인의 범주). 숫자는 화면에 두지 않으므로 나이도 날수도
+    글자로 적는다. 맡는 곳이 정해지면 로케일의 trustees 만 고치면 된다. %>
 <h1 class="title"><%= t("privacy.title") %></h1>
-<% %w[collect own export delete third_party].each do |key| %>
-  <p><%= t("privacy.#{key}") %></p>
-<% end %>
+
+<div class="guide">
+  <% %w[collect own export delete third_party].each do |key| %>
+    <p><%= t("privacy.#{key}") %></p>
+  <% end %>
+
+  <% %w[keeping rights disposal safety].each do |section| %>
+    <h2 class="section"><%= t("privacy.#{section}.title") %></h2>
+    <p><%= t("privacy.#{section}.body") %></p>
+  <% end %>
+
+  <h2 class="section"><%= t("privacy.trustees.title") %></h2>
+  <p><%= t("privacy.trustees.body") %></p>
+
+  <%# TODO: 서버 회사와 메일 회사가 정해지면 locales 의 privacy.trustees 에
+      이름과 나라를 적는다. 맡기기 전에 처리위탁 계약서(또는 DPA)를 먼저 받는다. %>
+  <table class="trustees">
+    <thead>
+      <tr>
+        <th><%= t("privacy.trustees.work") %></th>
+        <th><%= t("privacy.trustees.who") %></th>
+        <th><%= t("privacy.trustees.where") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% %w[server mail].each do |trustee| %>
+        <tr>
+          <td><%= t("privacy.trustees.#{trustee}") %></td>
+          <td><%= t("privacy.trustees.undecided") %></td>
+          <td><%= t("privacy.trustees.undecided") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2 class="section"><%= t("privacy.age.title") %></h2>
+  <p><%= t("privacy.age.body") %></p>
+
+  <h2 class="section"><%= t("privacy.officer.title") %></h2>
+  <p>
+    <%= t("privacy.officer.body") %>
+    <%= mail_to t("privacy.officer.mail") %>
+  </p>
+</div>

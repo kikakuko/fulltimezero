@@ -393,6 +393,34 @@ en:
     export: You can download everything you have written, at any time.
     delete: Delete your account and the records go with it, at once.
     third_party: No advertising, no trackers, no third-party analytics.
+    keeping:
+      title: How long it stays
+      body: Only as long as the account exists. It serves one purpose — giving a person their own records back. Delete the account and the records go with it, without delay. The one copy kept apart is a nightly backup, and the next night's backup writes over it.
+    rights:
+      title: What you can ask for
+      body: You may see your records, correct them, erase them, take them with you, and ask us to stop handling them. Seeing, downloading and erasing are in the settings. Anything else goes to the address below and is answered within ten days. Someone may act on your behalf. A supervisory authority can be told if the answer does not satisfy you.
+    disposal:
+      title: How it is erased
+      body: Erased records are not kept in any form that can be restored. They go from the database, and the next backup writes over what is left. Nothing is copied onto paper.
+    safety:
+      title: How it is kept safe
+      body: Traffic travels wrapped in encryption. Passwords are stored only in a form that cannot be turned back. One key reaches the server, and a backup leaves it only after being locked with a public key. There is no admin screen for reading anyone's records.
+    trustees:
+      title: Who else handles it
+      body: Two companies do work the app cannot do by itself. These are the categories of recipients, and the records go nowhere else.
+      work: The work
+      who: The company
+      where: Where it sits
+      server: Running the server and holding the records
+      mail: Sending the letter that resets a password
+      undecided: Not chosen yet
+    age:
+      title: Fourteen
+      body: Anyone under fourteen cannot use this. We decided it that way so that no one has to be asked their age — asking for a birthday would make the promise of one email address untrue.
+    officer:
+      title: Who is answerable
+      body: The person answerable for personal data is {{CPO_NAME}}. Every request and question about personal data arrives here.
+      mail: privacy@fulltimezero.com
 
   passwords:
     sent: If an account exists for that address, a reset letter is on its way.

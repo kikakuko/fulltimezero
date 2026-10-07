@@ -549,6 +549,22 @@ input[type="text"] {
   text-decoration-color: var(--rule);
 }
 
+/* 처리방침의 절 머리 — 법이 적으라 한 것을 끊어 읽게 한다. 안내의
+   본문은 고딕 15px 이므로, 명조를 쓰는 이 자리는 제 이름으로 선다. */
+.section { font: var(--type-title); color: var(--ink); margin: 2.75rem 0 1rem; }
+
+/* 맡기는 곳 — 빈 표로 선다. 맡는 곳이 정해지면 로케일만 고친다. */
+.trustees { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2.5rem; }
+.trustees th {
+  font: var(--type-label); color: var(--ink-soft); text-align: left;
+  padding: 0 0.75rem 0.5rem 0; border-bottom: 1px solid var(--rule);
+}
+.trustees td {
+  font: var(--type-body); color: var(--ink-soft); text-align: left;
+  padding: 0.75rem 0.75rem 0.75rem 0; vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+
 /* ── 네 개의 문 ─────────────────────────────────────────────────────
    화면 아래에 낮고 조용하게. 아이콘도 이모지도 없이 글자만.
    지금 서 있는 자리만 조금 진하다. */
