@@ -13,7 +13,8 @@
 # 필요한 것
 #   BACKUP_CERT   공개키 인증서의 자리(기본 /rails/backup/backup-cert.pem)
 #   BACKUP_DIR    뜬 것을 두는 자리(기본 /rails/backup)
-#   BACKUP_REMOTE 보낼 곳. 비어 있으면 보내지 않고 서버에 둔다(아래 「보내기」).
+#   BACKUP_REPO   백업을 올릴 사설 깃허브 저장소(git@github.com:…/fulltimezero-backup.git)
+#   BACKUP_REMOTE 또는 rclone 의 이름. 둘 다 비어 있으면 서버에만 둔다(아래 「보내기」).
 set -euo pipefail
 
 DB="${DATABASE_PATH:-/rails/storage/production.sqlite3}"
@@ -36,14 +37,32 @@ openssl cms -encrypt -binary -aes-256-cbc -in "$DIR/$NAME" -outform DER \
 rm -f "$DIR/$NAME"
 echo "떴다: $DIR/$NAME.cms ($(du -h "$DIR/$NAME.cms" | cut -f1))"
 
-# 3. 보내기 — 서버 밖으로. 보낼 곳이 정해지면 BACKUP_REMOTE 에 rclone 의 이름을 적는다.
-#    (예: BACKUP_REMOTE=backup:fulltimezero — rclone 은 서버에 한 번 깔고 한 번 설정한다)
-#    아직 없으면 서버에 둔 채로 둔다. 서버가 사라지면 백업도 사라진다는 뜻이다.
-if [ -n "${BACKUP_REMOTE:-}" ]; then
+# 3. 보내기 — 서버 밖으로.
+#
+#    첫째 길: 사설 깃허브 저장소(BACKUP_REPO). 계정을 더 만들지 않아도 되고, 판이
+#    쌓이는 것은 깃이 알아서 한다. 늘 같은 이름으로 덮어쓰므로 저장소에는 파일 하나뿐이고,
+#    지난 판은 역사에 남는다. 서버에는 쓰기 열쇠(배포 키) 하나만 둔다.
+#    둘째 길: rclone(BACKUP_REMOTE).
+#    아무것도 없으면 서버에 둔 채로 둔다 — 서버가 사라지면 백업도 사라진다는 뜻이다.
+if [ -n "${BACKUP_REPO:-}" ]; then
+  CLONE="${BACKUP_CLONE:-$DIR/repo}"
+  [ -d "$CLONE/.git" ] || git clone --depth 1 "$BACKUP_REPO" "$CLONE"
+  cp "$DIR/$NAME.cms" "$CLONE/fulltimezero.sqlite3.cms"
+  git -C "$CLONE" add fulltimezero.sqlite3.cms
+  # 같은 날 두 번 떠도 바뀐 것이 없으면 커밋하지 않는다.
+  if git -C "$CLONE" diff --cached --quiet; then
+    echo "바뀐 것이 없다 — 올리지 않는다."
+  else
+    git -C "$CLONE" -c user.name="fulltimezero" -c user.email="backup@fulltimezero" \
+        commit -q -m "밤의 백업 — $STAMP"
+    git -C "$CLONE" push -q origin HEAD
+    echo "올렸다: $BACKUP_REPO (fulltimezero.sqlite3.cms)"
+  fi
+elif [ -n "${BACKUP_REMOTE:-}" ]; then
   rclone copy "$DIR/$NAME.cms" "$BACKUP_REMOTE" --no-traverse
   echo "보냈다: $BACKUP_REMOTE/$NAME.cms"
 else
-  echo "보낼 곳이 없다(BACKUP_REMOTE). 서버에만 남는다 — DEPLOY.md 의 「백업을 둘 곳」."
+  echo "보낼 곳이 없다(BACKUP_REPO · BACKUP_REMOTE). 서버에만 남는다 — DEPLOY.md 의 「백업을 둘 곳」."
 fi
 
 # 4. 서버에 남기는 것은 며칠 치뿐. 밖에 보낸 것은 그쪽 규칙을 따른다.

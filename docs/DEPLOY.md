@@ -22,7 +22,7 @@ Kamal 로 한 대의 서버에 올린다(`config/deploy.yml`). 데이터베이�
 | `<메일계정>` `<메일비밀번호>` | 메일 회사가 준 것 | `.kamal/secrets` 의 `SMTP_USER_NAME` · `SMTP_PASSWORD` |
 | — | 가입을 받는가. **기본은 받지 않음** | `SIGNUPS`(여는 말은 `true` 하나) |
 | — | 검색에 보이는가. **기본은 막음** | `SEARCHABLE` |
-| `<백업보낼곳>` | 백업을 둘 바깥 저장소(rclone 의 이름) | 서버의 `BACKUP_REMOTE` |
+| `<백업저장소>` | 백업을 올릴 사설 깃허브 저장소 | 서버의 `BACKUP_REPO` |
 
 환경변수는 배포하는 맥의 셸에 둔다. 예(비밀값은 여기 두지 않는다):
 
@@ -170,27 +170,29 @@ scp ~/.secrets/fulltimezero-backup-cert.pem root@<서버IP>:/rails/backup/backup
 - 여는 열쇠를 잃으면 백업도 잃는다. 맥 밖에 한 벌 더 둔다(종이에 적거나, 다른 기기에).
 - 여는 열쇠를 서버에 두지 않는다. 그 순간 이 구조의 뜻이 사라진다.
 
-## 9. 백업을 둘 곳
+## 9. 백업을 둘 곳 — 사설 깃허브 저장소
 
-밤마다 뜬 것을 **서버 밖**으로 보낸다. 서버가 사라지는 날 백업도 함께 사라지면 안 된다.
+계정을 더 만들지 않는다. 사설 저장소 하나에 암호화된 덩어리를 올린다. 판이 쌓이는 것은
+깃이 알아서 하고, 저장소에는 늘 같은 이름의 파일 하나만 있다 — 지난 판은 역사에 남는다.
 
-- 값싸고 단순한 곳이면 된다(Backblaze B2 · Cloudflare R2 · Hetzner Storage Box 등).
-  1GB 도 쓰지 않으므로 한 달 몇백 원이다.
-- 계정을 만들고 **이 백업 전용 열쇠**를 발급한다(다른 것에 손댈 수 없는 권한으로).
-- 서버에 rclone 을 한 번 깔고 한 번 설정한다.
+1. 깃허브에서 **사설(Private) 저장소**를 하나 만든다. 이름은 `fulltimezero-backup`.
+   설명 · README · 라이선스 없이 빈 채로 만든다.
+2. 서버에서 그 저장소에만 쓰는 열쇠를 만든다. **배포 키(deploy key)라 이 저장소 하나에만
+   닿는다** — 다른 저장소에는 손대지 못한다.
 
 ```
 ssh root@<서버IP>
-apt install -y rclone
-rclone config          # 새 remote 이름을 backup 으로, 저장소 회사를 고르고 열쇠를 넣는다
+ssh-keygen -t ed25519 -f /root/.ssh/backup -N "" -C "fulltimezero backup"
+cat /root/.ssh/backup.pub
+printf 'Host github-backup\n  HostName github.com\n  User git\n  IdentityFile /root/.ssh/backup\n' >> /root/.ssh/config
 ```
 
-- 서버의 환경변수에 `BACKUP_REMOTE=backup:fulltimezero` 를 둔다.
-- 밤마다 한 번 돌게 한다(서버에서).
+3. 그 공개키를 저장소의 **Settings → Deploy keys → Add deploy key** 에 붙이고
+   **「Allow write access」를 켠다.**
+4. 백업이 그리로 가게 한다 — `BACKUP_REPO=git@github-backup:<계정>/fulltimezero-backup.git`.
 
-```
-(crontab -l 2>/dev/null; echo "17 3 * * * BACKUP_REMOTE=backup:fulltimezero /rails/bin/backup >> /var/log/fulltimezero-backup.log 2>&1") | crontab -
-```
+**암호화된 덩어리만 올라간다.** 저장소가 새어도 여는 열쇠가 없으면 열리지 않는다 —
+개인키는 맥에만 있다(§8). 하루 한 번 올리면 한 해에 백여 메가쯤 쌓인다.
 
 ## 10. 첫 배포
 
@@ -260,7 +262,7 @@ export BACKUP_DIR=/root/backup
 /usr/local/bin/fulltimezero-backup
 
 cat > /etc/cron.d/fulltimezero-backup <<'EOF'
-15 19 * * * root DATABASE_PATH=/var/lib/docker/volumes/fulltimezero_storage/_data/production.sqlite3 BACKUP_DIR=/root/backup /usr/local/bin/fulltimezero-backup >> /var/log/fulltimezero-backup.log 2>&1
+15 19 * * * root DATABASE_PATH=/var/lib/docker/volumes/fulltimezero_storage/_data/production.sqlite3 BACKUP_DIR=/root/backup BACKUP_REPO=git@github-backup:<계정>/fulltimezero-backup.git /usr/local/bin/fulltimezero-backup >> /var/log/fulltimezero-backup.log 2>&1
 EOF
 ```
 
@@ -272,6 +274,35 @@ EOF
 다만 그 대비는 「더 자주 뜨기」가 아니라 **「서버 밖에 두기」**다 — 기록이 하루 몇 줄이라
 하루 한 번으로 잃을 것이 적고, 서버가 통째로 사라지는 쪽이 진짜 위험이다. 그래서
 `BACKUP_REMOTE` 를 먼저 정하고, 배포 직전에도 한 번 뜬다.
+
+## 11.7 서버가 사라졌을 때 — 한 시간 안에 다시 세운다
+
+Oracle 의 무료 기계는 이레 동안 쓰임이 낮으면 회수 대상이다. 회수가 중지인지 삭제인지는
+오라클 문서에 적혀 있지 않다. **사라질 것을 전제로 삼는다** — 적어 두면 사고가 아니라
+절차다. 아홉 단계이고, 사람이 기다리는 시간(인스턴스 생성과 인증서 발급)을 빼면 손은
+몇 분이다.
+
+1. **새 인스턴스.** Compute → Create instance. 이름 `fulltimezero`, Ubuntu 24.04,
+   같은 shape(A1 이면 arm64, 마이크로면 amd64), 공인 IPv4 자동 할당, SSH 공개키 붙여넣기.
+2. **포트.** 쓰던 VCN 이 남아 있으면 Security List 의 80 · 443 규칙도 남아 있다. 새로
+   만들었으면 다시 연다(TCP · 0.0.0.0/0 · 80 과 443).
+3. **서버 손질.** 도커 · sqlite3 · 방화벽 · 기록 짧게 · 스왑(1GB 기계면) — §3 의 명령 그대로.
+4. **DNS.** Porkbun 의 A 레코드 셋(`@` · `www` · `app`)을 새 IP 로 고친다. TTL 이 열 분이라
+   십여 분이면 돈다. **DNS 가 먼저 돌아야 인증서가 난다.**
+5. **환경변수.** 맥에서 `export DEPLOY_SERVER_IP=<새IP>`(결이 바뀌었으면 `DEPLOY_ARCH` 도).
+6. **올리기.** `bin/kamal setup`. 이미지는 서버에서 짓는다.
+7. **되살리기.** 백업을 맥에서 열어(§12) 서버에 넣는다:
+
+```
+bin/kamal app stop
+scp restored.sqlite3 root@<새IP>:/var/lib/docker/volumes/fulltimezero_storage/_data/production.sqlite3
+bin/kamal app start
+```
+
+8. **씨앗.** `bin/kamal app exec 'bin/rails db:seed'` — 경전과 아홉 자리, 그리고 구경하는
+   자리의 씨앗이 다시 선다.
+9. **확인.** §11 의 목록을 그대로 한 번. 그리고 백업을 다시 세운다(§11.6 · §9) — 새 서버에는
+   배포 키도 cron 도 없다. **이것을 잊으면 다음 사라짐은 되돌릴 수 없다.**
 
 ## 12. 복구 — 한 달에 한 번 연습한다
 
