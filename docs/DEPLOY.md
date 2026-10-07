@@ -30,6 +30,7 @@ Kamal 로 한 대의 서버에 올린다(`config/deploy.yml`). 데이터베이�
 export APP_HOST=<도메인>
 export DEPLOY_SERVER_IP=<서버IP>
 export REGISTRY_SERVER=ghcr.io
+export DEPLOY_ARCH=arm64            # Ampere A1 이면 arm64, AMD 마이크로면 amd64
 export REGISTRY_USER=<저장소계정>
 export MAIL_FROM=no-reply@<도메인>
 export SMTP_ADDRESS=<메일서버>
@@ -49,12 +50,31 @@ export SMTP_ADDRESS=<메일서버>
 
 ## 3. 서버를 만든다
 
-**고른 곳: Vultr 서울(`icn`) · Cloud Compute Regular `vc2-2c-2gb` · 월 $15.**
-2코어 · 2GB · 65GB SSD. 까닭 셋 — 서울에 자리가 있고(적정성 결정 덕에 유럽 사람의
-기록도 그대로 둘 수 있다), 만들면 한둘 분 안에 뜨고, Kamal 이 그대로 가는 리눅스 한
-대다. 카카오클라우드 `t1i.small`(월 15,912원)이 더 싸고 서류가 한국어지만 처리위탁
-계약서를 주는지 물어봐야 해서 오늘은 고르지 않았다 — 가입을 열 때 다시 견준다.
-Oracle 무료는 본인 확인과 ARM 용량 때문에 「오늘」을 보장하지 못한다.
+**고른 곳: Oracle Cloud Always Free · 홈 리전 서울.** 값이 0원이고 진짜 리눅스 한 대라
+Kamal 설정이 그대로 간다(Fly.io · Render 를 버린 까닭이 이것이다). 유료(Vultr 서울)로
+갔던 것은 「오늘 보려면」이라는 까닭이었고, 그것은 정한 적 없는 조건이었다 — 되돌렸다.
+
+- **기계는 둘 중 하나.** `VM.Standard.A1.Flex`(Ampere, arm64)가 첫째다. 2026년부터 무료
+  몫이 2 OCPU · 12GB 로 줄었고, 그 안에서 1 OCPU · 6GB 면 넉넉하다. 서울은 「Out of host
+  capacity」 가 잦아 못 잡을 수 있다.
+- **못 잡으면 `VM.Standard.E2.1.Micro`**(AMD, amd64, 1/8 OCPU · 1GB). 영구 무료이고 대개
+  바로 잡힌다. **스왑 2GB 를 먼저 붙이고 올린다**(아래). 앱은 1GB 에서 돌지만 짓는 일이
+  빡빡하다.
+- 기계의 결이 바뀌면 `DEPLOY_ARCH` 를 함께 바꾼다 — A1 은 `arm64`(기본), 마이크로는 `amd64`.
+- 부트 볼륨은 47GB 이상이어야 하고 무료 몫은 전부 합쳐 200GB 다.
+- 운영체제는 **Ubuntu 24.04 LTS**(Platform Images → Ubuntu).
+- 만들 때 SSH 공개키를 붙여넣는다(맥의 `~/.ssh/id_ed25519.pub`).
+- **Oracle 은 80 · 443 이 기본으로 막혀 있다.** VCN 의 Security List 에 ingress 둘을 손으로
+  연다 — TCP, 0.0.0.0/0, 포트 80 과 443.
+
+### 1GB 기계에 스왑 먼저
+
+```
+ssh ubuntu@<서버IP>
+sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+sudo mkswap /swapfile && sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
 
 - 다른 곳이어도 조건은 같다. **공유 vCPU 2코어 · 메모리 2GB · 디스크 40GB** 면 충분하다 —
   Rails 8 에 SQLite 하나다. 모자라면 그때 올린다.
@@ -246,6 +266,12 @@ EOF
 
 보낼 곳(`BACKUP_REMOTE`)이 정해지기 전에는 서버에만 남는다 — 서버가 사라지면 백업도
 사라진다는 뜻이다. 가입을 열기 전에 반드시 바깥으로 보내게 한다(§9).
+
+**Oracle 에서는 이것이 더 급하다.** 이레 동안 CPU · 네트워크(A1 은 메모리까지)가 모두
+스물 푼 아래면 그 기계는 회수 대상이 된다. 하루 몇 사람 쓰는 앱이 바로 그 조건이다.
+다만 그 대비는 「더 자주 뜨기」가 아니라 **「서버 밖에 두기」**다 — 기록이 하루 몇 줄이라
+하루 한 번으로 잃을 것이 적고, 서버가 통째로 사라지는 쪽이 진짜 위험이다. 그래서
+`BACKUP_REMOTE` 를 먼저 정하고, 배포 직전에도 한 번 뜬다.
 
 ## 12. 복구 — 한 달에 한 번 연습한다
 

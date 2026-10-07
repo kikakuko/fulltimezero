@@ -98,7 +98,9 @@ asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
-  arch: amd64
+  # 서버의 결을 따른다 — Oracle 의 Ampere A1 은 arm64, AMD 마이크로는 amd64.
+  # 서버에서 짓기 때문에 이 값이 서버와 다르면 짓지 못한다.
+  arch: <%= ENV.fetch("DEPLOY_ARCH", "arm64") %>
   # 이미지는 서버에서 짓는다. 맥에는 도커 데몬을 두지 않는다 — 도커 CLI 하나면 된다.
   # 애플 실리콘에서 amd64 를 흉내내는 것보다 서버에서 제 결로 짓는 것이 빠르고,
   # 맥에 깔 것이 줄어든다(Docker Desktop 을 쓰지 않는다).
