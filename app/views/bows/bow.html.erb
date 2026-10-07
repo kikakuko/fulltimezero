@@ -1,0 +1,23 @@
+<%# 절하는 자리.
+    앱이 하는 일은 칸을 넘기는 것뿐이다 — 속도는 사람이 정한다. 한 배를 마치고
+    누르면 알 하나가 꿰이고, 그 한 배가 다시 보인다. 숫자는 어디에도 없다.
+    남은 알도, 지난 시간도, 몇 번째인지도 적지 않는다. %>
+<div class="bow" data-controller="bow"
+     data-bow-marks-value="<%= @marks.to_json %>"
+     data-bow-lines-value="<%= t("bows.frames.#{@kind}").to_json %>"
+     data-bow-run-value="<%= flash[:bowed].present? %>">
+  <%# 부위별 리그가 들어올 자리. 칸은 data-frame 으로 넘어간다 — 보간하지 않는다. %>
+  <span class="bow__figure" data-bow-target="figure" data-kind="<%= @kind %>" data-frame="0" aria-hidden="true"></span>
+
+  <p class="bow__line" data-bow-target="line"><%= t("bows.frames.#{@kind}").first %></p>
+
+  <%= render "rosary", rosary: @rosary, closed: flash[:closed].present? %>
+
+  <% unless guest? %>
+    <%= button_to t("bows.press"), beads_path(kind: @kind), class: "button-primary" %>
+  <% end %>
+</div>
+
+<p class="tiny" style="margin-top:2.5rem">
+  <%= link_to t("bows.back"), bows_path, class: "soft" %>
+</p>

@@ -1,0 +1,15 @@
+<%# 고르는 자리. 설명을 쓰지 않는다 — 그림만 보이고 고른다(§2).
+    어느 쪽이 깊다거나 낫다고 말하지 않는다(§5). 고르는 것은 사람의 몫이다.
+
+    자세 그림은 아직 오지 않았다. 들어올 것은 그림 여러 장이 아니라 부위별 SVG
+    한 벌과 자세마다의 각도다 — 코끼리와 같은 짜임(data-pivot)이다. 그때
+    .bow__figure 안에 선다. 지금은 빈 자리다. %>
+<h1 class="title"><%= t("bows.title") %></h1>
+
+<div class="bows">
+  <% Bowing::FORMS.each_key do |kind| %>
+    <%= link_to bow_path(kind), class: "bows__pick", "aria-label": t("bows.kinds.#{kind}") do %>
+      <span class="bow__figure" data-kind="<%= kind %>" aria-hidden="true"></span>
+    <% end %>
+  <% end %>
+</div>

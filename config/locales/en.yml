@@ -150,6 +150,7 @@ en:
       taken_on: "Taken on"
       cleared: "Days kept clear"
       copyings: "Sutra copying"
+      beads: "Rosary"
 
   guide:
     copying: "There is also the rest of copying a sutra, one character at a time."
@@ -385,6 +386,40 @@ en:
   maitreya:
     line: "Stopping is already Maitreya"
     back: "Back to the courtyard"
+
+  bows:
+    title: Bowing
+    press: One bow
+    back: Back
+    kinds:
+      korean: Korean full bow
+      tibetan: Tibetan full-length prostration
+    frames:
+      korean:
+        - Standing, palms together
+        - Bending at the waist, palms still together
+        - Kneeling down
+        - Setting both hands on the floor
+        - Forehead to the floor
+        - Palms turned up, raised beside the ears
+        - Palms turned down to the floor again
+        - Lifting the forehead
+        - Straightening the upper body
+        - Rising to the feet
+        - Standing again, palms together
+      tibetan:
+        - Standing, palms together
+        - Joined hands touch the crown of the head
+        - Joined hands touch the throat
+        - Joined hands touch the heart
+        - Hands part and the body folds forward
+        - Kneeling down
+        - Hands slide forward onto the floor
+        - The whole body stretches out along the floor
+        - Forehead to the floor
+        - Hands draw back toward the body
+        - Knees come up and the body rises
+        - Standing again, palms together
 
   guest:
     line: A place to look around. Nothing done here is kept.

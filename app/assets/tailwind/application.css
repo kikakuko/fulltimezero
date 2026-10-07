@@ -575,6 +575,38 @@ input[type="text"] {
   border-bottom: 1px solid var(--rule);
 }
 
+/* ── 절과 염주 ───────────────────────────────────────────────────────
+   고르는 자리에는 글이 없다 — 그림만 보이고 고른다(§2). 자세 그림은 아직
+   오지 않았다. 들어올 것은 그림 여러 장이 아니라 부위별 SVG 한 벌과 자세마다의
+   각도다 — 코끼리와 같은 짜임(data-pivot · transform-box: view-box)이다.
+   칸은 data-frame 으로 넘어가고 보간하지 않는다(하드 컷).
+
+   염주는 꿰인 알만 그린다. 그래서 알이 늘면 호가 자라고, 백여덟이 차면 원이
+   저절로 닫힌다. 원은 그 한 번만 나타난다 — 매 절마다 뜨면 닳고, 도상을 넷으로
+   못박은 §2 에 다섯째가 생긴다. */
+.bows { display: grid; gap: 1.5rem; margin-top: 2.5rem; }
+.bows__pick { display: block; border: 1px solid var(--rule); background: var(--paper); }
+.bow__figure { display: block; width: 100%; aspect-ratio: 800 / 520; }
+
+.bow { display: grid; justify-items: center; gap: 1.75rem; margin-top: 1.5rem; }
+.bow__line { font: var(--type-body); color: var(--ink-soft); margin: 0; text-align: center; }
+
+.rosary { display: block; width: min(56vw, 220px); height: auto; }
+.rosary__bead { fill: var(--ink); opacity: 0.72; }
+/* 닫히는 원 — 한 번 떠올랐다 가라앉아 그 자리에 남는다. 튕기지 않는다. */
+.rosary__ring {
+  fill: none; stroke: var(--ink); stroke-width: 0.6; opacity: 0;
+  animation: rosary-close 2.4s var(--ease-light) forwards;
+}
+@keyframes rosary-close {
+  from { opacity: 0; }
+  40% { opacity: 0.5; }
+  to { opacity: 0.22; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rosary__ring { animation: none; opacity: 0.22; }
+}
+
 /* ── 산수화의 구름 ───────────────────────────────────────────────────
    그림 셋은 색이 그대로 있다 — 흰 구름이라 밝기를 알파로 바꾸면 몸통이 사라지고
    가는 먹선만 남는다. 그래서 색 변수를 따로 만들지 않았다. 하루의 때는 구름을

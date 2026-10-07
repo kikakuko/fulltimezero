@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :plans, dependent: :destroy
   has_many :clearings, dependent: :destroy
   has_many :copyings, dependent: :destroy
+  has_many :beads, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

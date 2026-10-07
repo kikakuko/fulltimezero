@@ -53,7 +53,7 @@ class ExportTest < ActiveSupport::TestCase
   test "앱의 것은 사용자의 것이 아니므로 담지 않는다" do
     keys = JSON.parse(Export.new(@user).json).keys
 
-    assert_equal %w[exported_on account rests sittings plans cleared_days copyings], keys
+    assert_equal %w[exported_on account rests sittings plans cleared_days copyings beads], keys
   end
 
   # 데이터는 언제든 통째로 들고 나갈 수 있다(제7조 — 개정하지 않는 조항).

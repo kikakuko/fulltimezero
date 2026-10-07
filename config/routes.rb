@@ -55,6 +55,12 @@ Rails.application.routes.draw do
     resources :copyings, only: %i[new create]
     get "pagoda" => "pagodas#show", as: :pagoda
 
+    # 절 — 두 벌 가운데 하나를 고르고, 한 배마다 알 하나를 꿴다.
+    # 속도는 사람이 정한다. 앱이 세는 길은 없다.
+    get  "bows" => "bows#show", as: :bows
+    get  "bows/:kind" => "bows#bow", as: :bow
+    post "beads" => "beads#create", as: :beads
+
     # 날들 — 빈 일정. 달력의 날짜 숫자만이 이 앱에서 허용되는 숫자다.
     get   "days" => "days#index", as: :days
     get   "days/:date" => "days#show", as: :day

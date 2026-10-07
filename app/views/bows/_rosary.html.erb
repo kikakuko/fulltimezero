@@ -1,0 +1,12 @@
+<%# 염주. 꿰인 알만 그린다 — 빈 자리는 그리지 않는다. 그래서 알이 늘면 호가
+    자라고, 백여덟이 차면 원이 저절로 닫힌다.
+    원(圓)은 그 한 번만 나타난다. 매 절마다 뜨면 백여덟 번 되풀이되어 닳고,
+    도상을 넷으로 못박은 §2 에 다섯째가 생긴다. %>
+<svg class="<%= class_names("rosary", "rosary--closed": closed) %>" viewBox="-60 -60 120 120" aria-hidden="true">
+  <% if closed %>
+    <circle class="rosary__ring" cx="0" cy="0" r="<%= Rosary::RADIUS %>" />
+  <% end %>
+  <% rosary.beads.each do |bead| %>
+    <circle class="rosary__bead" cx="<%= bead[:x] %>" cy="<%= bead[:y] %>" r="2.1" />
+  <% end %>
+</svg>

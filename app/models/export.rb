@@ -19,7 +19,7 @@ class Export
   # 세션은 누구의 것인지 말고 아무것도 담지 않으므로 내보낼 것이 없다.
   SECTIONS = {
     rests: :rests, sittings: :sittings, plans: :plans,
-    clearings: :cleared_days, copyings: :copyings
+    clearings: :cleared_days, copyings: :copyings, beads: :beads
   }.freeze
 
   attr_reader :user, :on
@@ -39,7 +39,8 @@ class Export
       sittings: sittings,
       plans: plans,
       cleared_days: clearings,
-      copyings: copyings
+      copyings: copyings,
+      beads: beads
     )
   end
 
@@ -50,7 +51,8 @@ class Export
       section(t("settings.export.sittings"), sitting_lines),
       section(t("settings.export.plans"), plan_lines),
       section(t("settings.export.cleared"), clearing_lines),
-      section(t("settings.export.copyings"), copying_lines)
+      section(t("settings.export.copyings"), copying_lines),
+      section(t("settings.export.beads"), bead_lines)
     ]
 
     sections.compact.join("\n\n") + "\n"
@@ -100,6 +102,14 @@ class Export
     end
 
     def copied = user.copyings.includes(:sutra_char).order(:copied_on)
+
+    # 염주 알 — 한 알이 한 배다. 몇 번째 염주의 알인지와 어느 벌이었는지만 적는다.
+    # 얼마나 걸렸는지도, 얼마나 숙였는지도 담을 것이 없다.
+    def beads
+      strung.map { |bead| { strung_at: bead.created_at.in_time_zone(user.time_zone).iso8601, kind: bead.kind, round: bead.round } }
+    end
+
+    def strung = user.beads.order(:created_at)
 
     # ── 사람이 읽는 쪽 ──
 
@@ -151,6 +161,12 @@ class Export
 
     def copying_lines
       copied.map { |copying| "- #{copying.copied_on.iso8601} · #{copying.sutra_char.glyph}" }
+    end
+
+    def bead_lines
+      strung.group_by(&:round).map do |round, beads|
+        "- #{t("bows.kinds.#{beads.first.kind}")} · #{beads.first.created_at.in_time_zone(user.time_zone).to_date.iso8601} — #{beads.size}"
+      end
     end
 
     def t(key) = I18n.t(key, locale: user.locale)

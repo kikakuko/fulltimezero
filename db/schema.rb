@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_07_062319) do
   create_table "abidings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "engagement", null: false
@@ -36,6 +36,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_120000) do
     t.text "what_to_do", null: false
     t.text "what_to_do_en", null: false
     t.index ["pos"], name: "index_abidings_on_pos", unique: true
+  end
+
+  create_table "beads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "kind", null: false
+    t.integer "round", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id", "round"], name: "index_beads_on_user_id_and_round"
+    t.index ["user_id"], name: "index_beads_on_user_id"
   end
 
   create_table "clearings", force: :cascade do |t|
@@ -162,6 +172,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_17_120000) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "beads", "users"
   add_foreign_key "clearings", "users"
   add_foreign_key "copyings", "sutra_chars"
   add_foreign_key "copyings", "users"
