@@ -312,6 +312,72 @@ bin/kamal app start
 9. **확인.** §11 의 목록을 그대로 한 번. 그리고 백업을 다시 세운다(§11.6 · §9) — 새 서버에는
    배포 키도 cron 도 없다. **이것을 잊으면 다음 사라짐은 되돌릴 수 없다.**
 
+## 11.8 임시 — Cloudflare 터널로 맥을 보이게 하기 (조사만, 아직 세우지 않았다)
+
+**이것은 서버가 아니다.** 수원의 맥을 `app.fulltimezero.com` 이 가리키게 하는 임시 다리다.
+맥이 꺼지면 죽는다. 스승님께 보여 드리고 과제에 내는 데까지이고, **가입을 열기 전에
+진짜 서버(Oracle 서울)로 옮긴다.** 앱을 Cloudflare Workers 로 옮기는 일이 아니다 —
+Workers 는 자바스크립트만 돌고 Rails 가 못 돈다. 그것은 다시 쓰는 일이고 자물쇠
+오백서른다섯 벌을 버리는 일이다.
+
+### 공식 문서에서 확인한 것
+
+| 물음 | 답 | 어디서 |
+|---|---|---|
+| 무료 계정에 카드가 필요한가 | **일반 계정과 무료 영역에는 결제 수단 단계가 없다.** 다만 「카드가 필요 없다」고 **못박은 공식 문장은 찾지 못했다** — 도메인 추가 안내 어디에도 결제 단계가 없을 뿐이다 | 도메인 추가 안내 |
+| Zero Trust 는 | **무료 플랜이라도 결제 수단을 넣어야 한다** — 「If you chose the Zero Trust Free plan, this step is still needed but you will not be charged」 | Zero Trust 설정 안내 |
+| 카드 없이 터널을 세울 수 있나 | **로컬 관리 터널(cloudflared CLI)이 그 길이다.** 그 안내의 전제조건은 「사이트를 Cloudflare 에 추가」와 「네임서버를 Cloudflare 로 바꾸기」 둘뿐이고 Zero Trust 구독 이야기가 없다. 대시보드로 만드는 원격 관리 터널은 Zero Trust 를 지나므로 카드를 묻는다 | 로컬 터널 만들기 |
+| Porkbun 에 CNAME 만 넣는 부분 설정으로 되나 | **안 된다.** 「A CNAME setup (partial) is only available to customers on a Business or Enterprise plan」 — **네임서버를 Cloudflare 로 옮겨야 한다** | 부분 설정 안내 |
+| 방문자의 주소는 | **Cloudflare 를 지나므로 그쪽에 남는다.** 우리 쪽에도 온다 — `CF-Connecting-IP` 와 `X-Forwarded-For` 가 방문자 IP를, `CF-IPCountry` 가 나라를 실어 보낸다. **「Remove visitor IP headers」 매니지드 트랜스폼으로 그 머리말을 떼어 낼 수 있다** | HTTP 머리말 안내 |
+
+**되돌리기 쉽다는 전제가 깨졌다.** 부분 설정이 유료라서, 임시로 쓰려면 **도메인의
+네임서버를 Porkbun 에서 Cloudflare 로 옮겨야** 한다. 진짜 서버로 갈 때 다시 옮겨
+와야 하고, 네임서버 변경은 몇 시간에서 하루가 걸린다.
+
+### 세우는 차례 (아직 하지 않았다 — 설치도 가입도)
+
+```
+brew install cloudflared                      # 맥에 CLI 하나
+cloudflared tunnel login                      # 브라우저로 계정·영역을 고른다
+cloudflared tunnel create fulltimezero        # 이름 있는 터널을 만든다
+# ~/.cloudflared/config.yml 에 터널 번호와 자격 파일 자리, 그리고 보낼 곳(http://localhost:3000)
+cloudflared tunnel route dns fulltimezero app.fulltimezero.com
+cloudflared tunnel run fulltimezero
+```
+
+앱은 맥에서 **운영 모드로** 띄운다(`RAILS_ENV=production`). 그래야 요청 기록
+미들웨어가 걷힌 채로 돌아 접속 주소가 남지 않는다(§11.5). 개발 모드로 띄우면
+요청마다 주소가 로그에 남는다. `assume_ssl` 이 켜져 있으므로 Cloudflare 가 HTTPS 를
+끝내고 맥에는 평문으로 와도 맞다. `config.hosts` 에 `app.` 이 이미 들어 있다.
+
+### §4 와 걸리는 자리
+
+- **수탁자가 하나 더 생긴다.** Cloudflare 가 모든 요청을 지나간다 — 가입을 열 때
+  처리방침의 수탁자 표에 서버 회사 · 메일 회사와 함께 적어야 할 곳이다. 지금은 가입이
+  닫혀 있어 받는 개인정보가 없다.
+- **방문자 IP 머리말은 떼어 낸다.** 「Remove visitor IP headers」를 켜면 우리 쪽에는
+  주소가 오지 않는다. 레일즈가 요청을 적지 않더라도, 오지 않는 것이 안 적는 것보다 낫다.
+- **Cloudflare 쪽 기록은 우리 손 밖이다** — 프록시의 접근 기록, 서버 회사와 같은 층이다.
+
+### 끊고 되돌리기
+
+```
+cloudflared tunnel list                       # 무엇이 있는지
+cloudflared tunnel cleanup fulltimezero       # 남은 연결을 끊고
+cloudflared tunnel delete fulltimezero        # 터널을 지운다
+```
+
+그다음 Cloudflare 에서 `app` 의 CNAME 을 지우고, **도메인의 네임서버를 Porkbun 으로
+되돌린 뒤**, 진짜 서버의 IP로 A 레코드 셋을 다시 넣는다(§4).
+
+### 옮길 때 되돌릴 것 — 적어 둔다
+
+- [ ] 네임서버를 Porkbun 으로
+- [ ] `app` CNAME 을 지우고 A 레코드 셋을 서버 IP로
+- [ ] 터널 정리와 삭제, 맥의 `cloudflared` 제거
+- [ ] 처리방침의 수탁자에서 Cloudflare 를 빼거나 서버 회사로 바꾸기
+- [ ] 백업을 서버의 cron 으로 옮기기(맥에서 돌던 것을 끈다)
+
 ## 12. 복구 — 한 달에 한 번 연습한다
 
 백업은 복구해 본 적이 있을 때에만 백업이다.
