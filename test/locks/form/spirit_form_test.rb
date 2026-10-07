@@ -65,32 +65,21 @@ class SpiritFormTest < ActionDispatch::IntegrationTest
 
     assert_select "nav.doors", false
   end
-  # 달은 언제나 차오른다. 스물여드레의 달도, 앉음의 달도.
-  # 시간의 소진이 아니라 고요의 익어감이 이 앱의 문법이다.
+  # 달은 창 안에 날이 있는 동안 차오른다. 밀려나 이지러지는 것은 「잊음」이지
+  # 「기욺」이 아니다 — 시간의 소진이 아니라 고요의 익어감이 이 앱의 문법이다(§2).
   test "달이 기운다는 말이 코드에도 문서에도 남아 있지 않다" do
     leftovers = written.select { |path| path.read.match?(/기운다|기욺|기울\s*고/) }
 
     assert_empty leftovers.map { |path| path.relative_path_from(Rails.root).to_s },
       "달이 기운다는 서술이 남아 있다"
   end
-  test "앉음의 달은 그믐에서 시작한다" do
-    sign_in_as users(:one)
-    post sittings_path, params: { sitting: { length: "tea", bell: "1" } }
-    follow_redirect!
-
-    shade = Nokogiri::HTML(response.body).css(".night .moon ellipse").first
-
-    assert shade, "앉음의 달에 가리개가 없다"
-    assert_equal "black", shade["fill"], "그믐이 아니라 이미 밝은 채로 시작한다"
-    assert_equal "100.0", shade["rx"], "어둠이 원 전체를 덮고 있지 않다"
-  end
   # 달에는 이목구비가 없다. 호선 둘을 얹는 순간 그것은 미소 띤 달이 아니라 얼굴이 되고,
   # 얼굴이 되는 순간 의인화가 된다. 달은 표정이 아니라 빛으로 말한다.
   # 이 자물쇠는 달을 그리는 파일에만 걸린다(SPIRIT §7, 2026-09-15). 파장동 미륵은 마을
   # 사람들이 덧칠해 만든 얼굴이 곧 정체성이라, 얼굴을 빼면 미륵이 아니다.
+  # 달을 그리는 파일. 앉는 중에서 달이 내려온 뒤로 그리는 자리는 한 곳이다(§2, 2026-10-08).
   MOON_COMPONENTS = %w[
     app/helpers/moon_helper.rb
-    app/javascript/controllers/sitting_controller.js
   ].freeze
 
   test "달에 얼굴을 그리지 않는다" do
