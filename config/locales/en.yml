@@ -386,6 +386,10 @@ en:
     line: "Stopping is already Maitreya"
     back: "Back to the courtyard"
 
+  guest:
+    line: A place to look around. Nothing done here is kept.
+    only_looking: This is a place to look around, so nothing can be written here. Keeping happens in a place of one's own.
+
   not_yet:
     title: No accounts yet
     body: The app is not finished. No accounts are being taken, so no personal data is gathered. What stands open is the three gates, the guide to rest, and the nine abidings.

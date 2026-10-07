@@ -9,6 +9,8 @@
            anchors: Elephant::ANCHORS,
            abidings: @abidings %>
 
+<%# 손님에게는 앉기를 시작하는 손짓이 없다 %>
+<% unless guest? %>
 <%= form_with url: sittings_path, scope: :sitting, id: "sitting-form",
               data: { controller: "bell", bell_enabled_value: @bell,
                       bell_start_url_value: bell_source(:start),
@@ -45,9 +47,12 @@
   </ul>
   <p class="tiny"><%= link_to t("abidings.read"), guide_chapter_path("abidings"), class: "soft" %></p>
 <% end %>
+<% end %>
 
 <%# 무위. 고르는 것이 적을수록 좋다. 종성은 기본으로 꺼져 있고,
     켜 두었으면 들어가는 그 손짓에 한 번만 울린다. 마침종은 없다. %>
+<%# 손님에게는 무위로 드는 손짓이 없다 %>
+<% unless guest? %>
 <%= form_with url: nothing_path, id: "nothing-form",
               data: { controller: "bell", bell_enabled_value: @bell,
                       bell_start_url_value: bell_source(:start),
@@ -61,6 +66,7 @@
       <% end %>
     </li>
   </ul>
+<% end %>
 <% end %>
 
 <%# 두 길이 같은 무게로 나란히 선다 — 먹 알약 둘. 각각 제 폼으로 간다. %>

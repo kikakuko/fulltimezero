@@ -5,6 +5,50 @@ Sutra.seed_from(Sutra::HEART_FILE)
 # 아홉 자리도 앱의 것이다.
 Abiding.seed_from
 
+# 구경하는 자리의 씨앗 — 가입이 닫혀 있는 동안 손님 모두가 이것을 함께 본다.
+# 빈 화면이 아니라 살아 있던 자리여야 한다: 달이 차 있고, 탑에 글자가 쌓여 있고,
+# 코끼리가 길을 오르고, 미륵이 조금 드러나 있다. 몇 번을 돌려도 같은 결과가 된다.
+#
+# 아무도 이 계정으로 들어오지 못한다 — 가입과 로그인의 길이 닫혀 있고, 비밀번호는
+# 아무도 모르는 값이다. 손님에게는 이메일을 묻지 않는다(Guest).
+guest = User.find_or_create_by!(email_address: Guest::SEED) do |user|
+  user.password = SecureRandom.hex(32)
+  user.locale = "ko"
+  user.time_zone = "Asia/Seoul"
+end
+guest.update!(onboarded_at: 60.days.ago, what_moves: nil, daily_door: false)
+guest.rests.destroy_all
+guest.sittings.destroy_all
+guest.clearings.destroy_all
+guest.copyings.destroy_all
+guest.plans.destroy_all
+
+guest_today = guest.today
+guest_abidings = Abiding.in_order.to_a
+
+# 쉰 날 — 최근 스물여드레에 흩어서. 코끼리가 길의 중간쯤에 선다.
+[ 2, 5, 9, 14, 18, 23, 27, 34, 41, 52 ].each do |days_ago|
+  guest.rests.create!(rested_on: guest_today - days_ago,
+                      duration: Rest::DURATIONS[days_ago % Rest::DURATIONS.size],
+                      texture: Rest::TEXTURES[days_ago % Rest::TEXTURES.size])
+end
+
+# 앉음 — 둘은 자리를 골랐다.
+[ [ 3, guest_abidings[2] ], [ 11, nil ], [ 20, guest_abidings[5] ], [ 38, nil ] ].each do |days_ago, abiding|
+  at = (guest_today - days_ago).in_time_zone(guest.time_zone).change(hour: 7)
+  guest.sittings.create!(mode: "sitting", sat_on: guest_today - days_ago, abiding: abiding,
+                         created_at: at, ended_at: at + 20.minutes)
+end
+
+# 비운 날 셋 — 미륵이 조금 드러난다.
+[ 7, 21, 44 ].each { |days_ago| guest.clearings.create!(cleared_on: guest_today - days_ago) }
+
+# 사경 스물넉 자 — 첫 층이 아직 차지 않았다.
+guest_strokes = [ [ [ 0.24, 0.32 ], [ 0.52, 0.36 ], [ 0.76, 0.34 ] ], [ [ 0.5, 0.16 ], [ 0.49, 0.52 ], [ 0.5, 0.84 ] ] ]
+Sutra.heart.chars.order(:pos).first(24).each_with_index do |char, index|
+  guest.copyings.create!(sutra_char: char, copied_on: guest_today - (60 - index * 2), glyph_paths: guest_strokes)
+end
+
 # 개발용 씨앗 — 눈으로 보기 위한 계정 둘. 개발 DB 에만 심는다.
 #
 #   gate@fulltimezero.test / fulltimezero   문을 아직 지나지 않은 계정. 온보딩부터.

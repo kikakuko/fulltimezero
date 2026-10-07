@@ -1,3 +1,8 @@
+<%# 손님은 보되 쓰지 못한다. 저장되는 길은 404 이고(컨트롤러), 여기서는
+    쌓는 손짓을 아예 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
+<% if guest? %>
+  <div class="guide"><p><%= t("guest.only_looking") %></p></div>
+<% else %>
 <%= form_with model: @rest, url: rests_path do |f| %>
   <%= render "shared/errors", record: @rest %>
 
@@ -27,4 +32,5 @@
   <p class="tiny"><%= t("rests.new.texture_optional") %></p>
 
   <p style="margin-top:3rem"><%= f.button t("rests.new.submit"), class: "button-primary" %></p>
+<% end %>
 <% end %>

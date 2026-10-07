@@ -4,7 +4,8 @@ module Authentication
 
   included do
     before_action :require_authentication
-    helper_method :authenticated?
+    before_action :guests_only_look
+    helper_method :authenticated?, :guest?
   end
 
   class_methods do
@@ -14,16 +15,34 @@ module Authentication
   end
 
   private
+    # 손님은 보되 쓰지 못한다. 저장되는 길은 하나도 열려 있지 않다 — 길이 없으므로
+    # 404 다. 화면에서 손짓을 숨기는 것만으로는 모자라다.
+    def guests_only_look
+      head :not_found if guest? && !request.get? && !request.head?
+    end
+
     def authenticated?
-      resume_session
+      resume_session || resume_guest
     end
 
     def require_authentication
-      resume_session || request_authentication
+      resume_session || resume_guest || request_authentication
     end
 
     def resume_session
       Current.session ||= find_session_by_cookie
+    end
+
+    # 손님 — 계정이 없고 세션도 없다. 가입이 닫혀 있는 동안 씨앗을 함께 본다.
+    def resume_guest
+      Current.guest ||= Guest.user
+    end
+
+    # 인증을 건너뛰는 화면(문 셋 같은)에서도 손님인지 먼저 가린다 — 가리지 않으면
+    # 그 화면의 쓰는 길이 손님에게 열린 채로 남는다.
+    def guest?
+      resume_session
+      Current.session.nil? && resume_guest.present?
     end
 
     def find_session_by_cookie

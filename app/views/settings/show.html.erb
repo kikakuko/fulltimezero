@@ -1,3 +1,8 @@
+<%# 손님은 보되 쓰지 못한다. 저장되는 길은 404 이고(컨트롤러), 여기서는
+    쌓는 손짓을 아예 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
+<% if guest? %>
+  <div class="guide"><p><%= t("guest.only_looking") %></p></div>
+<% else %>
 <h1 class="title"><%= t("settings.title") %></h1>
 
 <%= form_with model: @user, url: settings_path, method: :patch do |f| %>
@@ -62,3 +67,4 @@
   <%= button_to t("settings.delete_account"), account_path, method: :delete, class: "button-quiet",
         form: { data: { turbo_confirm: t("settings.delete_confirm") } } %>
 </p>
+<% end %>

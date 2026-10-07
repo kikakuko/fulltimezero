@@ -56,6 +56,13 @@
         <p class="flash"><%= flash[:notice] || flash[:alert] %></p>
       <% end %>
 
+      <%# 손님임을 처음에 밝힌다. §3 은 쌓인 것이 무너지지 않는다고 했으니, 적었다가
+          사라지면 배신이다. 말없이 무너뜨리는 것이 §3 이 막는 일이고, 미리 밝히는
+          것은 다르다. 숫자도 날짜도 적지 않는다. %>
+      <% if guest? %>
+        <p class="tiny"><%= t("guest.line") %></p>
+      <% end %>
+
       <%= yield %>
 
       <% unless content_for?(:no_locales) %>

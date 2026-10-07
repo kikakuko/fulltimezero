@@ -25,8 +25,10 @@
     <%# 오늘 이미 고요했다면 물음이 조름이 되지 않게 달리 묻는다. %>
     <p class="lead"><%= @quiet ? t("today.already_quiet") : t("today.question") %></p>
 
-    <%# 전각으로 가는 길은 조감도에 있다. 여기에는 쉼 기록만. %>
-    <% if @quiet %>
+    <%# 전각으로 가는 길은 조감도에 있다. 여기에는 쉼 기록만.
+        손님에게는 쌓는 손짓을 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
+    <% if guest? %>
+    <% elsif @quiet %>
       <p><%= link_to t("today.rested"), new_rest_path, class: "button-quiet" %></p>
     <% else %>
       <p><%= link_to t("today.rested"), new_rest_path, class: "button-primary" %></p>
@@ -36,6 +38,7 @@
         하루 화면까지 세 번 눌러 들어가 있을 일이 아니다.
         일정이 있어도 비울 수 있다. 비움은 사실의 보고가 아니라 선언이다.
         지키지 못해도 아무 일 없다(제5조 · 제6조). %>
+    <% unless guest? %>
     <div class="tiny clearing" id="clearing" data-controller="maitreya">
       <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
                     day_path(Current.user.today, from: "today"), method: :patch, class: "button-quiet",
@@ -60,6 +63,7 @@
               <% end %>
               <p class="maitreya-scene__back"><%= link_to t("maitreya.back"), today_path, class: "soft" %></p>
             </div>
+    <% end %>
           </div>
         </template>
       <% end %>

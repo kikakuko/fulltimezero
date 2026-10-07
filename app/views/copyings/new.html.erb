@@ -1,3 +1,8 @@
+<%# 손님은 보되 쓰지 못한다. 저장되는 길은 404 이고(컨트롤러), 여기서는
+    쌓는 손짓을 아예 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
+<% if guest? %>
+  <div class="guide"><p><%= t("guest.only_looking") %></p></div>
+<% else %>
 <%# 사경 — 오늘의 한 자. 쓰면 그걸로 한 자다. 채점도 인식도 없다.
     몇 번째 자인지, 이 자가 경에 몇 번 나오는지는 쓰지 않는다 — 세는 일이므로. %>
 <%= render "compound/hall_header", key: :copying %>
@@ -77,4 +82,5 @@
 
     <p class="tiny"><%= link_to t("copyings.look"), pagoda_path, class: "soft" %></p>
   </div>
+<% end %>
 <% end %>
