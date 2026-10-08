@@ -58,7 +58,15 @@ class MoonShapeTest < ActionView::TestCase
     assert_match(/\.moon circle\.disc \{ opacity: var\(--moon-dark\); \}/, css, "어두운 쪽이 옅은 먹이 아니다")
     assert_match(/\.moon circle\.rim \{ opacity: var\(--moon-rim\); \}/, css)
     root = css[/:root \{.*?\n\}/m]
-    %w[--moon-dark --moon-dark-night --moon-rim --moon-glow].each { |name| assert_match(/#{name}: 0\.\d+;/, root, "#{name} 가 :root 에 없다") }
+    %w[--moon-dark --moon-rim --moon-glow].each { |name| assert_match(/#{name}: 0\.\d+;/, root, "#{name} 가 :root 에 없다") }
+    # 밤은 먹 바른 종이, 달은 먹을 비운 자리 — 밤에도 비는 쪽이 종이다. 어두운 쪽은 밤 바탕
+    # 그대로이되 기껏해야 한지빛 몇 푼이다.
+    night = root[/--moon-dark-night: (\d+)%;/, 1]
+    assert night, "--moon-dark-night 가 :root 에 없다"
+    assert_operator night.to_i, :<=, 10, "밤의 어두운 쪽이 한지빛으로 너무 밝다"
+    assert_match(/\.night \.moon circle\.body \{ fill: var\(--paper\); \}/, css, "밤에 비는 쪽이 종이가 아니다")
+    assert_match(/\.night \.moon circle\.disc \{ fill: color-mix\(in srgb, var\(--paper\) var\(--moon-dark-night\), var\(--night\)\); opacity: 1; \}/, css)
+    assert_equal "none", svg.at_css("circle.body")["fill"], "낮에 밝은 쪽을 채운다"
   end
 
   # 보름의 빛은 금빛 테두리가 아니라 먹선 원 바깥의 옅은 번짐 한 겹이다. 빈 원은 비워 둔다.

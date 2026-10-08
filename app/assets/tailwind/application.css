@@ -62,7 +62,7 @@
   --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.04'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   /* 달 — 어두운 쪽 먹의 옅기(낮 · 밤), 몸체 먹선의 짙기, 보름의 금빛 번짐 */
   --moon-dark: 0.22;
-  --moon-dark-night: 0.35;
+  --moon-dark-night: 6%;
   --moon-rim: 0.8;
   --moon-glow: 0.35;
 
@@ -392,7 +392,10 @@ button:hover { border-color: var(--ink); }
 }
 
 .night { background: var(--paper-grain) repeat, var(--night); color: var(--night-ink); }
-.night .moon circle.disc { fill: var(--night-ink); opacity: var(--moon-dark-night); }
+/* 밤은 먹 바른 종이, 달은 먹을 비운 자리 — 밤에도 비는 쪽이 종이다. 종이로 찬 몸체 위에
+   어두운 쪽을 밤빛으로 덮는다(기껏해야 한지빛 --moon-dark-night 만큼). 먹선 원 · 번짐은 그대로. */
+.night .moon circle.body { fill: var(--paper); }
+.night .moon circle.disc { fill: color-mix(in srgb, var(--paper) var(--moon-dark-night), var(--night)); opacity: 1; }
 .night .moon circle.rim { stroke: var(--night-ink); }
 
 .void { background: var(--night-dusk); color: var(--night-void-ink); }

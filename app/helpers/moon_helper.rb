@@ -1,6 +1,7 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
 # 달은 비워 그린다. 쉰 만큼 먹이 빠진다 — 코끼리와 같은 말.
+# 밤은 먹 바른 종이, 달은 먹을 비운 자리 — 밤에도 비는 쪽이 종이다.
 #
 # 달은 언제나 차오르는 달의 모양이다 — 비는 쪽이 오른쪽이다.
 #
@@ -30,6 +31,9 @@ module MoonHelper
             role: "img", "aria-label": title) do
       concat tag.title(title)
       concat tag.circle(cx: r, cy: r, r: r - 0.5, fill: "none", stroke: "var(--gilt)", class: "moonglow") if moonlight
+      # 종이 — 낮에는 비워 둔다(한지 위라 채울 것이 없다). 밤에는 비는 쪽이 종이가 되어야
+      # 하므로 한지로 채우고, 그 위에 어두운 쪽을 밤빛으로 덮는다(CSS 의 .night).
+      concat tag.circle(cx: r, cy: r, r: r, fill: "none", class: "body")
       concat moon_shade(id, phase, size, **shade_options)
       # 어두운 쪽 — 옅은 먹(옅기는 CSS 의 --moon-dark). 가리개가 비는 쪽을 열어 둔다.
       concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)",
