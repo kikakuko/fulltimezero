@@ -10,19 +10,21 @@
   font-family: "Caveat Brush";
   src: url("CaveatBrush.woff2") format("woff2");
   font-weight: 400; font-style: normal; font-display: swap;
-  unicode-range: U+0020-007E, U+00A0-00FF, U+2000-206F;
+  /* 알파벳만 — 마침표 · 숫자 · 문장부호에는 서지 않는다. 한국어 화면의 마침표 하나로
+     이 글꼴이 실리지 않게 하려는 것이다. 영어 화면에서는 글자가 있으니 그대로 실린다. */
+  unicode-range: U+0041-005A, U+0061-007A;
 }
 @font-face {
   font-family: "East Sea Dokdo";
   src: url("EastSeaDokdo.woff2") format("woff2");
   font-weight: 400; font-style: normal; font-display: swap;
 }
-/* 한자는 붓 해서 — Yuji Syuku(키누타 폰트 팩토리, OFL). 동해독도에는 한자가 없다.
-   현판 · 전각 이름의 곁말 · 사경의 본보기 글자가 이 붓으로 선다. 앱이 쓰는 한자만
-   추렸고, 거기 없는 넉 자(內 埵 罣 說)는 기기 명조로 떨어진다. */
+/* 한자는 해서 — LXGW WenKai TC(霞鶩文楷, OFL). 동해독도에는 한자가 없다. 전승 자형이라
+   한국 자형과 같다(艹 네 획 · 辶 점 둘 · 者의 점 · 爲 · 眞 · 卽). 현판 · 전각 이름의 곁말 ·
+   사경의 본보기 글자가 이 글꼴로 선다. 앱이 쓰는 한자만 추렸고, 빠진 글자는 없다. */
 @font-face {
-  font-family: "Yuji Syuku";
-  src: url("YujiSyuku.woff2") format("woff2");
+  font-family: "LXGW WenKai TC";
+  src: url("WenKaiTC.woff2") format("woff2");
   font-weight: 400; font-style: normal; font-display: swap;
   unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF;
 }
@@ -237,7 +239,7 @@
   --void-step: 0.6s;
   --void-drift: 4.5s;
 
-  --serif: "Caveat Brush", "Yuji Syuku", "East Sea Dokdo", "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
+  --serif: "Caveat Brush", "LXGW WenKai TC", "East Sea Dokdo", "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
   --sans: "Noto Sans KR", system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
 
   /* 글꼴 다섯. 한글 명조는 가로획이 가늘어 작은 크기에서 먼저 사라진다 —

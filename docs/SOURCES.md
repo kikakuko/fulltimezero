@@ -280,18 +280,20 @@ happiness」). 원문 · 판본 · 본 곳 · 옮긴 이 · 대조한 날은 `ap
 |---|---|---|---|---|---|
 | 동해독도(East Sea Dokdo) | 한글 큰 글 | 윤디자인 | github.com/google/fonts `ofl/eastseadokdo` (`EastSeaDokdo-Regular.ttf`, 3,178,684 바이트) | 라틴 · 한글 음절 · 자모 · 문장부호 — 원본에 한글 2,484자, 한자 없음 | `EastSeaDokdo.woff2` 232,220 바이트 |
 | Caveat Brush | 알파벳 큰 글 | Pablo Impallari | github.com/google/fonts `ofl/caveatbrush` (`CaveatBrush-Regular.ttf`, 295,568 바이트) | U+0020–007E · 00A0–00FF · 2000–206F | `CaveatBrush.woff2` 67,088 바이트 |
-| Yuji Syuku | 한자 — 현판 · 전각 이름의 곁말 · 사경의 본보기 글자 | 키누타 폰트 팩토리(Yuji Project) | github.com/google/fonts `ofl/yujisyuku` (`YujiSyuku-Regular.ttf`, 8,430,348 바이트) | 앱이 쓰는 한자 155자(사경 260자 중 겹치는 것 포함)와 CJK 문장부호 — 179자 | `YujiSyuku.woff2` 79,952 바이트 |
+| LXGW WenKai TC(霞鶩文楷 TC) | 한자 — 현판 · 전각 이름의 곁말 · 사경의 본보기 글자 | LXGW WenKai Project(落霞孤鶩), Klee One(Fontworks) 바탕 | github.com/lxgw/LxgwWenkaiTC 릴리스 1.522 (`LXGWWenKaiTC-Regular.ttf`, 15,267,616 바이트) | 앱이 쓰는 한자 155자(사경 · 현판 · 전각)와 CJK 문장부호 — 217자, 빠진 글자 없음 | `WenKaiTC.woff2` 54,852 바이트 |
 
 받은 날은 셋 다 2026-10-08. 추리는 손은 fontTools(`python3 -m fontTools.subset`)이고,
 원본 TTF 는 저장소에 두지 않는다 — 글자를 더 넣어야 하면 위 주소에서 다시 받아 추린다.
 
-Yuji Syuku 에 없는 한자 넉 자 — **內 · 埵 · 罣 · 說**(반야심경) — 는 기기 명조로 떨어진다.
-사경에서 그 네 글자만 결이 다르다. 다른 붓에서 빌려 메우는 것은 훗날의 일이다.
+한자는 처음 Yuji Syuku(일본 붓 해서, OFL)로 들였다가 같은 날 WenKai TC 로 바꿨다 — Yuji 는 일본 자형이라
+155자 중 23자(艹 · 辶 · 戶 · 示 · 者의 점 · 虛 · 鼻 · 益)가 한국 자형과 달랐고 넉 자(內 埵 罣 說)가 없었다.
+WenKai TC 는 전승 자형이라 155자가 모두 한국 자형과 같고(爲 · 眞 · 卽도 그 꼴로 선다) 빠진 글자가 없다.
+붓 맛은 Yuji 보다 옅다 — 붓보다 교과서 해서에 가깝다.
 
 **추림과 OFL(2026-10-08 확인).** 추린 woff2 는 OFL 이 말하는 「Modified Version」이다. OFL §3 은
 수정본에 **Reserved Font Name** 을 쓰지 못하게 하는데, 셋 다 동봉한 OFL 전문 첫 줄(저작권
 표시)에 Reserved Font Name 선언이 없다 — 구글 폰트는 올리는 글꼴에서 예약 이름을 뺀다.
-그래서 내부 이름(East Sea Dokdo · Caveat Brush · Yuji Syuku)을 바꾸지 않고 둔다. 동해독도의
+그래서 내부 이름(East Sea Dokdo · Caveat Brush · LXGW WenKai TC)을 바꾸지 않고 둔다. 동해독도의
 윤디자인 원 저장소(github.com/yoondesign/Yoonfont-KoreaDokdo)에는 「Reserved Font Name
 "KoreaDokdo"」가 있으나, 우리가 받은 것은 그 이름을 쓰지 않는 구글 폰트 쪽 배포본이고 그
 OFL 전문을 동봉했다. 「동해독도체」라는 이름의 동해시 배포본은 받지 않았다 — 조건이 다를
