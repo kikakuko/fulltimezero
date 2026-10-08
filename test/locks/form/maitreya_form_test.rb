@@ -71,13 +71,14 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
     css = CSS.read
 
     shake = css[/@keyframes maitreya-shake \{.*?\n\}/m]
-    assert_match(/12\.50% \{ transform: translateX\(-?3\.0px\); \}/, shake, "0.5초에 ±3px 가 아니다")
-    assert_match(/30\.00% \{ transform: translateX\(-?5\.0px\); \}/, shake, "1.2초에 ±5px 가 아니다")
-    assert_match(/50\.00% \{ transform: translateX\(-?2\.0px\); \}/, shake, "2.0초에 ±2px 가 아니다")
+    # 2026-10-08 에 키웠다 — ±3 → ±5 → ±2 에서 ±5 → ±8 → ±3 으로. 넉 초에 멎는 것은 그대로.
+    assert_match(/12\.50% \{ transform: translateX\(-?5\.0px\); \}/, shake, "0.5초에 ±5px 가 아니다")
+    assert_match(/30\.00% \{ transform: translateX\(-?8\.0px\); \}/, shake, "1.2초에 ±8px 가 아니다")
+    assert_match(/50\.00% \{ transform: translateX\(-?3\.0px\); \}/, shake, "2.0초에 ±3px 가 아니다")
     assert_match(/75%, 100% \{ transform: translateX\(0\); \}/, shake, "3.0초에 멎지 않는다")
 
     assert_match(/@keyframes maitreya-dust \{\s*0% \{ opacity: 0; \} 12\.5% \{ opacity: 0\.35; \} 50% \{ opacity: 1;.*75% \{ opacity: 0\.35; \} 100% \{ opacity: 0;/m, css)
-    assert_match(/@keyframes maitreya-sky \{ 0% \{ opacity: 0; \} 30% \{ opacity: 0\.5; \} 75% \{ opacity: 0\.1; \} 100% \{ opacity: 0; \} \}/, css)
+    assert_match(/@keyframes maitreya-sky \{ 0% \{ opacity: 0; \} 30% \{ opacity: 0\.7; \} 75% \{ opacity: 0\.1; \} 100% \{ opacity: 0; \} \}/, css)
     assert_match(/100% \{ stroke-dashoffset: 0; opacity: 0\.35; \}/, css, "금이 옅게 남지 않는다")
     assert_match(/--maitreya-gold: #f3e2b8;/, css)
 
