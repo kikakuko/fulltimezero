@@ -87,7 +87,8 @@ class GuestTest < ActionDispatch::IntegrationTest
   end
 
   # 문 셋은 손님에게도 열린다 — 다만 보내는 손짓이 아니라 가는 문이다. 둘째 문은
-  # 묻지 않고(적어도 남지 않으니), 셋째 문은 마당으로 간다. 지나도 씨앗은 그대로다.
+  # 묻지 않고(적어도 남지 않으니) 누를 것도 없이 한 숨 뒤 스스로 셋째 문으로 가고,
+  # 셋째 문은 마당으로 간다. 지나도 씨앗은 그대로다.
   test "손님도 문 셋을 지난다 — 보내지 않고 간다" do
     closed do
       before = [ @seed.reload.onboarded_at, @seed.what_moves ]
@@ -98,7 +99,10 @@ class GuestTest < ActionDispatch::IntegrationTest
 
       get threshold_naming_path
       assert_select "input[name='user[what_moves]']", false, "손님에게 한 줄을 묻는다"
-      assert_select "a.button-primary[href=?]", threshold_breath_path, count: 1
+      assert_select ".threshold--naming .button-primary", false, "손님의 둘째 문에 누를 길이 있다"
+      assert_select ".threshold--naming[data-controller~=passage] form[method=get][action=?][data-passage-target=gate]",
+        threshold_breath_path(locale: :ko), count: 1
+      assert_select ".threshold--naming form[method=post]", false, "둘째 문이 손님에게 보내는 손짓을 둔다"
       assert_select "a.button-quiet[href=?]", today_path(locale: :ko), count: 1
 
       get threshold_breath_path

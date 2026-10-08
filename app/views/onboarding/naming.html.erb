@@ -5,12 +5,13 @@
 
 <%= render "gates", state: "naming" %>
 
-<div class="threshold threshold--naming" data-controller="gates" data-gates-state-value="naming">
+<div class="threshold threshold--naming" data-controller="<%= guest? ? "gates passage" : "gates" %>" data-gates-state-value="naming">
   <%# 계정이 있든 없든 같은 칸이다. 없으면 세션이 들고 있는다.
-      손님에게는 칸이 없다 — 적어도 남지 않으니 묻지 않고, 물음만 보고 지나간다. %>
+      손님에게는 칸도 길도 없다 — 적어도 남지 않으니 묻지 않고, 물음만 떠 있다가
+      한 숨 뒤 스스로 셋째 문으로 간다. 장막이 사천왕을 지나 물러나는 것이 길이다. %>
   <% if guest? %>
     <p class="gates__line"><%= t("threshold.naming.question") %></p>
-    <p class="threshold__way"><%= link_to t("threshold.naming.go"), threshold_breath_path, class: "button-primary" %></p>
+    <%= form_with url: threshold_breath_path, method: :get, data: { passage_target: "gate" } do %><% end %>
   <% else %>
     <%= form_with scope: :user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
       <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>
