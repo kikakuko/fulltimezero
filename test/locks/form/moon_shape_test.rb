@@ -89,9 +89,33 @@ class MoonShapeTest < ActionView::TestCase
     assert_no_match(/(?:Date|performance)\.now\(\)/, js, "달이 경과 시간으로 찬다 — 진행 막대다")
     assert_match(/setProperty\("--moon-rx"/, js)
     css = Rails.root.join("app/assets/tailwind/application.css").read
-    assert_match(/\.moon--filling mask ellipse \{ rx: var\(--moon-rx\); transition: rx var\(--moon-fill-time\) ease-out; \}/, css)
+    assert_match(/\.moon--filling mask ellipse \{ rx: var\(--moon-rx\); transition: rx var\(--moon-fill-time\) var\(--moon-fill-ease\); \}/, css)
     time = css[/--moon-fill-time: ([\d.]+)s;/, 1].to_f
     assert time.between?(2.0, 3.0), "하루치가 차는 동안이 둘에서 셋 초 사이가 아니다(#{time})"
+    assert_match(/--moon-fill-ease: cubic-bezier\(\.34, 1\.56, \.64, 1\);/, css, "가리개가 살짝 넘쳤다 돌아오지 않는다")
+  end
+
+  # 경계의 번짐 — 보름의 번짐과 같은 색 · 같은 겹이고, 둘에서 셋 초 안에 걷힌다. 양은 속이지 않는다.
+  test "응답의 번짐은 금빛 한 겹이고, 둘에서 셋 초 안에 걷힌다" do
+    svg = Nokogiri::HTML(moon_svg(0.5, size: 100, from: 0.4)).at_css("svg")
+    edge = svg.at_css("ellipse.edge")
+
+    assert edge, "경계의 번짐이 없다"
+    assert_equal "none", edge["fill"]
+    assert_equal "var(--gilt)", edge["stroke"], "번짐이 보름의 색이 아니다"
+    assert_equal svg.at_css("mask ellipse")["rx"], edge["rx"], "번짐이 가리개의 경계에 있지 않다"
+    assert_equal "50.0", svg.at_css("clippath rect, clipPath rect")["x"], "경계가 있는 반쪽만 보이지 않는다"
+    assert_nil Nokogiri::HTML(moon_svg(0.5, size: 100)).at_css("ellipse.edge"), "누르지 않았는데 번짐이 있다"
+
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    assert_match(/\.moon--filling \.edge \{[^}]*filter: blur\(4px\); opacity: 0;/m, css)
+    assert_match(/@keyframes moon-edge \{ 0% \{ opacity: 0; \} 20% \{ opacity: var\(--moon-glow\); \} 100% \{ opacity: 0; \} \}/, css)
+    time = css[/--moon-edge-time: ([\d.]+)s;/, 1].to_f
+    assert time.between?(2.0, 3.0), "번짐이 둘에서 셋 초 안에 걷히지 않는다(#{time})"
+    assert_match(/prefers-reduced-motion: reduce\) \{\s*\.moon--filling mask ellipse, \.moon--filling \.edge \{ transition: none; \}/, css,
+      "움직임을 줄여도 번짐이 옮아간다")
+    assert_match(/prefers-reduced-motion: no-preference\) \{\s*\.moon--filling \.edge \{ animation: moon-edge/, css,
+      "움직임을 줄여도 번짐이 비친다")
   end
 
   # 보름의 빛은 금빛 테두리가 아니라 먹선 원 바깥의 옅은 번짐 한 겹이다. 빈 원은 비워 둔다.

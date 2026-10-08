@@ -65,8 +65,11 @@
   --moon-dark-night: 6%;
   --moon-rim: 0.8;
   --moon-glow: 0.35;
-  /* 「쉬었다」 뒤 하루치가 차는 동안. 둘에서 셋 초 사이 */
+  /* 「쉬었다」 뒤 하루치가 차는 동안(둘에서 셋 초 사이)과 그 곡선 — 살짝 넘쳤다 돌아온다.
+     경계의 번짐은 같은 사이에 비추었다 걷힌다. */
   --moon-fill-time: 2.4s;
+  --moon-fill-ease: cubic-bezier(.34, 1.56, .64, 1);
+  --moon-edge-time: 2.4s;
 
   /* 주사(朱砂) — 황화수은. 사경의 계선과 글씨에 쓰는 선홍, 탑다라니의 붉은 인쇄.
      하루에 한 번만 보인다(§2): 쓰는 곳은 탑 안의 「오늘 쓴 한 자」 하나뿐이다.
@@ -292,9 +295,19 @@ body {
 .moon circle.rim { opacity: var(--moon-rim); }
 /* 달이 응답한다 — 「쉬었다」를 누른 순간 하루치의 먹이 빠진다. 가로 반지름 하나만 옮아간다.
    반달을 지나는 날은 스크립트가 한 점까지 닫은 뒤 가리개를 비움으로 뒤집고 다시 연다. */
-.moon--filling mask ellipse { rx: var(--moon-rx); transition: rx var(--moon-fill-time) ease-out; }
+.moon--filling mask ellipse { rx: var(--moon-rx); transition: rx var(--moon-fill-time) var(--moon-fill-ease); }
+/* 먹이 빠지는 경계의 금빛 번짐 — 보름의 번짐과 같은 색 · 같은 겹(--moon-glow, blur 4px).
+   가리개와 같이 옮아가고, 비추었다 이내 가라앉는다(--moon-edge-time). */
+.moon--filling .edge {
+  rx: var(--moon-rx); transition: rx var(--moon-fill-time) var(--moon-fill-ease);
+  stroke-width: 6px; filter: blur(4px); opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .moon--filling .edge { animation: moon-edge var(--moon-edge-time) ease-out both; }
+}
+@keyframes moon-edge { 0% { opacity: 0; } 20% { opacity: var(--moon-glow); } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .moon--filling mask ellipse { transition: none; }
+  .moon--filling mask ellipse, .moon--filling .edge { transition: none; }
 }
 /* 보름의 빛 — 먹선 원 바깥에 옅은 금빛 번짐 한 겹. 빈 원은 비워 둔다. */
 .moon circle.moonglow { stroke-width: 8px; opacity: var(--moon-glow); filter: blur(4px); }
@@ -1551,64 +1564,64 @@ input[type="text"].threshold__field {
 
 @keyframes maitreya-shake {
   0.00% { transform: translateX(0.0px); }
-  1.25% { transform: translateX(-0.3px); }
-  2.50% { transform: translateX(0.6px); }
-  3.75% { transform: translateX(-0.9px); }
-  5.00% { transform: translateX(1.2px); }
-  6.25% { transform: translateX(-1.5px); }
-  7.50% { transform: translateX(1.8px); }
-  8.75% { transform: translateX(-2.1px); }
-  10.00% { transform: translateX(2.4px); }
-  11.25% { transform: translateX(-2.7px); }
-  12.50% { transform: translateX(3.0px); }
-  13.75% { transform: translateX(-3.1px); }
-  15.00% { transform: translateX(3.3px); }
-  16.25% { transform: translateX(-3.4px); }
-  17.50% { transform: translateX(3.6px); }
-  18.75% { transform: translateX(-3.7px); }
-  20.00% { transform: translateX(3.9px); }
-  21.25% { transform: translateX(-4.0px); }
-  22.50% { transform: translateX(4.1px); }
-  23.75% { transform: translateX(-4.3px); }
-  25.00% { transform: translateX(4.4px); }
-  26.25% { transform: translateX(-4.6px); }
-  27.50% { transform: translateX(4.7px); }
-  28.75% { transform: translateX(-4.9px); }
-  30.00% { transform: translateX(5.0px); }
-  31.25% { transform: translateX(-4.8px); }
-  32.50% { transform: translateX(4.6px); }
-  33.75% { transform: translateX(-4.4px); }
-  35.00% { transform: translateX(4.2px); }
-  36.25% { transform: translateX(-4.1px); }
-  37.50% { transform: translateX(3.9px); }
-  38.75% { transform: translateX(-3.7px); }
-  40.00% { transform: translateX(3.5px); }
-  41.25% { transform: translateX(-3.3px); }
-  42.50% { transform: translateX(3.1px); }
-  43.75% { transform: translateX(-2.9px); }
-  45.00% { transform: translateX(2.8px); }
-  46.25% { transform: translateX(-2.6px); }
-  47.50% { transform: translateX(2.4px); }
-  48.75% { transform: translateX(-2.2px); }
-  50.00% { transform: translateX(2.0px); }
-  51.25% { transform: translateX(-1.9px); }
-  52.50% { transform: translateX(1.8px); }
-  53.75% { transform: translateX(-1.7px); }
-  55.00% { transform: translateX(1.6px); }
-  56.25% { transform: translateX(-1.5px); }
-  57.50% { transform: translateX(1.4px); }
-  58.75% { transform: translateX(-1.3px); }
-  60.00% { transform: translateX(1.2px); }
-  61.25% { transform: translateX(-1.1px); }
-  62.50% { transform: translateX(1.0px); }
-  63.75% { transform: translateX(-0.9px); }
-  65.00% { transform: translateX(0.8px); }
-  66.25% { transform: translateX(-0.7px); }
-  67.50% { transform: translateX(0.6px); }
-  68.75% { transform: translateX(-0.5px); }
-  70.00% { transform: translateX(0.4px); }
-  71.25% { transform: translateX(-0.3px); }
-  72.50% { transform: translateX(0.2px); }
+  1.25% { transform: translateX(-0.5px); }
+  2.50% { transform: translateX(1.0px); }
+  3.75% { transform: translateX(-1.5px); }
+  5.00% { transform: translateX(2.0px); }
+  6.25% { transform: translateX(-2.5px); }
+  7.50% { transform: translateX(3.0px); }
+  8.75% { transform: translateX(-3.5px); }
+  10.00% { transform: translateX(4.0px); }
+  11.25% { transform: translateX(-4.5px); }
+  12.50% { transform: translateX(5.0px); }
+  13.75% { transform: translateX(-5.2px); }
+  15.00% { transform: translateX(5.4px); }
+  16.25% { transform: translateX(-5.6px); }
+  17.50% { transform: translateX(5.9px); }
+  18.75% { transform: translateX(-6.1px); }
+  20.00% { transform: translateX(6.3px); }
+  21.25% { transform: translateX(-6.5px); }
+  22.50% { transform: translateX(6.7px); }
+  23.75% { transform: translateX(-6.9px); }
+  25.00% { transform: translateX(7.1px); }
+  26.25% { transform: translateX(-7.4px); }
+  27.50% { transform: translateX(7.6px); }
+  28.75% { transform: translateX(-7.8px); }
+  30.00% { transform: translateX(8.0px); }
+  31.25% { transform: translateX(-7.7px); }
+  32.50% { transform: translateX(7.4px); }
+  33.75% { transform: translateX(-7.1px); }
+  35.00% { transform: translateX(6.8px); }
+  36.25% { transform: translateX(-6.4px); }
+  37.50% { transform: translateX(6.1px); }
+  38.75% { transform: translateX(-5.8px); }
+  40.00% { transform: translateX(5.5px); }
+  41.25% { transform: translateX(-5.2px); }
+  42.50% { transform: translateX(4.9px); }
+  43.75% { transform: translateX(-4.6px); }
+  45.00% { transform: translateX(4.2px); }
+  46.25% { transform: translateX(-3.9px); }
+  47.50% { transform: translateX(3.6px); }
+  48.75% { transform: translateX(-3.3px); }
+  50.00% { transform: translateX(3.0px); }
+  51.25% { transform: translateX(-2.9px); }
+  52.50% { transform: translateX(2.7px); }
+  53.75% { transform: translateX(-2.5px); }
+  55.00% { transform: translateX(2.4px); }
+  56.25% { transform: translateX(-2.2px); }
+  57.50% { transform: translateX(2.1px); }
+  58.75% { transform: translateX(-1.9px); }
+  60.00% { transform: translateX(1.8px); }
+  61.25% { transform: translateX(-1.6px); }
+  62.50% { transform: translateX(1.5px); }
+  63.75% { transform: translateX(-1.4px); }
+  65.00% { transform: translateX(1.2px); }
+  66.25% { transform: translateX(-1.1px); }
+  67.50% { transform: translateX(0.9px); }
+  68.75% { transform: translateX(-0.8px); }
+  70.00% { transform: translateX(0.6px); }
+  71.25% { transform: translateX(-0.5px); }
+  72.50% { transform: translateX(0.3px); }
   73.75% { transform: translateX(-0.1px); }
   75%, 100% { transform: translateX(0); }
 }
@@ -1616,7 +1629,7 @@ input[type="text"].threshold__field {
   0% { opacity: 0; } 12.5% { opacity: 0.35; } 50% { opacity: 1; translate: 0 calc(-14 * var(--m-u)); }
   75% { opacity: 0.35; } 100% { opacity: 0; translate: 0 calc(-24 * var(--m-u)); }
 }
-@keyframes maitreya-sky { 0% { opacity: 0; } 30% { opacity: 0.5; } 75% { opacity: 0.1; } 100% { opacity: 0; } }
+@keyframes maitreya-sky { 0% { opacity: 0; } 30% { opacity: 0.7; } 75% { opacity: 0.1; } 100% { opacity: 0; } }
 @keyframes maitreya-crack {
   0%, 12.5% { stroke-dashoffset: 260; opacity: 0.8; }
   30% { stroke-dashoffset: 0; opacity: 0.8; }

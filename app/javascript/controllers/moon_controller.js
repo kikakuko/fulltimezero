@@ -24,6 +24,7 @@ export default class extends Controller {
       this.open(this.leastValue)
       this.after(shade, () => {
         shade.setAttribute("fill", "white") // 가리개를 어둠에서 비움으로 — 색이 아니라 마스크의 밝기다
+        this.element.querySelector(".edge-clip")?.setAttribute("x", 0) // 경계가 왼쪽 반으로 건너간다
         this.open(this.rxValue)
       })
     }))

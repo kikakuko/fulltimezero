@@ -89,7 +89,7 @@ en:
     done: Today's share is done. Now rest.
     record_again: Record once more
     clear: Keep today clear
-    unclear: Let it go
+    unclear: Today is kept clear · let it go
 
   rests:
     recorded: Recorded. The moon is a little fuller.
@@ -307,7 +307,7 @@ en:
     day_empty: This day is empty.
     cleared: Kept clear.
     clear: Keep this day clear
-    unclear: Let it go
+    unclear: Kept clear · let it go
     add: What is there
     save: Write it
     remove: Erase

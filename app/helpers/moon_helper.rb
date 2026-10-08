@@ -47,6 +47,13 @@ module MoonHelper
       # 어두운 쪽 — 옅은 먹(옅기는 CSS 의 --moon-dark). 가리개가 비는 쪽을 열어 둔다.
       concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)",
                         mask: "url(##{id})", class: "disc")
+      # 응답하는 순간, 먹이 빠지는 경계에 금빛 번짐 한 겹 — 보름의 번짐과 같은 색 · 같은 겹.
+      # 가리개와 같은 타원이 같이 옮아가고, 경계가 있는 반쪽만 보인다. 이내 가라앉는다.
+      if filling
+        concat tag.clipPath(id: "#{id}-edge") { tag.rect(x: from < 0.5 ? r : 0, y: 0, width: r, height: size, class: "edge-clip") }
+        concat tag.ellipse(cx: r, cy: r, rx: shade_rx(from, size), ry: r, fill: "none", stroke: "var(--gilt)",
+                           class: "edge", "clip-path": "url(##{id}-edge)")
+      end
       # 몸체 — 가는 먹선 원.
       concat tag.circle(cx: r, cy: r, r: r - 0.5, fill: "none",
                         stroke: "var(--ink)", "stroke-width": 1, class: "rim")

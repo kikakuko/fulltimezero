@@ -90,7 +90,7 @@ ko:
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기
     clear: 오늘을 비워 둔다
-    unclear: 비움을 거둔다
+    unclear: 오늘을 비워 두었다 · 거둔다
 
   rests:
     recorded: 기록되었다. 달이 조금 찼다.
@@ -308,7 +308,7 @@ ko:
     day_empty: 이 날은 비어 있다.
     cleared: 비워 두었다.
     clear: 이 날을 비워 둔다
-    unclear: 비움을 거둔다
+    unclear: 비워 두었다 · 거둔다
     add: 무엇이 있는가
     save: 적는다
     remove: 지운다
