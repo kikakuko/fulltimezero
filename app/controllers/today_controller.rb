@@ -27,7 +27,8 @@ class TodayController < ApplicationController
     end
 
     # 오늘을 비워 두는 선언은 여기 없다 — 미륵당의 하루에서 한다(days#show). 마당의 달은
-    # 틈틈이 쉼이다(2026-10-08).
+    # 틈틈이 쉼이다(2026-10-08). 낙관을 찍는 손짓 안의 떨림은 비움과 같은 게이트가 정한다.
+    @vibrate = SilenceGate.allow?(:vibration, user: Current.user)
 
     # 비운 날의 아침 첫 화면에서만, 달이 살짝 크게 한 번 숨 쉰다.
     @cleared_morning = @empty && Current.user.morning? &&

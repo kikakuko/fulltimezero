@@ -70,9 +70,13 @@
   --moon-fill-time: 2.4s;
   --moon-fill-ease: cubic-bezier(.34, 1.56, .64, 1);
   --moon-edge-time: 2.4s;
-  /* 마당의 낙관 「쉼」 — 눌림(0.1초 안)과 찍힌 뒤 먹의 번짐(1초 안) */
+  /* 마당의 낙관 「쉼」 — 바탕 한 변수(지금은 먹; 주사는 §2 개정이 먼저다), 내려오는 동안(0.1초),
+     인주가 번지는 동안(0.3초), 그리고 고르지 않은 가장자리의 마스크 — 종이결과 같은 잡음으로
+     네모의 테를 흔들고(feDisplacementMap), 모서리로 갈수록 옅다(radialGradient). 색 변수 없음. */
+  --seal-ink: var(--ink);
   --seal-press-time: 0.1s;
-  --seal-stamp-time: 0.9s;
+  --seal-bleed-time: 0.3s;
+  --seal-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cfilter id='r' x='-10%25' y='-10%25' width='120%25' height='120%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.09' numOctaves='3' seed='7' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='7' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3CradialGradient id='g'%3E%3Cstop offset='55%25' stop-opacity='1'/%3E%3Cstop offset='100%25' stop-opacity='0.7'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='88' height='88' rx='5' fill='url(%23g)' filter='url(%23r)'/%3E%3C/svg%3E");
 
   /* 주사(朱砂) — 황화수은. 사경의 계선과 글씨에 쓰는 선홍, 탑다라니의 붉은 인쇄.
      하루에 한 번만 보인다(§2): 쓰는 곳은 탑 안의 「오늘 쓴 한 자」 하나뿐이다.
@@ -292,35 +296,37 @@ body {
 .tiny { font-size: 0.8125rem; color: var(--ink-soft); }
 .soft { color: var(--ink-soft); }
 
-/* 틈틈이 쉼 — 낙관 같은 붓 한 자. 그림 기호가 아니라 글자다. 먹선 원 하나에 「쉼」. */
+/* ── 틈틈이 쉼 — 낙관(落款) ──────────────────────────────────────────
+   백문(白文): 네모 바탕을 찍고 글자 「쉼」을 한지색으로 비운다. 바탕은 --seal-ink 한 변수
+   — 지금은 먹이다. 주사는 §2 가 「하루에 한 번만, 버튼에는 쓰지 않는다」고 못박고 있어
+   낙관에 쓰려면 헌법을 고쳐야 한다(palette_test 「주사가 쓰인 곳은 … 한 자 하나뿐」).
+   가장자리는 자를 댄 선이 아니다 — 종이결과 같은 잡음(--seal-mask)으로 고르지 않게 번지고,
+   모서리로 갈수록 인주가 옅은 데가 있다. 자국은 하나다 — 누를 때마다 같은 자리에 찍힌다. */
 .rest { margin: 0; }
 .seal {
   display: inline-grid; place-items: center; box-sizing: border-box;
-  width: 4.5rem; height: 4.5rem; border: 1px solid var(--ink); border-radius: 50%;
-  font-family: var(--serif); font-size: 1.75rem; line-height: 1; color: var(--ink);
-  text-decoration: none; text-indent: 0.1em;
+  width: 2.875rem; height: 2.875rem; border: 0; border-radius: 3px; padding: 0;
+  background: var(--seal-ink); color: var(--paper); cursor: pointer;
+  font-family: var(--serif); font-size: 1.6rem; line-height: 1; text-indent: 0.05em; text-decoration: none;
+  mask-image: var(--seal-mask); mask-size: 100%; mask-position: center; mask-repeat: no-repeat;
+  -webkit-mask-image: var(--seal-mask); -webkit-mask-size: 100%; -webkit-mask-position: center; -webkit-mask-repeat: no-repeat;
 }
-.seal:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
-/* 누르는 순간 살짝 눌린다(0.1초 안). 찍힌 뒤에는 먹이 한 번 번졌다 가라앉는다(1초 안) —
-   달은 움직이지 않는다. 움직임을 줄이면 둘 다 없다. */
-.seal { position: relative; transition: transform var(--seal-press-time) ease-out; }
-.seal:active { transform: scale(0.96); }
-/* 번짐 — 낙관 둘레의 먹 한 겹. 그림자가 아니라 번진 먹이다(둥근 그라데이션). */
-.seal::after {
-  content: ""; position: absolute; inset: -0.75rem; border-radius: 50%; pointer-events: none; opacity: 0;
-  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 22%, transparent) 0%, transparent 70%);
-}
+/* 찍는다 — 누르는 순간 도장이 내려오고(0.1초: 크기 1.08 → 1, 기울기 −2° → 0, 불투명 0.7 → 1),
+   닿은 뒤 인주가 가장자리로 조금 번진다(0.3초: 마스크가 살짝 커졌다 멈춤). 합쳐 0.4초. */
 @media (prefers-reduced-motion: no-preference) {
-  .rest--stamped .seal::after { animation: seal-stamp var(--seal-stamp-time) ease-out both; }
+  .seal:active { animation: seal-press var(--seal-press-time) ease-out both; }
+  .rest--stamped .seal {
+    animation: seal-press var(--seal-press-time) ease-out both,
+               seal-bleed var(--seal-bleed-time) ease-out var(--seal-press-time) both;
+  }
 }
-@keyframes seal-stamp {
-  0%   { opacity: 0; transform: scale(0.8); }
-  35%  { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.15); }
+@keyframes seal-press {
+  0%   { transform: scale(1.08) rotate(-2deg); opacity: 0.7; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .seal { transition: none; }
-  .seal:active { transform: none; }
+@keyframes seal-bleed {
+  0%   { mask-size: 100%; -webkit-mask-size: 100%; }
+  100% { mask-size: 106%; -webkit-mask-size: 106%; }
 }
 .moon { display: block; margin: 0 auto; }
 /* 달은 비워 그린다 — 가는 먹선 원이 몸체를 잡고, 어두운 쪽만 옅은 먹. 밝은 쪽은 한지 그대로. */

@@ -86,7 +86,9 @@ ko:
     question: 오늘 쉬었는가.
     already_quiet: 오늘은 이미 고요했다. 더 남길 쉼이 있는가.
     sit: 앉는다
+    # 낙관 — 번역하지 않는다. 영어 화면에도 「쉼」 한 자. 읽어 주는 이름만 그 언어로.
     rested: 쉼
+    rested_label: 쉼을 남긴다
     back: 마당으로
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기

@@ -85,7 +85,8 @@ en:
     question: Have you rested today?
     already_quiet: Today has already been quiet. Is there more rest to keep?
     sit: Sit
-    rested: Rest
+    rested: 쉼
+    rested_label: Leave a pause
     back: Back to the courtyard
     done: Today's share is done. Now rest.
     record_again: Record once more
