@@ -19,8 +19,8 @@
   <div class="center">
     <%= render "elephant", reading: @elephant, night: true %>
 
-    <%# 자리를 골랐으면 그 자리의 한 줄이, 아니면 늘 하는 한 줄이. 한 번 떴다 사라진다. %>
-    <p class="hint"><%= @sitting.abiding ? @sitting.abiding.sit_hint_here : t("sittings.hint") %></p>
+    <%# 늘 하는 한 줄. 한 번 떴다 사라진다. 고른 자리의 한 줄은 자리 고르기와 함께 걷었다. %>
+    <p class="hint"><%= t("sittings.hint") %></p>
   </div>
 
   <%= button_to t("sittings.finish"), sitting_path(@sitting), method: :patch,

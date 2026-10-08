@@ -1,6 +1,6 @@
-<%# 선방. 위 절반은 산수와 코끼리, 그 아래 한 줄, 그리고 같은 무게의 두 길 —
-    앉는 것과 아무것도 하지 않는 것. 자리 고르기는 「앉는다」 안에 있다.
-    카드도 태그도 「다른 길」 목록도 없다.
+<%# 선방. 위 절반은 산수와 바위와 코끼리, 그리고 같은 무게의 두 길 —
+    앉는 것과 아무것도 하지 않는 것. 자리를 고르는 돌은 걷었다(2026-10-08) —
+    아홉의 이름과 글은 장경각에만 있다. 카드도 태그도 「다른 길」 목록도 없다.
     길이는 글자로만 적는다 — 숫자는 화면에 없다.
     종성은 누르는 그 손짓 안에서 울린다. 죽비가 먼저다. %>
 <%= render "compound/hall_header", key: :sitting %>
@@ -31,19 +31,6 @@
     </li>
   </ul>
 
-  <%# 아홉 자리 가운데 하나를 고른다 — 흩어 놓은 돌에서. 고르지 않아도 된다.
-      고른 자리로 앉는 중의 한 줄이 정해질 뿐, 무엇도 세지 않는다. %>
-  <p class="tiny"><%= t("sittings.new.abiding") %></p>
-  <%= render "abidings/stones", abidings: @abidings, mode: :choice, chosen: @abiding %>
-  <ul class="choices">
-    <li>
-      <%= f.label "abiding_none" do %>
-        <%= radio_button_tag "sitting[abiding]", "", @abiding.nil?, id: "abiding_none" %>
-        <%= t("abidings.none") %>
-      <% end %>
-    </li>
-  </ul>
-  <p class="tiny"><%= link_to t("abidings.read"), guide_chapter_path("abidings"), class: "soft" %></p>
 <% end %>
 <% end %>
 

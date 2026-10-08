@@ -33,7 +33,7 @@ en:
     # under the quoted-original exception (§5) for its source.
     detail:
       sitting:
-        line: Where one sits. A black elephant rests on a rock.
+        line: Where one sits. A black elephant sits on a rock.
         verse: A tamed mind brings happiness
         enter: Enter the sitting hall
       copying:
@@ -123,8 +123,6 @@ en:
     image: In the picture
     sit_here: Sit at this place
     back: Back to the nine
-    read: Read the nine
-    none: No particular place
     sources: From Asaṅga's Śrāvakabhūmi and the fourteenth chapter of the Mahāyānasūtrālaṃkāra. The pairing with the six powers and four kinds of engagement, and the elephant picture, are the Tibetan lamrim reading.
     invitation: Any stone can be picked up first. There is no order.
     # 발자국 — 앞 문장은 경의 말(인용 원문 예외), 뒤는 이 장의 말이다.
@@ -264,7 +262,6 @@ en:
       nothing: Do nothing
       nothing_go: Go in
       nothing_bell: A bell on the way in
-      abiding: Place
     elephant:
       alt: An elephant on the path
     # A stick of incense and a cup of tea were how time was measured

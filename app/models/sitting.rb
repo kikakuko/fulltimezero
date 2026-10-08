@@ -22,6 +22,7 @@ class Sitting < ApplicationRecord
   belongs_to :user
   # 그때 고른 자리. 비워 둘 수 있다. 이것으로 사람을 판정하지 않는다 —
   # 어느 자리를 몇 번 골랐는지 세는 곳은 없다.
+  # 자리 고르기는 걷었다(2026-10-08). 칸과 관계는 남되 어디에서도 쓰지 않는다 — 지울지는 뒤에 정한다.
   belongs_to :abiding, optional: true
 
   validates :mode, inclusion: { in: MODES }

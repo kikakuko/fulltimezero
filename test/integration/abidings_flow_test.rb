@@ -44,32 +44,6 @@ class AbidingsFlowTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_sitting_path(abiding: 1)
   end
 
-  test "앉기에서 자리를 고르면 그 자리로 앉고, 앉는 중에 그 자리의 한 줄이 뜬다" do
-    sign_in_as @user
-    abiding = @abidings.fetch(4)
-
-    get new_sitting_path
-    assert_select ".stones .stone input[type=radio]", count: 9
-    assert_select "#abiding_none[checked]", count: 1, message: "처음에는 자리를 두지 않는다"
-
-    post sittings_path, params: { sitting: { length: "tea", abiding: abiding.pos } }
-    sitting = @user.sittings.last
-    assert_equal abiding, sitting.abiding
-
-    follow_redirect!
-    assert_match abiding.sit_hint, visible_text
-    assert_no_match I18n.t("sittings.hint"), visible_text
-    assert_no_match abiding.ko, visible_text, "앉는 중에 자리의 이름이 붙는다"
-  end
-
-  test "지난번 고른 자리가 다음 앉기에 그대로 있고, 안내에서 오면 그 자리다" do
-    sign_in_as @user
-    @user.sittings.create!(mode: "sitting", abiding: @abidings.fetch(6))
-
-    get new_sitting_path
-    assert_select "#abiding_7[checked]", count: 1
-
-    get new_sitting_path(abiding: 2)
-    assert_select "#abiding_2[checked]", count: 1
-  end
+  # 자리 고르기는 걷었다(2026-10-08). 안내의 「이 자리로 앉는다」는 선방으로 가는 문일
+  # 뿐이고, 선방에는 고르는 돌이 없다 — sitting_form_test 가 지킨다.
 end

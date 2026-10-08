@@ -43,13 +43,26 @@ class SittingFormTest < ActionDispatch::IntegrationTest
   end
 
   # 굽이는 길의 모양이다. 이름이 붙으면 아홉으로 세는 것이 되고, 그것은 §5 가 막는다.
-  test "굽이에 이름이 없다 — 선방에도 앉는 중에도" do
+  # 자리를 고르는 돌도 같다(2026-10-08) — 이름뿐 아니라 abiding 을 고르는 입력 자체가
+  # 두 화면에 없고, 씨앗이 남긴 abiding 값도 화면 어디에도 나오지 않는다.
+  # 아홉의 이름과 글은 장경각에만 있다.
+  test "선방과 앉는 중에 아홉의 이름도, 고르는 돌도, 고른 자리도 없다" do
+    user = users(:one)
+    names = Abiding.in_order.map(&:name)
+    user.sittings.create!(mode: "sitting", abiding: Abiding.in_order.last, ended_at: Time.current)
+
     get new_sitting_path
     assert_select ".elephant-field__station", false, "선방의 굽이에 이름이 붙었다"
+    assert_select ".stones, .stone", false, "선방에 자리 고르는 돌이 있다"
+    assert_select "input[name='sitting[abiding]']", false, "선방에 자리를 고르는 입력이 있다"
+    names.each { |name| assert_no_match(/#{Regexp.escape(name)}/, visible_text, "선방에 「#{name}」이 보인다") }
 
-    post sittings_path, params: { sitting: { length: "tea" } }
+    post sittings_path, params: { sitting: { length: "tea", abiding: Abiding.in_order.first.pos } }
     follow_redirect!
     assert_select ".elephant-field__station", false, "앉는 중의 굽이에 이름이 붙었다"
+    assert_select ".stones, .stone", false, "앉는 중에 돌이 있다"
+    names.each { |name| assert_no_match(/#{Regexp.escape(name)}/, visible_text, "앉는 중에 「#{name}」이 보인다") }
+    assert_nil user.sittings.last.abiding, "고르는 길을 걷었는데 앉음에 자리가 남는다"
 
     assert_no_match(/station/, Rails.root.join("app/models/elephant.rb").read, "자리를 세는 셈이 되살아났다")
   end
