@@ -86,12 +86,10 @@ ko:
     question: 오늘 쉬었는가.
     already_quiet: 오늘은 이미 고요했다. 더 남길 쉼이 있는가.
     sit: 앉는다
-    rested: 쉬었다
+    rested: 쉼
     back: 마당으로
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기
-    clear: 오늘을 비워 둔다
-    unclear: 오늘을 비워 두었다 · 거둔다
 
   rests:
     recorded: 기록되었다. 달이 조금 찼다.

@@ -289,6 +289,15 @@ body {
 .tiny { font-size: 0.8125rem; color: var(--ink-soft); }
 .soft { color: var(--ink-soft); }
 
+/* 틈틈이 쉼 — 낙관 같은 붓 한 자. 그림 기호가 아니라 글자다. 먹선 원 하나에 「쉼」. */
+.rest { margin: 0; }
+.seal {
+  display: inline-grid; place-items: center; box-sizing: border-box;
+  width: 4.5rem; height: 4.5rem; border: 1px solid var(--ink); border-radius: 50%;
+  font-family: var(--serif); font-size: 1.75rem; line-height: 1; color: var(--ink);
+  text-decoration: none; text-indent: 0.1em;
+}
+.seal:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
 .moon { display: block; margin: 0 auto; }
 /* 달은 비워 그린다 — 가는 먹선 원이 몸체를 잡고, 어두운 쪽만 옅은 먹. 밝은 쪽은 한지 그대로. */
 .moon circle.disc { opacity: var(--moon-dark); }

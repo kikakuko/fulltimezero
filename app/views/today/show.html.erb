@@ -31,44 +31,11 @@
 
     <%# 전각으로 가는 길은 조감도에 있다. 여기에는 쉼 기록만.
         손님에게는 쌓는 손짓을 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
-    <%# 「쉬었다」는 버튼이 아니라 달 아래 한 줄이다 — 달이 응답하니 손짓은 작아도 된다. %>
+    <%# 틈틈이 쉼 — 마당의 달은 짧은 일상의 짧은 쉼을 센다. 손짓은 낙관 같은 붓 한 자 「쉼」
+        하나다. 그림 기호가 아니라 글자다 — 이 앱의 아이콘은 글자다. 오늘을 비워 두는
+        선언은 여기 없다. 그것은 미륵당의 하루에서 한다(2026-10-08). %>
     <% unless guest? %>
-      <p><%= link_to t("today.rested"), new_rest_path, class: "button-quiet rested" %></p>
+      <p class="rest" id="rest"><%= link_to t("today.rested"), new_rest_path, class: "seal rested" %></p>
     <% end %>
-
-    <%# 오늘을 비우는 선언. 앱의 한가운데 행위이므로 여기 둔다 — 날들의
-        하루 화면까지 세 번 눌러 들어가 있을 일이 아니다.
-        일정이 있어도 비울 수 있다. 비움은 사실의 보고가 아니라 선언이다.
-        지키지 못해도 아무 일 없다(제5조 · 제6조). %>
-    <% unless guest? %>
-    <div class="tiny clearing" id="clearing" data-controller="maitreya">
-      <%= button_to t(@cleared_today ? "today.unclear" : "today.clear"),
-                    day_path(Current.user.today, from: "today"), method: :patch, class: "button-quiet",
-                    data: { action: "click->clearing#declare click->bell#open click->maitreya#rise" },
-                    form: { data: { controller: "clearing bell",
-                                    clearing_vibrate_value: @vibrate, clearing_declaring_value: !@cleared_today,
-                                    bell_enabled_value: @clearing_bell && !@cleared_today,
-                                    bell_start_url_value: bell_source(:start) } } %>
-
-      <%# 미륵이 솟는 장면. 누르는 순간 마당이 물러나고 땅과 미륵만 남는다.
-          넉 초에 전부 멎는다. 한 줄은 처음 비운 날과 다 올라온 날에만. %>
-      <% if @maitreya_rise %>
-        <% before, after = @maitreya_rise %>
-        <template data-maitreya-target="scene">
-          <div class="maitreya-scene" role="presentation">
-            <div class="maitreya-scene__ground">
-              <%= render "days/maitreya", reading: after, before: before %>
-            </div>
-            <div class="maitreya-scene__below">
-              <% if after.first || after.whole %>
-                <p class="maitreya-scene__line"><%= t("maitreya.line") %></p>
-              <% end %>
-              <p class="maitreya-scene__back"><%= link_to t("maitreya.back"), today_path, class: "soft" %></p>
-            </div>
-    <% end %>
-          </div>
-        </template>
-      <% end %>
-    </div>
   </div>
 <% end %>

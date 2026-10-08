@@ -16,13 +16,22 @@ class DaysController < ApplicationController
     @plans = Current.user.plans.on(@date).chronological
     @cleared = Current.user.clearings.exists?(cleared_on: @date)
 
+    # 오늘을 비워 두는 선언 — 그 손짓 안의 떨림과 종성은 게이트가 정한다. 종성은 기본으로
+    # 꺼져 있다. 미륵이 솟는 장면은 하루 한 번 — 오늘 이미 보았으면(비웠다가 거둔 날) 다시
+    # 오지 않는다. 본 날은 계정에 있다.
+    @today = @date == Current.user.today
+    if @today
+      @vibrate = SilenceGate.allow?(:vibration, user: Current.user)
+      @clearing_bell = Current.user.clearing_sound && SilenceGate.allow?(:bell, user: Current.user)
+      @maitreya_rise = Maitreya.declaring(Current.user) unless Current.user.maitreya_seen_on == Current.user.today
+    end
+
     # 그 날 남긴 쉼과 앉음. 지우려면 먼저 보여야 한다.
     @rests = Current.user.rests.where(rested_on: @date).chronological
     @sittings = Current.user.sittings.where(sat_on: @date).chronological
   end
 
   # 비움 예약을 걸고 거둔다. 오가는 것뿐이라 물어보지 않는다.
-  # 오늘 화면에서 선언했으면 오늘 화면으로 돌아간다.
   def update
     clearing = Current.user.clearings.find_by(cleared_on: date)
 
@@ -33,7 +42,7 @@ class DaysController < ApplicationController
     # 한 기기를 둘이 써도 각자 제 장면을 본다.
     Current.user.update!(maitreya_seen_on: Current.user.today) if !clearing && date == Current.user.today
 
-    redirect_to params[:from] == "today" ? today_path : day_path(date)
+    redirect_to day_path(date)
   end
 
   private

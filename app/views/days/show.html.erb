@@ -70,9 +70,11 @@
 
 <hr class="rule">
 
+<%# 이 날을 비워 두는 선언. 일정이 있어도 비울 수 있다 — 비움은 사실의 보고가 아니라
+    선언이다. 지키지 못해도 아무 일 없다(제5조 · 제6조). 오늘을 비우는 순간에는 미륵이
+    솟는 장면이 실린다(2026-10-08 에 마당에서 여기로 옮겼다 — 마당의 달은 틈틈이 쉼이다). %>
 <% unless guest? %>
-<%= button_to @cleared ? t("days.unclear") : t("days.clear"),
-              day_path(@date), method: :patch, class: "button-quiet" %>
+  <%= render "clearing" %>
 <% end %>
 
 <p class="tiny" style="margin-top:2.5rem">

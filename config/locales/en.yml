@@ -85,12 +85,10 @@ en:
     question: Have you rested today?
     already_quiet: Today has already been quiet. Is there more rest to keep?
     sit: Sit
-    rested: I rested
+    rested: Rest
     back: Back to the courtyard
     done: Today's share is done. Now rest.
     record_again: Record once more
-    clear: Keep today clear
-    unclear: Today is kept clear · let it go
 
   rests:
     recorded: Recorded. The moon is a little fuller.
