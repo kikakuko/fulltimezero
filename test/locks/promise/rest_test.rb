@@ -34,9 +34,15 @@ class RestTest < ActiveSupport::TestCase
     assert_nil rest.texture
   end
 
-  test "길이는 반드시 있어야 하고 목록 밖의 값은 받지 않는다" do
+  test "길이는 반드시 있어야 하고 목록 밖의 값은 받지 않는다 — 틈만 길이 없이 선다" do
     assert_not users(:one).rests.new(duration: nil).valid?
     assert_not users(:one).rests.new(duration: "forever").valid?
+    # 틈 — 묻지 않은 쉼. 길이도 결도 null 이고, 컬럼이 늘지 않는다.
+    pause = users(:one).rests.create!(without_asking: true)
+    assert pause.pause?
+    assert_nil pause.read_attribute(:duration)
+    assert_nil pause.texture
+    assert_not Rest.column_names.include?("without_asking"), "틈의 손짓이 컬럼이 되었다"
   end
 
   test "기록한 날은 사용자의 오늘로 찍힌다" do
