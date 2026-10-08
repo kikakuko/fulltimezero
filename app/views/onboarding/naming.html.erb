@@ -6,12 +6,18 @@
 <%= render "gates", state: "naming" %>
 
 <div class="threshold threshold--naming" data-controller="gates" data-gates-state-value="naming">
-  <%# 계정이 있든 없든 같은 칸이다. 없으면 세션이 들고 있는다. %>
-  <%= form_with scope: :user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
-    <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>
-    <%= f.text_field :what_moves, value: @what_moves, maxlength: User::WHAT_MOVES_MOST, autocomplete: "off",
-                     class: "threshold__field" %>
-    <p class="threshold__way"><%= f.button t("threshold.naming.go"), class: "button-primary" %></p>
+  <%# 계정이 있든 없든 같은 칸이다. 없으면 세션이 들고 있는다.
+      손님에게는 칸이 없다 — 적어도 남지 않으니 묻지 않고, 물음만 보고 지나간다. %>
+  <% if guest? %>
+    <p class="gates__line"><%= t("threshold.naming.question") %></p>
+    <p class="threshold__way"><%= link_to t("threshold.naming.go"), threshold_breath_path, class: "button-primary" %></p>
+  <% else %>
+    <%= form_with scope: :user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>
+      <%= f.label :what_moves, t("threshold.naming.question"), class: "gates__line" %>
+      <%= f.text_field :what_moves, value: @what_moves, maxlength: User::WHAT_MOVES_MOST, autocomplete: "off",
+                       class: "threshold__field" %>
+      <p class="threshold__way"><%= f.button t("threshold.naming.go"), class: "button-primary" %></p>
+    <% end %>
   <% end %>
 
   <%= render "later" %>

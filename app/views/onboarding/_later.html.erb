@@ -1,2 +1,8 @@
-<%# 어느 문에서든 지나갈 수 있다. 작게, 아래쪽에. 붙잡지 않는다(제7조). %>
-<%= button_to t("threshold.later"), threshold_passed_path, class: "button-quiet", form_class: "threshold__later" %>
+<%# 어느 문에서든 지나갈 수 있다. 작게, 아래쪽에. 붙잡지 않는다(제7조).
+    손님에게는 적을 것이 없으므로 보내지 않고 그냥 마당으로 간다 — 쓰는 길은 손님에게
+    닫혀 있다(guest_test). %>
+<% if guest? %>
+  <p class="threshold__later"><%= link_to t("threshold.later"), today_path, class: "button-quiet" %></p>
+<% else %>
+  <%= button_to t("threshold.later"), threshold_passed_path, class: "button-quiet", form_class: "threshold__later" %>
+<% end %>

@@ -9,7 +9,12 @@
 <div class="threshold threshold--breath" data-controller="gates breath" data-gates-state-value="breath">
   <p class="gates__line"><%= t("threshold.breath.line") %></p>
 
-  <%= form_with url: threshold_passed_path, data: { breath_target: "gate" } do %><% end %>
+  <%# 장막이 걷히면 스크립트가 이 문을 민다. 손님은 보낼 것이 없어 마당으로 간다(GET). %>
+  <% if guest? %>
+    <%= form_with url: today_path, method: :get, data: { breath_target: "gate" } do %><% end %>
+  <% else %>
+    <%= form_with url: threshold_passed_path, data: { breath_target: "gate" } do %><% end %>
+  <% end %>
 
   <%= render "later" %>
 </div>

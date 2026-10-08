@@ -86,6 +86,29 @@ class GuestTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 문 셋은 손님에게도 열린다 — 다만 보내는 손짓이 아니라 가는 문이다. 둘째 문은
+  # 묻지 않고(적어도 남지 않으니), 셋째 문은 마당으로 간다. 지나도 씨앗은 그대로다.
+  test "손님도 문 셋을 지난다 — 보내지 않고 간다" do
+    closed do
+      before = [ @seed.reload.onboarded_at, @seed.what_moves ]
+
+      get threshold_path
+      assert_select "a.button-primary[href=?]", threshold_naming_path
+      assert_select "form", false, "첫째 문에 손님이 보낼 폼이 있다"
+
+      get threshold_naming_path
+      assert_select "input[name='user[what_moves]']", false, "손님에게 한 줄을 묻는다"
+      assert_select "a.button-primary[href=?]", threshold_breath_path, count: 1
+      assert_select "a.button-quiet[href=?]", today_path(locale: :ko), count: 1
+
+      get threshold_breath_path
+      assert_select "form[method=get][action=?]", today_path(locale: :ko), count: 1
+      assert_select "form[method=post]", false, "셋째 문이 손님에게 보내는 손짓을 둔다"
+
+      assert_equal before, [ @seed.reload.onboarded_at, @seed.what_moves ], "손님이 문을 지나자 씨앗이 바뀌었다"
+    end
+  end
+
   # 가입이 열리면 구경하는 자리는 사라진다 — 그때는 저마다의 자리가 생긴다.
   test "가입이 열리면 손님의 자리가 없다" do
     with_env("SIGNUPS", "true") do
