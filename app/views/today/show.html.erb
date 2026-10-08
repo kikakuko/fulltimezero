@@ -10,6 +10,8 @@
       <p class="lead"><%= t("moon.full") %></p>
     <% end %>
     <p class="lead"><%= t("today.done") %></p>
+    <%# 할 일은 없지만 길은 있다 — 마당으로 돌아가는 조용한 한 줄. 손짓이 아니라 문이다. %>
+    <p class="tiny"><%= link_to t("today.back"), today_path, class: "soft" %></p>
   </div>
 <% else %>
   <%# 마당 — 삼문을 지나면 서는 곳. 맨 위에 경내 조감도, 전각으로 가는 길은 이름뿐. %>

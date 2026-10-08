@@ -87,6 +87,7 @@ ko:
     already_quiet: 오늘은 이미 고요했다. 더 남길 쉼이 있는가.
     sit: 앉는다
     rested: 쉬었다
+    back: 마당으로
     done: 오늘 몫은 끝났다. 이제 쉬어라.
     record_again: 한 번 더 기록하기
     clear: 오늘을 비워 둔다
@@ -96,8 +97,7 @@ ko:
     recorded: 기록되었다. 달이 조금 찼다.
     new:
       duration_question: 얼마나 쉬었는가
-      texture_question: 쉼의 결
-      texture_optional: 고르지 않아도 된다.
+      texture_question: 쉼의 결 — 고르지 않아도 된다
       submit: 기록
     durations:
       one_breath: 한 호흡

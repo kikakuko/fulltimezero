@@ -86,6 +86,7 @@ en:
     already_quiet: Today has already been quiet. Is there more rest to keep?
     sit: Sit
     rested: I rested
+    back: Back to the courtyard
     done: Today's share is done. Now rest.
     record_again: Record once more
     clear: Keep today clear
@@ -95,8 +96,7 @@ en:
     recorded: Recorded. The moon is a little fuller.
     new:
       duration_question: How long did you rest
-      texture_question: The texture of the rest
-      texture_optional: You don't have to choose.
+      texture_question: The texture of the rest — if you like
       submit: Record
     durations:
       one_breath: one breath
