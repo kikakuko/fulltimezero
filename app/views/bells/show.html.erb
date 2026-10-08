@@ -13,6 +13,11 @@
        data-bell-enabled-value="<%= @bell %>"
        data-bell-stop-on-leave-value="true"
        data-bell-start-url-value="<%= source %>">
+    <%# 종의 그림 — 들보에 매달린 정면, 당목은 오른쪽. 피그마에서 오면 여기 선다.
+        없는 동안은 아무것도 보이지 않고 자리만 접힌다. 움직이지 않는다. %>
+    <% if (figure = bell_figure) %>
+      <%= image_tag figure, class: "bell-hall__figure", alt: "", draggable: false %>
+    <% end %>
     <%= button_tag t("bells.listen"), type: "button", class: "button-primary",
                    data: { action: "click->bell#open" } %>
   </div>

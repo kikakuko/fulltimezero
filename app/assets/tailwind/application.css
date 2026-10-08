@@ -654,6 +654,8 @@ input[type="text"] {
    듣는 자리. 손짓 하나와, 그 아래 작은 출처 한 줄. 종 그림은 없다 —
    소리가 도상이다. */
 .bell-hall { display: grid; justify-items: center; margin: 2.5rem 0 1rem; }
+/* 종의 그림 — 표시 폭 260px(2배 520px 로 받는다). 그림이 없으면 이 자리는 접힌다. */
+.bell-hall__figure { display: block; width: min(260px, 100%); height: auto; margin-bottom: 1.5rem; user-select: none; -webkit-user-drag: none; }
 .bell-hall__source { color: var(--mute); text-align: center; margin: 0 0 2.5rem; }
 
 /* ── 절과 염주 ───────────────────────────────────────────────────────
