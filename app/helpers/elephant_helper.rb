@@ -16,9 +16,12 @@ module ElephantHelper
   DEFS_ID = "elephant-parts"
 
   # ele 가 없으면 흰빛은 CSS 가 정한다(무위 — 앉은 날과 무관한 하나의 값).
-  def elephant_figure(ele: nil, walking: false, label: nil)
+  # walking 은 문턱(들어설 때 걸어옴)과 장경각의 걷는 코끼리에, restless 는 바위 위의
+  # 뒤척임에. 둘 다 아니면 멎어 있다.
+  def elephant_figure(ele: nil, walking: false, restless: false, label: nil)
     classes = [ "elephant" ]
     classes << "elephant--walking-legs" if walking
+    classes << "elephant--restless" if restless
 
     content_tag :span, elephant_inline_svg(label), class: classes.join(" "), style: elephant_style(ele)
   end

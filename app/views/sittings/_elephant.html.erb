@@ -1,16 +1,34 @@
-<%# 코끼리의 길. 검은 코끼리가 앉은 시간만큼 희어지며 길을 오른다.
+<%# 코끼리 — 선방의 몸. 길가 바위에 앉아 있다(§2, 2026-10-08).
     길은 그리지 않는다 — 시각적 길은 배경 그림 안에 있다. 굽이 아홉은 길의
-    모양일 뿐이고 이름도 글도 붙지 않는다(§2, 2026-10-08). 아홉의 이름과 글은
-    장경각에 있다. 숫자는 없다. %>
+    모양일 뿐이고 이름도 글도 붙지 않는다. 숫자는 없다.
+
+    흰빛(--ele)과 뒤척임(--restless)과 길의 옅음(--whiteness)은 서버가 준 값
+    그대로이고, 앉는 동안 다시 계산되지 않는다.
+
+    TODO: 앉은 코끼리 그림으로 교체. 지금은 선 코끼리를 바위 위에 둔다 — 부위
+    회전만으로는 앉은 자세가 나오지 않았다(다리 축이 어깨 · 엉덩이에 있어 접힌
+    다리가 몸 아래로 들어가지 않는다). 새 그림의 규격은 docs/NEXT.md 에.
+
+    arriving: 선방에 들어설 때 가장자리에서 바위까지 걸어온다 — 자리의 변화가
+    아니라 문턱이다. 앉는 중에는 걸어오지 않는다. %>
 <% night ||= false %>
+<% arriving ||= false %>
 <div class="<%= class_names("elephant-field", "ink-frame": !night) %>" data-controller="elephant"
-     data-elephant-whiteness-value="<%= reading.whiteness %>"
-     data-elephant-yesterday-value="<%= reading.yesterday %>"
-     data-elephant-moving-value="<%= moving %>">
+     data-elephant-arriving-value="<%= arriving %>"
+     style="--whiteness: <%= reading.whiteness.round(4) %>; --restless: <%= reading.restlessness.round(4) %>;">
   <%# 화면 가장자리에서 흘러드는 구름. 코끼리보다 뒤에 선다 — 배경이지 도상이 아니다. %>
   <span class="cloud cloud--drift" aria-hidden="true"></span>
   <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
+    <%# 숨긴 길과, 그 위를 덮는 한지빛 — 희어질수록 길이 옅어진다. 길은 그림에 박혀 있어
+        떼어낼 수 없으므로 같은 모양으로 덮는다. 다 덮지는 않는다(--road-veil-most). %>
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
+    <path class="elephant-field__road-veil" data-elephant-target="veil" d=""/>
+    <%# 길가의 바위 — 먹선과 한지빛. 코끼리는 이 위에 앉는다. 자리는 값에 매이지 않는다. %>
+    <g class="elephant-field__rock">
+      <path class="elephant-field__rock-body"
+            d="M528 1032 C 540 1002, 582 992, 622 996 C 662 1000, 690 1012, 694 1030 C 698 1046, 672 1058, 624 1060 C 578 1062, 532 1054, 528 1032 Z"/>
+      <path class="elephant-field__rock-line" d="M548 1026 C 572 1016, 606 1012, 640 1016 M560 1044 C 590 1050, 628 1050, 664 1042"/>
+    </g>
   </svg>
 
   <%# 앉는 동안에는 밤이다. 새 색을 들이지 않고 하루의 때가 쓰는 그 겹을 그대로 얹는다. %>
@@ -18,12 +36,11 @@
     <span class="daylight" data-light="night" aria-hidden="true"></span>
   <% end %>
 
-  <%# 자리 틀 — 길 위의 자리 · 비스듬함 · 방향. 그 안의 코끼리는 부위별로 걷는다.
-      끝에 닿는 일이 없으므로 멈춰 서는 자리도 없다 — 코끼리는 늘 걷는다. %>
-  <div class="elephant-place" data-elephant-target="figure">
+  <%# 자리 틀 — 바위 위 한 자리. 그 안의 코끼리는 부위별로 뒤척인다. %>
+  <div class="<%= class_names("elephant-place", "elephant-place--arriving": arriving) %>" data-elephant-target="figure">
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
-      <%= elephant_figure ele: reading.whiteness, walking: true, label: t("sittings.elephant.alt") %>
+      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, label: t("sittings.elephant.alt") %>
     </div>
   </div>
 </div>

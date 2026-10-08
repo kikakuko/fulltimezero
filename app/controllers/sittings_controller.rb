@@ -10,10 +10,8 @@ class SittingsController < ApplicationController
     @bell = SilenceGate.allow?(:bell, user: Current.user)
     @abidings = Abiding.in_order.to_a
 
-    # 코끼리 — 앉은 흔적. 흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다.
+    # 코끼리 — 선방의 몸. 들어설 때 가장자리에서 바위까지 걸어와 앉는다(문턱).
     @elephant = Elephant.for(Current.user)
-    @elephant_moving = @elephant.moved? && session[:elephant_seen_on] != Current.user.today.to_s
-    session[:elephant_seen_on] = Current.user.today.to_s
 
     # 고른 자리는 지난번 그대로 두되, 안내에서 「이 자리로 앉는다」로 왔으면 그 자리.
     @abiding = Abiding.find_by(pos: params[:abiding]) || Current.user.sittings.where.not(abiding_id: nil)

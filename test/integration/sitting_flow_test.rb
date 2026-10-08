@@ -40,25 +40,24 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
     assert_operator Elephant.for(@user).whiteness, :>, before, "앉음이 끝났는데 코끼리가 그대로다"
   end
 
-  # 한 번의 앉음은 눈에 띄지 않을 만큼만 옮긴다. 그 옮김은 앉는 동안이 아니라
-  # 앉음이 끝난 뒤에 온다 — 앉는 중에는 시작할 때의 값 그대로 멎어 있다.
-  test "앉는 동안 코끼리는 시작할 때의 자리에 멎어 있다" do
+  # 한 번의 앉음은 눈에 띄지 않을 만큼만 바꾼다. 그 바뀜은 앉는 동안이 아니라 앉음이
+  # 끝난 뒤에 온다 — 앉는 중에는 뒤척임의 폭도 길의 옅음도 시작할 때의 값에 고정된다.
+  test "앉는 동안 뒤척임 폭과 길의 옅음은 시작할 때 값에 고정된다" do
     at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
     @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 3.hours)
 
     get new_sitting_path
-    before = css_select(".elephant-field").first["data-elephant-whiteness-value"]
+    before = dials
 
     post sittings_path, params: { sitting: { length: "long" } }
     follow_redirect!
-    assert_equal before, css_select(".elephant-field").first["data-elephant-whiteness-value"],
-      "앉기 시작하자 코끼리가 옮겨 갔다"
+    assert_equal before, dials, "앉기 시작하자 뒤척임이나 길이 바뀌었다"
 
     # 한참 앉아 있어도 그대로다.
     @user.sittings.last.update!(created_at: 50.minutes.ago)
     get sitting_path(@user.sittings.last, length: "long")
-    assert_equal before, css_select(".elephant-field").first["data-elephant-whiteness-value"],
-      "앉는 동안 코끼리가 움직였다"
+    assert_equal before, dials, "앉는 동안 뒤척임이나 길이 바뀌었다"
+    assert_match(/--restless: 0\.\d+;/, before, "뒤척임이 화면에 넘어가지 않는다")
   end
 
   test "중간에 마쳐도 실패가 아니다 — 같은 화면, 같은 말" do
@@ -107,6 +106,9 @@ class SittingFlowTest < ActionDispatch::IntegrationTest
   end
 
   private
+    # 코끼리에게 넘어가는 두 값 — 뒤척임의 폭과 길의 옅음.
+    def dials = css_select(".elephant-field").first["style"].to_s
+
     def visible_text
       Nokogiri::HTML(response.body).css("body").text.gsub(/\s+/, " ")
     end

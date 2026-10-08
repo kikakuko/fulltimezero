@@ -163,6 +163,30 @@
   --elephant-trunk-period: 2.9s;
   --elephant-tail-swing: 4deg;
   --elephant-tail-period: 3.7s;
+  /* 뒤척임 — 바위 위에서. 폭은 --restless(1 − 흰빛, 바닥 0.03)에 비례하고 주기는
+     느리다(네 초 아래로 내려가지 않는다 — elephant_white_test). 부위마다 주기를
+     어긋나게 두어 기계처럼 보이지 않게 한다. 쌓인 시간의 함수이지 경과 시간이
+     아니다 — 앉는 동안 폭이 변하지 않는다. */
+  --elephant-stir-head: 2.5deg;
+  --elephant-stir-trunk: 6deg;
+  --elephant-stir-tail: 7deg;
+  --elephant-stir-leg: 1.8deg;
+  --elephant-stir-shift: 1.2px;
+  --restless-period-head: 7s;
+  --restless-period-trunk: 5.5s;
+  --restless-period-tail: 4.5s;
+  --restless-period-leg: 9s;
+  --restless-period-body: 11s;
+  /* 길의 옅음 — 희어질수록 길을 한지빛으로 덮는다. 다 덮지는 않는다: 길은 사라지지
+     않는다(elephant_white_test). 흰빛 1 에서도 열다섯 푼은 남는다. */
+  --road-veil-most: 0.85;
+  /* 바위의 자리 — 길의 첫 굽이 곁. 코끼리의 발이 닿는 점(그림 좌표 611, 1018). 값은
+     결이고, 「어떤 값에도 매이지 않는다」는 약속이다(elephant_promise_test). */
+  --rock-x: 70.7%;
+  --rock-y: 86%;
+  /* 문턱 — 들어설 때 걸어오는 거리와 시간. 제 폭의 두 배 반 밖에서 온다. */
+  --arrive-from: 260%;
+  --arrive-time: 2.6s;
   /* 흰 코끼리의 먹선 — 흰빛 1 에서도 먹선이 이만큼 아래로는 옅어지지 않는다.
      흰 코끼리가 한지에 묻히지 않게 하려는 값이다. */
   --elephant-ink-white: 0.3;
@@ -1481,8 +1505,9 @@ input[type="text"].threshold__field {
 }
 
 /* ── 코끼리의 길 ─────────────────────────────────────────────────────
-   검은 코끼리가 앉은 날만큼 희어지며 길을 오른다. 길은 그리지 않는다.
-   자리 · 방향 · 밝기는 스크립트가 CSS 변수로 넘기고, 여기서는 그 변수만 쓴다. */
+   검은 코끼리가 앉은 시간만큼 희어지며 길가 바위에 앉아 있다. 길은 그리지 않는다 —
+   다만 희어질수록 그 길을 한지빛으로 덮는다. 빛 · 뒤척임 · 길의 옅음은 서버가 CSS
+   변수로 주고, 여기서는 그 변수만 쓴다. */
 .elephant-field {
   /* 폭 — 그림 폭에 대한 비율. 그림 속 길의 너비에 맞춘 값이다(폭 390 의 그림에서 80px).
      비율로 두어야 틀이 좁아지거나 화면이 커져도 코끼리와 길의 비가 같다. */
@@ -1496,6 +1521,15 @@ input[type="text"].threshold__field {
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
+/* 길의 덮개 — 숨긴 길과 같은 모양을 한지빛으로 긋는다. 불투명도가 흰빛을 따른다.
+   길은 그림에 박혀 있어 떼어낼 수 없으므로 덮는다. */
+.elephant-field__road-veil {
+  fill: none; stroke: var(--paper); stroke-width: 96px; stroke-linecap: round; stroke-linejoin: round;
+  opacity: calc(var(--whiteness, 0) * var(--road-veil-most));
+}
+/* 길가의 바위 — 한지빛 몸에 먹선. 코끼리가 앉는 자리다. */
+.elephant-field__rock-body { fill: var(--paper-deep); stroke: var(--ink); stroke-width: 3px; stroke-linejoin: round; opacity: 0.92; }
+.elephant-field__rock-line { fill: none; stroke: var(--ink); stroke-width: 2px; stroke-linecap: round; opacity: 0.45; }
 .elephant-field__station { font-family: var(--sans); font-size: 24px; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 6px; stroke-linejoin: round; }
 /* 정거장 이름을 누르면 그 자리를 읽는 곳으로. */
 .elephant-field__stop { cursor: pointer; }
@@ -1508,21 +1542,20 @@ input[type="text"].threshold__field {
 .ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin: 2rem 0 1rem; }
 .choices--aside { margin: 0.5rem 0 0; }
 
-/* 자리 틀 — 발이 길의 가운데 선에 닿는다. 길 위의 자리 · 비스듬함 · 방향만
-   맡고, 그 안의 코끼리(.elephant)는 부위별로 걷는다. */
+/* 자리 틀 — 바위 위 한 자리. 자리는 어떤 값에도 매이지 않는다(--rock-x · --rock-y 는
+   상수다). 그 안의 코끼리(.elephant)는 부위별로 뒤척인다. */
 .elephant-place {
-  position: absolute; left: var(--x, 0%); top: var(--y, 0%);
+  position: absolute; left: var(--rock-x); top: var(--rock-y);
   width: var(--elephant-width); aspect-ratio: 347 / 243;
   transform: translate(-50%, -100%);
+  transition: transform var(--arrive-time) ease-out;
   pointer-events: none;
 }
-/* 흰빛이 바뀐 날 어제의 자리에서 오늘의 자리로 — 그동안에도 다리는 걷는다. */
-.elephant-place--walking { transition: left 1s ease-out, top 1s ease-out; }
-/* 방향 — 접선만큼 비스듬해지고, 오른쪽으로 갈 때는 뒤집힌다. 축은 발. */
-.elephant-place__turn {
-  width: 100%; height: 100%; transform-origin: 50% 100%;
-  transform: rotate(var(--angle, 0deg)) scaleX(var(--flip, 1));
-}
+/* 문턱 — 들어설 때 가장자리 밖에서 바위까지. 자리의 변화가 아니라 들어섬에 붙은
+   움직임이다. 넘침(--ease-land)을 쓰지 않는다 — 도착이 아니라 걸음이다. */
+.elephant-place--arriving { transform: translate(calc(-50% + var(--arrive-from)), -100%); }
+/* 방향 — 그림은 왼쪽을 본다. 바위에서는 돌리지 않는다. */
+.elephant-place__turn { width: 100%; height: 100%; transform-origin: 50% 100%; }
 /* 접지 그림자 — 발밑. */
 .elephant-place__shadow {
   position: absolute; left: 50%; bottom: -4px; width: 55%; height: 8px;
@@ -1530,7 +1563,9 @@ input[type="text"].threshold__field {
   background: color-mix(in srgb, var(--ink) 22%, transparent);
 }
 @media (prefers-reduced-motion: reduce) {
-  .elephant-place--walking { transition: none; }
+  /* 걸어오지 않고 처음부터 바위 앞에 서 있다. 뒤척이지도 않는다 — 멎어 있다. */
+  .elephant-place { transition: none; }
+  .elephant-place--arriving { transform: translate(-50%, -100%); }
 }
 
 /* ── 코끼리 — 부위별 ───────────────────────────────────────────────
@@ -1617,6 +1652,40 @@ input[type="text"].threshold__field {
 @keyframes elephant-tail {
   0%, 100% { rotate: calc(-1 * var(--elephant-tail-swing)); }
   50% { rotate: var(--elephant-tail-swing); }
+}
+
+/* 뒤척임 — 바위 위에서 부위마다 느리게 흔들린다. 폭은 --restless 에 비례한다.
+   앉는 동안 --restless 는 그대로이므로 폭도 그대로다 — 경과 시간과 무관하다. */
+@media (prefers-reduced-motion: no-preference) {
+  .elephant--restless .elephant__head { animation: elephant-stir-head var(--restless-period-head) ease-in-out infinite; }
+  .elephant--restless .elephant__trunk { animation: elephant-stir-trunk var(--restless-period-trunk) ease-in-out infinite; }
+  .elephant--restless .elephant__tail { animation: elephant-stir-tail var(--restless-period-tail) ease-in-out infinite; }
+  .elephant--restless .elephant__leg-fr { animation: elephant-stir-leg var(--restless-period-leg) ease-in-out infinite; }
+  .elephant--restless .elephant__leg-fl { animation: elephant-stir-leg calc(var(--restless-period-leg) * 1.13) ease-in-out calc(var(--restless-period-leg) / -3) infinite; }
+  .elephant--restless .elephant__leg-bl { animation: elephant-stir-leg calc(var(--restless-period-leg) * 1.27) ease-in-out calc(var(--restless-period-leg) / -2) infinite; }
+  .elephant--restless .elephant__leg-br { animation: elephant-stir-leg calc(var(--restless-period-leg) * 1.41) ease-in-out calc(var(--restless-period-leg) / -5) infinite; }
+  .elephant--restless .elephant__body,
+  .elephant--restless .elephant__tusk { animation: elephant-stir-shift var(--restless-period-body) ease-in-out infinite; }
+}
+@keyframes elephant-stir-head {
+  0%, 100% { rotate: calc(var(--restless, 1) * var(--elephant-stir-head)); }
+  50% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-head)); }
+}
+@keyframes elephant-stir-trunk {
+  0%, 100% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-trunk)); }
+  50% { rotate: calc(var(--restless, 1) * var(--elephant-stir-trunk)); }
+}
+@keyframes elephant-stir-tail {
+  0%, 100% { rotate: calc(var(--restless, 1) * var(--elephant-stir-tail)); }
+  50% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-tail)); }
+}
+@keyframes elephant-stir-leg {
+  0%, 100% { rotate: calc(var(--restless, 1) * var(--elephant-stir-leg)); }
+  50% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-leg)); }
+}
+@keyframes elephant-stir-shift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: calc(var(--restless, 1) * var(--elephant-stir-shift)) 0; }
 }
 
 

@@ -57,7 +57,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_equal Elephant::ANCHORS, anchors
     assert_equal Elephant::VIEW, js[/export const VIEW = \[ (\d+), (\d+) \]/, 0].scan(/\d+/).map(&:to_i)
     assert_no_match(/ROOM/, js, "틀 위에 덧댄 자리가 스크립트에 남아 있다")
-    assert_match(/getPointAtLength/, js, "길 위의 점을 재지 않는다")
+    assert_no_match(/getPointAtLength/, js, "길 위의 점을 잰다 — 코끼리는 길 위를 가지 않는다")
 
     # 굽이는 정거장과 따로 산다 — 정거장 아홉은 그대로, 길 점만 그림을 따른다.
     assert_match(/export const BENDS = \{/, js)
@@ -67,45 +67,57 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     # 앵커는 그림 안에 있고, 아래에서 위로 오른다.
     Elephant::ANCHORS.each { |x, y| assert x.between?(0, Elephant::VIEW[0]) && y.between?(0, Elephant::VIEW[1]) }
     assert_equal Elephant::ANCHORS.map(&:last).sort.reverse, Elephant::ANCHORS.map(&:last), "길이 올라가지 않는다"
-    # 아홉째의 코끼리는 봉우리를 밟지 않는다 — 코끼리 한 마리 높이(그림 좌표 124)가 그 위에
-    # 들어야 머리가 틀 안에 온전히 든다. 그림 높이의 11% 아래.
-    assert_operator Elephant::ANCHORS.last.last, :>=, (Elephant::VIEW[1] * 0.11).ceil, "아홉째가 봉우리에 올라 머리가 틀 밖으로 나간다"
   end
 
-  # 코끼리는 길 위에서 걷는다. 흰빛이 바뀐 날 곡선 위를 가는 동안에도 걸음은 이어진다.
-  test "걸음은 부위별로 이어지고, 길 위를 가는 동안에도 멈추지 않는다" do
+  # 문턱 — 들어설 때 가장자리 밖에서 바위까지 걸어온다. 자리의 변화가 아니라 들어섬에
+  # 붙은 움직임이다. 바위 앞에 서면 걸음을 거두고 뒤척임을 시작한다.
+  test "선방에 들어서면 가장자리에서 바위까지 걸어와 뒤척인다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
-
-    assert_match(/\.elephant-place--walking \{ transition: left 1s ease-out, top 1s ease-out; \}/, css)
-    assert_match(/\.elephant--walking-legs \.elephant__leg-fr,\s*\.elephant--walking-legs \.elephant__leg-bl \{ animation: elephant-leg var\(--elephant-stride\) ease-in-out infinite; \}/, css)
-    assert_no_match(/elephant-place--walking[^{]*\{[^}]*animation/, css, "길 위를 가는 동안 걸음이 따로 멈춘다")
-
     js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
-    assert_match(/classList\.add\("elephant-place--walking"\)/, js)
-    assert_no_match(/requestAnimationFrame\(\s*function|setInterval|--whiteness/, js, "스크립트가 걸음을 매 프레임 그린다")
-  end
-
-  # 끝에 닿는 일이 없으므로 멈춰 서는 자리도 없다. 오래 앉아도 코끼리는 걷는다(§2).
-  test "오래 앉아도 멈춰 서지 않는다 — 끝이 없기 때문이다" do
-    at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
-    @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 1000.hours)
 
     get new_sitting_path
+    assert_select ".elephant-field[data-elephant-arriving-value=true]", count: 1
+    assert_select ".elephant-place.elephant-place--arriving .elephant.elephant--walking-legs", count: 1,
+      message: "걸어오며 다리를 걷지 않는다"
 
-    assert_select ".elephant-place .elephant.elephant--walking-legs", count: 1, message: "오래 앉았다고 섰다"
-    assert_select ".elephant-place[data-halt]", false, "멈춰 서는 표시가 남아 있다"
+    assert_match(/\.elephant-place--arriving \{ transform: translate\(calc\(-50% \+ var\(--arrive-from\)\), -100%\); \}/, css)
+    assert_match(/transition: transform var\(--arrive-time\) ease-out/, css, "문턱이 걸음이 아니라 튕김이다")
+    assert_match(/transitionend.*this\.settle\(\)/m, js, "바위 앞에 서도 걸음을 거두지 않는다")
+    assert_match(/settle\(\) \{.*?remove\("elephant--walking-legs"\).*?add\("elephant--restless"\)/m, js,
+      "바위 앞에서 뒤척임이 시작되지 않는다")
+    assert_no_match(/requestAnimationFrame\(\s*function|setInterval/, js, "스크립트가 걸음을 매 프레임 그린다")
+  end
+
+  test "움직임을 끈 사람에게는 처음부터 바위 앞에 서 있다" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    reduced = css[/@media \(prefers-reduced-motion: reduce\) \{[^@]*?\.elephant-place--arriving[^}]*\}/m].to_s
+
+    assert_match(/transform: translate\(-50%, -100%\)/, reduced, "움직임을 꺼도 가장자리에서 온다")
+    assert_match(/matchMedia\("\(prefers-reduced-motion: reduce\)"\)\.matches/,
+      Rails.root.join("app/javascript/controllers/elephant_controller.js").read)
+  end
+
+  # 앉는 중에는 걸어오지 않는다 — 앉은 채 뒤척일 뿐이다.
+  test "앉는 중의 코끼리는 걸어오지 않고 처음부터 뒤척인다" do
+    post sittings_path, params: { sitting: { length: "tea" } }
+    follow_redirect!
+
+    assert_select ".night .elephant-field[data-elephant-arriving-value=false]", count: 1
+    assert_select ".night .elephant-place--arriving", false, "앉는 중에 걸어온다"
+    assert_select ".night .elephant.elephant--restless", count: 1, message: "앉는 중에 뒤척이지 않는다"
+    assert_select ".night .elephant--walking-legs", false, "앉는 중에 걷는다"
+  end
+
+  # 끝에 닿는 일이 없으므로 멎는 자리도 없다. 오래 앉아도 뒤척임 한 점은 남는다(§2).
+  test "오래 앉아도 뒤척임 한 점은 남는다 — 끝이 없기 때문이다" do
+    at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
+    @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 5000.hours)
+
+    get new_sitting_path
+    field = css_select(".elephant-field").first
+
+    assert_match(/--restless: 0\.03;/, field["style"], "뒤척임이 바닥 아래로 내려갔다")
     assert_operator Elephant.for(@user).whiteness, :<, 1.0, "흰빛이 하나에 닿았다"
-  end
-
-  test "흰빛이 바뀐 날의 첫 화면에서만 어제 자리에서 걸어온다" do
-    at = @user.today.in_time_zone(@user.time_zone).change(hour: 7)
-    @user.sittings.create!(mode: "sitting", sat_on: @user.today, created_at: at, ended_at: at + 30.minutes)
-
-    get new_sitting_path
-    assert_select ".elephant-field[data-elephant-moving-value=true]", count: 1
-
-    get new_sitting_path
-    assert_select ".elephant-field[data-elephant-moving-value=false]", count: 1, message: "같은 날 두 번 걸어온다"
   end
 
   test "코끼리는 골라 둔 자리와 무관하다" do
@@ -114,8 +126,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     get new_sitting_path
 
     reading = Elephant.for(@user)
-    assert_select ".elephant-field[data-elephant-whiteness-value=?]", reading.whiteness.to_s
-    assert_operator reading.whiteness, :<, 0.01, "골라 둔 자리가 코끼리를 옮겼다"
+    assert_match(/--whiteness: #{reading.whiteness.round(4)};/, css_select(".elephant-field").first["style"])
+    assert_operator reading.whiteness, :<, 0.01, "골라 둔 자리가 코끼리를 희게 했다"
   end
 
   private

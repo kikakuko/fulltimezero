@@ -1,6 +1,6 @@
-<%# 앉는 중. 길 위의 코끼리가 걷는다. 숫자도, 막대도, 달도 없다(§2, 2026-10-08).
-    자리와 빛은 앉기 시작할 때의 값으로 멎는다 — 끝나지 않은 앉음은 세지 않으므로
-    앉는 동안 다시 계산되지 않는다. 움직이는 것은 걷는 다리뿐이다.
+<%# 앉는 중. 바위 위의 코끼리가 뒤척인다. 숫자도, 막대도, 달도 없다(§2, 2026-10-08).
+    빛과 뒤척임의 폭과 길의 옅음은 앉기 시작할 때의 값으로 멎는다 — 끝나지 않은
+    앉음은 세지 않으므로 앉는 동안 다시 계산되지 않는다. 걷지 않는다.
     종이 울려 앉음이 끝나면 그때 더해져, 다음에 선방에 들어설 때 조금 옮겨 가 있다.
     한 줄만 잠시 떴다 사라진다 — 지켜보지 않아도 된다는 말. %>
 <% content_for :no_chrome, true %>
@@ -17,7 +17,7 @@
      data-sitting-open-value="<%= @length.open? %>">
 
   <div class="center">
-    <%= render "elephant", reading: @elephant, moving: false, night: true %>
+    <%= render "elephant", reading: @elephant, night: true %>
 
     <%# 자리를 골랐으면 그 자리의 한 줄이, 아니면 늘 하는 한 줄이. 한 번 떴다 사라진다. %>
     <p class="hint"><%= @sitting.abiding ? @sitting.abiding.sit_hint_here : t("sittings.hint") %></p>

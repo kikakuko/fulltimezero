@@ -12,7 +12,7 @@
 # 흰빛의 값과 결은 결 쪽이다 — test/locks/form/elephant_white_test.rb.
 require "test_helper"
 
-class ElephantPromiseTest < ActiveSupport::TestCase
+class ElephantPromiseTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:one)
     @user.rests.destroy_all
@@ -43,8 +43,9 @@ class ElephantPromiseTest < ActiveSupport::TestCase
 
     # 한 해가 지나도 그대로다.
     (1..370).step(37) do |days|
-      assert_in_delta now, Elephant.for(@user, today: @today + days).whiteness, 1e-12,
-        "#{days}일 뒤에 흰빛이 달라졌다"
+      travel_to @today + days do
+        assert_in_delta now, Elephant.for(@user).whiteness, 1e-12, "#{days}일 뒤에 흰빛이 달라졌다"
+      end
     end
 
     # 다른 도상의 것이 오가도 코끼리는 움직이지 않는다.
@@ -66,6 +67,33 @@ class ElephantPromiseTest < ActiveSupport::TestCase
     end
 
     assert_equal seen.sort, seen, "흰빛이 내려간 구간이 있다"
+  end
+
+  # 코끼리는 걷지 않는다. 자리는 어떤 값에도 매이지 않는다 — 바위 하나다. 들어설 때
+  # 가장자리에서 걸어오는 것은 자리의 변화가 아니라 문턱이다(§2, 2026-10-08).
+  test "코끼리의 자리는 어떤 값에도 매이지 않는다 — 바위 하나" do
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
+
+    place = css[/\.elephant-place \{[^}]*\}/m].to_s
+    assert_match(/left: var\(--rock-x\); top: var\(--rock-y\);/, place, "자리가 바위가 아니다")
+    assert_no_match(/--x|--y|--angle|--flip/, place, "자리가 값을 받는다")
+    # 왜 재지 않는지를 적은 주석은 걷어내고 코드만 본다.
+    code = js.gsub(%r{^\s*//.*$}, "")
+    assert_no_match(/getPointAtLength|setProperty\("--x"|setProperty\("--y"|whiteness/i, code,
+      "스크립트가 흰빛으로 자리를 잰다")
+
+    # 흰빛이 다른 두 사람의 코끼리가 같은 자리에 선다.
+    sign_in_as @user
+    get new_sitting_path
+    bare = Nokogiri::HTML(response.body).at_css(".elephant-place")
+
+    sit(minutes: 60 * 400, on: @today)
+    get new_sitting_path
+    seasoned = Nokogiri::HTML(response.body).at_css(".elephant-place")
+
+    assert_equal bare["style"].to_s, seasoned["style"].to_s, "흰빛이 자리를 옮겼다"
+    assert_nil bare["style"].presence, "자리가 화면마다 따로 적힌다"
   end
 
   # 흰빛을 깎는 코드가 없다 — 지우는 것은 사용자의 손이지 앱의 셈이 아니다.

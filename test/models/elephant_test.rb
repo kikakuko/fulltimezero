@@ -63,20 +63,31 @@ class ElephantTest < ActiveSupport::TestCase
     assert_equal 0.0, Elephant.for(@user).whiteness
   end
 
-  test "어제의 값을 함께 준다 — 오늘 앉았으면 움직였다" do
-    sit(minutes: 30, on: @today)
-    reading = Elephant.for(@user)
+  test "뒤척임은 흰빛의 반대다 — 앉은 만큼 고요해진다" do
+    before = Elephant.for(@user).restlessness
+    sit(minutes: 600, on: @today)
+    after = Elephant.for(@user).restlessness
 
-    assert_operator reading.whiteness, :>, reading.yesterday
-    assert reading.moved?
+    assert_operator after, :<, before, "앉았는데 뒤척임이 줄지 않았다"
+    assert_in_delta 1 - Elephant.for(@user).whiteness, after, 1e-9
   end
 
-  test "오늘 앉지 않았으면 어제와 같다 — 가만히 있어도 내려가지 않는다" do
-    sit(minutes: 30, on: @today - 5)
-    reading = Elephant.for(@user)
+  test "뒤척임은 바닥 아래로 내려가지 않는다 — 몇 해를 앉아도 한 점은 남는다" do
+    sit(minutes: 60 * 5000, on: @today)
 
-    assert_in_delta reading.yesterday, reading.whiteness, 1e-12
-    assert_not reading.moved?
+    assert_in_delta Elephant::RESTLESS_LEAST, Elephant.for(@user).restlessness, 1e-12
+    assert_operator Elephant.for(@user).restlessness, :>, 0
+  end
+
+  test "앉지 않으면 그대로다 — 가만히 있어도 내려가지 않는다" do
+    sit(minutes: 30, on: @today - 5)
+    before = Elephant.for(@user)
+
+    travel_to 40.days.from_now do
+      after = Elephant.for(@user)
+      assert_in_delta before.whiteness, after.whiteness, 1e-12
+      assert_in_delta before.restlessness, after.restlessness, 1e-12
+    end
   end
 
   private
