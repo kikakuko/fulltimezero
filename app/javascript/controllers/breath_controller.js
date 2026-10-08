@@ -17,11 +17,18 @@ export default class extends Controller {
   get gates() { return document.getElementById("gates") }
   get veil() { return this.gates?.querySelector(".gates__veil") }
 
+  // 남겨 두는 그림(#gates)에 붙인 「떠나는 중」 표시는 Turbo 스냅숏에 담기기 전에 걷는다 —
+  // 남겨 두는 요소는 떠날 때 걷는다(permanent_test).
   connect() {
     this.timer = setTimeout(() => this.open(), DWELL)
+    this.restore = () => this.gates?.classList.remove("gates--leaving")
+    document.addEventListener("turbo:before-cache", this.restore)
   }
 
-  disconnect() { clearTimeout(this.timer) }
+  disconnect() {
+    clearTimeout(this.timer)
+    document.removeEventListener("turbo:before-cache", this.restore)
+  }
 
   async open() {
     if (this.opening || !this.gates) return

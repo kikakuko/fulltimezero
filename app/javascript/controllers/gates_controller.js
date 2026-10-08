@@ -23,9 +23,19 @@ export default class extends Controller {
   // 늦게 마친다. 한 틀 기다렸다가 장막을 찾는다.
   connect() {
     this.frame = requestAnimationFrame(() => this.shift())
+    // 남겨 두는 그림은 떠날 때 이 문의 상태로 되돌려 스냅숏에 담는다 — 열렸거나 지나는 중이던
+    // 장막이 다음에 되살아나지 않게(permanent_test).
+    this.restore = () => {
+      const veil = document.querySelector("#gates .gates__veil")
+      if (veil) veil.dataset.state = this.stateValue
+    }
+    document.addEventListener("turbo:before-cache", this.restore)
   }
 
-  disconnect() { cancelAnimationFrame(this.frame) }
+  disconnect() {
+    cancelAnimationFrame(this.frame)
+    document.removeEventListener("turbo:before-cache", this.restore)
+  }
 
   shift() {
     const gates = document.getElementById("gates")
