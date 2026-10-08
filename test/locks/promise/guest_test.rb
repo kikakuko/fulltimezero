@@ -109,6 +109,21 @@ class GuestTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # 문이 랜딩이다 — 손님도 첫째 문부터 들어온다. 지나면 그다음부터는 마당이다.
+  test "손님은 첫째 문에서 들어오고, 지나면 마당이다" do
+    closed do
+      get gate_path
+      assert_redirected_to threshold_path, "손님이 문을 건너뛰고 마당에 떨어진다"
+
+      get today_path
+      assert_response :success
+
+      get gate_path
+      assert_redirected_to today_path(locale: :ko), "문을 지났는데 다시 문을 세운다"
+      assert_nil cookies[:session_id].presence, "손님에게 로그인 쿠키가 심겼다"
+    end
+  end
+
   # 가입이 열리면 구경하는 자리는 사라진다 — 그때는 저마다의 자리가 생긴다.
   test "가입이 열리면 손님의 자리가 없다" do
     with_env("SIGNUPS", "true") do

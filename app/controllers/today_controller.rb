@@ -4,6 +4,8 @@ class TodayController < ApplicationController
   before_action -> { redirect_to threshold_path unless Current.user.onboarded? }
 
   def show
+    # 손님이 마당에 섰다면 문을 지난 것이다 — 다음에 열 때는 문을 다시 세우지 않는다.
+    session[:threshold_passed] = true if guest?
     @moon = Current.user.moon
     @quiet = Current.user.quiet_today?
 
