@@ -38,7 +38,26 @@ export default class extends Controller {
     ]
   }
 
-  disconnect() { this.timers?.forEach(clearTimeout) }
+  // 그림(#gates)은 Turbo 가 문 사이에 남겨 두는 것이라, 지나는 중의 표시가 묻은 채로 Turbo 의
+  // 스냅숏에 들어가면 다음에 이 문으로 돌아올 때(마당의 불이문에서) 그 그림이 되살아나
+  // 빛의 길이 다시 돈다. 스냅숏에 담기기 전과 떠날 때, 표시를 걷고 장막을 첫째 문으로 되돌린다.
+  connect() {
+    this.restore = () => this.reset()
+    document.addEventListener("turbo:before-cache", this.restore)
+  }
+
+  disconnect() {
+    this.timers?.forEach(clearTimeout)
+    document.removeEventListener("turbo:before-cache", this.restore)
+    this.reset()
+  }
+
+  reset() {
+    this.element.classList.remove("passing")
+    this.gates?.classList.remove("gates--passing")
+    const veil = this.veil
+    if (veil && veil.dataset.state !== "stop") veil.dataset.state = "stop"
+  }
 
   // 장막을 다음 문으로 — 지금의 장막을 한 번 읽어 두어야 거기서부터 옮아간다.
   shift(state) {

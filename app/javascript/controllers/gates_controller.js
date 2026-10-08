@@ -30,6 +30,8 @@ export default class extends Controller {
   shift() {
     const gates = document.getElementById("gates")
     if (gates && !gates.dataset.light) gates.dataset.light = lightAt(new Date().getHours())
+    // 문에 새로 서는 그림은 지나는 중이 아니다 — 남겨 둔 그림에 그 표시가 묻어 왔어도 걷는다.
+    gates?.classList.remove("gates--passing")
 
     const veil = document.querySelector("#gates .gates__veil")
     if (!veil || veil.dataset.state === this.stateValue) return

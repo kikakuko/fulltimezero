@@ -110,6 +110,14 @@ class GuestTest < ActionDispatch::IntegrationTest
       get threshold_breath_path
       assert_redirected_to threshold_path
 
+      # 지나는 중의 표시는 Turbo 가 남겨 두는 그림(#gates)에 묻어 돌아오면 안 된다 — 마당의
+      # 불이문에서 이 문으로 돌아올 때 빛의 길이 다시 돌았다(2026-10-08). 스냅숏 전과 떠날 때 걷는다.
+      js = Rails.root.join("app/javascript/controllers/passage_controller.js").read
+      assert_match(/addEventListener\("turbo:before-cache"/, js, "지나는 중의 표시를 스냅숏 전에 걷지 않는다")
+      assert_match(/classList\.remove\("gates--passing"\)/, js)
+      assert_match(/classList\.remove\("gates--passing"\)/, Rails.root.join("app/javascript/controllers/gates_controller.js").read,
+        "문에 새로 서는 그림이 지나는 중의 표시를 걷지 않는다")
+
       assert_equal before, [ @seed.reload.onboarded_at, @seed.what_moves ], "손님이 문을 지나자 씨앗이 바뀌었다"
     end
   end
