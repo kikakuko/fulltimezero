@@ -1,6 +1,32 @@
 /* This app is a raft. — 이 앱도 뗏목이다. */
 @import "tailwindcss";
 
+/* ── 붓 — 큰 글의 글꼴 ───────────────────────────────────────────
+   한글은 동해독도(윤디자인, OFL), 알파벳은 Caveat Brush(OFL). 둘 다 저장소 안의
+   파일이고 저장소에서 낸다 — 글꼴 서비스를 부르지 않는다(제6조). 쓰는 글자만
+   추렸다(app/assets/fonts). 알파벳 글꼴은 라틴 자리에만 서고, 한글은 그 뒤의
+   붓으로 떨어진다. 붓은 큰 글(--serif 자리)에만 쓴다 — 읽는 글은 고딕이다. */
+@font-face {
+  font-family: "Caveat Brush";
+  src: url("CaveatBrush.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2000-206F;
+}
+@font-face {
+  font-family: "East Sea Dokdo";
+  src: url("EastSeaDokdo.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+/* 한자는 붓 해서 — Yuji Syuku(키누타 폰트 팩토리, OFL). 동해독도에는 한자가 없다.
+   현판 · 전각 이름의 곁말 · 사경의 본보기 글자가 이 붓으로 선다. 앱이 쓰는 한자만
+   추렸고, 거기 없는 넉 자(內 埵 罣 說)는 기기 명조로 떨어진다. */
+@font-face {
+  font-family: "Yuji Syuku";
+  src: url("YujiSyuku.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF;
+}
+
 /* ── 색 — 이 파일에서 색은 여기 한 곳에만 있다 ─────────────────────
    흩어지면 한쪽만 어긋난다. 아래의 모든 규칙은 이 변수만 쓴다
    (test/locks/form/palette_test.rb 가 지킨다).
@@ -206,7 +232,7 @@
   --void-step: 0.6s;
   --void-drift: 4.5s;
 
-  --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
+  --serif: "Caveat Brush", "Yuji Syuku", "East Sea Dokdo", "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", "Batang", "Songti SC", serif;
   --sans: "Noto Sans KR", system-ui, -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif;
 
   /* 글꼴 다섯. 한글 명조는 가로획이 가늘어 작은 크기에서 먼저 사라진다 —
@@ -1192,15 +1218,21 @@ input[type="text"].threshold__field {
           brightness(var(--compound-brightness)) contrast(var(--compound-contrast));
 }
 .compound__hall {
-  position: absolute; display: block;
-  font-family: var(--sans); font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1;
+  position: absolute; display: block; color: var(--ink); text-decoration: none; line-height: 1;
+  /* 이름이 서는 높이 — 전각 상자 안에서, 앞면 처마 자리(위에서 2/3). 문은 지붕 쪽. */
+  --name-y: 66%;
 }
-/* 이름은 전각 바로 아래. 먹선 위에서도 읽히게 한지빛 테를 두른다. */
+.compound__hall--gate { --name-y: 38%; }
+/* 이름은 붓 한글, 전각의 앞면에. 먹선 위에서도 읽히게 한지빛 테를 두른다. */
 .compound__name {
-  position: absolute; top: 100%; left: -1rem; right: -1rem; margin-top: 0.15rem; text-align: center;
-  text-shadow: 0 0 5px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+  position: absolute; top: var(--name-y); left: -2rem; right: -2rem; translate: 0 -50%; text-align: center;
+  font-family: var(--serif); font-size: 18px; line-height: 1;
+  text-shadow: 0 0 6px var(--paper), 0 0 3px var(--paper), 0 0 1px var(--paper);
 }
-.compound__hall:hover .compound__name { text-decoration: underline; text-underline-offset: 0.3em; text-decoration-color: var(--rule); }
+/* 그 아래 작은 한자 — 그림 위의 곁말이라 읽는 글의 하한 밖에 있다(type_test 의 DRAWN). */
+.compound__han { display: block; margin-top: 2px; font-size: 10px; letter-spacing: 0.1em; color: var(--ink-soft); }
+.compound__han:empty { display: none; }
+.compound__hall:hover .compound__name { text-decoration: underline; text-underline-offset: 0.25em; text-decoration-color: var(--rule); }
 .compound__hall:focus-visible { outline: 1px solid var(--ink-soft); outline-offset: 2px; }
 
 /* ── 전각에 드는 흐름 ────────────────────────────────────────────────

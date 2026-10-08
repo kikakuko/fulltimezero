@@ -32,7 +32,8 @@
                             # 스크립트의 상수에서 온다(compound_controller.js 의 SOURCES).
                             compound_source_param: (hall.key == :maitreya ? t("compound.detail.maitreya.source") : nil),
                             compound_enter_param: t("compound.detail.#{hall.key}.enter") } do %>
-          <span class="compound__name"><%= t("compound.halls.#{hall.key}") %></span>
+          <%# 이름은 붓 한글, 그 아래 작은 한자 — 그림 위의 곁말이지 읽는 글이 아니다. %>
+          <span class="compound__name"><%= t("compound.halls.#{hall.key}") %><span class="compound__han" lang="zh-Hant"><%= hall.han %></span></span>
         <% end %>
       <% end %>
     <% end %>

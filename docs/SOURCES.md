@@ -268,3 +268,22 @@ happiness」). 원문 · 판본 · 본 곳 · 옮긴 이 · 대조한 날은 `ap
 예외다. 옛글의 낱말은 옛글의 것이다」(SPIRIT §5)를 그 두 칸에 적용한
 것이고, 새 예외를 둔 것이 아니다. 숫자 · 느낌표 · 이모지의 자물쇠는 그
 두 칸에도 그대로 걸린다.
+
+## 글꼴
+
+큰 글은 붓이다(2026-10-08). 셋 다 SIL Open Font License 1.1 이고, 파일은 `app/assets/fonts/`
+에 OFL 전문과 함께 있다. **글꼴 서비스를 부르지 않는다** — 저장소에서 낸다(제6조,
+`type_test` 「붓 셋은 저장소 안의 파일이다」). 작은 글(읽는 글 · 손잡이 · 보조)은 붓이 아니라
+기기의 고딕이다 — 붓은 13px 아래에서 읽히지 않는다.
+
+| 글꼴 | 자리 | 만든 이 | 받은 곳 | 추린 글자 | 파일 |
+|---|---|---|---|---|---|
+| 동해독도(East Sea Dokdo) | 한글 큰 글 | 윤디자인 | github.com/google/fonts `ofl/eastseadokdo` (`EastSeaDokdo-Regular.ttf`, 3,178,684 바이트) | 라틴 · 한글 음절 · 자모 · 문장부호 — 원본에 한글 2,484자, 한자 없음 | `EastSeaDokdo.woff2` 232,220 바이트 |
+| Caveat Brush | 알파벳 큰 글 | Pablo Impallari | github.com/google/fonts `ofl/caveatbrush` (`CaveatBrush-Regular.ttf`, 295,568 바이트) | U+0020–007E · 00A0–00FF · 2000–206F | `CaveatBrush.woff2` 67,088 바이트 |
+| Yuji Syuku | 한자 — 현판 · 전각 이름의 곁말 · 사경의 본보기 글자 | 키누타 폰트 팩토리(Yuji Project) | github.com/google/fonts `ofl/yujisyuku` (`YujiSyuku-Regular.ttf`, 8,430,348 바이트) | 앱이 쓰는 한자 155자(사경 260자 중 겹치는 것 포함)와 CJK 문장부호 — 179자 | `YujiSyuku.woff2` 79,952 바이트 |
+
+받은 날은 셋 다 2026-10-08. 추리는 손은 fontTools(`python3 -m fontTools.subset`)이고,
+원본 TTF 는 저장소에 두지 않는다 — 글자를 더 넣어야 하면 위 주소에서 다시 받아 추린다.
+
+Yuji Syuku 에 없는 한자 넉 자 — **內 · 埵 · 罣 · 說**(반야심경) — 는 기기 명조로 떨어진다.
+사경에서 그 네 글자만 결이 다르다. 다른 붓에서 빌려 메우는 것은 훗날의 일이다.
