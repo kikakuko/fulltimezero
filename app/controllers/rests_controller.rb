@@ -10,6 +10,9 @@ class RestsController < ApplicationController
     @rest = Current.user.rests.new(rest_params)
 
     if @rest.save
+      # 달이 응답한다 — 이 쉼으로 오늘이 처음 고요해졌을 때만, 그 순간 한 번(사건).
+      # 같은 날 두 번째 기록이나 이미 앉은 날에는 달이 바뀌지 않으므로 보여 줄 것도 없다.
+      flash[:moon_step] = true if Current.user.moon_steps_with?(@rest)
       redirect_to today_path, notice: t("rests.recorded")
     else
       render :new, status: :unprocessable_entity

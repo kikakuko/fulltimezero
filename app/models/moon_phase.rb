@@ -36,6 +36,12 @@ class MoonPhase
   def new_moon? = fraction.zero?
   def full_moon? = fraction >= 1.0
 
+  # 오늘을 뺀 달 — 「쉬었다」를 누른 순간 달이 거기서 오늘의 자리로 찬다.
+  def without_today
+    today = days.last
+    (days.count(&:rested?) - (today&.rested? ? 1 : 0)).fdiv(WINDOW_DAYS)
+  end
+
   # 4 x 7 격자. 마지막 칸이 오늘.
   def rows = days.each_slice(7).to_a
 end

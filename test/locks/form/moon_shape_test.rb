@@ -69,6 +69,31 @@ class MoonShapeTest < ActionView::TestCase
     assert_equal "none", svg.at_css("circle.body")["fill"], "낮에 밝은 쪽을 채운다"
   end
 
+  # 달이 응답한다 — 「쉬었다」를 누른 그 순간만(사건), 오늘 몫이 눈에 보이게 찬다. 가리개는
+  # 「어디서」에 그려지고 스크립트가 「어디로」만 받는다. 경과 시간으로 차오르지 않는다.
+  test "달이 응답하는 것은 사건이다 — 누른 순간에만, 가로 반지름 하나로" do
+    svg = Nokogiri::HTML(moon_svg(0.5, size: 100, from: 0.4)).at_css("svg")
+    assert_includes svg["class"], "moon--filling"
+    assert_equal "moon", svg["data-controller"]
+    assert_equal "10.0", svg.at_css("mask ellipse")["rx"], "가리개가 「어디서」에 그려지지 않았다"
+    assert_equal "1.0", svg["data-moon-rx-value"], "「어디로」가 반달의 한 점이 아니다"
+    assert_equal "true", svg["data-moon-lit-value"]
+    assert_match(/--moon-rx: 10\.0px/, svg["style"])
+
+    plain = Nokogiri::HTML(moon_svg(0.5, size: 100)).at_css("svg")
+    assert_nil plain["data-controller"], "누르지 않았는데 달이 움직인다"
+    same = Nokogiri::HTML(moon_svg(0.5, size: 100, from: 0.5)).at_css("svg")
+    assert_nil same["data-controller"], "바뀐 것이 없는데 달이 움직인다"
+
+    js = Rails.root.join("app/javascript/controllers/moon_controller.js").read
+    assert_no_match(/(?:Date|performance)\.now\(\)/, js, "달이 경과 시간으로 찬다 — 진행 막대다")
+    assert_match(/setProperty\("--moon-rx"/, js)
+    css = Rails.root.join("app/assets/tailwind/application.css").read
+    assert_match(/\.moon--filling mask ellipse \{ rx: var\(--moon-rx\); transition: rx var\(--moon-fill-time\) ease-out; \}/, css)
+    time = css[/--moon-fill-time: ([\d.]+)s;/, 1].to_f
+    assert time.between?(2.0, 3.0), "하루치가 차는 동안이 둘에서 셋 초 사이가 아니다(#{time})"
+  end
+
   # 보름의 빛은 금빛 테두리가 아니라 먹선 원 바깥의 옅은 번짐 한 겹이다. 빈 원은 비워 둔다.
   test "보름의 빛은 먹선 원 바깥에 옅은 금빛 번짐 한 겹이다" do
     svg = Nokogiri::HTML(moon_svg(1.0, size: 100, moonlight: true))

@@ -57,6 +57,12 @@ class User < ApplicationRecord
   # 물음이 조름이 되지 않도록, 이 날의 화면은 다르게 묻는다.
   def quiet_today? = rested_today? || sat_today?
 
+  # 이 쉼으로 그날이 처음 고요해졌는가 — 달이 응답하는 한 번. 같은 날의 둘째 기록이나
+  # 이미 앉은 날에는 달이 바뀌지 않는다.
+  def moon_steps_with?(rest)
+    rests.where(rested_on: rest.rested_on).count == 1 && sittings.where(sat_on: rest.rested_on).none?
+  end
+
   def moon
     MoonPhase.for(self)
   end

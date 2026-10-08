@@ -65,6 +65,8 @@
   --moon-dark-night: 6%;
   --moon-rim: 0.8;
   --moon-glow: 0.35;
+  /* 「쉬었다」 뒤 하루치가 차는 동안. 둘에서 셋 초 사이 */
+  --moon-fill-time: 2.4s;
 
   /* 주사(朱砂) — 황화수은. 사경의 계선과 글씨에 쓰는 선홍, 탑다라니의 붉은 인쇄.
      하루에 한 번만 보인다(§2): 쓰는 곳은 탑 안의 「오늘 쓴 한 자」 하나뿐이다.
@@ -288,6 +290,12 @@ body {
 /* 달은 비워 그린다 — 가는 먹선 원이 몸체를 잡고, 어두운 쪽만 옅은 먹. 밝은 쪽은 한지 그대로. */
 .moon circle.disc { opacity: var(--moon-dark); }
 .moon circle.rim { opacity: var(--moon-rim); }
+/* 달이 응답한다 — 「쉬었다」를 누른 순간 하루치의 먹이 빠진다. 가로 반지름 하나만 옮아간다.
+   반달을 지나는 날은 스크립트가 한 점까지 닫은 뒤 가리개를 비움으로 뒤집고 다시 연다. */
+.moon--filling mask ellipse { rx: var(--moon-rx); transition: rx var(--moon-fill-time) ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .moon--filling mask ellipse { transition: none; }
+}
 /* 보름의 빛 — 먹선 원 바깥에 옅은 금빛 번짐 한 겹. 빈 원은 비워 둔다. */
 .moon circle.moonglow { stroke-width: 8px; opacity: var(--moon-glow); filter: blur(4px); }
 

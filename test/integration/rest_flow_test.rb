@@ -23,7 +23,7 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select ".lead", text: I18n.t("today.question", locale: :ko)
-    assert_select "a.button-primary", text: I18n.t("today.rested", locale: :ko)
+    assert_select "a.rested", text: I18n.t("today.rested", locale: :ko)
 
     get new_rest_path(locale: :ko)
     assert_response :success

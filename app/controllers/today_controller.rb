@@ -8,6 +8,9 @@ class TodayController < ApplicationController
     session[:threshold_passed] = true if guest?
     @moon = Current.user.moon
     @quiet = Current.user.quiet_today?
+    # 달이 응답한다 — 「쉬었다」를 누른 그 순간, 오늘 몫(하루치)이 눈에 보이게 찬다.
+    # 경과 시간이 아니라 사건이다. 어디서 시작할지는 오늘을 뺀 달이 말한다.
+    @moon_from = @moon.without_today if flash[:moon_step]
 
     # 「오늘 몫은 끝났다」는 기록한 그 자리에서만 말한다(제2조).
     # 나중에 다시 열었을 때 같은 말을 되풀이하면 그것은 조름이 된다.

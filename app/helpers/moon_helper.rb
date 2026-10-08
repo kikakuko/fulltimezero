@@ -22,19 +22,28 @@ module MoonHelper
   # moonlight: 보름에 닿은 그 순간에만 참이 된다 — 먹선 원 바깥에 옅은 금빛 번짐
   # 한 겹이 핀다. 빈 원은 비워 둔다. 빛무리는 도상에 두지 않는다는 원칙의
   # 예외가 아니라, 밝은 바탕에서 피는 월광 한 겹이다.
-  def moon_svg(phase, size: 160, title: t("moon.title"), moonlight: false, **shade_options)
+  # from: 달이 응답하는 순간 — 「쉬었다」를 누른 그때만 — 어디서 시작하는가. 가리개는 거기
+  # 그려지고, 스크립트가 phase 의 자리까지 옮긴다(moon_controller). 경과 시간이 아니라 사건이다.
+  def moon_svg(phase, size: 160, title: t("moon.title"), moonlight: false, from: nil, **shade_options)
     r = size / 2.0
     id = "moon-#{@moon_seq = @moon_seq.to_i + 1}"
+    filling = !from.nil? && from != phase
+    fill_attrs = if filling
+      { style: "--moon-rx: #{shade_rx(from, size)}px",
+        data: { controller: "moon", moon_rx_value: shade_rx(phase, size), moon_lit_value: phase.to_f >= 0.5, moon_least_value: LEAST_RX } }
+    else
+      {}
+    end
 
     tag.svg(viewBox: "0 0 #{size} #{size}", width: size, height: size,
-            class: class_names("moon", moonlight: moonlight),
-            role: "img", "aria-label": title) do
+            class: class_names("moon", moonlight: moonlight, "moon--filling": filling),
+            role: "img", "aria-label": title, **fill_attrs) do
       concat tag.title(title)
       concat tag.circle(cx: r, cy: r, r: r - 0.5, fill: "none", stroke: "var(--gilt)", class: "moonglow") if moonlight
       # 종이 — 낮에는 비워 둔다(한지 위라 채울 것이 없다). 밤에는 비는 쪽이 종이가 되어야
       # 하므로 한지로 채우고, 그 위에 어두운 쪽을 밤빛으로 덮는다(CSS 의 .night).
       concat tag.circle(cx: r, cy: r, r: r, fill: "none", class: "body")
-      concat moon_shade(id, phase, size, **shade_options)
+      concat moon_shade(id, filling ? from : phase, size, **shade_options)
       # 어두운 쪽 — 옅은 먹(옅기는 CSS 의 --moon-dark). 가리개가 비는 쪽을 열어 둔다.
       concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)",
                         mask: "url(##{id})", class: "disc")
@@ -53,8 +62,13 @@ module MoonHelper
 
       tag.mask(id: id) do
         concat tag.rect(x: 0, y: 0, width: r, height: size, fill: "white")
-        concat tag.ellipse(cx: r, cy: r, rx: [ r * (1 - 2 * f).abs, LEAST_RX ].max.round(2), ry: r,
+        concat tag.ellipse(cx: r, cy: r, rx: shade_rx(f, size), ry: r,
                            fill: f < 0.5 ? "white" : "black", **options)
       end
+    end
+
+    # 가리개의 가로 반지름 — 반달에서 한 점은 남는다.
+    def shade_rx(phase, size)
+      [ size / 2.0 * (1 - 2 * phase.to_f.clamp(0.0, 1.0)).abs, LEAST_RX ].max.round(2)
     end
 end

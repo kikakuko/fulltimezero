@@ -6,6 +6,11 @@
   <span class="soft"><%= weekday_name(@date.wday) %></span>
 </h1>
 
+<%# 손님은 적지도 비우지도 못한다 — 사경실과 같은 한 줄로 말한다. %>
+<% if guest? %>
+  <div class="guide"><p><%= t("guest.only_looking") %></p></div>
+<% end %>
+
 <% if @plans.any? %>
   <ul class="plans card">
     <% @plans.each do |plan| %>
