@@ -29,14 +29,35 @@ class TypeTest < ActiveSupport::TestCase
     root = css[/:root \{.*?\n\}/m]
 
     TOKENS.each { |name, value| assert_match(/--type-#{name}: #{Regexp.escape(value)};/, root) }
-    assert_match(/--serif: "Noto Serif KR",/, root)
+    # 큰 글은 붓이다 — 알파벳 · 한자 · 한글 순으로 서고, 셋 다 없을 때만 기기 명조로 떨어진다.
+    assert_match(/--serif: "Caveat Brush", "Yuji Syuku", "East Sea Dokdo", "Noto Serif KR",/, root)
     assert_match(/--sans: "Noto Sans KR",/, root)
     assert_match(/--ink-soft: #4a524f;/, root)
   end
 
+  # 붓 셋은 저장소 안의 파일이다. 글꼴 서비스를 부르지 않는다(제6조) — 바깥을 부르지
+  # 않는다는 약속은 spirit_promise_test 가 지키고, 여기서는 파일이 제자리에 있는지를 본다.
+  # 알파벳 붓은 라틴 자리에만, 한자 붓은 한자 자리에만 선다 — 한글은 동해독도의 것이다.
+  test "붓 셋은 저장소 안의 파일이고, 저마다 제 글자 자리에만 선다" do
+    faces = css.scan(/@font-face \{([^}]*)\}/m).flatten
+    assert_equal 3, faces.size, "글꼴이 셋이 아니다"
+
+    { "Caveat Brush" => /U\+0020-007E/, "Yuji Syuku" => /U\+4E00-9FFF/, "East Sea Dokdo" => nil }.each do |family, range|
+      face = faces.find { |body| body.include?(%(font-family: "#{family}")) }
+      assert face, "#{family} 의 @font-face 가 없다"
+      file = face[/src: url\("([\w-]+\.woff2)"\) format\("woff2"\)/, 1]
+      assert file, "#{family} 가 저장소 안의 woff2 가 아니다"
+      assert Rails.root.join("app/assets/fonts", file).exist?, "#{file} 이 app/assets/fonts 에 없다"
+      assert_no_match(/https?:/, face, "#{family} 가 바깥에서 온다")
+      range ? assert_match(range, face) : assert_no_match(/unicode-range/, face, "한글 붓의 자리를 좁혔다")
+    end
+    assert_includes Rails.application.config.assets.paths.map(&:to_s), Rails.root.join("app/assets/fonts").to_s
+  end
+
   # 문의 현판 위 한자는 읽는 글이 아니라 그림의 일부다 — 그림의 비율로
   # 줄어든다(먼 문일수록 작게). 획이 단순한 옛 이름 세 자뿐이다.
-  DRAWN = %w[.gate-plaque__board].freeze
+  # 조감도의 전각 이름 아래 작은 한자도 같다 — 그림 위의 곁말이지 읽는 글이 아니다.
+  DRAWN = %w[.gate-plaque__board .compound__han].freeze
 
   test "명조는 18px 이상에만 쓴다" do
     serif_classes = []

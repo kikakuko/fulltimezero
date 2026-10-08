@@ -48,9 +48,16 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
 
     assert rule
     assert_no_match(/border(?!-)|background|box-shadow|border-radius/, rule, "전각에 상자를 그렸다")
-    # 그림 위의 이름은 작다 — 명조는 18px 이상에만 쓰므로 고딕이다.
-    assert_match(/font-family: var\(--sans\); font-size: 13px; color: var\(--ink\)/, rule)
-    assert_match(/\.compound__name \{[^}]*top: 100%/, css, "이름이 전각 바로 아래가 아니다")
+    # 이름은 붓 한글(큰 글의 하한 18px), 그 아래 작은 한자는 그림 위의 곁말이다(type_test 의 DRAWN).
+    # 전각의 앞면에 선다 — 높이는 --name-y 하나로 두고 문만 지붕 쪽이다.
+    name = css[/\.compound__name \{[^}]*\}/m]
+    assert_match(/font-family: var\(--serif\); font-size: 18px/, name, "전각 이름이 붓이 아니다")
+    assert_match(/top: var\(--name-y\)/, name, "이름의 높이가 한 변수에서 오지 않는다")
+    assert_match(/\.compound__hall \{[^}]*--name-y: \d+%;/m, css)
+    assert_match(/\.compound__hall--gate \{ --name-y: \d+%; \}/, css, "문의 이름이 지붕 쪽이 아니다")
+    assert_match(/\.compound__han \{[^}]*font-size: 10px/, css, "곁말 한자가 작지 않다")
+    get today_path
+    assert_select ".compound__name .compound__han[lang='zh-Hant']", count: Compound::HALLS.count { |hall| hall.han }
     # 먹틀은 가장자리가 있어야 틀이다 — 화면 양옆에 16px 을 남긴다(한지 여백 1.5rem 에서 0.5rem 만 편다).
     %w[compound maitreya].each do |frame|
       assert_match(/\.#{frame} \{[^}]*width: calc\(100% \+ 1rem\); margin: 0 -0\.5rem/, css, "#{frame} 먹틀에 가장자리가 없다")
