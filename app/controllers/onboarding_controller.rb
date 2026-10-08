@@ -22,6 +22,9 @@
 # 옮긴다. 가입 없이 나가면 버린다.
 class OnboardingController < ApplicationController
   allow_unauthenticated_access
+  # 손님은 둘째 · 셋째 문에 따로 서지 않는다 — 적을 것이 없으니 첫째 문에서 한 자리로
+  # 지난다(빛이 일주문에서 불이문으로 간다). 둘째 · 셋째 문의 주소로 오면 첫째 문이다.
+  before_action -> { redirect_to threshold_path if guest? }, only: %i[naming breath]
 
   def stop
   end

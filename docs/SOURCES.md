@@ -287,3 +287,12 @@ happiness」). 원문 · 판본 · 본 곳 · 옮긴 이 · 대조한 날은 `ap
 
 Yuji Syuku 에 없는 한자 넉 자 — **內 · 埵 · 罣 · 說**(반야심경) — 는 기기 명조로 떨어진다.
 사경에서 그 네 글자만 결이 다르다. 다른 붓에서 빌려 메우는 것은 훗날의 일이다.
+
+**추림과 OFL(2026-10-08 확인).** 추린 woff2 는 OFL 이 말하는 「Modified Version」이다. OFL §3 은
+수정본에 **Reserved Font Name** 을 쓰지 못하게 하는데, 셋 다 동봉한 OFL 전문 첫 줄(저작권
+표시)에 Reserved Font Name 선언이 없다 — 구글 폰트는 올리는 글꼴에서 예약 이름을 뺀다.
+그래서 내부 이름(East Sea Dokdo · Caveat Brush · Yuji Syuku)을 바꾸지 않고 둔다. 동해독도의
+윤디자인 원 저장소(github.com/yoondesign/Yoonfont-KoreaDokdo)에는 「Reserved Font Name
+"KoreaDokdo"」가 있으나, 우리가 받은 것은 그 이름을 쓰지 않는 구글 폰트 쪽 배포본이고 그
+OFL 전문을 동봉했다. 「동해독도체」라는 이름의 동해시 배포본은 받지 않았다 — 조건이 다를
+수 있어 쓰지 않는다.

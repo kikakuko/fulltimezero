@@ -162,6 +162,11 @@
   --light-cy-5: 0.72; --light-r-5: 1.60; --light-dark-5: 0.16;
   /* 넘치는 한 번 — 3.0초에 화면 전체가 이만큼 흰빛이 되었다가 사라진다. */
   --light-flood-peak: 0.55;
+  /* 손님의 지남 — 빛이 되돌아 멀어지는 길. 천왕문(cy 0.36)과 불이문(cy 0.15)의 자리와,
+     거기서의 반지름 · 어둠. 끝의 어둠은 0 — 걷힌다. */
+  --light-pass: 6.4s;
+  --light-pass-cy-1: 0.36; --light-pass-r-1: 0.75; --light-pass-dark-1: 0.12;
+  --light-pass-cy-2: 0.15; --light-pass-r-2: 0.25;
   /* 빛의 색은 때를 따른다(GateLight). 세는 것도 보상도 아니다. */
   --light-dawn: #eef2f5;
   --light-day: #fbf7ec;
@@ -998,6 +1003,45 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
 /* 그림 전체를 한 숨 보여 준 뒤, 한지빛 오늘로 옅어진다. */
 .gates.gates--leaving { opacity: 0; transition: opacity 0.8s ease-in 1s; }
 
+/* ── 손님의 지남 — 빛이 일주문에서 불이문으로 ──────────────────────
+   「들어간다」를 누르면 다가왔던 빛이 되돌아 멀어진다 — 작아지고(r), 둘레의 어둠은
+   걷히고(dark → 0), 그 자리에 때의 빛이 모여 밝아진다(.gates__flood 의 glow).
+   천왕문에 닿는 때(0.34)에 장막이 둘째 문으로, 불이문에 닿는 때(0.66)에 셋째 문으로
+   옮아가 사천왕과 현판이 빛을 따라 드러난다. 끝에서 빛이 온통 번지면 마당이다.
+   값은 :root 의 --light-pass 와 아래 때 셋뿐이고, 그림은 움직이지 않는다. */
+@property --glow-cy { syntax: "<number>"; inherits: false; initial-value: 0.72; }
+@property --glow-r { syntax: "<number>"; inherits: false; initial-value: 0.2; }
+.gates { --glow-color: var(--light-day); }
+.gates[data-light="dawn"] { --glow-color: var(--light-dawn); }
+.gates[data-light="evening"] { --glow-color: var(--light-evening); }
+.gates[data-light="night"] { --glow-color: var(--light-night); }
+#gates.gates--passing .gates__light { opacity: 1; animation: gate-pass var(--light-pass) ease-in-out both; }
+#gates.gates--passing .gates__flood {
+  opacity: 0;
+  background: radial-gradient(circle calc(var(--glow-r) * var(--gates-w))
+      at 50% calc(var(--gates-edge) + var(--glow-cy) * var(--gates-h)),
+    var(--glow-color) 0%, var(--glow-color) 35%, transparent 100%);
+  animation: gate-glow var(--light-pass) ease-in both;
+}
+/* 되돌아가는 길 — 일주문 앞(3.8초의 자리)에서 천왕문(0.36)을 지나 불이문(0.15)으로. */
+@keyframes gate-pass {
+  0%   { --light-cy: var(--light-cy-5); --light-r: var(--light-r-5); --light-dark: var(--light-dark-5); }
+  34%  { --light-cy: var(--light-pass-cy-1); --light-r: var(--light-pass-r-1); --light-dark: var(--light-pass-dark-1); }
+  100% { --light-cy: var(--light-pass-cy-2); --light-r: var(--light-pass-r-2); --light-dark: 0; }
+}
+/* 모이는 빛 — 빛의 자리를 따라가며 짙어지다가, 불이문에서 화면을 다 덮는다. */
+@keyframes gate-glow {
+  0%   { --glow-cy: var(--light-cy-5); --glow-r: 0.3; opacity: 0; }
+  34%  { --glow-cy: var(--light-pass-cy-1); --glow-r: 0.24; opacity: 0.3; }
+  /* 불이문에 닿은 뒤 현판이 떠오를 틈을 둔다 — 빛은 작고 옅게 머물다가 번진다. */
+  66%  { --glow-cy: var(--light-pass-cy-2); --glow-r: 0.16; opacity: 0.4; }
+  84%  { --glow-cy: var(--light-pass-cy-2); --glow-r: 0.3; opacity: 0.9; }
+  100% { --glow-cy: var(--light-pass-cy-2); --glow-r: 3; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gates.gates--passing .gates__light, #gates.gates--passing .gates__flood { animation: none; }
+}
+
 /* 아래 — 글이 먹빛이 되어 그늘이 거의 필요 없다. 돌길의 밝은 결만 살짝 잠재운다. */
 .gates__scrim {
   position: absolute; left: 0; right: 0; bottom: 0; height: 220px;
@@ -1189,6 +1233,23 @@ input[type="text"].threshold__field {
 
 /* 셋째 문 — 할 일이 없다. 잠시 뒤 글이 옅어지고 장막이 걷힌다. */
 .threshold--breath.opening > * { animation: fade-away 1.2s ease-in forwards; }
+
+/* 손님의 지남 — 한 줄 셋이 같은 자리에 겹쳐 서고, 빛이 그 문에 닿을 때 하나씩 떠올랐다
+   가라앉는다. 「들어간다」를 누르면 첫째 문의 글은 옅어진다. */
+.passage__lines { display: grid; }
+.passage__lines > * { grid-area: 1 / 1; }
+.threshold--stop .passage__line { animation: none; opacity: 0; visibility: hidden; }
+.threshold--stop.passing .passage__line--stop,
+.threshold--stop.passing .threshold__quote,
+.threshold--stop.passing .threshold__way,
+.threshold--stop.passing .threshold__later { animation: fade-away 1.2s ease-in forwards; }
+@media (prefers-reduced-motion: no-preference) {
+  .threshold--stop.passing .passage__line--naming { animation: gate-pass-word 2s ease-out 2.2s both; }
+  .threshold--stop.passing .passage__line--breath { animation: gate-pass-word 2s ease-out 4.2s both; }
+}
+@keyframes gate-pass-word {
+  0% { opacity: 0; visibility: visible; } 25%, 70% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: visible; }
+}
 
 
 /* 매일 지나는 문 — 첫째 문의 빛을 1.6초로 줄인 장면. 글은 없다. 빛이 가라앉으면

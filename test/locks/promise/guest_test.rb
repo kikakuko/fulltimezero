@@ -86,28 +86,29 @@ class GuestTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 문 셋은 손님에게도 열린다 — 다만 보내는 손짓이 아니라 가는 문이다. 둘째 문은
-  # 묻지 않고(적어도 남지 않으니) 누를 것도 없이 한 숨 뒤 스스로 셋째 문으로 가고,
-  # 셋째 문은 마당으로 간다. 지나도 씨앗은 그대로다.
-  test "손님도 문 셋을 지난다 — 보내지 않고 간다" do
+  # 문 셋은 손님에게도 열린다 — 다만 보내는 손짓이 아니라 가는 문이다. 적을 것이 없으니
+  # 첫째 문에서 한 자리로 지난다: 「들어간다」 하나로 빛이 불이문까지 가고 마당이다(GET).
+  # 둘째 · 셋째 문의 한 줄은 같은 자리에 떠오르고, 그 주소로 오면 첫째 문이다. 지나도
+  # 씨앗은 그대로다.
+  test "손님은 첫째 문에서 한 자리로 지난다 — 보내지 않고 간다" do
     closed do
       before = [ @seed.reload.onboarded_at, @seed.what_moves ]
 
       get threshold_path
-      assert_select "a.button-primary[href=?]", threshold_naming_path
-      assert_select "form", false, "첫째 문에 손님이 보낼 폼이 있다"
-
-      get threshold_naming_path
+      assert_select ".threshold--stop[data-controller~=passage] button.button-primary[data-action='click->passage#enter']", count: 1
+      assert_select "form[method=get][action=?][data-passage-target=gate]", today_path(locale: :ko), count: 1
+      assert_select "form[method=post]", false, "첫째 문에 손님이 보낼 폼이 있다"
+      assert_select "a[href=?]", threshold_naming_path, false, "손님을 둘째 문으로 보낸다"
+      %w[stop naming breath].each do |door|
+        assert_select ".passage__lines .gates__line.passage__line--#{door}", count: 1
+      end
       assert_select "input[name='user[what_moves]']", false, "손님에게 한 줄을 묻는다"
-      assert_select ".threshold--naming .button-primary", false, "손님의 둘째 문에 누를 길이 있다"
-      assert_select ".threshold--naming[data-controller~=passage] form[method=get][action=?][data-passage-target=gate]",
-        threshold_breath_path(locale: :ko), count: 1
-      assert_select ".threshold--naming form[method=post]", false, "둘째 문이 손님에게 보내는 손짓을 둔다"
       assert_select "a.button-quiet[href=?]", today_path(locale: :ko), count: 1
 
+      get threshold_naming_path
+      assert_redirected_to threshold_path
       get threshold_breath_path
-      assert_select "form[method=get][action=?]", today_path(locale: :ko), count: 1
-      assert_select "form[method=post]", false, "셋째 문이 손님에게 보내는 손짓을 둔다"
+      assert_redirected_to threshold_path
 
       assert_equal before, [ @seed.reload.onboarded_at, @seed.what_moves ], "손님이 문을 지나자 씨앗이 바뀌었다"
     end

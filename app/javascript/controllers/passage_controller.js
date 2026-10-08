@@ -1,19 +1,51 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
-// 둘째 문, 손님의 경우. 적을 것이 없으니 누를 것도 없다. 물음 한 줄이 떠 있고,
-// 사천왕이 지켜보는 동안 한 숨 머물다가 그냥 다음 문으로 간다 — 그러면 장막이
-// 사천왕을 지나 셋째 문으로 물러난다. 빛이 지나가는 것이지 손이 미는 것이 아니다.
-// 셋째 문(breath)과 같은 숨이다. 잘했다는 말도, 손짓도 없다.
+// 손님의 지남 — 문 셋을 한 자리에서. 적을 것이 없으니 누를 것도 둘째 · 셋째 문에는
+// 없다. 「들어간다」 하나로 빛이 일주문에서 천왕문을 지나 불이문으로 간다 — 작아지고
+// 밝아지다가 불이문에서 온통 밝아지면 마당이다. 빛의 길은 CSS(gate-pass · gate-glow)에
+// 있고, 여기서는 때가 되면 장막을 다음 문으로 옮기고 마지막에 마당으로 가는 GET 폼을
+// 보낼 뿐이다. 잘했다는 말도, 손짓도 없다.
 import { Controller } from "@hotwired/stimulus"
 
-const DWELL = 4500  // 물음이 떠 있는 동안. 셋째 문과 같다
+// 빛의 길 --light-pass(6.4초)의 때 — 천왕문에 닿는 때 · 불이문에 닿는 때 · 온통 밝은 때 · 마당.
+const NAMING_AT = 2200
+const BREATH_AT = 4200
+const OPEN_AT = 6000
+const DONE_AT = 6600
 
 export default class extends Controller {
   static targets = ["gate"]
 
-  connect() {
-    this.timer = setTimeout(() => this.gateTarget.requestSubmit(), DWELL)
+  // 그림은 문을 옮겨 가는 동안 남겨 둔 것이라, 쓸 때마다 찾는다.
+  get gates() { return document.getElementById("gates") }
+  get veil() { return this.gates?.querySelector(".gates__veil") }
+
+  enter(event) {
+    event?.preventDefault()
+    if (this.entering) return
+    this.entering = true
+
+    // 움직임을 줄인 화면에서는 빛의 길이 없다 — 곧장 마당이다.
+    if (!this.gates || matchMedia("(prefers-reduced-motion: reduce)").matches) return this.gateTarget.requestSubmit()
+
+    this.element.classList.add("passing")
+    this.gates.classList.add("gates--passing")
+    this.timers = [
+      setTimeout(() => this.shift("naming"), NAMING_AT),
+      setTimeout(() => this.shift("breath"), BREATH_AT),
+      setTimeout(() => this.shift("open"), OPEN_AT),
+      setTimeout(() => this.gateTarget.requestSubmit(), DONE_AT)
+    ]
   }
 
-  disconnect() { clearTimeout(this.timer) }
+  disconnect() { this.timers?.forEach(clearTimeout) }
+
+  // 장막을 다음 문으로 — 지금의 장막을 한 번 읽어 두어야 거기서부터 옮아간다.
+  shift(state) {
+    const veil = this.veil
+    if (!veil) return
+
+    getComputedStyle(veil).opacity
+    veil.dataset.state = state
+  }
 }

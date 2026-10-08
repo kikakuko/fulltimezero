@@ -7,8 +7,20 @@
 
 <%= render "gates", state: "stop" %>
 
-<div class="threshold threshold--stop" data-controller="gates" data-gates-state-value="stop">
-  <p class="gates__line"><%= t("threshold.stop.line") %></p>
+<%# 손님은 적을 것이 없으니 문 셋을 한 자리에서 지난다 — 「들어간다」를 누르면 빛이
+    일주문에서 천왕문을 지나 불이문으로 가며 작아지고 밝아지다가, 불이문에서 온통
+    밝아져 마당이다(passage_controller). 둘째 · 셋째 문의 한 줄은 빛이 그 문에 닿을 때
+    같은 자리에 떠오른다. 보내는 것은 없다 — 마당으로 가는 GET 하나뿐이다. %>
+<div class="threshold threshold--stop" data-controller="<%= guest? ? "gates passage" : "gates" %>" data-gates-state-value="stop">
+  <% if guest? %>
+    <div class="passage__lines">
+      <p class="gates__line passage__line--stop"><%= t("threshold.stop.line") %></p>
+      <p class="gates__line passage__line passage__line--naming" aria-hidden="true"><%= t("threshold.naming.question") %></p>
+      <p class="gates__line passage__line passage__line--breath" aria-hidden="true"><%= t("threshold.breath.line") %></p>
+    </div>
+  <% else %>
+    <p class="gates__line"><%= t("threshold.stop.line") %></p>
+  <% end %>
 
   <figure class="threshold__quote">
     <blockquote class="verse threshold__verse"><%= t("threshold.stop.quote") %></blockquote>
@@ -16,7 +28,12 @@
   </figure>
 
   <p class="threshold__way">
-    <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "button-primary" %>
+    <% if guest? %>
+      <button type="button" class="button-primary" data-action="click->passage#enter"><%= t("threshold.stop.go") %></button>
+      <%= form_with url: today_path, method: :get, data: { passage_target: "gate" } do %><% end %>
+    <% else %>
+      <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "button-primary" %>
+    <% end %>
   </p>
 
   <%= render "later" %>
