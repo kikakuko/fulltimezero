@@ -91,11 +91,12 @@ en:
     record_again: Record once more
 
   rests:
-    recorded: Recorded. The moon is a little fuller.
+    recorded: The moon is a little brighter.
+    pause: a pause
     new:
       duration_question: How long did you rest
       texture_question: The texture of the rest — if you like
-      submit: Record
+      submit: Light the moon
     durations:
       one_breath: one breath
       a_moment: a moment
@@ -310,6 +311,7 @@ en:
     save: Write it
     remove: Erase
     kept: "Rest on this day"
+    write_rest: Write a rest
     forget_confirm: "This erases the record. It cannot be undone."
     not_kept: "It was not kept."
     kinds:

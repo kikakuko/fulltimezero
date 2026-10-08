@@ -70,6 +70,9 @@
   --moon-fill-time: 2.4s;
   --moon-fill-ease: cubic-bezier(.34, 1.56, .64, 1);
   --moon-edge-time: 2.4s;
+  /* 마당의 낙관 「쉼」 — 눌림(0.1초 안)과 찍힌 뒤 먹의 번짐(1초 안) */
+  --seal-press-time: 0.1s;
+  --seal-stamp-time: 0.9s;
 
   /* 주사(朱砂) — 황화수은. 사경의 계선과 글씨에 쓰는 선홍, 탑다라니의 붉은 인쇄.
      하루에 한 번만 보인다(§2): 쓰는 곳은 탑 안의 「오늘 쓴 한 자」 하나뿐이다.
@@ -298,6 +301,27 @@ body {
   text-decoration: none; text-indent: 0.1em;
 }
 .seal:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+/* 누르는 순간 살짝 눌린다(0.1초 안). 찍힌 뒤에는 먹이 한 번 번졌다 가라앉는다(1초 안) —
+   달은 움직이지 않는다. 움직임을 줄이면 둘 다 없다. */
+.seal { position: relative; transition: transform var(--seal-press-time) ease-out; }
+.seal:active { transform: scale(0.96); }
+/* 번짐 — 낙관 둘레의 먹 한 겹. 그림자가 아니라 번진 먹이다(둥근 그라데이션). */
+.seal::after {
+  content: ""; position: absolute; inset: -0.75rem; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 22%, transparent) 0%, transparent 70%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rest--stamped .seal::after { animation: seal-stamp var(--seal-stamp-time) ease-out both; }
+}
+@keyframes seal-stamp {
+  0%   { opacity: 0; transform: scale(0.8); }
+  35%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seal { transition: none; }
+  .seal:active { transform: none; }
+}
 .moon { display: block; margin: 0 auto; }
 /* 달은 비워 그린다 — 가는 먹선 원이 몸체를 잡고, 어두운 쪽만 옅은 먹. 밝은 쪽은 한지 그대로. */
 .moon circle.disc { opacity: var(--moon-dark); }

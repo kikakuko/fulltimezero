@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_07_062319) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_08_053655) do
   create_table "abidings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "engagement", null: false
@@ -82,7 +82,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_07_062319) do
 
   create_table "rests", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "duration", null: false
+    t.string "duration"
     t.text "note"
     t.date "rested_on", null: false
     t.string "texture"

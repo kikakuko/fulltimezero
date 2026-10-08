@@ -133,7 +133,8 @@ class Export
 
     def rest_lines
       user.rests.chronological.map do |rest|
-        words = [ t("rests.durations.#{rest.duration}") ]
+        # 틈은 길이 없이 「틈」으로 선다 — 내보내기에도 그대로 든다(§7).
+        words = [ rest.pause? ? t("rests.pause") : t("rests.durations.#{rest.duration}") ]
         words << t("rests.textures.#{rest.texture}") if rest.texture
         words << rest.note if rest.note
 

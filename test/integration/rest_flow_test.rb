@@ -23,7 +23,7 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select ".lead", text: I18n.t("today.question", locale: :ko)
-    assert_select "a.rested", text: I18n.t("today.rested", locale: :ko)
+    assert_select "form#rest button.rested", text: I18n.t("today.rested", locale: :ko)
 
     get new_rest_path(locale: :ko)
     assert_response :success
@@ -43,6 +43,42 @@ class RestFlowTest < ActionDispatch::IntegrationTest
     assert_select ".flash", text: I18n.t("rests.recorded", locale: :ko)
     assert_select ".lead", text: I18n.t("today.done", locale: :ko)
     assert_select "a.button-primary", count: 0, message: "오늘 몫이 끝난 화면에는 행동이 없어야 한다"
+  end
+
+  # 틈 — 마당의 낙관. 묻지 않고 바로 남고, 길이도 결도 없이 달의 셈에 든다. 첫 틈에만 달이
+  # 응답하고, 그 뒤의 틈은 낙관이 찍힐 뿐 마당에 그대로다. 내보내기에도 「틈」으로 든다(§7).
+  test "틈은 묻지 않고 한 번에 — 길이도 결도 없이 달의 셈에 들고, 내보내기에 든다" do
+    user = users(:one)
+    user.rests.destroy_all
+    user.sittings.destroy_all
+    sign_in_as user
+    before = user.moon.fraction
+
+    assert_difference -> { Rest.count }, 1 do
+      post rests_path(locale: :ko)
+    end
+    pause = Rest.last
+    assert pause.pause?
+    assert_nil pause.duration
+    assert_nil pause.texture
+    assert_equal user.today, pause.rested_on
+    assert_operator user.moon.fraction, :>, before, "틈이 달의 셈에 들지 않는다"
+    assert_redirected_to today_path(locale: :ko)
+    follow_redirect!
+    assert_select "svg.moon--filling", count: 1, message: "첫 틈에 달이 응답하지 않는다"
+
+    # 둘째 틈 — 달은 그대로, 낙관만 찍힌다.
+    post rests_path(locale: :ko)
+    assert_redirected_to today_path(locale: :ko, anchor: "rest")
+    follow_redirect!
+    assert_select "form#rest.rest--stamped", count: 1
+    assert_select "svg.moon--filling", false, "둘째 틈에 달이 다시 움직인다"
+
+    get day_path(user.today, locale: :ko)
+    assert_select ".plans li", text: /#{I18n.t("rests.pause", locale: :ko)}/, count: 2
+
+    assert_includes Export.new(user).markdown, I18n.t("rests.pause", locale: :ko)
+    assert_equal 2, JSON.parse(Export.new(user).json)["rests"].count { |rest| rest["duration"].nil? }
   end
 
   test "결을 고르지 않아도 기록된다" do

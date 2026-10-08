@@ -32,10 +32,15 @@
     <%# 전각으로 가는 길은 조감도에 있다. 여기에는 쉼 기록만.
         손님에게는 쌓는 손짓을 보이지 않는다 — 눌러도 남지 않기 때문이다. %>
     <%# 틈틈이 쉼 — 마당의 달은 짧은 일상의 짧은 쉼을 센다. 손짓은 낙관 같은 붓 한 자 「쉼」
-        하나다. 그림 기호가 아니라 글자다 — 이 앱의 아이콘은 글자다. 오늘을 비워 두는
-        선언은 여기 없다. 그것은 미륵당의 하루에서 한다(2026-10-08). %>
-    <% unless guest? %>
+        하나다. 그림 기호가 아니라 글자다 — 이 앱의 아이콘은 글자다. 누르면 묻지 않고 바로
+        틈 하나가 남는다(길이도 결도 없다). 첫 틈에만 달이 응답하고, 그 뒤의 틈은 낙관이
+        찍히는 느낌만(rest--stamped). 길이와 결을 적는 자리는 미륵당의 하루에 있다.
+        오늘을 비워 두는 선언도 거기서 한다(2026-10-08). 손님은 누르면 구경하는 자리 한 줄. %>
+    <% if guest? %>
       <p class="rest" id="rest"><%= link_to t("today.rested"), new_rest_path, class: "seal rested" %></p>
+    <% else %>
+      <%= button_to t("today.rested"), rests_path, class: "seal rested",
+                    form: { id: "rest", class: class_names("rest", "rest--stamped": flash[:stamped]) } %>
     <% end %>
   </div>
 <% end %>

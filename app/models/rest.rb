@@ -18,9 +18,15 @@ class Rest < ApplicationRecord
 
   belongs_to :user
 
-  enum :duration, DURATIONS.index_by(&:itself), validate: true
+  # 틈 — 마당의 낙관을 누른 쉼. 묻지 않으므로 길이도 결도 없다(둘 다 null). 길이를 적는
+  # 쉼과 같은 무게로 달의 셈에 든다. 몇 번인지 세지 않는다 — 기록이지 횟수가 아니다.
+  # without_asking 은 저장할 때의 손짓(컬럼이 아니다) — 그때만 길이가 없어도 된다.
+  attribute :without_asking, :boolean, default: false
+
+  enum :duration, DURATIONS.index_by(&:itself), validate: { allow_nil: true }
   enum :texture, TEXTURES.index_by(&:itself), validate: { allow_nil: true }
 
+  validates :duration, presence: true, unless: :without_asking
   validates :rested_on, presence: true
   validates :note, length: { maximum: 200 }
 
@@ -30,6 +36,8 @@ class Rest < ApplicationRecord
   before_validation :stamp_today, on: :create
 
   scope :chronological, -> { order(:rested_on, :created_at) }
+
+  def pause? = duration.nil?
 
   private
     def stamp_today

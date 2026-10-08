@@ -5,6 +5,8 @@
 <% else %>
 <%= form_with model: @rest, url: rests_path do |f| %>
   <%= render "shared/errors", record: @rest %>
+  <%# 어느 날의 쉼인가 — 미륵당의 하루가 준다. 없으면 오늘이다. %>
+  <%= f.hidden_field :rested_on, value: @rest.rested_on&.iso8601 %>
 
   <h1 class="title"><%= t("rests.new.duration_question") %></h1>
   <ul class="choices">

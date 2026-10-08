@@ -92,11 +92,13 @@ ko:
     record_again: 한 번 더 기록하기
 
   rests:
-    recorded: 기록되었다. 달이 조금 찼다.
+    recorded: 달이 조금 밝아졌다.
+    # 틈 — 마당의 낙관을 누른 쉼. 길이도 결도 없다.
+    pause: 틈
     new:
       duration_question: 얼마나 쉬었는가
       texture_question: 쉼의 결 — 고르지 않아도 된다
-      submit: 기록
+      submit: 달을 밝힌다
     durations:
       one_breath: 한 호흡
       a_moment: 잠깐
@@ -311,6 +313,7 @@ ko:
     save: 적는다
     remove: 지운다
     kept: "이 날의 쉼"
+    write_rest: 쉼을 적는다
     forget_confirm: "이 기록을 지운다. 되돌릴 수 없다."
     not_kept: "남기지 못했다."
     kinds:
