@@ -30,7 +30,7 @@ class TypeTest < ActiveSupport::TestCase
 
     TOKENS.each { |name, value| assert_match(/--type-#{name}: #{Regexp.escape(value)};/, root) }
     # 큰 글은 붓이다 — 알파벳 · 한자 · 한글 순으로 서고, 셋 다 없을 때만 기기 명조로 떨어진다.
-    assert_match(/--serif: "Caveat Brush", "Yuji Syuku", "East Sea Dokdo", "Noto Serif KR",/, root)
+    assert_match(/--serif: "Caveat Brush", "LXGW WenKai TC", "East Sea Dokdo", "Noto Serif KR",/, root)
     assert_match(/--sans: "Noto Sans KR",/, root)
     assert_match(/--ink-soft: #4a524f;/, root)
   end
@@ -42,7 +42,8 @@ class TypeTest < ActiveSupport::TestCase
     faces = css.scan(/@font-face \{([^}]*)\}/m).flatten
     assert_equal 3, faces.size, "글꼴이 셋이 아니다"
 
-    { "Caveat Brush" => /U\+0020-007E/, "Yuji Syuku" => /U\+4E00-9FFF/, "East Sea Dokdo" => nil }.each do |family, range|
+    # 알파벳 붓은 글자(A–Z · a–z)에만 — 마침표 하나로 한국어 화면에 실리지 않게.
+    { "Caveat Brush" => /unicode-range: U\+0041-005A, U\+0061-007A;/, "LXGW WenKai TC" => /U\+4E00-9FFF/, "East Sea Dokdo" => nil }.each do |family, range|
       face = faces.find { |body| body.include?(%(font-family: "#{family}")) }
       assert face, "#{family} 의 @font-face 가 없다"
       file = face[/src: url\("([\w-]+\.woff2)"\) format\("woff2"\)/, 1]
