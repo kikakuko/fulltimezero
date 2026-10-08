@@ -190,11 +190,14 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_select "meta[name=color-scheme][content=light]"
   end
 
+  # 바탕은 한지다. 그 위에 종이결 한 겹(--paper-grain)이 깔릴 수 있다 — 색이 아니라 결이다.
+  PAPER = /\A(?:var\(--paper-grain\) repeat, )?var\(--paper\)\z/
+
   test "어둠은 문과 몰입 화면의 것이고, 나머지는 한지 위에 있다" do
-    assert_equal "var(--paper)", declaration("body", "background")
+    assert_match PAPER, declaration("body", "background")
 
     DARK_PLACES.each do |place|
-      assert_match(/\Avar\(--night/, declaration(place, "background").to_s, "#{place} 가 어둡지 않다")
+      assert_match(/\A(?:var\(--paper-grain\) repeat, )?var\(--night/, declaration(place, "background").to_s, "#{place} 가 어둡지 않다")
     end
   end
 
@@ -275,7 +278,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
   # 문을 나서는 순간은 어둠에서 밝음으로 넘어가는 것으로 보인다(SPIRIT §2).
   test "셋째 문은 장막이 걷히고, 그림이 한지빛 오늘로 옅어지며 열린다" do
     assert_match(/\.gates\.gates--leaving \{ opacity: 0; /, CSS.read)
-    assert_equal "var(--paper)", declaration("body", "background"), "그림이 옅어진 자리가 한지가 아니다"
+    assert_match PAPER, declaration("body", "background"), "그림이 옅어진 자리가 한지가 아니다"
 
     breath = Rails.root.join("app/javascript/controllers/breath_controller.js").read
     assert_match(/gates--leaving"\)\s*await settle\(this\.gates, LEAVE\)\s*this\.gateTarget\.requestSubmit\(\)/, breath,
