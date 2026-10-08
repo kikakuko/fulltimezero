@@ -20,7 +20,8 @@
       <p class="tiny"><%= t(@day_line || "greetings.#{@greeting}") %></p>
     <% end %>
 
-    <%= moon_svg(@moon.fraction) %>
+    <%# 마당의 달은 조감도 아래에 작게 — 전경보다 커지지 않는다. %>
+    <%= moon_svg(@moon.fraction, size: 104) %>
 
     <%# 오늘 이미 고요했다면 물음이 조름이 되지 않게 달리 묻는다. %>
     <p class="lead"><%= @quiet ? t("today.already_quiet") : t("today.question") %></p>
