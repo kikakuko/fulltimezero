@@ -24,8 +24,8 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
       assert_select "a.compound__hall--#{key}[href=?]", public_send(way), count: 1,
         message: "#{key} 으로 가는 길이 마당에 없다"
     end
-    assert_select "a.compound__hall--courtyard[href=?]", "#clearing", count: 1
-    assert_select "#clearing", count: 1, message: "마당을 누르면 내려갈 자리가 없다"
+    assert_select "a.compound__hall--courtyard[href=?]", "#rest", count: 1
+    assert_select "#rest", count: 1, message: "마당을 누르면 내려갈 자리가 없다"
 
     WAYS.each_value do |way|
       get public_send(way)

@@ -51,7 +51,7 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
   end
 
   test "한 줄 「멈추면 이미 미륵」은 처음 비운 날에 뜬다" do
-    get today_path
+    get day_path(@user.today)
     scene = Nokogiri::HTML(css_select("template").first.inner_html)
 
     assert_equal I18n.t("maitreya.line"), scene.at_css(".maitreya-scene__line").text
@@ -60,7 +60,7 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
 
   test "다 올라오는 날 — 한 줄과 함께 지평선 곳곳에서 작은 미륵들이 솟는다" do
     (Maitreya::FULL - 1).times { |i| @user.clearings.create!(cleared_on: @user.today - i - 1) }
-    get today_path
+    get day_path(@user.today)
     scene = Nokogiri::HTML(css_select("template").first.inner_html)
 
     assert_equal I18n.t("maitreya.line"), scene.at_css(".maitreya-scene__line").text
@@ -119,12 +119,12 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
 
   # 「오늘을 비워 둔다」를 누르는 그 손짓 안에서만 떤다. 거두는 손짓에는 떨지 않는다.
   test "비우는 손짓 안에서 떨고, 거두는 손짓에는 떨지 않는다" do
-    get today_path
+    get day_path(@user.today)
     assert_select "form[data-controller~=clearing][data-clearing-declaring-value=true][data-clearing-vibrate-value=true]"
     assert_select "form[data-controller~=bell][data-bell-enabled-value=false]", count: 1, message: "종성이 기본으로 켜져 있다"
 
     @user.clearings.create!(cleared_on: @user.today)
-    get today_path
+    get day_path(@user.today)
     assert_select "form[data-controller~=clearing][data-clearing-declaring-value=false]"
   end
 
@@ -143,7 +143,7 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
     patch settings_path, params: { user: { clearing_sound: "1" } }
     assert @user.reload.clearing_sound
 
-    get today_path
+    get day_path(@user.today)
     assert_select "form[data-controller~=bell][data-bell-enabled-value=true]", count: 1
   end
 
@@ -151,7 +151,7 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
   # 켜고 누르는 소리이므로. 비우는 손짓의 종성도 같은 종이다.
   test "비우는 손짓의 종성도 게이트를 지난다" do
     @user.update!(clearing_sound: true)
-    get today_path
+    get day_path(@user.today)
 
     assert_select "form[data-controller~=bell][data-bell-enabled-value=?]",
       SilenceGate.allow?(:bell, user: @user).to_s, count: 1

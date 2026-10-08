@@ -67,20 +67,20 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 비움은 앱의 한가운데 행위다. 세 번 눌러 들어가야 닿을 일이 아니다.
-  test "오늘 화면에서 오늘을 비우고 거둔다" do
-    get today_path
-    assert_select "form[action=?]", day_path(@user.today, from: "today")
-    assert_match I18n.t("today.clear"), visible_text
+  # 오늘의 비움은 미륵당의 하루에서 한다 — 마당의 달은 틈틈이 쉼이다(2026-10-08).
+  test "미륵당의 오늘에서 오늘을 비우고 거둔다" do
+    get day_path(@user.today)
+    assert_select "form[action=?]", day_path(@user.today)
+    assert_match I18n.t("days.clear"), visible_text
 
-    patch day_path(@user.today, from: "today")
-    assert_redirected_to today_path
+    patch day_path(@user.today)
+    assert_redirected_to day_path(@user.today)
     assert @user.clearings.exists?(cleared_on: @user.today), "오늘이 비워지지 않았다"
 
     follow_redirect!
-    assert_match I18n.t("today.unclear"), visible_text
+    assert_match I18n.t("days.unclear"), visible_text
 
-    patch day_path(@user.today, from: "today")
+    patch day_path(@user.today)
     assert_empty @user.clearings.where(cleared_on: @user.today), "비움을 거두지 못한다"
   end
 
@@ -88,10 +88,10 @@ class DaysFlowTest < ActionDispatch::IntegrationTest
   test "일정이 있어도 오늘을 비울 수 있다" do
     @user.plans.create!(planned_on: @user.today, what: "회의")
 
-    get today_path
-    assert_match I18n.t("today.clear"), visible_text
+    get day_path(@user.today)
+    assert_match I18n.t("days.clear"), visible_text
 
-    patch day_path(@user.today, from: "today")
+    patch day_path(@user.today)
     assert @user.clearings.exists?(cleared_on: @user.today)
   end
 

@@ -14,7 +14,7 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
 
   test "오늘을 비워 두는 손짓에 솟는 장면이 실려 있다 — 전과 뒤를 함께" do
     2.times { |i| @user.clearings.create!(cleared_on: @user.today - i - 1) }
-    get today_path
+    get day_path(@user.today)
 
     assert_select "#clearing[data-controller=maitreya] button[data-action*='click->maitreya#rise']", count: 1
     assert_select "#clearing template[data-maitreya-target=scene]", count: 1
@@ -28,15 +28,15 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "장면은 하루 한 번 — 비웠다가 거두고 다시 비워도 오지 않는다" do
-    get today_path
+    get day_path(@user.today)
     assert_select "template[data-maitreya-target=scene]", count: 1
 
     patch day_path(@user.today, from: "today")
-    get today_path
+    get day_path(@user.today)
     assert_select "template[data-maitreya-target=scene]", false, "비운 날에 장면이 남아 있다"
 
     patch day_path(@user.today, from: "today") # 거둔다
-    get today_path
+    get day_path(@user.today)
     assert_select "template[data-maitreya-target=scene]", false, "같은 날 다시 장면이 온다"
   end
 
@@ -45,13 +45,13 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
     two = users(:two)
     two.clearings.destroy_all
 
-    get today_path
+    get day_path(@user.today)
     assert_select "template[data-maitreya-target=scene]", count: 1
     patch day_path(@user.today, from: "today")
     assert_equal @user.today, @user.reload.maitreya_seen_on
 
     sign_in_as two # 같은 브라우저 세션에서 다른 계정으로
-    get today_path
+    get day_path(@user.today)
     assert_select "template[data-maitreya-target=scene]", count: 1, message: "앞사람이 본 장면 때문에 뒷사람이 못 본다"
 
     source = Rails.root.glob("app/**/*.rb").map(&:read).join
@@ -60,7 +60,7 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
 
   test "앞날을 비워 두는 것은 장면을 쓰지 않는다" do
     patch day_path(@user.today + 2)
-    get today_path
+    get day_path(@user.today)
 
     assert_select "template[data-maitreya-target=scene]", count: 1
   end

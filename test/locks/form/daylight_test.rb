@@ -57,7 +57,7 @@ class DaylightTest < ActionDispatch::IntegrationTest
     @user.clearings.destroy_all
     @user.update!(maitreya_seen_on: nil)
 
-    get today_path
+    get day_path(@user.today)
     scene = css_select("template[data-maitreya-target=scene]").first
 
     assert scene, "솟는 장면이 없다"
