@@ -29,7 +29,7 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     assert quote, "경의 한 줄이 한 박 뒤가 아니다"
     assert way && $1.to_f > 1, "길이 경의 한 줄보다 먼저 온다"
     assert_match(/\.threshold--stop \.threshold__later \{ animation: gate-later /, css)
-    assert_match(/@keyframes gate-later \{ from \{ opacity: 0\.2; \}/, css, "「나중에」가 빛이 닿기 전에 눈에 띈다")
+    assert_match(/@keyframes gate-later \{ from \{ opacity: 0\.[1-3]\d*; \}/, css, "「나중에」가 빛이 닿기 전에 눈에 띈다(0.1~0.3 밖)")
   end
 
   # 『앙굴리말라경』의 「나는 멈추었다」 — 선언이지 명령이 아니다. 앱이

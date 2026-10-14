@@ -114,7 +114,7 @@ class MoonShapeTest < ActionView::TestCase
     assert_nil Nokogiri::HTML(moon_svg(0.5, size: 100)).at_css("ellipse.edge"), "누르지 않았는데 번짐이 있다"
 
     css = Rails.root.join("app/assets/tailwind/application.css").read
-    assert_match(/\.moon--filling \.edge \{[^}]*filter: blur\(4px\); opacity: 0;/m, css)
+    assert_match(/\.moon--filling \.edge \{[^}]*filter: blur\([2-6]px\); opacity: 0;/m, css, "번짐의 흐림이 2~6px 밖이다")
     assert_match(/@keyframes moon-edge \{ 0% \{ opacity: 0; \} 20% \{ opacity: var\(--moon-glow\); \} 100% \{ opacity: 0; \} \}/, css)
     time = css[/--moon-edge-time: ([\d.]+)s;/, 1].to_f
     assert time.between?(2.0, 3.0), "번짐이 둘에서 셋 초 안에 걷히지 않는다(#{time})"

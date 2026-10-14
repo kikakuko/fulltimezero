@@ -138,7 +138,7 @@ class ElephantPartsTest < ActionDispatch::IntegrationTest
       assert_match(/\.void__elephant/, selector, "무위 밖에서 흩어진다: #{selector.strip}")
     end
     assert_no_match(/elephant--scatter|elephant-drift|elephant-ink-loosen|elephant-fill-loosen/, css, "아홉째의 흩어짐이 남아 있다")
-    assert_match(/--elephant-ink-white: 0\.3;/, css[/:root \{.*?\n\}/m], "흰 코끼리의 먹선 바닥이 없다")
+    assert_match(/--elephant-ink-white: 0\.[2-5]\d*;/, css[/:root \{.*?\n\}/m], "흰 코끼리의 먹선 바닥이 0.2~0.5 밖이다")
   end
 
   # 장경각의 코끼리 아홉은 그림 한 벌을 가리킨다 — 서 있으니 무리마다 CSS 가 닿을 일이 없다.

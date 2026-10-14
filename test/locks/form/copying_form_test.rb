@@ -51,8 +51,8 @@ class CopyingFormTest < ActionDispatch::IntegrationTest
     art = css[/\.pagoda__art \{.*?\n\}/m].to_s
     value = ->(name) { art[/--pagoda-#{name}: ([\d.]+);/, 1].to_f }
 
-    assert_equal 0.04, value.("wash")
-    assert_equal 0.94, value.("eave")
+    assert value.("wash").between?(0.02, 0.08), "탑신이 아주 옅지 않다(#{value.("wash")})"
+    assert value.("eave").between?(0.85, 1.0), "옥개석이 진하지 않다(#{value.("eave")})"
     assert_operator value.("wash"), :<, value.("pillar")
     assert_operator value.("pillar"), :<, value.("eave")
     { "wash" => "wash", "eave" => "eave", "pillar" => "pillar", "base" => "base", "jewel" => "jewel" }.each do |part, name|

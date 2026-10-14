@@ -71,20 +71,24 @@ class MaitreyaFormTest < ActionDispatch::IntegrationTest
     css = CSS.read
 
     shake = css[/@keyframes maitreya-shake \{.*?\n\}/m]
-    # 2026-10-08 에 키웠다 — ±3 → ±5 → ±2 에서 ±5 → ±8 → ±3 으로. 넉 초에 멎는 것은 그대로.
-    assert_match(/12\.50% \{ transform: translateX\(-?5\.0px\); \}/, shake, "0.5초에 ±5px 가 아니다")
-    assert_match(/30\.00% \{ transform: translateX\(-?8\.0px\); \}/, shake, "1.2초에 ±8px 가 아니다")
-    assert_match(/50\.00% \{ transform: translateX\(-?3\.0px\); \}/, shake, "2.0초에 ±3px 가 아니다")
+    # 값이 아니라 범위다(결은 범위, 약속은 값 — 2026-10-14). 봉우리는 가운데(1.2초)에 있다.
+    at = ->(pct) { shake[/#{pct}% \{ transform: translateX\(-?([\d.]+)px\); \}/, 1].to_f }
+    assert at.("12.50").between?(3, 8), "0.5초의 흔들림이 3~8px 밖이다(#{at.("12.50")})"
+    assert at.("30.00").between?(5, 12), "1.2초의 흔들림이 5~12px 밖이다(#{at.("30.00")})"
+    assert at.("50.00").between?(1, 5), "2.0초의 흔들림이 1~5px 밖이다(#{at.("50.00")})"
+    assert at.("30.00") > at.("12.50") && at.("30.00") > at.("50.00"), "흔들림의 봉우리가 가운데가 아니다"
     assert_match(/75%, 100% \{ transform: translateX\(0\); \}/, shake, "3.0초에 멎지 않는다")
 
-    assert_match(/@keyframes maitreya-dust \{\s*0% \{ opacity: 0; \} 12\.5% \{ opacity: 0\.35; \} 50% \{ opacity: 1;.*75% \{ opacity: 0\.35; \} 100% \{ opacity: 0;/m, css)
-    assert_match(/@keyframes maitreya-sky \{ 0% \{ opacity: 0; \} 30% \{ opacity: 0\.7; \} 75% \{ opacity: 0\.1; \} 100% \{ opacity: 0; \} \}/, css)
-    assert_match(/100% \{ stroke-dashoffset: 0; opacity: 0\.35; \}/, css, "금이 옅게 남지 않는다")
+    assert_match(/@keyframes maitreya-dust \{\s*0% \{ opacity: 0; \} 12\.5% \{ opacity: 0\.\d+; \} 50% \{ opacity: 1;.*75% \{ opacity: 0\.\d+; \} 100% \{ opacity: 0;/m, css)
+    sky = css[/@keyframes maitreya-sky \{ 0% \{ opacity: 0; \} 30% \{ opacity: ([\d.]+); \} 75% \{ opacity: 0\.\d+; \} 100% \{ opacity: 0; \} \}/, 1].to_f
+    assert sky.between?(0.5, 0.9), "하늘 겹의 봉우리가 0.5~0.9 밖이다(#{sky})"
+    crack = css[/100% \{ stroke-dashoffset: 0; opacity: ([\d.]+); \}/, 1].to_f
+    assert crack.between?(0.2, 0.5), "금이 옅게 남지 않는다(#{crack})"
     assert_match(/--maitreya-gold: #f3e2b8;/, css)
 
     js = Rails.root.join("app/javascript/controllers/maitreya_controller.js").read
-    assert_equal 4000, js[/const SCENE = (\d+)/, 1].to_i
-    assert_equal 300, js[/const FADE = (\d+)/, 1].to_i
+    assert js[/const SCENE = (\d+)/, 1].to_i.between?(3000, 5000), "장면이 서너 초가 아니다"
+    assert_operator js[/const FADE = (\d+)/, 1].to_i, :<=, 500, "마당이 물러나는 데 반 초를 넘긴다"
   end
 
   test "입자도 색종이도 반짝임도 없다 — 먼지는 흙이다" do

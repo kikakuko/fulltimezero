@@ -18,7 +18,7 @@ class MotionTest < ActiveSupport::TestCase
 
     assert_match(/--ease-land: cubic-bezier\(0\.34, 1\.56, 0\.64, 1\);/, root, "닿는 곡선이 :root 에 없다")
     assert_match(/--ease-light: cubic-bezier\([\d., ]+\);/, root, "빛의 곡선이 :root 에 없다")
-    assert_match(/--press: 0\.1s;/, root, "누르는 반응이 :root 상수가 아니다")
+    assert_operator root[/--press: ([\d.]+)s;/, 1].to_f, :<=, 0.15, "누르는 반응이 0.15초를 넘거나 :root 상수가 아니다"
     assert_match(/--stagger: (?:5\d|6\d|7\d|80)ms;/, root, "시간차가 50~80ms 의 :root 상수가 아니다")
   end
 

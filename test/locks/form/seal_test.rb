@@ -42,9 +42,9 @@ class SealTest < ActionDispatch::IntegrationTest
     bleed = root[/--seal-bleed-time: ([\d.]+)s;/, 1].to_f
     assert_operator press, :<=, 0.1, "도장이 내려오는 데 0.1초를 넘는다"
     assert_operator press + bleed, :<=, 0.5, "찍힘이 0.5초 안에 멎지 않는다"
-    assert_match(/@keyframes seal-press \{\s*0%\s*\{ transform: scale\(1\.08\) rotate\(-2deg\); opacity: 0\.7; \}\s*100%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}/, css)
+    assert_match(/@keyframes seal-press \{\s*0%\s*\{ transform: scale\(1\.(?:0[5-9]|1[0-2])\) rotate\(-[1-3]deg\); opacity: 0\.[6-8]; \}\s*100%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}/, css)
     # 번짐은 마스크를 키우지 않고 transform 으로 — 잡음 마스크를 프레임마다 다시 그리지 않는다.
-    assert_match(/@keyframes seal-stamp \{\s*0%\s*\{ transform: scale\(1\.08\) rotate\(-2deg\); opacity: 0\.7; \}\s*25%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}\s*100%\s*\{ transform: scale\(1\.0\d\) rotate\(0\); opacity: 1; \}/, css,
+    assert_match(/@keyframes seal-stamp \{\s*0%\s*\{ transform: scale\(1\.(?:0[5-9]|1[0-2])\) rotate\(-[1-3]deg\); opacity: 0\.[6-8]; \}\s*25%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}\s*100%\s*\{ transform: scale\(1\.0\d\) rotate\(0\); opacity: 1; \}/, css,
       "인주가 가장자리로 번지지 않는다")
     assert_no_match(/@keyframes [\w-]+ \{[^}]*mask-size/m, css, "마스크를 움직인다 — 프레임마다 다시 그린다")
     %w[seal-press seal-stamp].each do |name|

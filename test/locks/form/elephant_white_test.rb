@@ -39,7 +39,7 @@ class ElephantWhiteTest < ActiveSupport::TestCase
   # 뒤척임은 0 이 되지 않는다. 멎은 몸은 몸이 아니다 — 한 점은 남는다.
   test "뒤척임의 바닥은 0 보다 크다" do
     assert_operator Elephant::RESTLESS_LEAST, :>, 0
-    assert_equal 0.03, Elephant::RESTLESS_LEAST
+    assert Elephant::RESTLESS_LEAST.between?(0.01, 0.1), "뒤척임의 바닥이 한 점(0.01~0.1)이 아니다"
     assert_equal Elephant::RESTLESS_LEAST, Elephant.restlessness(1.0)
   end
 
@@ -49,7 +49,7 @@ class ElephantWhiteTest < ActiveSupport::TestCase
 
     assert_operator most, :>, 0
     assert_operator most, :<, 1, "덮개가 길을 다 덮는다"
-    assert_equal 0.85, most
+    assert most.between?(0.7, 0.95), "덮개의 상한이 0.7~0.95 밖이다(#{most})"
     assert_match(/opacity: calc\(var\(--whiteness, 0\) \* var\(--road-veil-most\)\)/, css, "덮개의 옅음이 흰빛을 따르지 않는다")
   end
 

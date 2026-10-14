@@ -38,8 +38,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
   test "흰빛은 그림의 색으로만 보이고, 양 끝은 상수다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
 
-    assert_match(/--elephant-dark: 0\.35;/, css)
-    assert_match(/--elephant-light: 2\.4;/, css)
+    assert_match(/--elephant-dark: 0\.[2-5]\d*;/, css, "검은 쪽 끝이 0.2~0.5 밖이다")
+    assert_match(/--elephant-light: [1-3]\.\d+;/, css, "흰 쪽 끝이 1~3 밖이다")
     assert_match(%r{--elephant-width: calc\(80 / 390 \* 100%\);}, css, "코끼리 폭이 그림 폭의 비율이 아니다")
     assert_match(/\.elephant-field \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "산수 틀이 그림의 비율이 아니다 — 위에 덧댄 자리가 있다")
     assert_no_match(/ROOM|20000%/, css, "틀 위에 덧댄 자리가 남아 있다")
@@ -116,7 +116,7 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     get new_sitting_path
     field = css_select(".elephant-field").first
 
-    assert_match(/--restless: 0\.03;/, field["style"], "뒤척임이 바닥 아래로 내려갔다")
+    assert_match(/--restless: #{Elephant::RESTLESS_LEAST.round(4)};/, field["style"], "뒤척임이 바닥 아래로 내려갔다")
     assert_operator Elephant.for(@user).whiteness, :<, 1.0, "흰빛이 하나에 닿았다"
   end
 

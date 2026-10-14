@@ -22,8 +22,9 @@ class GateLightTest < ActionDispatch::IntegrationTest
     root = css[/:root \{.*?\n\}/m]
 
     assert_match(/--light-arrive: 3\.8s;/, root)
-    assert_match(/--light-daily: 1\.6s;/, root)
-    assert_match(/--light-flood-peak: 0\.55;/, root)
+    # 다가오는 3.8초는 여섯 때의 비율과 맞물려 값이다. 나머지는 범위다(2026-10-14).
+    assert root[/--light-daily: ([\d.]+)s;/, 1].to_f.between?(1.0, 2.5), "매일의 문이 1~2.5초 밖이다"
+    assert root[/--light-flood-peak: ([\d.]+);/, 1].to_f.between?(0.4, 0.7), "넘침이 0.4~0.7 밖이다"
 
     keyframes = css[/@keyframes gate-light \{.*?\n\}/m]
     MOMENTS.each_with_index do |(second, cy, r, dark, _), i|
@@ -69,7 +70,7 @@ class GateLightTest < ActionDispatch::IntegrationTest
     { dawn: "#eef2f5", day: "#fbf7ec", evening: "#f7e6d6", night: "#e8ecf2" }.each do |name, color|
       assert_match(/--light-#{name}: #{color};/, root)
     end
-    assert_match(/--light-night-dim: 0\.15;/, root, "밤의 밝기가 0.85배가 아니다")
+    assert root[/--light-night-dim: ([\d.]+);/, 1].to_f.between?(0.1, 0.3), "밤의 어둠 한 겹이 0.1~0.3 밖이다"
   end
 
   test "빛의 색은 사용자의 시간대를 따른다" do
