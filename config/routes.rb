@@ -1,9 +1,10 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 Rails.application.routes.draw do
-  # 호스트는 셋이고 앱은 하나다. www 로 온 발길은 맨 이름으로 넘긴다 —
-  # 영구 넘김(301)이라 검색과 브라우저가 한 번만 배운다. app 은 넘기지 않는다.
+  # 주소는 하나다 — 맨 이름. www 와 app 으로 온 발길은 맨 이름으로 넘긴다(영구 넘김 301,
+  # 검색과 브라우저가 한 번만 배운다). 그래야 세션 쿠키가 맨 이름 하나에만 걸리고 쿠키 범위를
+  # 고민할 일이 없다(2026-10-14, 헤이제임스). app 을 살려 두던 자리는 접었다.
   match "(*path)", to: redirect(subdomain: "", status: 301), via: :all, constraints: lambda { |request|
-    ENV["APP_HOST"].present? && request.host == "www.#{ENV['APP_HOST']}"
+    ENV["APP_HOST"].present? && %w[www app].any? { |sub| request.host == "#{sub}.#{ENV['APP_HOST']}" }
   }
 
   get "up" => "rails/health#show", as: :rails_health_check
