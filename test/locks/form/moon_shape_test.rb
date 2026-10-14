@@ -103,8 +103,14 @@ class MoonShapeTest < ActionView::TestCase
     assert edge, "경계의 번짐이 없다"
     assert_equal "none", edge["fill"]
     assert_equal "var(--gilt)", edge["stroke"], "번짐이 보름의 색이 아니다"
-    assert_equal svg.at_css("mask ellipse")["rx"], edge["rx"], "번짐이 가리개의 경계에 있지 않다"
-    assert_equal "50.0", svg.at_css("clippath rect, clipPath rect")["x"], "경계가 있는 반쪽만 보이지 않는다"
+    # 번짐은 도착하는 자리에 미리 그려 두고 opacity 만 움직인다 — 흐림 아래에서 모양을 옮기지 않는다.
+    assert_equal "1.0", edge["rx"], "번짐이 도착하는 자리(반달의 한 점)에 그려지지 않았다"
+    assert_no_match(/\.moon--filling \.edge \{[^}]*(?:rx:|transition)/m, Rails.root.join("app/assets/tailwind/application.css").read,
+      "번짐의 모양이 흐림 아래에서 움직인다")
+    # 도착하는 자리가 반달 이후(0.5)이므로 경계는 왼쪽 반에 있다 — 그 반쪽만 보인다.
+    assert_equal "0", svg.at_css("clippath rect, clipPath rect")["x"], "경계가 있는 반쪽만 보이지 않는다"
+    before_half = Nokogiri::HTML(moon_svg(0.3, size: 100, from: 0.2)).at_css("svg")
+    assert_equal "50.0", before_half.at_css("clippath rect, clipPath rect")["x"], "반달 이전의 경계는 오른쪽 반에 있다"
     assert_nil Nokogiri::HTML(moon_svg(0.5, size: 100)).at_css("ellipse.edge"), "누르지 않았는데 번짐이 있다"
 
     css = Rails.root.join("app/assets/tailwind/application.css").read
@@ -112,8 +118,8 @@ class MoonShapeTest < ActionView::TestCase
     assert_match(/@keyframes moon-edge \{ 0% \{ opacity: 0; \} 20% \{ opacity: var\(--moon-glow\); \} 100% \{ opacity: 0; \} \}/, css)
     time = css[/--moon-edge-time: ([\d.]+)s;/, 1].to_f
     assert time.between?(2.0, 3.0), "번짐이 둘에서 셋 초 안에 걷히지 않는다(#{time})"
-    assert_match(/prefers-reduced-motion: reduce\) \{\s*\.moon--filling mask ellipse, \.moon--filling \.edge \{ transition: none; \}/, css,
-      "움직임을 줄여도 번짐이 옮아간다")
+    assert_match(/prefers-reduced-motion: reduce\) \{\s*\.moon--filling mask ellipse \{ transition: none; \}/, css,
+      "움직임을 줄여도 가리개가 옮아간다")
     assert_match(/prefers-reduced-motion: no-preference\) \{\s*\.moon--filling \.edge \{ animation: moon-edge/, css,
       "움직임을 줄여도 번짐이 비친다")
   end

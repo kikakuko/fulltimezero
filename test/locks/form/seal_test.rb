@@ -43,8 +43,11 @@ class SealTest < ActionDispatch::IntegrationTest
     assert_operator press, :<=, 0.1, "도장이 내려오는 데 0.1초를 넘는다"
     assert_operator press + bleed, :<=, 0.5, "찍힘이 0.5초 안에 멎지 않는다"
     assert_match(/@keyframes seal-press \{\s*0%\s*\{ transform: scale\(1\.08\) rotate\(-2deg\); opacity: 0\.7; \}\s*100%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}/, css)
-    assert_match(/@keyframes seal-bleed \{\s*0%\s*\{ mask-size: 100%;.*100%\s*\{ mask-size: 10[0-9]%;/m, css, "인주가 가장자리로 번지지 않는다")
-    %w[seal-press seal-bleed].each do |name|
+    # 번짐은 마스크를 키우지 않고 transform 으로 — 잡음 마스크를 프레임마다 다시 그리지 않는다.
+    assert_match(/@keyframes seal-stamp \{\s*0%\s*\{ transform: scale\(1\.08\) rotate\(-2deg\); opacity: 0\.7; \}\s*25%\s*\{ transform: scale\(1\) rotate\(0\); opacity: 1; \}\s*100%\s*\{ transform: scale\(1\.0\d\) rotate\(0\); opacity: 1; \}/, css,
+      "인주가 가장자리로 번지지 않는다")
+    assert_no_match(/@keyframes [\w-]+ \{[^}]*mask-size/m, css, "마스크를 움직인다 — 프레임마다 다시 그린다")
+    %w[seal-press seal-stamp].each do |name|
       css.scan(/^.*animation:[^;]*\b#{name}\b.*$/).each do |line|
         block = css[0, css.index(line)].rpartition("@media").last
         assert_match(/\A \(prefers-reduced-motion: no-preference\)/, block, "움직임을 줄여도 #{name} 가 돈다")
