@@ -26,6 +26,8 @@
     <%= tag.link rel: "apple-touch-icon", href: asset_path("apple-touch-icon.png"), sizes: "180x180" %>
     <%= tag.link rel: "manifest", href: "/manifest.json" %>
 
+    <%# 미리 받는 글꼴은 첫 화면의 큰 글 하나(동해독도)뿐이다 — 나머지는 화면의 글자가 부른다. %>
+    <%= tag.link rel: "preload", as: "font", type: "font/woff2", crossorigin: "anonymous", href: asset_path("EastSeaDokdo.woff2") %>
     <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
