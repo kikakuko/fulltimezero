@@ -458,6 +458,7 @@ en:
     export: You can download everything you have written, at any time.
     delete: Delete your account and the records go with it, at once.
     third_party: No advertising, no trackers, no third-party analytics.
+    addresses: The app does not record your address. The gatekeeper in front of the server keeps it for a few days, to look into outages, and then it is gone.
     keeping:
       title: How long it stays
       body: Only as long as the account exists. It serves one purpose — giving a person their own records back. Delete the account and the records go with it, without delay. The one copy kept apart is a nightly backup, and the next night's backup writes over it.

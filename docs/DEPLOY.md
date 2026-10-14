@@ -94,7 +94,7 @@ printf '[Journal]\nSystemMaxUse=50M\nMaxRetentionSec=3day\n' > /etc/systemd/jour
 systemctl restart systemd-journald
 
 # 도커가 담는 기록도 짧게 — 프록시의 접속 기록이 여기 쌓인다.
-printf '{ "log-driver": "json-file", "log-opts": { "max-size": "10m", "max-file": "2" } }\n' > /etc/docker/daemon.json
+printf '{ "log-driver": "json-file", "log-opts": { "max-size": "10m", "max-file": "3" } }\n' > /etc/docker/daemon.json
 systemctl restart docker
 ```
 
@@ -242,7 +242,7 @@ bin/kamal app exec 'bin/rails db:seed'   # 경전과 아홉 자리를 심는다
 |---|---|---|
 | 레일즈 요청 기록 | **남지 않는다** | 요청을 적는 미들웨어를 운영에서 걷었다(`production.rb`) |
 | 레일즈 오류 기록 | 남지 않는다 | 예외와 자리만 적힌다. 시도를 세는 자리도 이메일로 센다 |
-| kamal-proxy 접근 기록 | **남는다 — 끌 수 없다** | 브라우저 정보는 비웠다(`logging.request_headers: []`). 도커 기록을 10MB·2벌로 회전시켜 보관을 짧게 |
+| kamal-proxy 접근 기록 | **남는다 — 끌 수 없다** | 브라우저 정보는 비웠다(`logging.request_headers: []`). 도커 기록을 10MB·3벌로 회전시켜 며칠만 남긴다 — 끄지는 않는다(장애 때 볼 것이 있어야 한다). 처리방침에 적었다 |
 | 도커 데몬 | 위와 같은 층 | 같은 회전 설정 |
 | sshd(들어온 기록) | **남는다** | 끄지 않는다 — 침입을 보려면 필요하다. journald 를 사흘·50MB 로 짧게 |
 | 방화벽(ufw) | 끌 수 있다 | `ufw logging off` |
