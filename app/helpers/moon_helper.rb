@@ -48,10 +48,11 @@ module MoonHelper
       concat tag.circle(cx: r, cy: r, r: r, fill: "var(--ink)",
                         mask: "url(##{id})", class: "disc")
       # 응답하는 순간, 먹이 빠지는 경계에 금빛 번짐 한 겹 — 보름의 번짐과 같은 색 · 같은 겹.
-      # 가리개와 같은 타원이 같이 옮아가고, 경계가 있는 반쪽만 보인다. 이내 가라앉는다.
+      # 도착하는 자리(phase)에 미리 그려 두고 비추었다 가라앉힌다 — 흐림 아래에서 모양을
+      # 움직이지 않는다. 경계가 있는 반쪽만 보인다.
       if filling
-        concat tag.clipPath(id: "#{id}-edge") { tag.rect(x: from < 0.5 ? r : 0, y: 0, width: r, height: size, class: "edge-clip") }
-        concat tag.ellipse(cx: r, cy: r, rx: shade_rx(from, size), ry: r, fill: "none", stroke: "var(--gilt)",
+        concat tag.clipPath(id: "#{id}-edge") { tag.rect(x: phase.to_f < 0.5 ? r : 0, y: 0, width: r, height: size, class: "edge-clip") }
+        concat tag.ellipse(cx: r, cy: r, rx: shade_rx(phase, size), ry: r, fill: "none", stroke: "var(--gilt)",
                            class: "edge", "clip-path": "url(##{id}-edge)")
       end
       # 몸체 — 가는 먹선 원.

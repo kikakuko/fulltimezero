@@ -312,21 +312,22 @@ body {
   -webkit-mask-image: var(--seal-mask); -webkit-mask-size: 100%; -webkit-mask-position: center; -webkit-mask-repeat: no-repeat;
 }
 /* 찍는다 — 누르는 순간 도장이 내려오고(0.1초: 크기 1.08 → 1, 기울기 −2° → 0, 불투명 0.7 → 1),
-   닿은 뒤 인주가 가장자리로 조금 번진다(0.3초: 마스크가 살짝 커졌다 멈춤). 합쳐 0.4초. */
+   닿은 뒤 인주가 가장자리로 조금 번진다(0.3초: 도장이 살짝 커졌다 멈춤). 합쳐 0.4초.
+   번짐은 마스크를 키우지 않는다 — 잡음 마스크를 프레임마다 다시 그리면 휴대폰이 끊긴다.
+   transform 하나로 내려옴과 번짐을 잇는다(2026-10-14). */
 @media (prefers-reduced-motion: no-preference) {
   .seal:active { animation: seal-press var(--seal-press-time) ease-out both; }
-  .rest--stamped .seal {
-    animation: seal-press var(--seal-press-time) ease-out both,
-               seal-bleed var(--seal-bleed-time) ease-out var(--seal-press-time) both;
-  }
+  .rest--stamped .seal { animation: seal-stamp calc(var(--seal-press-time) + var(--seal-bleed-time)) ease-out both; }
 }
 @keyframes seal-press {
   0%   { transform: scale(1.08) rotate(-2deg); opacity: 0.7; }
   100% { transform: scale(1) rotate(0); opacity: 1; }
 }
-@keyframes seal-bleed {
-  0%   { mask-size: 100%; -webkit-mask-size: 100%; }
-  100% { mask-size: 106%; -webkit-mask-size: 106%; }
+/* 25% 가 0.1초다(0.4초 중). 내려와 닿은 뒤 0.3초에 걸쳐 조금 번진다. */
+@keyframes seal-stamp {
+  0%   { transform: scale(1.08) rotate(-2deg); opacity: 0.7; }
+  25%  { transform: scale(1) rotate(0); opacity: 1; }
+  100% { transform: scale(1.03) rotate(0); opacity: 1; }
 }
 .moon { display: block; margin: 0 auto; }
 /* 달은 비워 그린다 — 가는 먹선 원이 몸체를 잡고, 어두운 쪽만 옅은 먹. 밝은 쪽은 한지 그대로. */
@@ -336,17 +337,15 @@ body {
    반달을 지나는 날은 스크립트가 한 점까지 닫은 뒤 가리개를 비움으로 뒤집고 다시 연다. */
 .moon--filling mask ellipse { rx: var(--moon-rx); transition: rx var(--moon-fill-time) var(--moon-fill-ease); }
 /* 먹이 빠지는 경계의 금빛 번짐 — 보름의 번짐과 같은 색 · 같은 겹(--moon-glow, blur 4px).
-   가리개와 같이 옮아가고, 비추었다 이내 가라앉는다(--moon-edge-time). */
-.moon--filling .edge {
-  rx: var(--moon-rx); transition: rx var(--moon-fill-time) var(--moon-fill-ease);
-  stroke-width: 6px; filter: blur(4px); opacity: 0;
-}
+   도착하는 자리에 미리 그려 두고 opacity 만 비추었다 가라앉힌다(--moon-edge-time) — 흐림
+   아래에서 모양이 움직이면 프레임마다 다시 흐리게 그려야 해서 휴대폰이 끊긴다(2026-10-14). */
+.moon--filling .edge { stroke-width: 6px; filter: blur(4px); opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .moon--filling .edge { animation: moon-edge var(--moon-edge-time) ease-out both; }
 }
 @keyframes moon-edge { 0% { opacity: 0; } 20% { opacity: var(--moon-glow); } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .moon--filling mask ellipse, .moon--filling .edge { transition: none; }
+  .moon--filling mask ellipse { transition: none; }
 }
 /* 보름의 빛 — 먹선 원 바깥에 옅은 금빛 번짐 한 겹. 빈 원은 비워 둔다. */
 .moon circle.moonglow { stroke-width: 8px; opacity: var(--moon-glow); filter: blur(4px); }
