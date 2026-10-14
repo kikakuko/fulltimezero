@@ -114,6 +114,12 @@ en:
   moon:
     full: The moon is full.
     title: The moon
+    read:
+      dark: The moon is dark
+      thin: The moon is a thin crescent
+      half: The moon is about half full
+      nearly: The moon is nearly full
+      full: The moon is full
 
   abidings:
     when_sitting: When sitting
@@ -264,6 +270,10 @@ en:
       nothing_bell: A bell on the way in
     elephant:
       alt: An elephant on the path
+      read:
+        dark: A black elephant sits on the rock
+        fading: A paling elephant sits on the rock
+        white: An almost white elephant sits on the rock
     # A stick of incense and a cup of tea were how time was measured
     # before clocks. They keep their own words, apart from rests.durations.
     lengths:

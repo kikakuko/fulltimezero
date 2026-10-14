@@ -40,7 +40,8 @@
   <div class="<%= class_names("elephant-place", "elephant-place--arriving": arriving) %>" data-elephant-target="figure">
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
-      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, label: t("sittings.elephant.alt") %>
+      <%# 읽어 주는 말은 그림의 묘사다 — 검은 · 옅어진 · 거의 흰 코끼리. 숫자는 없다. %>
+      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, label: elephant_reading(reading.whiteness) %>
     </div>
   </div>
 </div>

@@ -117,6 +117,13 @@ ko:
   moon:
     full: 달이 찼다.
     title: 달
+    # 화면을 읽어 주는 말 — 숫자 대신 그림의 묘사. 단계의 이름이 아니다.
+    read:
+      dark: 그믐이다
+      thin: 달이 가늘다
+      half: 달이 반쯤 찼다
+      nearly: 달이 거의 찼다
+      full: 보름이다
 
   abidings:
     when_sitting: 앉을 때
@@ -267,6 +274,11 @@ ko:
       nothing_bell: 들어갈 때 종성
     elephant:
       alt: 길 위의 코끼리
+      # 화면을 읽어 주는 말 — 그림의 묘사. 숫자는 없다.
+      read:
+        dark: 검은 코끼리가 바위에 앉아 있다
+        fading: 옅어진 코끼리가 바위에 앉아 있다
+        white: 거의 흰 코끼리가 바위에 앉아 있다
     # 향 한 대·차 한 잔은 시계 이전의 전통이 시간을 재던 단위다.
     # 쉼의 길이(rests.durations)와 낱말이 겹치지 않게 둔다.
     lengths:

@@ -24,7 +24,21 @@ module MoonHelper
   # 예외가 아니라, 밝은 바탕에서 피는 월광 한 겹이다.
   # from: 달이 응답하는 순간 — 「쉬었다」를 누른 그때만 — 어디서 시작하는가. 가리개는 거기
   # 그려지고, 스크립트가 phase 의 자리까지 옮긴다(moon_controller). 경과 시간이 아니라 사건이다.
-  def moon_svg(phase, size: 160, title: t("moon.title"), moonlight: false, from: nil, **shade_options)
+  # 화면을 읽어 주는 말 — 숫자 대신 그림을 말로 읽는다(2026-10-14). 단계의 이름이 아니라 달의
+  # 묘사다: 그믐 · 가늘다 · 반쯤 찼다 · 거의 찼다 · 보름. 경계는 결(moon_reading_test).
+  READINGS = { 0.0 => :dark, 0.35 => :thin, 0.65 => :half, 1.0 => :nearly }.freeze
+
+  def moon_reading(phase)
+    f = phase.to_f.clamp(0.0, 1.0)
+    key = if f <= 0.0 then :dark
+    elsif f >= 1.0 then :full
+    else READINGS.find { |upto, _| f < upto }&.last || :nearly
+    end
+    t("moon.read.#{key}")
+  end
+
+  def moon_svg(phase, size: 160, title: nil, moonlight: false, from: nil, **shade_options)
+    title ||= moon_reading(phase)
     r = size / 2.0
     id = "moon-#{@moon_seq = @moon_seq.to_i + 1}"
     filling = !from.nil? && from != phase

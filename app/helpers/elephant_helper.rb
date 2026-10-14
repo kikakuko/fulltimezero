@@ -18,6 +18,17 @@ module ElephantHelper
   # ele 가 없으면 흰빛은 CSS 가 정한다(무위 — 앉은 날과 무관한 하나의 값).
   # walking 은 문턱(들어설 때 걸어옴)과 장경각의 걷는 코끼리에, restless 는 바위 위의
   # 뒤척임에. 둘 다 아니면 멎어 있다.
+  # 화면을 읽어 주는 말 — 숫자 대신 그림을 말로 읽는다(2026-10-14). 단계의 이름이 아니라
+  # 코끼리의 묘사다: 검은 · 옅어진 · 거의 흰. 경계는 결(moon_reading_test).
+  def elephant_reading(whiteness)
+    w = whiteness.to_f
+    key = if w < 0.33 then :dark
+    elsif w < 0.8 then :fading
+    else :white
+    end
+    t("sittings.elephant.read.#{key}")
+  end
+
   def elephant_figure(ele: nil, walking: false, restless: false, label: nil)
     classes = [ "elephant" ]
     classes << "elephant--walking-legs" if walking
