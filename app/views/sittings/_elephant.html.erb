@@ -26,6 +26,13 @@
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
     <mask id="elephant-road-mist" maskUnits="userSpaceOnUse" x="0" y="0" width="<%= Elephant::VIEW[0] %>" height="<%= Elephant::VIEW[1] %>">
       <path class="elephant-field__road-band" data-elephant-target="road" d=""/>
+      <%# 바위와 코끼리의 자리는 비운다 — 흰빛이 높을 때 흰 코끼리가 흰 안개에 묻히지 않게.
+          바위의 가운데(아래 바위 path 의 중심)에서 반지름 120, 가장자리는 부드럽게. %>
+      <radialGradient id="elephant-road-clearing">
+        <stop offset="0.7" stop-opacity="1"/>
+        <stop offset="1" stop-opacity="0"/>
+      </radialGradient>
+      <circle class="elephant-field__road-clearing" cx="611" cy="1026" r="120" fill="url(#elephant-road-clearing)"/>
     </mask>
     <g class="elephant-field__road-mist" mask="url(#elephant-road-mist)">
       <image href="<%= image_path("cloud-mist.webp") %>" x="0" y="0" width="<%= Elephant::VIEW[0] %>" height="<%= Elephant::VIEW[1] %>" preserveAspectRatio="xMidYMid slice"/>
