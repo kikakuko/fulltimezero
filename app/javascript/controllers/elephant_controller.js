@@ -26,13 +26,13 @@ export const BENDS = {
 }
 
 export default class extends Controller {
-  static targets = [ "path", "veil", "figure" ]
+  static targets = [ "path", "road", "figure" ]
   static values = { arriving: Boolean }
 
   connect() {
     const d = catmullRom(road(ANCHORS, BENDS))
     this.pathTarget.setAttribute("d", d)
-    this.veilTarget.setAttribute("d", d)
+    this.roadTarget.setAttribute("d", d) // 길의 안개 띠 — 같은 모양이 마스크가 된다
 
     if (!this.arrivingValue) return
 

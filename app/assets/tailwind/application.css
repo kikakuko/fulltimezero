@@ -1695,12 +1695,16 @@ input[type="text"].threshold__field {
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
-/* 길의 덮개 — 숨긴 길과 같은 모양을 한지빛으로 긋는다. 불투명도가 흰빛을 따른다.
-   길은 그림에 박혀 있어 떼어낼 수 없으므로 덮는다. */
-.elephant-field__road-veil {
-  fill: none; stroke: var(--paper); stroke-width: 96px; stroke-linecap: round; stroke-linejoin: round;
+/* 길의 안개 — 숨긴 길과 같은 모양으로 띠를 그어 마스크로 삼고, 그 안에 구름 겹 둘을 깐다.
+   불투명도가 흰빛을 따른다(흰빛 × --road-veil-most) — 희어질수록 길이 안개에 잠긴다.
+   마스크의 밝기는 한지빛이면 된다(색이 아니라 밝기다). 한지빛 덮개는 걷었다(2026-10-15). */
+.elephant-field__road-band {
+  fill: none; stroke: var(--paper); stroke-width: 180px; stroke-linecap: round; stroke-linejoin: round;
+}
+.elephant-field__road-mist {
   opacity: calc(var(--whiteness, 0) * var(--road-veil-most));
 }
+.elephant-field__road-mist-drift { opacity: 0.7; }
 /* 길가의 바위 — 한지빛 몸에 먹선. 코끼리가 앉는 자리다. */
 .elephant-field__rock-body { fill: var(--paper-deep); stroke: var(--ink); stroke-width: 3px; stroke-linejoin: round; opacity: 0.92; }
 .elephant-field__rock-line { fill: none; stroke: var(--ink); stroke-width: 2px; stroke-linecap: round; opacity: 0.45; }

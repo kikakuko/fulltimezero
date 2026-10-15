@@ -19,10 +19,18 @@
   <%# 화면 가장자리에서 흘러드는 구름. 코끼리보다 뒤에 선다 — 배경이지 도상이 아니다. %>
   <span class="cloud cloud--drift" aria-hidden="true"></span>
   <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
-    <%# 숨긴 길과, 그 위를 덮는 한지빛 — 희어질수록 길이 옅어진다. 길은 그림에 박혀 있어
-        떼어낼 수 없으므로 같은 모양으로 덮는다. 다 덮지는 않는다(--road-veil-most). %>
+    <%# 숨긴 길과, 길의 모양을 따라 깔리는 안개 — 희어질수록 길이 안개에 잠긴다. 길은 그림에
+        박혀 있어 떼어낼 수 없으므로 같은 모양(ANCHORS 곡선)을 마스크로 삼아 저장소의 구름 겹
+        둘(cloud-mist · cloud-drift)을 그 위에 겹친다. 다 잠기지는 않는다(--road-veil-most).
+        새 그림도 새 색도 없다. %>
     <path class="elephant-field__path" data-elephant-target="path" d=""/>
-    <path class="elephant-field__road-veil" data-elephant-target="veil" d=""/>
+    <mask id="elephant-road-mist" maskUnits="userSpaceOnUse" x="0" y="0" width="<%= Elephant::VIEW[0] %>" height="<%= Elephant::VIEW[1] %>">
+      <path class="elephant-field__road-band" data-elephant-target="road" d=""/>
+    </mask>
+    <g class="elephant-field__road-mist" mask="url(#elephant-road-mist)">
+      <image href="<%= image_path("cloud-mist.webp") %>" x="0" y="0" width="<%= Elephant::VIEW[0] %>" height="<%= Elephant::VIEW[1] %>" preserveAspectRatio="xMidYMid slice"/>
+      <image href="<%= image_path("cloud-drift.webp") %>" x="0" y="0" width="<%= Elephant::VIEW[0] %>" height="<%= Elephant::VIEW[1] %>" preserveAspectRatio="xMidYMid slice" class="elephant-field__road-mist-drift"/>
+    </g>
     <%# 길가의 바위 — 먹선과 한지빛. 코끼리는 이 위에 앉는다. 자리는 값에 매이지 않는다. %>
     <g class="elephant-field__rock">
       <path class="elephant-field__rock-body"
