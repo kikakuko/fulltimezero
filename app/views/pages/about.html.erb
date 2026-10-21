@@ -1,0 +1,18 @@
+<%# 이 앱에 대하여. 마당의 미리보기는 그림이 아니라 마당의 조각(today/_moon · today/_rest)
+    그대로다 — 스크린숏을 두면 그림 무게가 늘고, 화면이 바뀔 때 미리보기만 낡는다.
+    씨앗의 값(보름 전 사흘)으로 서버에서 그리고, 스크립트를 붙이지 않는다 — 누를 곳이 없다.
+    폭은 휴대폰 한 장(390px)의 틀 안. %>
+<h1 class="title"><%= t("about.title") %></h1>
+
+<div class="guide">
+  <p><%= t("about.lead") %></p>
+</div>
+
+<figure class="about-preview" aria-label="<%= t("about.preview") %>">
+  <div class="about-preview__frame center" inert>
+    <%= render "today/moon", fraction: @preview_moon %>
+    <p class="lead"><%= t("today.question") %></p>
+    <%= render "today/rest", preview: true %>
+  </div>
+  <figcaption class="tiny soft"><%= t("about.preview") %></figcaption>
+</figure>

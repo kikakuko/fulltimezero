@@ -296,6 +296,15 @@ body {
 .tiny { font-size: 0.8125rem; color: var(--ink-soft); }
 .soft { color: var(--ink-soft); }
 
+/* 이 앱에 대하여 — 마당의 미리보기. 그림이 아니라 그 화면의 조각 그대로, 휴대폰 한 장(390px)의
+   틀 안에. 누를 곳이 없다(inert). 틀은 먹틀과 같은 결 — 한지 위의 옅은 테. */
+.about-preview { margin: 2.5rem auto 0; max-width: 390px; display: grid; gap: 0.75rem; justify-items: center; }
+.about-preview__frame {
+  width: 100%; box-sizing: border-box; padding: 2rem 1rem 2.5rem;
+  background: var(--ink-frame); border: 1px solid var(--rule); border-radius: 12px;
+}
+.about-preview__frame .lead { margin: 1.75rem 0; }
+
 /* ── 틈틈이 쉼 — 낙관(落款) ──────────────────────────────────────────
    백문(白文): 네모 바탕을 찍고 글자 「쉼」을 한지색으로 비운다. 바탕은 --seal-ink 한 변수
    — 지금은 먹이다. 주사는 §2 가 「하루에 한 번만, 버튼에는 쓰지 않는다」고 못박고 있어

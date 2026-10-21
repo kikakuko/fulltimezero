@@ -437,6 +437,11 @@ en:
         - Knees come up and the body rises
         - Standing again, palms together
 
+  about:
+    title: About
+    lead: A place that celebrates an empty day, where the moon brightens when you rest.
+    preview: This is the courtyard.
+
   credits:
     title: What was borrowed
     note: Sources and terms for what this app borrows. It grows as sounds, type and images come in.

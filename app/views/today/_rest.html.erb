@@ -1,0 +1,16 @@
+<%# 틈틈이 쉼 — 낙관(落款) 「쉼」 하나. 마당과 /about 의 미리보기가 함께 쓴다.
+    백문(白文): 바탕을 찍고 글자를 비운다. 번역하지 않는다 — 영어 화면에도 「쉼」.
+    누르면 묻지 않고 바로 틈 하나가 남는다(길이도 결도 없다). 첫 틈에만 달이 응답하고,
+    그 뒤의 틈은 낙관이 찍히는 느낌만(rest--stamped). 떨림은 비움과 같은 게이트를 지난다.
+    손님은 누르면 구경하는 자리 한 줄. 미리보기(preview)는 누를 곳도 스크립트도 없는 그림이다. %>
+<% preview ||= false %>
+<% if preview %>
+  <p class="rest"><span class="seal rested" role="img" aria-label="<%= t("today.rested_label") %>" lang="ko"><%= t("today.rested") %></span></p>
+<% elsif guest? %>
+  <p class="rest" id="rest"><%= link_to t("today.rested"), new_rest_path, class: "seal rested", "aria-label": t("today.rested_label"), lang: "ko" %></p>
+<% else %>
+  <%= button_to t("today.rested"), rests_path, class: "seal rested", "aria-label": t("today.rested_label"), lang: "ko",
+                data: { action: "click->seal#press" },
+                form: { id: "rest", class: class_names("rest", "rest--stamped": flash[:stamped]),
+                        data: { controller: "seal", seal_vibrate_value: @vibrate } } %>
+<% end %>

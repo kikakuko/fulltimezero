@@ -85,6 +85,8 @@ Rails.application.routes.draw do
     get "privacy" => "pages#privacy", as: :privacy
     # 쓰인 것들 — 빌려온 것의 출처와 이용조건. 소리 · 글꼴 · 그림이 들어올 때마다 는다.
     get "credits" => "pages#credits", as: :credits
+    # 이 앱에 대하여 — 마당의 미리보기가 그림이 아니라 그 화면의 조각 그대로 선다.
+    get "about" => "pages#about", as: :about
   end
 
   # 브라우저가 한국어를 선호하면 ko, 그 밖에는 en.

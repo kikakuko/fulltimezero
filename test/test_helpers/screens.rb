@@ -8,7 +8,7 @@ module Screens
 
   # 문 셋은 계정 없이 지난다 — 문이 랜딩이다.
   OPEN_PAGES = %i[threshold_path threshold_naming_path threshold_breath_path new_user_path new_session_path
-                  new_password_path guide_path privacy_path].freeze
+                  new_password_path guide_path privacy_path about_path].freeze
 
   # 날들은 여기에 없다 — 달력의 날짜는 숫자 금지의 유일한 예외이고,
   # 그 화면은 따로 검사한다(「날들 화면의 숫자는 달력의 날짜뿐이다」).
