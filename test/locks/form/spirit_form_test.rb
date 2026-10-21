@@ -187,7 +187,7 @@ class SpiritFormTest < ActionDispatch::IntegrationTest
         assert_no_match(/!/, text, "#{page} 에 느낌표가 있다")
         assert_no_match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/, text, "#{page} 에 이모지가 있다")
 
-        hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+        hosts = outward_hosts(response.body)
         assert_empty hosts, "#{page} 가 바깥을 부른다: #{hosts.inspect}"
       end
 

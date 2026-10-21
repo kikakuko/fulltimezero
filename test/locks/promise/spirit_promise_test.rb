@@ -144,7 +144,7 @@ class SpiritPromiseTest < ActionDispatch::IntegrationTest
       assert_response :success, "#{name}(#{locale}) 이 열리지 않는다"
       assert_no_match(/\d\s*(분|minutes?|mins?)\b/i, visible_text, "#{name}(#{locale}) 화면에 분이 보인다")
 
-      hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+      hosts = outward_hosts(response.body)
       assert_empty hosts, "#{name}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
     end
 end

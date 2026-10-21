@@ -32,7 +32,7 @@ module Screens
     page_html = Nokogiri::HTML(response.body)
     page_html.css("a[href]").each { |link| link.remove_attribute("href") }
 
-    hosts = page_html.to_s.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+    hosts = outward_hosts(page_html.to_s)
     assert_empty hosts, "#{page}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
 
     # 임포트맵이 제 파일을 미리 잇는 것은 바깥이 아니다. 바깥 주소를
@@ -44,6 +44,13 @@ module Screens
 
     assert_empty early.map { |link| link["href"] },
       "#{page}(#{locale}) 가 바깥을 미리 잇는다"
+  end
+
+  # 화면에 실린 절대 주소의 호스트 가운데 바깥인 것. 그 화면의 자기 호스트(request.host)는 바깥이
+  # 아니다 — 같은 화면의 다른 언어 주소(hreflang)와 링크 그림(og:image)은 규격상 절대 주소여야
+  # 해서 자기 호스트로 실린다(2026-10-22). 그 밖의 호스트는 하나도 빼지 않는다.
+  def outward_hosts(html)
+    html.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq - [ request.host ]
   end
 
   def flatten_spaces(text) = text.gsub(/\s+/, " ").strip
@@ -62,7 +69,7 @@ module Screens
     assert_no_match(/\d/, text, "#{name}(#{locale}) 화면에 숫자가 보인다")
     assert_no_match(/\d\s*(분|minutes?|mins?)\b/i, text, "#{name}(#{locale}) 화면에 분이 보인다")
 
-    hosts = response.body.scan(%r{https?://([^/"'\s>]+)}).flatten.uniq
+    hosts = outward_hosts(response.body)
     assert_empty hosts, "#{name}(#{locale}) 화면이 바깥을 부른다: #{hosts.inspect}"
   end
 
