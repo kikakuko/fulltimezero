@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 283" width="250" height="283">
+<defs><linearGradient id="elephant-sit-far-fade-ramp" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="185"><stop offset="0" stop-opacity="0"/><stop offset="1" stop-opacity="1"/></linearGradient><mask id="elephant-sit-far-fade" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="250" height="283"><rect width="250" height="283" fill="url(#elephant-sit-far-fade-ramp)"/></mask></defs>
+<g class="elephant__parts">
+<g class="elephant__body" data-pivot="160,240" style="transform-origin: 160px 240px">
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 100 26.7 C 133.3 23.3 160 36.7 165 63.3 C 193.3 83.3 226.7 106.7 240 140 C 250.7 168.3 250.7 206.7 244 226.7 C 226.7 241.7 193.3 246 160 240.7 C 133.3 236.7 110 227.3 97.3 208.3 C 84 188.3 76.7 165 76.7 140 C 77.3 110 88.3 70 100 26.7 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 128.3 173.3 C 133.3 181.7 133.3 190 129.3 197.3"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 90.7 121.7 C 95 126 100 127.3 105.3 126"/>
+</g>
+<g class="elephant__tail" data-pivot="244,206.7" style="transform-origin: 244px 206.7px">
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 244 206.7 C 247.3 219.3 245.7 229.3 248 237.3"/>
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 246 235.3 C 249.3 236.7 252 240.7 250 244 C 246.7 244 244 240.7 246 235.3 Z"/>
+</g>
+<g class="elephant__leg-br" data-pivot="146.7,266.7" style="transform-origin: 146.7px 266.7px" data-depth="far">
+<path class="e-fill" fill="var(--e-fill-far)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 134 266 C 141.7 262 154.7 262.7 158 269.3 C 156 274.7 142.7 276.7 136 274.7 C 132.7 272.7 132 268.7 134 266 Z"/>
+</g>
+<g class="elephant__leg-bl" data-pivot="190,190" style="transform-origin: 190px 190px">
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 173.3 183.3 C 160 183.3 150 190 145 203.3 C 138.3 220 128.3 240 116.7 253.3 C 111.7 259.3 110.7 266.7 115 272.7 C 120 278.3 135 278.3 141.7 275 C 146.7 266.7 153.3 256.7 160 250 C 176.7 246.7 200 247.3 220 244 C 240 240 248.7 223.3 243.3 206.7 C 238.3 190 213.3 180 193.3 180.7 C 186.7 181 180 182 173.3 183.3 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 151.7 204 C 156.7 207.3 158.3 212.7 156.7 217.3"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 117.3 270.7 C 118.3 267.3 122.3 267.3 123.3 270.7"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 124.7 273.3 C 125.7 270 129.7 270 130.7 273.3"/>
+</g>
+<g class="elephant__leg-fr" data-pivot="85,146.7" style="transform-origin: 85px 146.7px" data-depth="far" mask="url(#elephant-sit-far-fade)">
+<path class="e-fill" fill="var(--e-fill-far)" stroke="none" d="M 77.3 140 C 76.7 180 74.7 226.7 70 260 C 67.3 266.7 64 271.3 66 275 C 70 278.3 77.3 277.3 82 275 C 84 260 86.7 226.7 90.7 186.7 C 92 170 92.7 153.3 93.3 140 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 78.7 160 C 76.7 193.3 74.7 230 70 260 C 67.3 266.7 64 271.3 66 275 C 70 278.3 77.3 277.3 82 275"/>
+</g>
+<g class="elephant__leg-fl" data-pivot="102.7,143.3" style="transform-origin: 102.7px 143.3px">
+<path class="e-fill" fill="var(--e-fill)" stroke="none" d="M 92 136.7 C 96 173.3 94.7 220 88.7 260 C 86 268.3 77.3 273.3 78.7 278.3 C 83.3 282.7 96.7 282 100.3 278.3 C 103 260 102.7 213.3 108 173.3 C 110 160 112 146.7 114 136.7 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 93.3 153.3 C 95.3 186.7 94 223.3 88.7 260 C 86 268.3 77.3 273.3 78.7 278.3 C 83.3 282.7 96.7 282 100.3 278.3 C 103 260 102.7 213.3 108 173.3 C 109.3 165 110.3 158.3 111.7 151.7"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 84 278.7 C 85 275.3 89.3 275.3 90.3 278.7"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 91.3 279 C 92.3 275.7 96.3 275.7 97.7 278.7"/>
+</g>
+<g class="elephant__trunk" data-pivot="26.7,93.3" style="transform-origin: 26.7px 93.3px">
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 18.3 80 C 8.3 100 2.7 123.3 4 150 C 5.3 176.7 13.3 196.7 26.7 208.3 C 34 215 41.7 218 46.7 218.7 C 51 220 51 226.7 45.3 228.3 C 41.3 229.3 38.7 226.7 40 224 C 36 215.3 32.7 203.3 30.7 190 C 28.3 173.3 28.3 146.7 31.7 130 C 34 120 38.3 113.3 43.3 110 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 7 100.7 C 10 102 12.7 102.7 15.3 102.7"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 5 124 C 7.7 125.3 10.3 125.7 13.3 125.3"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 6.7 160 C 9 160.7 11.3 161 13.7 160.7"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 11 184 C 13.3 184 15.3 183.3 17.3 182.3"/>
+</g>
+<g class="elephant__head" data-pivot="110,83.3" style="transform-origin: 110px 83.3px">
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 116.7 31.7 C 103.3 10 83.3 1.7 66.7 6.7 C 45 13.3 28.3 31.7 21.7 53.3 C 17.3 68.3 15 80 16 90 C 26.7 100 36.7 106.7 46 110 C 56.7 115 70 120 83.3 121.7 C 100 123.3 111.7 113.3 116.7 100 C 120 80 121.7 53.3 116.7 31.7 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 55 55.3 C 60 59.7 66.7 59.7 71.7 55.3"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 54 100 C 58.7 103.3 63.3 103 66.3 99.7"/>
+<g class="elephant__ear" data-pivot="110.7,33.3" style="transform-origin: 110.7px 33.3px">
+<path class="e-fill" fill="var(--e-fill)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 108.7 23.3 C 126.7 15 153.3 23.3 161.7 43.3 C 168.3 60 163.3 76.7 150 83.3 C 140 88.3 130 96.7 123.3 106.7 C 116.7 113.3 108.7 108.3 108.7 100 C 107 83.3 105.3 50 108.7 23.3 Z"/>
+<path class="e-line" fill="none" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 115.3 29.3 C 130 24 146.7 30.7 155 44"/>
+</g>
+</g>
+<g class="elephant__tusk" data-pivot="43.3,110" style="transform-origin: 43.3px 110px">
+<path class="e-fill" fill="var(--e-tusk)" stroke="var(--e-ink)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" d="M 21.7 118.3 C 30 115 41.7 108.3 49.3 106 C 50.3 110.7 47.7 113.3 43.3 115 C 36.7 117.7 28.3 120 21.7 118.3 Z"/>
+</g>
+</g>
+</svg>

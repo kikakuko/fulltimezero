@@ -48,11 +48,14 @@ export default class extends Controller {
 
   disconnect() { cancelAnimationFrame(this.frame) }
 
-  // 바위 앞에 섰다. 걸음을 거두고 뒤척임을 시작한다.
+  // 바위 앞에 섰다. 걸음을 거두고 앉는다 — 선 그림이 앉은 그림으로 교차 페이드한다(CSS 의
+  // --elephant-seat-time, 3초 넘게. 두 그림의 불투명도가 같은 곡선으로 엇갈려 둘 다 다 보이거나
+  // 둘 다 안 보이는 때가 없다). 앉은 뒤 뒤척이는 것은 귀 · 꼬리 · 코뿐이다.
   settle() {
     this.figureTarget.classList.remove("elephant-place--arriving")
     const elephant = this.figureTarget.querySelector(".elephant")
     elephant?.classList.remove("elephant--walking-legs")
+    elephant?.classList.add("elephant--seated")
     elephant?.classList.add("elephant--restless")
   }
 }

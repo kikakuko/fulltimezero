@@ -221,6 +221,8 @@
      느리다(네 초 아래로 내려가지 않는다 — elephant_white_test). 부위마다 주기를
      어긋나게 두어 기계처럼 보이지 않게 한다. 쌓인 시간의 함수이지 경과 시간이
      아니다 — 앉는 동안 폭이 변하지 않는다. */
+  /* 선 그림이 앉은 그림으로 바뀌는 교차 페이드 — 셋 초 넘게 */
+  --elephant-seat-time: 3.2s;
   --elephant-stir-head: 2.5deg;
   --elephant-stir-trunk: 6deg;
   --elephant-stir-tail: 7deg;
@@ -1789,6 +1791,22 @@ input[type="text"].threshold__field {
   --e-tusk: var(--paper);
 }
 .elephant__art { display: block; width: 100%; height: 100%; overflow: visible; }
+/* 앉은 코끼리 — 선 그림과 같은 자리에 겹친다. 발끝이 같은 바닥선(틀의 아래)에 오고, 틀의 높이를
+   채운다. 바위에 닿으면 선 그림이 앉은 그림으로 교차 페이드한다 — 두 그림이 같은 시간 · 같은
+   곡선(linear)으로 엇갈리므로 둘 다 다 보이거나 둘 다 안 보이는 때가 없다. 흰빛(--e-fill …)은
+   .elephant 에서 내려오므로 두 그림이 같이 먹는다. */
+.elephant { position: relative; }
+.elephant__art--seated {
+  position: absolute; bottom: 0; left: 50%; width: auto; height: 100%; aspect-ratio: 250 / 283;
+  translate: -50% 0; opacity: 0;
+}
+.elephant__art--standing, .elephant__art--seated { transition: opacity var(--elephant-seat-time) linear; }
+.elephant--seated .elephant__art--standing { opacity: 0; }
+.elephant--seated .elephant__art--seated { opacity: 1; }
+.elephant .e-line { fill: none; stroke: var(--e-ink); }
+@media (prefers-reduced-motion: reduce) {
+  .elephant__art--standing, .elephant__art--seated { transition: none; }
+}
 .elephant__defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 .elephant .e-fill { fill: var(--e-fill); }
 .elephant .e-ink { fill: var(--e-ink); }
@@ -1854,6 +1872,12 @@ input[type="text"].threshold__field {
   .elephant--restless .elephant__body,
   .elephant--restless .elephant__tusk { animation: elephant-stir-shift var(--restless-period-body) ease-in-out infinite; }
 }
+/* 앉은 뒤에는 귀 · 꼬리 · 코만 뒤척인다. 다리 · 머리 · 몸통 · 상아는 움직이지 않는다 — 귀는
+   머리의 주기를 빌려 쓴다(주기 다섯은 그대로, 넷 초 아래로 내려가지 않는다). */
+@media (prefers-reduced-motion: no-preference) {
+  .elephant--restless .elephant__art--seated .elephant__ear { animation: elephant-stir-head var(--restless-period-head) ease-in-out infinite; }
+}
+.elephant .elephant__art--seated :is(.elephant__leg-fr, .elephant__leg-fl, .elephant__leg-bl, .elephant__leg-br, .elephant__head, .elephant__body, .elephant__tusk) { animation: none; }
 @keyframes elephant-stir-head {
   0%, 100% { rotate: calc(var(--restless, 1) * var(--elephant-stir-head)); }
   50% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-head)); }

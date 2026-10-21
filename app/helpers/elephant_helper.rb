@@ -13,6 +13,9 @@
 #     못하지만 사용자 지정 속성은 상속되어 넘어간다 — 색이 그렇게 내려간다.
 module ElephantHelper
   PARTS = Rails.root.join("app/assets/images/elephant_parts.svg")
+  # 앉은 코끼리 — 바위 위의 몸. docs/drawings/elephant_sitting.png 를 보고 손으로 그린 그림이다.
+  # 무리 이름 아홉은 선 그림과 같고, 머리 안에 귀(ear)가 하나 더 있다. 뒤척이는 것은 귀 · 꼬리 · 코뿐.
+  SEATED = Rails.root.join("app/assets/images/elephant_sitting.svg")
   DEFS_ID = "elephant-parts"
 
   # ele 가 없으면 흰빛은 CSS 가 정한다(무위 — 앉은 날과 무관한 하나의 값).
@@ -29,12 +32,18 @@ module ElephantHelper
     t("sittings.elephant.read.#{key}")
   end
 
-  def elephant_figure(ele: nil, walking: false, restless: false, label: nil)
+  # seated: false — 선 그림 하나(무위 · 장경각). :later — 앉은 그림을 겹쳐 두되 선 그림이 보인다
+  # (선방에 들어서며 걸어오는 동안 — 바위에 닿으면 스크립트가 elephant--seated 를 붙여 교차 페이드).
+  # true — 처음부터 앉아 있다(앉는 중, 움직임을 줄인 화면).
+  def elephant_figure(ele: nil, walking: false, restless: false, label: nil, seated: false)
     classes = [ "elephant" ]
     classes << "elephant--walking-legs" if walking
     classes << "elephant--restless" if restless
+    classes << "elephant--seated" if seated == true
 
-    content_tag :span, elephant_inline_svg(label), class: classes.join(" "), style: elephant_style(ele)
+    art = elephant_inline_svg(label)
+    art += elephant_seated_svg if seated
+    content_tag :span, art, class: classes.join(" "), style: elephant_style(ele)
   end
 
   # 그림 한 벌 — 한 화면에 한 번만 둔다.
@@ -63,9 +72,15 @@ module ElephantHelper
       @@elephant_parts_source ||= PARTS.read
     end
 
+    def elephant_seated_svg
+      source = Rails.env.production? ? (@@elephant_seated_source ||= SEATED.read) : SEATED.read
+      source.sub(/\A<svg\b[^>]*viewBox="([^"]+)"[^>]*>/) { %(<svg class="elephant__art elephant__art--seated" viewBox="#{$1}" aria-hidden="true">) }
+            .html_safe # rubocop:disable Rails/OutputSafety -- 저장소 안의 그림 파일이다
+    end
+
     def elephant_inline_svg(label)
       svg = elephant_parts_source.sub(/\A<svg\b[^>]*>/) do
-        head = '<svg class="elephant__art" viewBox="0 0 347 243"'
+        head = '<svg class="elephant__art elephant__art--standing" viewBox="0 0 347 243"'
         label ? %(#{head} role="img" aria-label="#{ERB::Util.html_escape(label)}">) : %(#{head} aria-hidden="true">)
       end
 

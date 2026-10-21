@@ -5,9 +5,8 @@
     흰빛(--ele)과 뒤척임(--restless)과 길의 옅음(--whiteness)은 서버가 준 값
     그대로이고, 앉는 동안 다시 계산되지 않는다.
 
-    TODO: 앉은 코끼리 그림으로 교체. 지금은 선 코끼리를 바위 위에 둔다 — 부위
-    회전만으로는 앉은 자세가 나오지 않았다(다리 축이 어깨 · 엉덩이에 있어 접힌
-    다리가 몸 아래로 들어가지 않는다). 새 그림의 규격은 docs/NEXT.md 에.
+    앉은 그림(elephant_sitting.svg)이 선 그림과 같은 자리에 겹쳐 있다. 걸어와 바위에 닿으면
+    선 그림이 앉은 그림으로 교차 페이드하고(3초 넘게), 앉는 중에는 처음부터 앉아 있다.
 
     arriving: 선방에 들어설 때 가장자리에서 바위까지 걸어온다 — 자리의 변화가
     아니라 문턱이다. 앉는 중에는 걸어오지 않는다. %>
@@ -56,7 +55,7 @@
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
       <%# 읽어 주는 말은 그림의 묘사다 — 검은 · 옅어진 · 거의 흰 코끼리. 숫자는 없다. %>
-      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, label: elephant_reading(reading.whiteness) %>
+      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, seated: arriving ? :later : true, label: elephant_reading(reading.whiteness) %>
     </div>
   </div>
 </div>
