@@ -5,6 +5,8 @@
 require "test_helper"
 
 class AboutFlowTest < ActionDispatch::IntegrationTest
+  include Screens
+
   test "계정 없이 열리고, 미리보기는 마당의 조각 그대로다 — 그림도 스크립트도 누를 곳도 없다" do
     I18n.available_locales.each do |locale|
       get about_path(locale: locale)
@@ -28,5 +30,20 @@ class AboutFlowTest < ActionDispatch::IntegrationTest
     moon = css_select(".about-preview svg.moon").first
     assert_equal MoonHelper.instance_method(:moon_reading).bind_call(ApplicationController.new.view_context, Rational(25, 28)), moon["aria-label"]
     assert_not_includes moon["class"], "moon--filling", "미리보기의 달이 움직인다"
+  end
+
+  # 없는 것들 — 미리보기 바로 아래, 「쓰인 것들」 한 줄 위. 자물쇠의 경로는 화면에 내지 않는다.
+  test "없는 것들이 미리보기 아래, 「쓰인 것들」 위에 서고, 자물쇠 경로는 화면에 없다" do
+    I18n.available_locales.each do |locale|
+      get about_path(locale: locale)
+      body = response.body
+
+      lines = I18n.t("about.none.lines", locale: locale)
+      assert_select ".about-none h2", text: I18n.t("about.none.title", locale: locale)
+      assert_select ".about-none li", count: lines.size
+      assert_operator body.index("about-preview"), :<, body.index("about-none"), "#{locale}: 없는 것들이 미리보기 위에 있다"
+      assert_operator body.index("about-none"), :<, body.index(credits_path(locale: locale)), "#{locale}: 「쓰인 것들」이 없는 것들 위에 있다"
+      assert_no_match(%r{test/locks|_test\.rb}, visible_text, "#{locale}: 자물쇠 경로가 화면에 나왔다")
+    end
   end
 end

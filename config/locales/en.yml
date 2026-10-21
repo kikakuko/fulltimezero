@@ -441,6 +441,22 @@ en:
     title: About
     lead: A place that celebrates an empty day, where the moon brightens when you rest.
     preview: This is the courtyard.
+    none:
+      title: What isn't here
+      lines:
+        - No measuring.
+        - No scores, no ranks to climb.
+        - No rewards, no badges.
+        - Nothing to keep unbroken.
+        - No alerts you didn't ask for.
+        - No ads.
+        - No tracking scripts.
+        - No outside scripts.
+        - No resets.
+        - No rankings, friends or showing off.
+        - No autoplay, no endless scroll.
+        - No AI.
+    credits: What was borrowed is credited here.
 
   credits:
     title: What was borrowed

@@ -16,3 +16,14 @@
   </div>
   <figcaption class="tiny soft"><%= t("about.preview") %></figcaption>
 </figure>
+
+<%# 없는 것들 — docs/legal/none.md 를 화면에. 줄마다 지키는 자물쇠의 경로는 문서에만 둔다. %>
+<section class="guide about-none">
+  <h2 class="section"><%= t("about.none.title") %></h2>
+  <ul>
+    <% t("about.none.lines").each do |line| %>
+      <li><%= line %></li>
+    <% end %>
+  </ul>
+  <p class="tiny"><%= link_to t("about.credits"), credits_path, class: "soft" %></p>
+</section>
