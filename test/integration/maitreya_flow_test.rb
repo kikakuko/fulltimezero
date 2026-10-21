@@ -51,7 +51,7 @@ class MaitreyaFlowTest < ActionDispatch::IntegrationTest
     assert_equal @user.today, @user.reload.maitreya_seen_on
 
     sign_in_as two # 같은 브라우저 세션에서 다른 계정으로
-    get day_path(@user.today)
+    get day_path(two.today) # 뒷사람의 오늘 — 시간대가 달라 서울 자정 무렵엔 하루가 다르다
     assert_select "template[data-maitreya-target=scene]", count: 1, message: "앞사람이 본 장면 때문에 뒷사람이 못 본다"
 
     source = Rails.root.glob("app/**/*.rb").map(&:read).join
