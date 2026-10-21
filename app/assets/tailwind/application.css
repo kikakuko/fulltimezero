@@ -1797,13 +1797,12 @@ input[type="text"].threshold__field {
    .elephant 에서 내려오므로 두 그림이 같이 먹는다. */
 .elephant { position: relative; }
 .elephant__art--seated {
-  position: absolute; bottom: 0; left: 50%; width: auto; height: 100%; aspect-ratio: 250 / 283;
+  position: absolute; bottom: 0; left: 50%; width: auto; height: 100%; aspect-ratio: 250 / 268;
   translate: -50% 0; opacity: 0;
 }
 .elephant__art--standing, .elephant__art--seated { transition: opacity var(--elephant-seat-time) linear; }
 .elephant--seated .elephant__art--standing { opacity: 0; }
 .elephant--seated .elephant__art--seated { opacity: 1; }
-.elephant .e-line { fill: none; stroke: var(--e-ink); }
 @media (prefers-reduced-motion: reduce) {
   .elephant__art--standing, .elephant__art--seated { transition: none; }
 }
@@ -1872,12 +1871,13 @@ input[type="text"].threshold__field {
   .elephant--restless .elephant__body,
   .elephant--restless .elephant__tusk { animation: elephant-stir-shift var(--restless-period-body) ease-in-out infinite; }
 }
-/* 앉은 뒤에는 귀 · 꼬리 · 코만 뒤척인다. 다리 · 머리 · 몸통 · 상아는 움직이지 않는다 — 귀는
+/* 앉은 뒤에는 귀 · 꼬리 · 코만 뒤척인다. 앉은 그림은 다리와 머리를 몸통 하나에 담았고, 몸통과
+   상아는 움직이지 않는다. 코와 꼬리는 위의 규칙을 그대로 받고, 귀(선 그림에는 머리 안에 있다)는
    머리의 주기를 빌려 쓴다(주기 다섯은 그대로, 넷 초 아래로 내려가지 않는다). */
 @media (prefers-reduced-motion: no-preference) {
   .elephant--restless .elephant__art--seated .elephant__ear { animation: elephant-stir-head var(--restless-period-head) ease-in-out infinite; }
 }
-.elephant .elephant__art--seated :is(.elephant__leg-fr, .elephant__leg-fl, .elephant__leg-bl, .elephant__leg-br, .elephant__head, .elephant__body, .elephant__tusk) { animation: none; }
+.elephant .elephant__art--seated :is(.elephant__body, .elephant__tusk) { animation: none; }
 @keyframes elephant-stir-head {
   0%, 100% { rotate: calc(var(--restless, 1) * var(--elephant-stir-head)); }
   50% { rotate: calc(-1 * var(--restless, 1) * var(--elephant-stir-head)); }

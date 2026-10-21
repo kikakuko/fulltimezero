@@ -13,8 +13,9 @@
 #     못하지만 사용자 지정 속성은 상속되어 넘어간다 — 색이 그렇게 내려간다.
 module ElephantHelper
   PARTS = Rails.root.join("app/assets/images/elephant_parts.svg")
-  # 앉은 코끼리 — 바위 위의 몸. docs/drawings/elephant_sitting.png 를 보고 손으로 그린 그림이다.
-  # 무리 이름 아홉은 선 그림과 같고, 머리 안에 귀(ear)가 하나 더 있다. 뒤척이는 것은 귀 · 꼬리 · 코뿐.
+  # 앉은 코끼리 — 바위 위의 몸. docs/drawings/elephant_sitting.png 의 윤곽을 뜬 그림이다.
+  # 무리는 다섯(몸통 · 귀 · 코 · 꼬리 · 상아) — 다리와 머리는 움직이지 않으므로 몸통에 든다.
+  # 뒤척이는 것은 귀 · 꼬리 · 코뿐.
   SEATED = Rails.root.join("app/assets/images/elephant_sitting.svg")
   DEFS_ID = "elephant-parts"
 
