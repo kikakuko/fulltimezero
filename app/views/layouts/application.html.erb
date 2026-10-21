@@ -19,6 +19,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# 나라 밖으로 펼칠 때 — 같은 화면의 언어 셋(ko · en · x-default)과 링크 그림 한 장.
+        둘 다 자기 주소다(바깥이 아니다). 그림은 로케일마다, 없으면 ko 로 떨어진다. %>
+    <% I18n.available_locales.each do |locale| %>
+      <%= tag.link rel: "alternate", hreflang: locale, href: alternate_url(locale) %>
+    <% end %>
+    <%= tag.link rel: "alternate", hreflang: "x-default", href: alternate_url(I18n.default_locale) %>
+    <%= tag.meta property: "og:image", content: image_url(og_image_path) %>
+    <%= tag.meta property: "og:image:width", content: "1200" %>
+    <%= tag.meta property: "og:image:height", content: "630" %>
+
     <%= yield :head %>
 
     <%# 아이콘 — 한지 위의 먹빛 코끼리. 주사는 없다(manifest_test). %>
