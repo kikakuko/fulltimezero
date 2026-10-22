@@ -15,6 +15,9 @@
 <div class="<%= class_names("elephant-field", "ink-frame": !night, "hall-figure": !night) %>" data-controller="elephant"
      data-elephant-arriving-value="<%= arriving %>"
      style="--whiteness: <%= reading.whiteness.round(4) %>; --restless: <%= reading.restlessness.round(4) %>;">
+  <%# 무대 — 그림과 같은 비율의 자리. 바위 · 코끼리 · 길의 안개가 그림의 좌표로 서 있다. 전각 화면에서는
+      틀이 첫 화면까지 길어지고 무대가 틀보다 넓어진다(가로가 잘린다). %>
+  <div class="elephant-field__stage">
   <%# 화면 가장자리에서 흘러드는 구름. 코끼리보다 뒤에 선다 — 배경이지 도상이 아니다. %>
   <span class="cloud cloud--drift" aria-hidden="true"></span>
   <svg class="elephant-field__map" viewBox="0 0 <%= Elephant::VIEW.join(" ") %>" aria-hidden="true">
@@ -57,5 +60,6 @@
       <%# 읽어 주는 말은 그림의 묘사다 — 검은 · 옅어진 · 거의 흰 코끼리. 숫자는 없다. %>
       <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, seated: arriving ? :later : true, label: elephant_reading(reading.whiteness) %>
     </div>
+  </div>
   </div>
 </div>

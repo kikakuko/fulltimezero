@@ -247,6 +247,11 @@
      시간에 겹쳐 들어온다. 나올 때는 거꾸로다(docs/M-entry-design.md). */
   --entry-time: 1.6s;
   --entry-scale: 2.4;
+  /* 전각 그림의 높이 — 첫 화면까지. 그림 위에 서는 것의 높이를 뺀다: 머리줄 3.5rem(2rem 여백 +
+     한 줄) + 본문 위 여백 3.5rem + 전각 이름 1.875rem + 이름 아래 2rem. 손님의 한 줄(1.5rem)은
+     세지 않는다 — 그림이 접히는 선보다 짧아지지 않는 쪽을 고른다. */
+  --hall-above: 10.875rem;
+  --hall-height: calc(100svh - var(--hall-above));
   /* 흰 코끼리의 먹선 — 흰빛 1 에서도 먹선이 이만큼 아래로는 옅어지지 않는다.
      흰 코끼리가 한지에 묻히지 않게 하려는 값이다. */
   --elephant-ink-white: 0.3;
@@ -1517,9 +1522,18 @@ input[type="text"].threshold__field {
 
 .maitreya {
   position: relative; width: calc(100% + 1rem); margin: 0 -0.5rem 2.5rem;
-  aspect-ratio: 390 / 560; overflow: hidden; container-type: inline-size;
+  aspect-ratio: 390 / 560; overflow: hidden;
   --m-u: calc(100cqw / 390);
   --shown: var(--shown-to); --mound: var(--mound-to);
+}
+/* 무대 — 그림과 같은 비율(390 × 560)의 자리이고, 한 단위(--m-u)의 그릇이다. 흙 · 미륵 · 금 · 물결은
+   모두 이 안에 있다. 틀과 같은 크기가 기본이고, 전각 화면에서는 틀이 첫 화면까지 길어져 무대가
+   틀보다 넓어진다(가로가 잘린다) — 자리 값은 하나도 바뀌지 않는다. */
+.maitreya__stage { position: absolute; inset: 0; container-type: inline-size; }
+.maitreya.hall-figure { aspect-ratio: auto; height: var(--hall-height); }
+.hall-figure .maitreya__stage {
+  inset: auto; left: 50%; top: 50%; translate: -50% -50%;
+  width: max(100%, calc(var(--hall-height) * 390 / 560)); aspect-ratio: 390 / 560;
 }
 .maitreya__yard { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
 
@@ -1731,8 +1745,21 @@ input[type="text"].threshold__field {
      그림은 원래 비율(864 × 1184) 그대로 든다. 위에 무엇을 덧대지 않는다 — 그림이 틀을
      꽉 채우게 그려져 있어 덧댄 것은 띠로 보인다. 아홉째의 머리는 자리로 맞춘다(Elephant). */
   position: relative; width: calc(100% + 1rem); aspect-ratio: 864 / 1184; margin: 0 -0.5rem 1rem;
+}
+/* 무대 — 그림과 같은 비율(864 × 1184)의 자리. 바위 · 코끼리 · 길의 안개는 그림의 좌표로 서 있으므로
+   모두 이 안에 있다. 틀과 같은 크기가 기본이고, 전각 화면에서는 틀이 첫 화면까지 길어져 무대가
+   틀보다 넓어진다(가로가 잘린다) — 자리 값은 하나도 바뀌지 않는다. */
+.elephant-field__stage {
+  position: absolute; inset: 0;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
   background: url("elephant_field.webp") center / cover no-repeat;
+}
+/* 전각 화면 — 그림 높이만 첫 화면까지. 먹틀과 양옆 16px 은 그대로다. 걸어오는 코끼리는 틀의
+   가장자리에서 나타난다. */
+.elephant-field.hall-figure { aspect-ratio: auto; height: var(--hall-height); overflow: hidden; }
+.hall-figure .elephant-field__stage {
+  inset: auto; left: 50%; top: 50%; translate: -50% -50%;
+  width: max(100%, calc(var(--hall-height) * 864 / 1184)); aspect-ratio: 864 / 1184;
 }
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }

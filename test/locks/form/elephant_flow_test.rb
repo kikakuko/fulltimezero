@@ -41,7 +41,11 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_match(/--elephant-dark: 0\.[2-5]\d*;/, css, "검은 쪽 끝이 0.2~0.5 밖이다")
     assert_match(/--elephant-light: [1-3]\.\d+;/, css, "흰 쪽 끝이 1~3 밖이다")
     assert_match(%r{--elephant-width: calc\(80 / 390 \* 100%\);}, css, "코끼리 폭이 그림 폭의 비율이 아니다")
+    # 무대(__stage)가 그림의 비율이고 그림이 그 무대를 채운다 — 위에 덧댄 자리가 없다. 틀 자체는
+    # 전각 화면에서 첫 화면까지 길어진다(entry_test).
     assert_match(/\.elephant-field \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "산수 틀이 그림의 비율이 아니다 — 위에 덧댄 자리가 있다")
+    assert_match(/\.hall-figure \.elephant-field__stage \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "무대가 그림의 비율이 아니다")
+    assert_match(/\.elephant-field__stage \{[^}]*background: url\("elephant_field\.webp"\) center \/ cover no-repeat;/m, css, "그림이 무대를 채우지 않는다")
     assert_no_match(/ROOM|20000%/, css, "틀 위에 덧댄 자리가 남아 있다")
     assert_match(/--e-light: calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\) \* \(var\(--elephant-light\) - var\(--elephant-dark\)\)\) \/ var\(--elephant-light\)\);/, css)
     assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\) calc\(var\(--e-light\) \* 100%\), var\(--ink\)\);/, css)

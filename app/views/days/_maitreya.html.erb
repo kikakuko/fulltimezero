@@ -14,6 +14,9 @@
 <div class="<%= class_names("maitreya", "ink-frame": framed, "hall-figure": framed) %>"
      style="--shown-from: <%= shown_from %>; --shown-to: <%= reading.shown %>; --mound-from: <%= mound_from %>; --mound-to: <%= reading.mound %>;"
      aria-hidden="true">
+  <%# 무대 — 그림과 같은 비율의 자리이고 한 단위(--m-u)의 그릇. 흙 · 미륵 · 금 · 물결이 그림의 좌표로
+      서 있다. 날들의 한 장에서는 틀이 첫 화면까지 길어지고 무대가 틀보다 넓어진다(가로가 잘린다). %>
+  <div class="maitreya__stage">
   <%= image_tag "mireukdang.webp", class: "maitreya__yard", alt: "", draggable: false %>
   <%# 미륵당 위의 구름무리. 가장 가까운 구름이라 가장 빠르다. 미륵보다 뒤에 선다. %>
   <span class="cloud cloud--scroll" aria-hidden="true"></span>
@@ -59,4 +62,5 @@
   <% end %>
   <span class="maitreya__lip"></span>
   <span class="maitreya__dust"><span></span><span></span><span></span><span></span></span>
+  </div>
 </div>

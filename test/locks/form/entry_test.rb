@@ -114,6 +114,32 @@ class EntryTest < ActionDispatch::IntegrationTest
     assert_match(/this\.close\(\)\s*\n\s*if \(document\.startViewTransition\)/, compound, "카드가 열린 채로 든다")
   end
 
+  # 그림은 첫 화면까지 — 높이만. 먹틀과 양옆 16px 은 그대로이고, 글과 손잡이는 한 화면 아래다.
+  test "선방 · 미륵당의 그림은 첫 화면까지이고, 먹틀은 그대로이며, 글과 손잡이는 그림 아래다" do
+    assert_match(/--hall-above: [\d.]+rem;/, root, "그림 위에 서는 것의 높이가 :root 에 없다")
+    assert_match(/--hall-height: calc\(100svh - var\(--hall-above\)\);/, root, "그림의 높이가 첫 화면이 아니다")
+    assert_match(/\.elephant-field\.hall-figure \{ aspect-ratio: auto; height: var\(--hall-height\); overflow: hidden; \}/, css)
+    assert_match(/\.maitreya\.hall-figure \{ aspect-ratio: auto; height: var\(--hall-height\); \}/, css)
+    # 무대는 그림의 비율로 틀 가운데에 — 자리 값은 바뀌지 않는다.
+    assert_match(%r{\.hall-figure \.elephant-field__stage \{\s*inset: auto; left: 50%; top: 50%; translate: -50% -50%;\s*width: max\(100%, calc\(var\(--hall-height\) \* 864 / 1184\)\); aspect-ratio: 864 / 1184;}m, css)
+    assert_match(%r{\.hall-figure \.maitreya__stage \{\s*inset: auto; left: 50%; top: 50%; translate: -50% -50%;\s*width: max\(100%, calc\(var\(--hall-height\) \* 390 / 560\)\); aspect-ratio: 390 / 560;}m, css)
+    assert_match(/\.maitreya__stage \{ position: absolute; inset: 0; container-type: inline-size; \}/, css, "한 단위(--m-u)의 그릇이 무대가 아니다")
+    # 먹틀과 양옆 16px 은 그대로(compound_form_test 의 규칙과 같다).
+    %w[elephant-field maitreya].each do |frame|
+      assert_match(/\.#{frame} \{[^}]*width: calc\(100% \+ 1rem\);[^}]*margin: 0 -0\.5rem/m, css, "#{frame} 먹틀에 가장자리가 없다")
+    end
+
+    { new_sitting_path => [ ".elephant-field.hall-figure.ink-frame", ".ways" ], days_path => [ ".maitreya.hall-figure.ink-frame", ".calendar" ] }.each do |path, (figure, handles)|
+      get path
+      assert_select figure, count: 1
+      assert_select "#{figure} > :first-child[class$=__stage]", count: 1, message: "#{path} 의 그림에 무대가 없다"
+      main = Nokogiri::HTML(response.body).css("main").to_html
+      assert_operator main.index("hall-header"), :<, main.index("hall-figure"), "#{path} 에서 이름이 그림 위에 있지 않다"
+      assert_operator main.index("hall-figure"), :<, main.index("hall-words"), "#{path} 에서 글이 그림 아래에 있지 않다"
+      assert_operator main.index("hall-words"), :<, main.index(handles.delete(".")), "#{path} 에서 손잡이가 글 아래에 있지 않다"
+    end
+  end
+
   test "카드에는 이름 · 한 줄 · 「든다」만 있고, 전각 그림 한 장은 카드를 열 때 받는다" do
     get today_path
 
