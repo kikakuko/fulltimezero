@@ -112,6 +112,9 @@ class EntryTest < ActionDispatch::IntegrationTest
     assert_match(/if \(!this\.opened \|\| this\.entering\) return/, compound)
     assert_match(/this\.entering = true/, compound)
     assert_match(/this\.close\(\)\s*\n\s*if \(document\.startViewTransition\)/, compound, "카드가 열린 채로 든다")
+    # 카드는 미끄러져 내려가지 않고 바로 걷힌다 — 옛 화면의 스냅숏에 담기면 전환 내내 보인다.
+    assert_match(/classList\.add\("compound--entering"\)\s*\n\s*this\.close\(\)/, compound, "카드가 미끄러지는 채로 스냅숏에 담긴다")
+    assert_match(/\.compound--entering \.compound__card, \.compound--entering \.compound__backdrop \{ transition: none; \}/, css)
   end
 
   # 그림은 첫 화면까지 — 높이만. 먹틀과 양옆 16px 은 그대로이고, 글과 손잡이는 한 화면 아래다.

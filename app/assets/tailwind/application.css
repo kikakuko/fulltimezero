@@ -1488,6 +1488,8 @@ input[type="text"].threshold__field {
   transform: translateY(100%); transition: transform 0.35s ease-out;
 }
 .compound--card-open .compound__card { transform: translateY(0); }
+/* 「든다」 — 카드와 뒷막이 바로 걷힌다. 옛 화면의 스냅숏에 담기지 않게. */
+.compound--entering .compound__card, .compound--entering .compound__backdrop { transition: none; }
 
 .compound__card-close {
   position: absolute; top: 0.6rem; right: 0.9rem; border: 0; background: none; cursor: pointer;

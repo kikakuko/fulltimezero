@@ -119,6 +119,8 @@ export default class extends Controller {
 
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return this.go(href)
 
+    // 카드는 미끄러져 내려가지 않고 바로 걷힌다 — 옛 화면의 스냅숏에 카드가 담기면 전환 내내 보인다.
+    this.element.classList.add("compound--entering")
     this.close()
 
     if (document.startViewTransition) {
