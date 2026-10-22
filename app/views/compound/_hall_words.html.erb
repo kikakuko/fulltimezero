@@ -2,10 +2,12 @@
     부품(.verse, 황토)으로 서고, 우리가 지은 한 줄은 먹으로 선다(verse_promise_test).
     출전은 숫자를 담으므로 서버 응답에 두지 않는다 — 화면 쪽 스크립트(entry · SOURCES)가 넣는다.
     미륵당의 출전만 숫자가 없어 여기서 온다. 이 자리는 전각 화면의 표시이기도 하다 — 전환
-    (View Transition)의 한쪽이고, 떠날 때 조감도가 돌아오는 축(cx · cy)을 지닌다.
+    (View Transition)의 한쪽이고(:entry), 머리줄과 아래 문이 잠깐 물러나는 화면이며(:hall),
+    떠날 때 조감도가 돌아오는 축(cx · cy)을 지닌다.
     key: Compound::HALLS 의 키. %>
 <% hall = Compound.hall(key) %>
 <% content_for :entry, true %>
+<% content_for :hall, true %>
 <div class="hall-words" data-controller="entry"
      data-entry-key-value="<%= hall.key %>" data-entry-x-value="<%= hall.cx %>" data-entry-y-value="<%= hall.cy %>"
      <% if hall.key == :maitreya %>data-entry-source-value="<%= t("compound.detail.maitreya.source") %>"<% end %>>

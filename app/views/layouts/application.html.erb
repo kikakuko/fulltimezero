@@ -48,7 +48,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <%# 전각 화면에서는 머리줄과 아래 문이 들어선 뒤 잠깐 물러난다(hush) — 그림이 화면을 채운다. %>
+  <body <%= tag.attributes(data: { controller: "hush" }) if content_for?(:hall) %>>
     <%# 매일 지나는 문. 첫째 문의 빛이 짧게 다가와 한 번 넘치고, 가라앉으면
         그대로 마당이다. 글은 없다. 아무 곳이나 누르면 곧장 끝난다. %>
     <% if daily_door_due? %>
