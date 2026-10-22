@@ -184,14 +184,15 @@ cloud-drift)을 그 안에 깔았다. 불투명도는 흰빛 × 0.85 — 희어�
 순서: **서버 → 가입 → PWA 홈 화면 → iOS 껍데기(저장소 따로, 브리지는 진동 하나) → Android → 심사.**
 서버 전에는 시작하지 않는다.
 
-## 12. 「없는 것들」 가운데 자물쇠가 없는 셋
+## 12. 「없는 것들」 가운데 자물쇠가 없던 셋 — 끝났다(2026-10-22)
 
-`docs/legal/none.md` 의 줄 가운데 지키는 검사가 없는 것. 하나씩 약속 자물쇠로 잠근다.
+`docs/legal/none.md` 의 줄 가운데 지키는 검사가 없던 셋을 약속 자물쇠로 잠갔다.
 
-- **순위 · 친구 · 공유 자랑** — 라우트 · 뷰 · 카피에 rank · leaderboard · friend · follow · share 같은
-  낱말과 길이 없음을 잠근다.
-- **자동 재생 · 무한 스크롤** — 뷰에 `autoplay` 가 없고, 목록에 다음 쪽을 저절로 불러오는 장치
-  (스크롤 끝에서 부르는 것)가 없음을 잠근다.
-- **AI** — 젬 · pin 은 dependency_test · importmap_test 가 이미 수로 막는다. 남은 것은 서버가
-  바깥 API 를 직접 부르는 길이다 — `app/` 에 `Net::HTTP` · `URI.open` 같은 바깥 호출이 메일러 밖에
-  없음을 잠근다.
+- **순위 · 친구 · 공유 자랑** — `test/locks/promise/comparing_test.rb`. 라우트 · 뷰 · 로케일 카피에
+  rank · leaderboard · friend · follow · share · invite, 한국어 순위 · 친구 · 공유 · 초대가 없다.
+  비켜 둔 자리 둘: 「없는 것들」의 그 줄 자체, 영어 `today.done` 의 share(오늘의 몫).
+- **자동 재생 · 무한 스크롤** — `test/locks/promise/endless_test.rb`. 뷰 · 스크립트에 `autoplay` 가 없고,
+  Stimulus 컨트롤러가 IntersectionObserver 로 다음 쪽을 부르지 않고, 저절로 열리는 turbo-frame
+  (loading lazy)이 없다.
+- **AI** — `test/locks/promise/outward_call_test.rb`. `app/` 에 `Net::HTTP` · `URI.open` · Faraday ·
+  HTTParty 가 메일러 밖에 없다. 젬 · pin 은 dependency_test · importmap_test 가 수로 막는다.
