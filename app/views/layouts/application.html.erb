@@ -12,6 +12,12 @@
         달의 응답 · 낙관의 찍힘 · 절처럼 한 번의 사건을 flash 로 넘기는 장면을 미리 받기가
         먼저 가져가면 그 사건이 사라진다(flash_once_test). 링크가 적어 잃는 것도 없다. %>
     <meta name="turbo-prefetch" content="false">
+    <%# 전각에 드는 전환 — 마당과 전각 화면에만. 떠나는 화면과 오는 화면이 둘 다 이것을 가질 때
+        Turbo 가 View Transition 으로 갈아 끼운다(docs/M-entry-design.md). 움직임을 줄인 화면에서는
+        Turbo 가 스스로 끈다. 문 셋과 몰입 화면에는 두지 않는다. %>
+    <% if content_for?(:entry) %>
+      <meta name="view-transition" content="same-origin">
+    <% end %>
     <%# 아직 보여 줄 때가 아니다 — 기본은 검색에 막음(SearchGate). %>
     <% if SearchGate.closed? %>
       <meta name="robots" content="noindex, nofollow">

@@ -18,11 +18,11 @@ class TypeTest < ActiveSupport::TestCase
 
   # 읽는 글 — 카드의 한 줄, 방 머리의 한 줄, 선방의 한 줄, 안내의 본문과 인용,
   # 아홉 자리의 설명, 사경의 글자 풀이.
-  READING = [ ".compound__card-line", ".hall-header__line", ".quote",
+  READING = [ ".compound__card-line", ".hall-words__line", ".quote",
               ".guide > p:not(.lead):not(.aside), .guide blockquote p", ".copy-notes dd" ].freeze
 
   # 옅은 --mute 가 설 수 있는 자리 — 출전 · 한자 곁말 · 닫는 손잡이 · 음원의 출처 같은 보조.
-  MUTE_PLACES = %w[.threshold__source .compound__card-source .guide\ .source .compound__card-han
+  MUTE_PLACES = %w[.threshold__source .hall-words__source .guide\ .source
                    .compound__card-close .bell-hall__source].freeze
 
   test "글꼴 다섯은 :root 의 토큰이다" do

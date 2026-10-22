@@ -143,7 +143,9 @@ class CopyingFormTest < ActionDispatch::IntegrationTest
     assert_select ".button-primary", count: 1
     assert_select ".copy-offer button.button-primary[data-copying-target=offer]", text: I18n.t("copyings.offer")
     assert_select ".copy-offer button.button-quiet", text: I18n.t("copyings.rewrite")
-    assert_select "input[type=submit], .verse", false, "옛 제출 칸이나 인용이 남아 있다"
+    assert_select "input[type=submit]", false, "옛 제출 칸이 남아 있다"
+    assert_select ".verse", count: 1, message: "인용 부품은 글 자리의 경구 하나뿐이다"
+    assert_select ".hall-words .verse", count: 1
   end
 
   # 채점도, 인식도, 정확도도 없다(제3조). 주석은 왜 하지 않는지를 적은 자리라 걷어낸다.

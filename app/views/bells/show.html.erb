@@ -7,6 +7,7 @@
     숫자가 없다 — 몇 번 울리는지도, 얼마나 남았는지도. 쌓이는 것도 없다.
     나가면 멎는다. 다른 화면까지 따라가면 부르지 않은 소리가 된다(§4). %>
 <%= render "compound/hall_header", key: :bell %>
+<%= render "compound/hall_words", key: :bell %>
 
 <% if (source = bell_source(:temple)) %>
   <div class="bell-hall" data-controller="bell"

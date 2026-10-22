@@ -11,7 +11,7 @@
 <% scene = before.present? %>
 <% shown_from = scene ? before.shown : reading.shown %>
 <% mound_from = scene ? before.mound : reading.mound %>
-<div class="<%= class_names("maitreya", "ink-frame": framed) %>"
+<div class="<%= class_names("maitreya", "ink-frame": framed, "hall-figure": framed) %>"
      style="--shown-from: <%= shown_from %>; --shown-to: <%= reading.shown %>; --mound-from: <%= mound_from %>; --mound-to: <%= reading.mound %>;"
      aria-hidden="true">
   <%= image_tag "mireukdang.webp", class: "maitreya__yard", alt: "", draggable: false %>

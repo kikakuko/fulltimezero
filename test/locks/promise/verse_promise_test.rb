@@ -13,8 +13,12 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
   end
 
-  # 인용이 서는 화면들. 새 화면에 인용을 세우면 여기에 더한다.
-  PAGES = %i[threshold_path].freeze
+  # 인용이 서는 화면들. 새 화면에 인용을 세우면 여기에 더한다. 전각 화면 셋은 글 자리
+  # (compound/_hall_words)에 경구가 선다(2026-10-22 — 마당의 카드에서 옮겨 왔다).
+  PAGES = %i[threshold_path new_sitting_path new_copying_path guide_path].freeze
+  # 전각마다 글 자리가 서는 화면. 불이문은 첫째 문으로 가고, 그 경구는 문 자체에 선다.
+  HALL_PAGES = { sitting: :new_sitting_path, maitreya: :days_path, copying: :new_copying_path,
+                 lecture: :guide_path, bowing: :bows_path, bell: :bells_path }.freeze
   SCRIPTURE = /\A『[^』]+』/
 
   test "인용이 서는 곳마다 바로 곁에 출전이 선다" do
@@ -39,23 +43,26 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "전각 카드는 경의 말에만 인용 부품을 붙인다 — 미륵당 · 예경당 · 범종각은 먹이다" do
+  test "전각의 글 자리는 경의 말에만 인용 부품을 붙인다 — 미륵당 · 예경당 · 범종각은 먹이다" do
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
     ko = js[/ko: \{(.*?)\}/m, 1]
+
     get today_path(locale: :ko)
-    doc = Nokogiri::HTML(response.body)
+    assert_select ".compound__card .verse", false, "카드에 인용 부품이 있다 — 경구는 전각 화면의 것이다"
 
-    assert_select ".compound__card-verse.verse", false, "카드의 한 줄이 처음부터 황토다"
-    assert_match(/classList\.toggle\("verse", scripture === true\)/, js)
-    Compound::CARD_HALLS.each do |hall|
-      anchor = doc.at_css("a.compound__hall--#{hall.key}")
-      source = anchor["data-compound-source-param"].presence || ko[/\b#{hall.key}: "([^"]+)"/, 1]
+    HALL_PAGES.each do |key, way|
+      hall = Compound.hall(key)
+      get send(way, locale: :ko)
+      words = css_select(".hall-words").first
+      assert words, "#{key} 화면에 글 자리가 없다"
+      source = words["data-entry-source-value"].presence || ko[/\b#{key}: "([^"]+)"/, 1]
 
-      assert_equal hall.scripture.to_s, anchor["data-compound-scripture-param"]
       if hall.scripture
-        assert_match SCRIPTURE, source, "#{hall.key} 는 경의 말이라면서 출전이 경이 아니다"
+        assert_select ".hall-words__verse.verse", count: 1, message: "#{key} 의 경구가 황토가 아니다"
+        assert_match SCRIPTURE, source, "#{key} 는 경의 말이라면서 출전이 경이 아니다"
       else
-        assert_no_match SCRIPTURE, source.to_s, "#{hall.key} 의 출전이 경인데 먹으로 섰다"
+        assert_select ".hall-words__verse.verse", false, "#{key} 의 한 줄이 황토다 — 우리 말이다"
+        assert_no_match SCRIPTURE, source.to_s, "#{key} 의 출전이 경인데 먹으로 섰다"
       end
     end
     # 먹으로 서는 셋 — 미륵당의 한 줄은 우리가 지은 말이고 출전은 장소다.
@@ -74,31 +81,36 @@ class VersePromiseTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 전각 카드의 인용은 눌러야 채워진다. 채워질 출전이 전각마다 있어야 한다 — 서버가
-  # 싣거나(숫자가 없는 것), 스크립트의 출전 상수에 있거나.
-  test "전각 카드의 인용마다 채워질 출전이 있다" do
+  # 전각 글 자리의 출전은 화면 쪽 스크립트가 채운다(숫자를 서버 응답에 두지 않으려고).
+  # 채워질 출전이 경의 말마다 있어야 한다 — 서버가 싣거나(숫자가 없는 것), 스크립트의 출전
+  # 상수에 있거나.
+  test "전각 글 자리의 인용마다 채워질 출전이 있다" do
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
-    get today_path
-    doc = Nokogiri::HTML(response.body)
+    entry = Rails.root.join("app/javascript/controllers/entry_controller.js").read
 
     # 출전은 경의 말에만 붙는다. 우리 말에는 출전이 없다 — 없는 것이 바른 모양이다.
     Compound::CARD_HALLS.select(&:scripture).each do |hall|
-      anchor = doc.at_css("a.compound__hall--#{hall.key}")
-      next if anchor["data-compound-source-param"].present?
+      next unless HALL_PAGES[hall.key]
+
+      get send(HALL_PAGES[hall.key])
+      next if css_select(".hall-words").first["data-entry-source-value"].present?
 
       %w[ko en].each do |locale|
         block = js[/#{locale}: \{(.*?)\}/m, 1].to_s
-        assert_match(/\b#{hall.key}: "[^"]+"/, block, "#{hall.key} 카드의 인용에 #{locale} 출전이 없다")
+        assert_match(/\b#{hall.key}: "[^"]+"/, block, "#{hall.key} 글 자리의 인용에 #{locale} 출전이 없다")
       end
     end
-    assert_match(/this\.cardSourceTarget\.textContent = cited/, js, "출전이 카드에 채워지지 않는다")
+    assert_match(/this\.sourceTarget\.textContent = this\.sourceValue \|\| \(SOURCES\[locale\] \|\| SOURCES\.ko\)\[this\.keyValue\]/, entry,
+      "출전이 글 자리에 채워지지 않는다")
   end
 
   test "인용은 적어 둔 화면에만 선다" do
-    views = Rails.root.glob("app/views/**/*.erb").select { |file| file.read.match?(/class="(?:[^"]*\s)?verse[\s"]/) }
+    views = Rails.root.glob("app/views/**/*.erb").select do |file|
+      file.read.match?(/class="(?:[^"]*\s)?verse[\s"]|class_names\([^)]*\bverse:/)
+    end
     places = views.map { |file| file.relative_path_from(Rails.root).to_s }.sort
 
-    assert_equal %w[app/views/onboarding/stop.html.erb], places,
+    assert_equal %w[app/views/compound/_hall_words.html.erb app/views/onboarding/stop.html.erb], places,
       "인용이 새 화면에 섰다 — PAGES 에 더하고 출전을 곁에 세운다"
   end
 end

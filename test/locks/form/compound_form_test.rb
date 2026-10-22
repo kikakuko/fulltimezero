@@ -89,34 +89,39 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     Compound::CARD_HALLS.each do |hall|
       assert_select "a.compound__hall--#{hall.key}[data-action*='click->compound#open']", count: 1
       assert_select "a.compound__hall--#{hall.key}[data-compound-key-param=?]", hall.key.to_s
-      assert_select "a.compound__hall--#{hall.key}[data-compound-han-param=?]", hall.han
+      assert_select "a.compound__hall--#{hall.key}[data-compound-line-param]", count: 1
     end
     assert_select "a.compound__hall--courtyard[data-action]", false, "마당이 카드를 연다"
     assert_equal 7, Compound::CARD_HALLS.size
   end
 
-  # 카드의 글 — 이름 · 한자 · 한 줄 · 경구 · 「드는」 말은 데이터 속성으로,
-  # 숫자가 없다. 출전(숫자를 담을 수 있는 자리)은 미륵당만 여기 있고,
-  # 나머지 넷은 자리 쪽 스크립트의 상수에서 온다.
-  test "카드의 글에는 숫자가 없다 — 출전은 미륵당만 예외로 여기 있다" do
+  # 카드의 글 — 이름 · 한 줄 · 「드는」 말은 데이터 속성으로, 숫자가 없다. 경구와 출전은
+  # 카드에 없다(2026-10-22 — 전각 화면의 글 자리로 옮겼다). 출전(숫자를 담을 수 있는 자리)은
+  # 거기서도 서버 응답에 없고, 미륵당만 숫자가 없어 값으로 실린다. 나머지 넷은 자리 쪽
+  # 스크립트의 상수에서 온다.
+  test "카드의 글에는 숫자가 없다 — 출전은 미륵당만 예외로 전각 화면에 실린다" do
     get today_path
     doc = Nokogiri::HTML(response.body)
 
     Compound::CARD_HALLS.each do |hall|
       anchor = doc.at_css("a.compound__hall--#{hall.key}")
-      %w[name han line verse enter].each do |field|
+      %w[name line enter].each do |field|
         value = anchor["data-compound-#{field}-param"]
         assert value.present?, "#{hall.key}.#{field} 이 없다"
         assert_no_match(/\d/, value, "#{hall.key}.#{field} 에 숫자가 있다: #{value}")
       end
-
-      source = anchor["data-compound-source-param"]
-      if hall.key == :maitreya
-        assert source.present?, "미륵당의 출전이 없다"
-        assert_no_match(/\d/, source, "미륵당의 출전에 숫자가 있다")
-      else
-        assert_nil source, "#{hall.key} 의 출전이 화면(서버 응답)에 있다 — 숫자를 담을 수 있는 자리다"
+      %w[han verse source scripture].each do |field|
+        assert_nil anchor["data-compound-#{field}-param"], "#{hall.key}.#{field} 이 카드에 남아 있다"
       end
+    end
+
+    get days_path
+    assert_select ".hall-words[data-entry-source-value]", count: 1
+    assert_no_match(/\d/, css_select(".hall-words").first["data-entry-source-value"], "미륵당의 출전에 숫자가 있다")
+    [ new_sitting_path, new_copying_path, guide_path, bows_path, bells_path ].each do |path|
+      get path
+      assert_select ".hall-words[data-entry-source-value]", false, "#{path} 의 출전이 서버 응답에 있다 — 숫자를 담을 수 있는 자리다"
+      assert_select ".hall-words__source", text: ""
     end
   end
 
@@ -125,20 +130,23 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
   test "출전 넷은 스크립트에 있고, 미륵당이라는 낱말과 섞이지 않는다" do
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
 
-    assert_match(/const SOURCES = \{/, js)
+    assert_match(/export const SOURCES = \{/, js)
     %w[35 12 204 86].each { |digit| assert_match(/#{digit}/, js, "#{digit} 이 출전 상수에 없다") }
     assert_no_match(/maitreya/, js, "미륵당이라는 낱말이 숫자를 담은 파일에 있다")
   end
 
-  test "조감도가 커지는 자리는 눌린 전각의 중심이고, 한지빛으로 옅어진다" do
+  # 값(2.4 배 · 1.6초)은 entry_test 가 본다. 여기서는 축이 전각의 중심이라는 것만 —
+  # 전환(View Transition)에서도, 지원하지 않는 브라우저의 확대에서도.
+  test "조감도가 커지는 자리는 눌린 전각의 중심이고, 지원하지 않는 브라우저에서는 한지빛으로 옅어진다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
 
-    assert_match(/\.compound--zooming \.compound__scene \{[^}]*transform: scale\(2\.6\);/, css)
-    assert_match(/transform-origin: var\(--zoom-x, 50%\) var\(--zoom-y, 50%\);/, css)
-    assert_match(/\.compound--zooming \.compound__veil \{ opacity: 1; transition: opacity 0\.7s ease-in; \}/, css)
+    assert_match(/\.compound--zooming \.compound__scene \{[^}]*transform: scale\(var\(--entry-scale\)\);/, css)
+    assert_equal 3, css.scan(/transform-origin: var\(--zoom-x, 50%\) var\(--zoom-y, 50%\);/).size, "축이 전환의 두 의사 요소와 확대에 같지 않다"
+    assert_match(/\.compound--zooming \.compound__veil \{ opacity: 1; transition: opacity var\(--entry-time\) ease-in-out; \}/, css)
 
     js = Rails.root.join("app/javascript/controllers/compound_controller.js").read
     assert_match(/this\.sceneTarget\.style\.setProperty\("--zoom-x", `\$\{cx\}%`\)/, js)
+    assert_match(/placeAxis\(cx, cy\)/, js, "전환의 축이 전각의 중심이 아니다")
   end
 
   # 카드를 열고 읽는 것은 구조이지 움직임이 아니다 — 그대로 뜨고, 확대만 건너뛴다.
@@ -170,14 +178,15 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     assert_select ".compound__card.card", count: 1
   end
 
-  # 방 머리 — 전각 이름과 한 줄이 카드의 것과 같다(같은 로케일 키).
-  test "방 머리에 전각 이름과 한 줄이 있고, 카드의 것과 같다" do
+  # 방 머리 — 전각 이름. 한 줄은 글 자리(hall-words)에 있고, 둘 다 카드의 것과 같다(같은 로케일 키).
+  test "방 머리에 전각 이름이, 글 자리에 한 줄이 있고, 카드의 것과 같다" do
     { new_sitting_path => :sitting, new_copying_path => :copying,
       days_path => :maitreya, guide_path => :lecture }.each do |path, key|
       get path
 
       assert_select ".hall-header__name", text: I18n.t("compound.halls.#{key}")
-      assert_select ".hall-header__line", text: I18n.t("compound.detail.#{key}.line")
+      assert_select ".hall-words__line", text: I18n.t("compound.detail.#{key}.line")
+      assert_select ".hall-words__verse", text: I18n.t("compound.detail.#{key}.verse")
     end
   end
 

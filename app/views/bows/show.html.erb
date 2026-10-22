@@ -5,6 +5,7 @@
     한 벌과 자세마다의 각도다 — 코끼리와 같은 짜임(data-pivot)이다. 그때
     .bow__figure 안에 선다. 지금은 빈 자리다. %>
 <h1 class="title"><%= t("bows.title") %></h1>
+<%= render "compound/hall_words", key: :bowing %>
 
 <div class="bows">
   <% Bowing::FORMS.each_key do |kind| %>

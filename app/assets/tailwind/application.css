@@ -243,6 +243,10 @@
   /* 문턱 — 들어설 때 걸어오는 거리와 시간. 제 폭의 두 배 반 밖에서 온다. */
   --arrive-from: 260%;
   --arrive-time: 2.6s;
+  /* 전각에 드는 전환 — 조감도가 전각의 가운데를 축으로 이만큼 커지며 사라지고, 그 방이 같은
+     시간에 겹쳐 들어온다. 나올 때는 거꾸로다(docs/M-entry-design.md). */
+  --entry-time: 1.6s;
+  --entry-scale: 2.4;
   /* 흰 코끼리의 먹선 — 흰빛 1 에서도 먹선이 이만큼 아래로는 옅어지지 않는다.
      흰 코끼리가 한지에 묻히지 않게 하려는 값이다. */
   --elephant-ink-white: 0.3;
@@ -288,8 +292,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 화면의 대부분은 비어 있어야 한다. */
-.sheet { max-width: 34rem; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+/* 화면의 대부분은 비어 있어야 한다.
+   가로로 넘친 것은 화면 밖이다 — 구름이 틀 밖으로 흘러들고 코끼리가 가장자리 밖에서 걸어오지만,
+   그것이 문서를 화면보다 넓게 만들면 휴대폰에서 옆으로 밀리고(마당 435px · 선방 496px) 전각에
+   드는 전환이 깨진다(뷰포트가 바뀐 것으로 본다). clip 은 스크롤 상자를 만들지 않는다. */
+.sheet { max-width: 34rem; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; overflow-x: clip; }
 .center { text-align: center; }
 
 /* 큰 명조가 두 줄로 접히면 끝 글자 하나만 떨어지지 않게 줄 길이를 고른다. */
@@ -1389,19 +1396,47 @@ input[type="text"].threshold__field {
 .compound__hall:focus-visible { outline: 1px solid var(--ink-soft); outline-offset: 2px; }
 
 /* ── 전각에 드는 흐름 ────────────────────────────────────────────────
-   전각을 누르면 카드가 아래에서 올라와 무엇이 있는 곳인지 말한다. 「든다」를
-   누르면 조감도가 그 전각을 향해 커지며 한지빛으로 옅어지고, 그 방으로
-   넘어간다. 카드는 구조이지 움직임이 아니라 움직임을 줄여도 그대로 뜨고,
-   확대 · 축소만 건너뛴다.
+   전각을 누르면 카드가 아래에서 올라와 무엇이 있는 곳인지 말한다 — 이름 · 한 줄 ·
+   「든다」. 「든다」를 누르면 조감도가 그 전각을 향해 커지며 사라지고, 그 방이 같은
+   시간에 겹쳐 들어온다. 나올 때는 거꾸로다. 카드는 구조이지 움직임이 아니라 움직임을
+   줄여도 그대로 뜨고, 전환만 건너뛴다(Turbo 가 스스로 끈다).
+
+   전환은 View Transition 이다 — 조감도(compound)는 마당에만, 전각 그림(hall)은 전각
+   화면에만 있어 짝이 저절로 한 방향이다. 축(--zoom-x · --zoom-y)은 스크립트가 <html> 에
+   놓고 다음 방문에서 걷는다. 전환이 도는 동안은 ::view-transition 이 화면을 덮어 손을
+   받는다 — pointer-events: none 을 주면 그 밑의 산 화면이 손을 받으므로 주지 않는다.
 
    경구의 강조는 --cinnabar 를 쓰지 않는다 — 하루 한 번(오늘 쓴 한 자 ·
    미륵이 오르는 순간)만의 것이라는 §2 의 규칙과 부딪힌다. 단청의 황토로
    대신한다. */
-.compound__scene { position: relative; transform-origin: 50% 50%; }
+.compound__scene { position: relative; transform-origin: 50% 50%; view-transition-name: compound; }
+.hall-figure { view-transition-name: hall; }
+
+::view-transition-group(root),
+::view-transition-group(compound),
+::view-transition-group(hall) { animation-duration: var(--entry-time); animation-timing-function: ease-in-out; }
+::view-transition-old(compound) {
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  animation: entry-away var(--entry-time) ease-in-out both;
+}
+::view-transition-new(compound) {
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  animation: entry-back var(--entry-time) ease-in-out both;
+}
+::view-transition-old(hall) { animation: entry-fade-out var(--entry-time) ease-in-out both; }
+::view-transition-new(hall) { animation: entry-fade-in var(--entry-time) ease-in-out both; }
+@keyframes entry-away { from { transform: scale(1); opacity: 1; } to { transform: scale(var(--entry-scale)); opacity: 0; } }
+@keyframes entry-back { from { transform: scale(var(--entry-scale)); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes entry-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes entry-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* 지원하지 않는 브라우저 — 방문 앞에 조감도만 커지며 한지빛으로 옅어진다. 같은 값, 같은 시간.
+   커지는 동안 손은 받지 않는다. */
+.compound--zooming { pointer-events: none; }
 .compound--zooming .compound__scene {
   transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
-  transform: scale(2.6);
-  transition: transform 0.7s ease-in;
+  transform: scale(var(--entry-scale));
+  transition: transform var(--entry-time) ease-in-out;
 }
 
 /* 누른 전각 뒤의 옅은 후광. */
@@ -1414,13 +1449,7 @@ input[type="text"].threshold__field {
 .compound__veil {
   position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none; z-index: 2;
 }
-.compound--zooming .compound__veil { opacity: 1; transition: opacity 0.7s ease-in; }
-
-.compound__zoom-label {
-  position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; margin: 0;
-  font-family: var(--serif); font-size: 1.15rem; color: var(--ink); opacity: 0; pointer-events: none;
-}
-.compound--zooming .compound__zoom-label { opacity: 1; transition: opacity 0.3s ease 0.4s; }
+.compound--zooming .compound__veil { opacity: 1; transition: opacity var(--entry-time) ease-in-out; }
 
 /* 카드와 뒷막 — 화면을 바꾸지 않고 아래에서 올라온다. */
 .compound__backdrop {
@@ -1443,18 +1472,12 @@ input[type="text"].threshold__field {
   font-size: 1.4rem; line-height: 1; color: var(--mute); padding: 0.4rem;
 }
 .compound__card-name { font: var(--type-title); color: var(--ink); margin: 0.75rem 0 0; }
-.compound__card-han { font: var(--type-ui); color: var(--mute); margin: 0; }
 .compound__card-line { font: var(--type-body); color: var(--ink-soft); margin: 0.6rem 0 0; }
-.compound__card-verse { margin: 0.6rem 0 0; }
-/* 경이 아닌 한 줄 — 같은 명조 18 이되 먹으로 선다. */
-.compound__card-verse:not(.verse) { font: 400 1.125rem/1.5 var(--serif); color: var(--ink); }
-.compound__card-source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
-.compound__card .button-primary { margin-top: 1rem; }
+.compound__card .button-primary { margin-top: 1.25rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .compound--zooming .compound__scene,
-  .compound--zooming .compound__veil,
-  .compound--zooming .compound__zoom-label { transition: none; }
+  .compound--zooming .compound__veil { transition: none; }
 }
 
 /* ── 하루의 때 ──────────────────────────────────────────────────────
@@ -1470,10 +1493,17 @@ input[type="text"].threshold__field {
 .daylight[data-light="evening"] { background: var(--daylight-evening); opacity: var(--daylight-veil-evening); }
 .daylight[data-light="night"] { background: var(--daylight-night); opacity: var(--daylight-veil-night); }
 
-/* 방 머리 — 전각 이름과 한 줄. 경내에서 들어온 자리임을 알린다. */
+/* 방 머리 — 전각 이름 하나. 경내에서 들어온 자리임을 알린다. */
 .hall-header { margin-bottom: 2rem; }
 .hall-header__name { font: var(--type-title); color: var(--ink); margin: 0; }
-.hall-header__line { font: var(--type-body); color: var(--ink-soft); margin: 0.3rem 0 0; }
+/* 전각의 글 — 한 줄 · 경구 · 출전. 카드에서 옮겨 왔다(2026-10-22). 경이 아닌 한 줄은 같은
+   명조 18 이되 먹으로 선다. 출전은 보조라 --mute. */
+.hall-words { margin: 0 0 2rem; }
+.hall-words__line { font: var(--type-body); color: var(--ink-soft); margin: 0; }
+.hall-words__verse { margin: 0.6rem 0 0; }
+.hall-words__verse:not(.verse) { font: 400 1.125rem/1.5 var(--serif); color: var(--ink); }
+.hall-words__source { font: var(--type-label); color: var(--mute); margin: 0.15rem 0 0; }
+.hall-words__source:empty { display: none; }
 
 /* ── 미륵 — 묻혀 있다가 드러난다 ───────────────────────────────────
    미륵당 마당 그림(390 × 560) 위, 땅선(y 470) 아래로 내려간 미륵은 잘려서

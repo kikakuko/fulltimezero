@@ -14,7 +14,9 @@
     <p class="tiny"><%= link_to t("today.back"), today_path, class: "soft" %></p>
   </div>
 <% else %>
-  <%# 마당 — 삼문을 지나면 서는 곳. 맨 위에 경내 조감도, 전각으로 가는 길은 이름뿐. %>
+  <%# 마당 — 삼문을 지나면 서는 곳. 맨 위에 경내 조감도, 전각으로 가는 길은 이름뿐.
+      전각으로 드는 전환(View Transition)의 한쪽이다 — 레이아웃이 meta 를 둔다. %>
+  <% content_for :entry, true %>
   <%= render "compound" %>
 
   <div class="center<%= " cleared" if @cleared_morning %>">

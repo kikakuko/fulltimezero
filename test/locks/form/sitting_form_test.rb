@@ -105,7 +105,8 @@ class SittingFormTest < ActionDispatch::IntegrationTest
     get new_sitting_path
     assert_select ".elephant-field.ink-frame", count: 1
     assert_select ".button-primary", count: 2
-    assert_select ".verse", false
+    assert_select ".verse", count: 1, message: "인용 부품은 글 자리의 경구 하나뿐이다"
+    assert_select ".hall-words .verse", count: 1
 
     post sittings_path, params: { sitting: { length: SittingLength::DEFAULT } }
     follow_redirect!

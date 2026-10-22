@@ -40,4 +40,6 @@ class Compound
   # 카드를 열고 드는 흐름이 있는 전각. 마당은 스스로를 가리키므로 카드가 없다 —
   # 누르면 곧장 아래로 간다.
   CARD_HALLS = HALLS.reject { |hall| hall.key == :courtyard }.freeze
+
+  def self.hall(key) = HALLS.find { |hall| hall.key == key.to_sym } or raise ArgumentError, "모르는 전각: #{key}"
 end

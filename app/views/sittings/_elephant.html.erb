@@ -12,7 +12,7 @@
     아니라 문턱이다. 앉는 중에는 걸어오지 않는다. %>
 <% night ||= false %>
 <% arriving ||= false %>
-<div class="<%= class_names("elephant-field", "ink-frame": !night) %>" data-controller="elephant"
+<div class="<%= class_names("elephant-field", "ink-frame": !night, "hall-figure": !night) %>" data-controller="elephant"
      data-elephant-arriving-value="<%= arriving %>"
      style="--whiteness: <%= reading.whiteness.round(4) %>; --restless: <%= reading.restlessness.round(4) %>;">
   <%# 화면 가장자리에서 흘러드는 구름. 코끼리보다 뒤에 선다 — 배경이지 도상이 아니다. %>

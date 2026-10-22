@@ -14,4 +14,12 @@ module CompoundHelper
     when :gate then threshold_path
     end
   end
+
+  # 전각의 전면 그림 — 있는 것은 둘뿐이다(선방 · 미륵당). 카드를 여는 손짓에 이 한 장을 미리
+  # 받는다. 소리는 여기 없다 — 소리는 누르는 그 순간에만 받는다(bell_loading_test).
+  PICTURES = { sitting: "elephant_field.webp", maitreya: "mireukdang.webp" }.freeze
+
+  def compound_picture_for(hall)
+    PICTURES[hall.key] && image_path(PICTURES[hall.key])
+  end
 end

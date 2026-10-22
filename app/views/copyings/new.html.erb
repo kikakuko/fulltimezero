@@ -6,6 +6,7 @@
 <%# 사경 — 오늘의 한 자. 쓰면 그걸로 한 자다. 채점도 인식도 없다.
     몇 번째 자인지, 이 자가 경에 몇 번 나오는지는 쓰지 않는다 — 세는 일이므로. %>
 <%= render "compound/hall_header", key: :copying %>
+<%= render "compound/hall_words", key: :copying %>
 
 <% if @char.nil? %>
   <div class="center">

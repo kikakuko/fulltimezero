@@ -26,6 +26,7 @@
 | `search_gate_test` | 검색에 보일 것인가(기본 막음) — 보여 줄 때가 되면 푼다 |
 | `elephant_parts_test` `elephant_flow_test` `elephant_form_test` `void_dispersal_test` | 코끼리의 결과 흩어짐 |
 | `maitreya_test` `maitreya_flow_test` `pagoda_test` `pagoda_layout_test` `moon_phase_test` | 미륵 · 탑 · 달의 값 |
+| `entry_test` | 전각에 드는 전환 — 2.4 배 · 1.6초, 축은 다음 방문에서 걷힘, 전환 중 손은 한 화면만 |
 | `threshold_test` `compound_flow_test` `days_flow_test` `sitting_flow_test` `copying_flow_test` `rest_flow_test` `settings_flow_test` `abidings_form_test` | 각 화면의 짜임 |
 | `verse_form_test` | 경의 말을 어떤 색으로 세우는가 |
 | `languages_test` `abiding_test` `sutra_test` `greeting_test` `sitting_length_test` `user_test` | 언어와 자료의 결 |

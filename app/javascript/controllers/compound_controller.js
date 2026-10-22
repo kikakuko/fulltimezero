@@ -1,23 +1,28 @@
 // This app is a raft. — 이 앱도 뗏목이다.
 //
 // 전각에 드는 흐름. 전각을 누르면 화면을 바꾸지 않고 카드가 아래에서
-// 올라와 무엇이 있는 곳인지 말한다. 「든다」를 누르면 조감도가 그 전각을
-// 향해 커지며 한지빛으로 옅어지고, 그 방으로 넘어간다.
+// 올라와 무엇이 있는 곳인지 말한다 — 이름 · 한 줄 · 「든다」. 「든다」를 누르면
+// 조감도가 그 전각을 향해 커지며 사라지고, 그 방이 같은 시간에 겹쳐 들어온다
+// (View Transition — Turbo 가 meta view-transition 을 보고 한다. 값은 CSS 의
+// --entry-time · --entry-scale). 여기서 하는 일은 축을 놓는 것뿐이다: 전각의
+// 가운데(cx · cy)를 turbo:before-render 에서 <html> 에 넣는다. 옛 화면의 스냅숏은
+// 이미 담긴 뒤이고 새 화면은 아직 그려지기 전이라, 전환의 의사 요소가 그 값으로 선다.
+// 그 값은 다음 방문이 시작될 때(turbo:visit) 걷힌다 — 전환이 도는 동안 걷으면 축이 튄다.
+//
+// 지원하지 않는 브라우저에서는 방문 앞에 조감도만 커진다(같은 값, 같은 시간).
+// 움직임을 줄인 화면에서는 둘 다 건너뛰고 곧장 든다 — 전환은 Turbo 가 스스로 끈다.
 //
 // 카드를 열고 읽는 것은 구조이지 움직임이 아니다 — 움직임을 줄인 화면에서도
-// 카드는 그대로 뜨고, 확대 · 축소만 건너뛴다.
+// 카드는 그대로 뜬다.
 import { Controller } from "@hotwired/stimulus"
 
-const ZOOM = 700   // 조감도가 커지며 옅어지는 동안
-const LABEL = 250  // 가운데 이름이 뜬 채로 머무는 동안
-
-// 출전 — 카드에만 뜨는 인용 표시다. 숫자를 담고 있어 로케일 파일에 둘 수
-// 없다(카피 어디에도 숫자가 없어야 화면에 숫자가 없다는 말이 우연이 아니게
-// 된다 — spirit_test). 언어는 <html lang> 에서 읽는다.
+// 출전 — 숫자를 담고 있어 로케일 파일에 둘 수 없다(카피 어디에도 숫자가 없어야
+// 화면에 숫자가 없다는 말이 우연이 아니게 된다 — spirit_test). 전각 화면의 글 자리
+// (entry 컨트롤러)가 <html lang> 을 보고 여기서 꺼내 넣는다.
 // 이 넷은 숫자를 담는다. 다섯째(날들의 전각)는 숫자가 없어 로케일에 그대로
-// 있고 event.params.source 로 온다 — 그 이름을 여기 적지 않는 것은 숫자를
-// 가진 이 파일과 한 자리에 있으면 안 되는 자물쇠가 있기 때문이다.
-const SOURCES = {
+// 있고 서버가 싣는다 — 그 이름을 여기 적지 않는 것은 숫자를 가진 이 파일과 한
+// 자리에 있으면 안 되는 자물쇠가 있기 때문이다.
+export const SOURCES = {
   ko: {
     sitting: "『법구경』 35",
     copying: "『금강경』 제12 존중정교분",
@@ -32,30 +37,49 @@ const SOURCES = {
   }
 }
 
+// 확대의 축 — 전각의 가운데를 조감도에 대한 백분율로 <html> 에 둔다. 전환의 의사
+// 요소(::view-transition-old(compound) · -new(compound))가 거기서 커지고 돌아온다.
+export function placeAxis(cx, cy) {
+  const root = document.documentElement.style
+  root.setProperty("--zoom-x", `${cx}%`)
+  root.setProperty("--zoom-y", `${cy}%`)
+}
+
+// 다음 방문이 시작될 때 걷는다. <html> 은 Turbo 가 갈아 끼우지 않으므로 누군가 걷어야 한다.
+export function clearAxis() {
+  const root = document.documentElement.style
+  root.removeProperty("--zoom-x")
+  root.removeProperty("--zoom-y")
+}
+
+// CSS 의 시간을 읽는다 — 값은 한 곳(:root)에만 있다.
+export function entryTime() {
+  return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--entry-time")) * 1000 || 0
+}
+
 export default class extends Controller {
-  static targets = [
-    "scene", "halo", "veil", "zoomLabel", "backdrop", "card",
-    "cardName", "cardHan", "cardLine", "cardVerse", "cardSource", "cardEnter"
-  ]
+  static targets = [ "scene", "halo", "veil", "backdrop", "card", "cardName", "cardLine", "cardEnter" ]
+
+  connect() {
+    document.addEventListener("turbo:visit", clearAxis)
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:visit", clearAxis)
+    if (this.axis) document.removeEventListener("turbo:before-render", this.axis)
+  }
 
   // 전각을 누르면 카드가 올라온다. 화면은 바뀌지 않는다.
   open(event) {
     event.preventDefault()
 
-    const { key, name, han, line, verse, scripture, source, enter, cx, cy } = event.params
-    const locale = document.documentElement.lang
-    // 넷은 여기서, 나머지 하나는 로케일에서 이미 온 채로 있다.
-    const cited = source || (SOURCES[locale] || SOURCES.ko)[key] || ""
+    const { name, line, enter, cx, cy, picture } = event.params
 
-    this.opened = { href: event.currentTarget.getAttribute("href"), cx, cy, name }
+    this.opened = { href: event.currentTarget.getAttribute("href"), cx, cy }
+    this.entering = false
 
     this.cardNameTarget.textContent = name
-    this.cardHanTarget.textContent = han
     this.cardLineTarget.textContent = line
-    this.cardVerseTarget.textContent = verse
-    // 황토는 경의 말에만. 경이 아닌 한 줄은 먹.
-    this.cardVerseTarget.classList.toggle("verse", scripture === true)
-    this.cardSourceTarget.textContent = cited
     this.cardEnterTarget.textContent = enter
 
     this.haloTarget.hidden = false
@@ -67,7 +91,8 @@ export default class extends Controller {
 
     // 방을 미리 받아 둔다 — 「든다」를 누를 즈음엔 이미 와 있어 끊기지 않는다.
     // 느려도 장면을 늘리지 않는다. 받아 오는 동안 그냥 기다리지 않을 뿐이다.
-    this.prefetch(this.opened.href)
+    // 전각 그림이 있으면 그 한 장도 — 교차 페이드가 빈 그림으로 피지 않게.
+    this.prefetch(this.opened.href, picture)
   }
 
   close() {
@@ -77,29 +102,38 @@ export default class extends Controller {
     this.opened = null
   }
 
-  prefetch(href) {
+  prefetch(href, picture) {
     if (this.prefetched === href) return
 
     this.prefetched = href
     fetch(href, { headers: { Accept: "text/html" }, credentials: "same-origin" }).catch(() => {})
+    if (picture) new Image().src = picture
   }
 
-  // 「든다」 — 조감도가 전각을 향해 커지며 한지빛으로 옅어진 뒤 그 방으로.
+  // 「든다」 — 한 번만 든다. 조감도가 전각을 향해 커지며 사라지고 그 방이 겹쳐 들어온다.
   async enter() {
-    if (!this.opened) return
+    if (!this.opened || this.entering) return
 
-    const { href, cx, cy, name } = this.opened
+    const { href, cx, cy } = this.opened
+    this.entering = true
 
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return this.go(href)
 
     this.close()
+
+    if (document.startViewTransition) {
+      // 전환은 Turbo 가 한다. 축만 놓는다 — 스냅숏이 담긴 뒤, 새 화면이 그려지기 전에.
+      this.axis = () => { placeAxis(cx, cy); this.axis = null }
+      document.addEventListener("turbo:before-render", this.axis, { once: true })
+      return this.go(href)
+    }
+
+    // 지원하지 않는 브라우저 — 방문 앞에 조감도만 커지며 한지빛으로 옅어진다. 손은 받지 않는다.
     this.sceneTarget.style.setProperty("--zoom-x", `${cx}%`)
     this.sceneTarget.style.setProperty("--zoom-y", `${cy}%`)
-    this.zoomLabelTarget.textContent = name
     this.element.classList.add("compound--zooming")
 
-    await settle(this.sceneTarget, ZOOM)
-    await wait(LABEL)
+    await settle(this.sceneTarget, entryTime())
     this.go(href)
   }
 
@@ -115,8 +149,4 @@ function settle(element, ms) {
     const timer = setTimeout(done, ms + 200)
     element.addEventListener("transitionend", ended)
   })
-}
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
 }

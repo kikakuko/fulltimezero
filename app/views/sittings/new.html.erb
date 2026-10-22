@@ -6,6 +6,7 @@
 <%= render "compound/hall_header", key: :sitting %>
 
 <%= render "elephant", reading: @elephant, arriving: true %>
+<%= render "compound/hall_words", key: :sitting %>
 
 <%# 손님에게는 앉기를 시작하는 손짓이 없다 %>
 <% unless guest? %>
