@@ -112,20 +112,23 @@ class DaysFormTest < ActionDispatch::IntegrationTest
   end
 
   # 달력은 하나다. 「달의 자취」와 「날들」이 둘 다 달력일 까닭이 없다.
+  # 달 한가운데에서 돈다 — 달 초(1–4일)에는 today - 4 가 지난달로 넘어가 이번 달 달력에 없다.
   test "한 칸이 셋을 품는다 — 일정 · 비움 · 고요했던 날" do
-    today = @user.today
-    @user.plans.create!(planned_on: today - 1, what: "회의")
-    @user.clearings.create!(cleared_on: today - 2)
-    @user.rests.create!(rested_on: today - 3, duration: "a_while")
-    @user.sittings.create!(sat_on: today - 4, mode: "sitting", ended_at: Time.current)
+    travel_to Time.utc(2026, 11, 15, 3, 0) do # 서울 낮 열두 시
+      today = @user.today
+      @user.plans.create!(planned_on: today - 1, what: "회의")
+      @user.clearings.create!(cleared_on: today - 2)
+      @user.rests.create!(rested_on: today - 3, duration: "a_while")
+      @user.sittings.create!(sat_on: today - 4, mode: "sitting", ended_at: Time.current)
 
-    get days_path
+      get days_path
 
-    assert_select "a[href=?] .kept", day_path(today - 1), count: 1, message: "일정이 있는 날의 먹점이 없다"
-    assert_select "a[href=?] .clear", day_path(today - 2), count: 1, message: "비워 둔 날의 옅은 원이 없다"
-    assert_select "a[href=?].quiet", day_path(today - 3), count: 1, message: "쉰 날이 고요하지 않다"
-    assert_select "a[href=?].quiet", day_path(today - 4), count: 1, message: "앉은 날이 고요하지 않다"
-    assert_select "a[href=?].quiet", day_path(today - 1), false, "아무 날이나 고요하다"
+      assert_select "a[href=?] .kept", day_path(today - 1), count: 1, message: "일정이 있는 날의 먹점이 없다"
+      assert_select "a[href=?] .clear", day_path(today - 2), count: 1, message: "비워 둔 날의 옅은 원이 없다"
+      assert_select "a[href=?].quiet", day_path(today - 3), count: 1, message: "쉰 날이 고요하지 않다"
+      assert_select "a[href=?].quiet", day_path(today - 4), count: 1, message: "앉은 날이 고요하지 않다"
+      assert_select "a[href=?].quiet", day_path(today - 1), false, "아무 날이나 고요하다"
+    end
   end
 
   test "한 칸이 셋을 품어도 합계도 연속기록도 없다" do
