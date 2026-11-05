@@ -19,11 +19,14 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_select ".elephant-field__station", false, "굽이에 이름이 붙었다"
     assert_select "a.elephant-field__stop", false, "굽이가 눌러 가는 길이 되었다"
     assert_select ".elephant-place .elephant svg.elephant__art[role=img][aria-label]", count: 1
-    assert_select ".elephant-place .elephant.elephant--walking-legs", count: 1
+    # 방에서 시작한다 — 코끼리는 이미 앉아 있다. 걸어 들어오는 것은 탱화 속(③)에서다.
+    assert_select ".elephant-place .elephant.elephant--seated.elephant--restless", count: 1
+    assert_select ".elephant-place .elephant--walking-legs", false, "방에서 코끼리가 걷는다"
 
-    # 맨 위 — 앉는다 · 아무것도 하지 않는다보다 앞에 선다.
+    # 맨 위 — 앉는다 · 아무것도 하지 않는다보다 앞에 선다. 길은 방 그림의 족자 안에 있다.
     main = Nokogiri::HTML(response.body).css("main").to_html
-    assert_operator main.index("elephant-field"), :<, main.index("<form"), "코끼리의 길이 맨 위가 아니다"
+    assert_operator main.index("seonbang"), :<, main.index("<form"), "선방의 그림이 맨 위가 아니다"
+    assert_operator main.index("seonbang__frame"), :<, main.index("elephant-field"), "코끼리의 길이 족자 안에 있지 않다"
     assert_no_match(/\d/, visible_text.sub(/한국어.*/, ""), "코끼리의 길에 숫자가 있다")
   end
 
@@ -44,7 +47,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     # 무대(__stage)가 그림의 비율이고 그림이 그 무대를 채운다 — 위에 덧댄 자리가 없다. 틀 자체는
     # 전각 화면에서 첫 화면까지 길어진다(entry_test).
     assert_match(/\.elephant-field \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "산수 틀이 그림의 비율이 아니다 — 위에 덧댄 자리가 있다")
-    assert_match(/\.hall-figure \.elephant-field__stage \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "무대가 그림의 비율이 아니다")
+    # 족자 안에서는 틀이 테를 뺀 폭(694 × 1052)이고, 무대는 그림 비율 그대로 테만큼 나가 잘린다(entry_test).
+    assert_match(%r!\.seonbang__frame \.elephant-field \{[^}]*aspect-ratio: 694 / 1052;!m, css, "족자 안의 산수가 테를 뺀 폭이 아니다")
     assert_match(/\.elephant-field__stage \{[^}]*background: var\(--img-elephant_field-webp\) center \/ cover no-repeat;\s*background-image: image-set\(var\(--img-elephant_field-avif\) type\("image\/avif"\), var\(--img-elephant_field-webp\) type\("image\/webp"\)\);/m, css, "그림이 무대를 채우지 않는다")
     %w[avif webp].each { |format| assert_match(/--img-elephant_field-#{format}: url\("elephant_field\.#{format}"\);/, css, "산수의 #{format} 주소가 그 그림이 아니다") }
     assert_no_match(/ROOM|20000%/, css, "틀 위에 덧댄 자리가 남아 있다")
@@ -74,16 +78,18 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     assert_equal Elephant::ANCHORS.map(&:last).sort.reverse, Elephant::ANCHORS.map(&:last), "길이 올라가지 않는다"
   end
 
-  # 문턱 — 들어설 때 가장자리 밖에서 바위까지 걸어온다. 자리의 변화가 아니라 들어섬에
-  # 붙은 움직임이다. 바위 앞에 서면 걸음을 거두고 뒤척임을 시작한다.
-  test "선방에 들어서면 가장자리에서 바위까지 걸어와 뒤척인다" do
+  # 문턱 — 탱화 속(③)에 처음 들 때 가장자리 밖에서 바위까지 걸어온다. 자리의 변화가 아니라 들어섬에
+  # 붙은 움직임이다. 바위 앞에 서면 걸음을 거두고 뒤척임을 시작한다. 방(①)과 크게 보기(②)에서는 이미 앉아
+  # 있다(docs/M-seonbang-room-design.md).
+  test "탱화 속에 처음 들면 가장자리에서 바위까지 걸어와 뒤척인다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read
     js = Rails.root.join("app/javascript/controllers/elephant_controller.js").read
 
     get new_sitting_path
     assert_select ".elephant-field[data-elephant-arriving-value=true]", count: 1
-    assert_select ".elephant-place.elephant-place--arriving .elephant.elephant--walking-legs", count: 1,
-      message: "걸어오며 다리를 걷지 않는다"
+    assert_select ".elephant-place.elephant-place--arriving", false, "방에서 이미 걸어오고 있다"
+    assert_match(/seonbang:within@window->elephant#arrive/, response.body, "탱화 속에 들어도 걸어오지 않는다")
+    assert_match(/arrive\(\) \{.*?add\("elephant-place--arriving"\).*?add\("elephant--walking-legs"\)/m, js, "걸어오며 다리를 걷지 않는다")
 
     assert_match(/\.elephant-place--arriving \{ transform: translate\(calc\(-50% \+ var\(--arrive-from\)\), -100%\); \}/, css)
     assert_match(/transition: transform var\(--arrive-time\) ease-out/, css, "문턱이 걸음이 아니라 튕김이다")

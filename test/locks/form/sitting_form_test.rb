@@ -103,7 +103,8 @@ class SittingFormTest < ActionDispatch::IntegrationTest
   # 톤 정비 — 앉기의 부품. 산수는 먹틀에, 두 길은 먹 알약 둘, 나오는 길은 조용한 버튼.
   test "앉기는 부품 다섯으로 선다 — 옛 버튼 없이" do
     get new_sitting_path
-    assert_select ".elephant-field.ink-frame", count: 1
+    assert_select ".seonbang.ink-frame", count: 1, message: "방 그림이 먹틀에 앉지 않는다"
+    assert_select ".seonbang .elephant-field.ink-frame", false, "족자 안의 산수에 먹틀이 겹으로 섰다"
     assert_select ".button-primary", count: 2
     assert_select ".verse", count: 1, message: "인용 부품은 글 자리의 경구 하나뿐이다"
     assert_select ".hall-words .verse", count: 1

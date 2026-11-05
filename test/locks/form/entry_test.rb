@@ -58,7 +58,8 @@ class EntryTest < ActionDispatch::IntegrationTest
       assert_select ".hall-words[data-controller=entry][data-entry-x-value][data-entry-y-value]", count: 1
     end
     get new_sitting_path
-    assert_select ".elephant-field.hall-figure", count: 1
+    assert_select ".seonbang.hall-figure", count: 1
+    assert_select ".elephant-field.hall-figure", false, "족자 안의 산수가 전환의 이름을 가진다 — 짝은 방 그림이다"
     get days_path
     assert_select ".maitreya.hall-figure", count: 1
 
@@ -67,7 +68,7 @@ class EntryTest < ActionDispatch::IntegrationTest
     post sittings_path, params: { sitting: { length: "tea" } }
     follow_redirect!
     assert_select meta, false, "앉는 중에 전환의 meta 가 있다"
-    assert_select ".elephant-field.hall-figure", false, "앉는 중의 산수가 전환의 이름을 가진다"
+    assert_select ".elephant-field.hall-figure, .seonbang.hall-figure", false, "앉는 중의 그림이 전환의 이름을 가진다"
 
     turbo = Gem.loaded_specs.fetch("turbo-rails").full_gem_path + "/app/assets/javascripts/turbo.min.js"
     assert_includes File.read(turbo), "startViewTransition", "Turbo 가 View Transition 을 모른다"
@@ -118,29 +119,38 @@ class EntryTest < ActionDispatch::IntegrationTest
   end
 
   # 그림은 첫 화면까지 — 높이만. 먹틀과 양옆 16px 은 그대로이고, 글과 손잡이는 한 화면 아래다.
-  test "선방 · 미륵당의 그림은 첫 화면까지이고, 먹틀은 그대로이며, 글과 손잡이는 그림 아래다" do
+  # 선방은 방 그림 한 장이 그 자리에 선다(docs/M-seonbang-room-design.md) — 방 그림의 비율 그대로이고, 산수는 그
+  # 안의 족자에 통째로(contain) 든다.
+  test "선방 · 미륵당의 그림은 첫 화면 쪽이고, 먹틀은 그대로이며, 글과 손잡이는 그림 아래다" do
     assert_match(/--hall-above: [\d.]+rem;/, root, "그림 위에 서는 것의 높이가 :root 에 없다")
     assert_match(/--hall-height: calc\(100svh - var\(--hall-above\)\);/, root, "그림의 높이가 첫 화면이 아니다")
-    assert_match(/\.elephant-field\.hall-figure \{ aspect-ratio: auto; height: var\(--hall-height\); overflow: hidden; \}/, css)
     assert_match(/\.maitreya\.hall-figure \{ aspect-ratio: auto; height: var\(--hall-height\); \}/, css)
-    # 무대는 그림의 비율로 틀 가운데에 — 자리 값은 바뀌지 않는다.
-    assert_match(%r{\.hall-figure \.elephant-field__stage \{\s*inset: auto; left: 50%; top: 50%; translate: -50% -50%;\s*width: max\(100%, calc\(var\(--hall-height\) \* 864 / 1184\)\); aspect-ratio: 864 / 1184;}m, css)
+    assert_match(%r!\.seonbang \{[^}]*aspect-ratio: 768 / 1029;[^}]*overflow: hidden;!m, css, "방 그림의 틀이 방 그림의 비율이 아니다")
+    # 족자가 틀이다 — 족자 안에서는 산수 그림의 제 먹틀(양옆 붉은 테, 768 폭에서 37px 씩)을 잘라 그리지 않는다.
+    assert_match(%r!\.seonbang__frame \.elephant-field \{[^}]*height: 100%;[^}]*aspect-ratio: 694 / 1052;[^}]*overflow: hidden;!m, css, "족자 안의 산수가 테를 뺀 폭으로 들지 않는다")
+    assert_match(%r!\.seonbang__frame \.elephant-field__stage \{ left: calc\(-37 / 694 \* 100%\); right: calc\(-37 / 694 \* 100%\); \}!, css, "족자 안의 무대가 테만큼 양옆으로 나가지 않는다")
     assert_match(%r{\.hall-figure \.maitreya__stage \{\s*inset: auto; left: 50%; top: 50%; translate: -50% -50%;\s*width: max\(100%, calc\(var\(--hall-height\) \* 390 / 560\)\); aspect-ratio: 390 / 560;}m, css)
     assert_match(/\.maitreya__stage \{ position: absolute; inset: 0; container-type: inline-size; \}/, css, "한 단위(--m-u)의 그릇이 무대가 아니다")
     # 먹틀과 양옆 16px 은 그대로(compound_form_test 의 규칙과 같다).
-    %w[elephant-field maitreya].each do |frame|
+    %w[seonbang maitreya].each do |frame|
       assert_match(/\.#{frame} \{[^}]*width: calc\(100% \+ 1rem\);[^}]*margin: 0 -0\.5rem/m, css, "#{frame} 먹틀에 가장자리가 없다")
     end
 
-    { new_sitting_path => [ ".elephant-field.hall-figure.ink-frame", ".ways" ], days_path => [ ".maitreya.hall-figure.ink-frame", ".calendar" ] }.each do |path, (figure, handles)|
+    { new_sitting_path => [ ".seonbang.hall-figure.ink-frame", ".ways", "__camera" ], days_path => [ ".maitreya.hall-figure.ink-frame", ".calendar", "__stage" ] }.each do |path, (figure, handles, first)|
       get path
       assert_select figure, count: 1
-      assert_select "#{figure} > :first-child[class$=__stage]", count: 1, message: "#{path} 의 그림에 무대가 없다"
+      assert_select "#{figure} > :first-child[class$=#{first}]", count: 1, message: "#{path} 의 그림에 무대가 없다"
       main = Nokogiri::HTML(response.body).css("main").to_html
       assert_operator main.index("hall-header"), :<, main.index("hall-figure"), "#{path} 에서 이름이 그림 위에 있지 않다"
       assert_operator main.index("hall-figure"), :<, main.index("hall-words"), "#{path} 에서 글이 그림 아래에 있지 않다"
       assert_operator main.index("hall-words"), :<, main.index(handles.delete(".")), "#{path} 에서 손잡이가 글 아래에 있지 않다"
     end
+  end
+
+  test "새로 고침하면 방에서 시작한다" do
+    js = Rails.root.join("app/javascript/controllers/seonbang_controller.js").read
+    assert_match(/connect\(\) \{.*?history\.replaceState\(\{ \.\.\.history\.state, seonbang: "room" \}, ""\)/m, js, "처음 그릴 때 지금 칸의 걸음을 방으로 바꿔 두지 않는다")
+    assert_no_match(/history\.state\??\.seonbang/, js, "기록에 남은 걸음을 읽어 되살린다")
   end
 
   test "카드에는 이름 · 한 줄 · 「든다」만 있고, 전각 그림 한 장은 카드를 열 때 받는다" do

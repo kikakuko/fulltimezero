@@ -61,11 +61,13 @@ class ElephantSeatedTest < ActionDispatch::IntegrationTest
     assert_match(%r{aspect-ratio: 250 / 268;}, CSS.read, "앉은 그림의 틀이 viewBox 와 달라 발끝이 바닥선에서 뜬다")
   end
 
-  test "선방에서는 두 그림이 같은 자리에 겹치고, 앉는 중에는 처음부터 앉아 있다" do
+  # 방에서 시작하므로 선방에서도 처음부터 앉아 있다. 걸어 들어와 앉는 장면은 탱화 속에서 — 그때 스크립트가
+  # 앉음을 거두고 걸린 다음 다시 앉힌다(elephant_controller 의 arrive · settle).
+  test "선방에서는 두 그림이 같은 자리에 겹치고, 선방도 앉는 중도 처음부터 앉아 있다" do
     sign_in_as users(:one)
 
     get new_sitting_path
-    assert_select ".elephant-place .elephant:not(.elephant--seated) svg.elephant__art--standing", count: 1
+    assert_select ".elephant-place .elephant.elephant--seated svg.elephant__art--standing", count: 1
     assert_select ".elephant-place .elephant svg.elephant__art--seated[aria-hidden=true]", count: 1
 
     post sittings_path, params: { sitting: { length: "tea" } }
