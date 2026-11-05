@@ -119,3 +119,8 @@
 | `tmp/art/gate-d3a-1.jpeg` | 일주문 — D3(문 안), 고름. D 의 결 기준 그림(`docs/sources/art/gate-d3a.jpg`) | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
 | `tmp/art/gate-d3b-1.jpeg` | 일주문 — D3(문 안) | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
 | `tmp/art/og-b-fixed-1.jpeg` | og — B, 마당의 차 둘을 지운 편집. 1200×630 으로 잘라 `app/assets/images/og/ko.jpg` 로 들임 | og-b(편집할 그림) | 2026-11-05 | 예 |
+| `tmp/art/seonbang-room-a-1.jpeg` | 선방 방 — D | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) · 앱의 그림(`mireukdang.webp`) — 결만 | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-room-b-1.jpeg` | 선방 방 — D, 족자 꼴(장황에 옅은 금빛 — 다시 그릴 때 뺀다) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) · 앱의 그림(`mireukdang.webp`) — 결만 | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-room2-a-1.jpeg` | 선방 방 — D, 둘째(족자 크게, 금빛 없이) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-room2-b-1.jpeg` | 선방 방 — D, 둘째, 고름 | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청), 기준 | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 아니오 |
