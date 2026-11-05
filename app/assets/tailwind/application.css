@@ -253,6 +253,16 @@
   --hall-above: 10.875rem;
   --hall-height: calc(100svh - var(--hall-above));
   /* 전각 화면에서 머리줄과 아래 문이 물러나는 때와 돌아오는 시간. 나갈 때는 느리게. */
+  /* 배경 그림의 주소 — 두 형식을 여기 한 곳에. 주소를 url() 로 두어야 propshaft 가 지문 붙은 이름으로 바꾼다
+     (image-set() 안에 바로 쓰면 CSS 손질이 url() 을 벗겨 운영에서 404 가 난다). */
+  --img-cloud-mist-avif: url("cloud-mist.avif");
+  --img-cloud-mist-webp: url("cloud-mist.webp");
+  --img-cloud-drift-avif: url("cloud-drift.avif");
+  --img-cloud-drift-webp: url("cloud-drift.webp");
+  --img-cloud-scroll-avif: url("cloud-scroll.avif");
+  --img-cloud-scroll-webp: url("cloud-scroll.webp");
+  --img-elephant_field-avif: url("elephant_field.avif");
+  --img-elephant_field-webp: url("elephant_field.webp");
   --hush-after: 3s;
   --hush-away: 0.6s;
   --hush-back: 0.4s;
@@ -411,6 +421,11 @@ a:hover { text-decoration-color: var(--ink); }
 
 /* 인용 — 경의 말. 명조 18, 글씨의 황토. 한 화면에 하나. */
 .verse { font: 400 1.125rem/1.5 var(--serif); color: var(--ocher-ink); }
+
+/* 그림의 두 형식 — <picture> 는 상자를 만들지 않는다. 안의 <img> 가 예전 자리 그대로 선다.
+   배경 그림은 WebP 한 줄을 먼저 두고 image-set() 으로 AVIF 를 먼저 고르게 한다 — image-set 을 모르는 브라우저
+   (Safari 17 아래)는 앞줄의 WebP 를 쓴다(docs/M-renewal-design.md). */
+picture { display: contents; }
 
 /* 먹틀 — 수묵 그림이 앉는 자리. */
 .ink-frame { background: var(--ink-frame); border-radius: 16px; }
@@ -809,22 +824,28 @@ input[type="text"] {
 /* 안개띠 — 마당의 산 밑 지평선. 가장 멀고 가장 느리다. */
 .cloud--mist {
   left: -28%; top: 44%; width: 156%; aspect-ratio: 1280 / 307;
-  background-image: url("cloud-mist.webp");
+  background-image: var(--img-cloud-mist-webp);
+  background-image: image-set(var(--img-cloud-mist-avif) type("image/avif"), var(--img-cloud-mist-webp) type("image/webp"));
   opacity: var(--cloud-far); --cloud-span: var(--cloud-span-far);
 }
 
 /* 가장자리 흐름 — 산수화의 왼쪽에서 흘러든다. 그림의 왼쪽이 잘려 있는 것이 그 모양이다. */
 .cloud--drift {
   left: -34%; top: 14%; width: 120%; aspect-ratio: 1280 / 565;
-  background-image: url("cloud-drift.webp");
+  background-image: var(--img-cloud-drift-webp);
+  background-image: image-set(var(--img-cloud-drift-avif) type("image/avif"), var(--img-cloud-drift-webp) type("image/webp"));
   opacity: var(--cloud-mid); --cloud-span: var(--cloud-span-mid);
   --cloud-from: -4%; --cloud-to: 10%;
 }
+/* 선방 안의 가장자리 흐름은 WebP 하나로 — 같은 그림을 길의 안개(SVG 안의 <image>, WebP 만 받는다)가 함께
+   쓴다. 여기서만 AVIF 를 고르면 한 화면이 같은 구름을 두 형식으로 두 번 받는다. */
+.elephant-field .cloud--drift { background-image: var(--img-cloud-drift-webp); }
 
 /* 구름무리 — 미륵당 위. 가장 가깝고 가장 빠르다. */
 .cloud--scroll {
   left: -18%; top: 2%; width: 132%; aspect-ratio: 1280 / 594;
-  background-image: url("cloud-scroll.webp");
+  background-image: var(--img-cloud-scroll-webp);
+  background-image: image-set(var(--img-cloud-scroll-avif) type("image/avif"), var(--img-cloud-scroll-webp) type("image/webp"));
   opacity: var(--cloud-near); --cloud-span: var(--cloud-span-near);
 }
 
@@ -1771,7 +1792,8 @@ input[type="text"].threshold__field {
 .elephant-field__stage {
   position: absolute; inset: 0;
   /* 청록 산수 — 시각적 길은 이 그림 안에 있다. 숨긴 path 는 그 길을 따라간다. */
-  background: url("elephant_field.webp") center / cover no-repeat;
+  background: var(--img-elephant_field-webp) center / cover no-repeat;
+  background-image: image-set(var(--img-elephant_field-avif) type("image/avif"), var(--img-elephant_field-webp) type("image/webp"));
 }
 /* 전각 화면 — 그림 높이만 첫 화면까지. 먹틀과 양옆 16px 은 그대로다. 걸어오는 코끼리는 틀의
    가장자리에서 나타난다. */

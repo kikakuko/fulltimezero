@@ -45,7 +45,8 @@ class ElephantFlowTest < ActionDispatch::IntegrationTest
     # 전각 화면에서 첫 화면까지 길어진다(entry_test).
     assert_match(/\.elephant-field \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "산수 틀이 그림의 비율이 아니다 — 위에 덧댄 자리가 있다")
     assert_match(/\.hall-figure \.elephant-field__stage \{[^}]*aspect-ratio: 864 \/ 1184;/m, css, "무대가 그림의 비율이 아니다")
-    assert_match(/\.elephant-field__stage \{[^}]*background: url\("elephant_field\.webp"\) center \/ cover no-repeat;/m, css, "그림이 무대를 채우지 않는다")
+    assert_match(/\.elephant-field__stage \{[^}]*background: var\(--img-elephant_field-webp\) center \/ cover no-repeat;\s*background-image: image-set\(var\(--img-elephant_field-avif\) type\("image\/avif"\), var\(--img-elephant_field-webp\) type\("image\/webp"\)\);/m, css, "그림이 무대를 채우지 않는다")
+    %w[avif webp].each { |format| assert_match(/--img-elephant_field-#{format}: url\("elephant_field\.#{format}"\);/, css, "산수의 #{format} 주소가 그 그림이 아니다") }
     assert_no_match(/ROOM|20000%/, css, "틀 위에 덧댄 자리가 남아 있다")
     assert_match(/--e-light: calc\(\(var\(--elephant-dark\) \+ var\(--ele, 0\) \* \(var\(--elephant-light\) - var\(--elephant-dark\)\)\) \/ var\(--elephant-light\)\);/, css)
     assert_match(/--e-fill: color-mix\(in srgb, var\(--paper\) calc\(var\(--e-light\) \* 100%\), var\(--ink\)\);/, css)

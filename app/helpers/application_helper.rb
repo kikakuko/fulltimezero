@@ -13,6 +13,17 @@ module ApplicationHelper
     %w[jpg png].map { |extension| "og/#{locale}.#{extension}" }.find { |path| OG_IMAGES.join(File.basename(path)).exist? }
   end
 
+  # 그림 — 같은 이름의 AVIF 가 있으면 <picture> 에 AVIF 를 먼저, WebP 를 받침으로 둔다(docs/M-renewal-design.md).
+  # 받는 쪽은 둘 가운데 하나만 받는다 — iOS 16 미만은 AVIF 를 건너뛰고 WebP 를. <img> 는 받침 그대로라 클래스 · alt ·
+  # 자물쇠가 지금처럼 닿는다. AVIF 가 없으면 <img> 하나.
+  def picture_image_tag(source, **options)
+    avif = source.sub(/\.webp\z/, ".avif")
+    image = image_tag(source, **options)
+    return image if avif == source || !OG_IMAGES.dirname.join(avif).exist?
+
+    picture_tag { tag.source(srcset: image_path(avif), type: "image/avif") + image }
+  end
+
   # 같은 화면의 다른 언어 주소 — 경로 맨 앞의 로케일만 바꾼다. 자기 주소이지 바깥이 아니다.
   def alternate_url(locale)
     prefix = %r{\A/(?:#{I18n.available_locales.join("|")})(?=/|\z)}

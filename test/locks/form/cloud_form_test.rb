@@ -24,7 +24,9 @@ class CloudFormTest < ActiveSupport::TestCase
     { "mist" => "far", "drift" => "mid", "scroll" => "near" }.each do |name, depth|
       rule = css[/\.cloud--#{name} \{.*?\n\}/m].to_s
 
-      assert_match(/background-image: url\("cloud-#{name}\.webp"\)/, rule, "#{name} 의 그림이 바뀌었다")
+      # 그림은 두 형식(AVIF 먼저, WebP 받침)으로 — 주소는 :root 의 변수에 한 곳(docs/M-renewal-design.md).
+      assert_match(/background-image: var\(--img-cloud-#{name}-webp\);\s*background-image: image-set\(var\(--img-cloud-#{name}-avif\) type\("image\/avif"\), var\(--img-cloud-#{name}-webp\) type\("image\/webp"\)\);/, rule, "#{name} 의 그림이 바뀌었다")
+      %w[avif webp].each { |format| assert_match(/--img-cloud-#{name}-#{format}: url\("cloud-#{name}\.#{format}"\);/, css, "#{name} 의 #{format} 주소가 그 그림이 아니다") }
       assert_match(/opacity: var\(--cloud-#{depth}\)/, rule, "#{name} 이 제 깊이의 짙기를 쓰지 않는다")
       assert_match(/--cloud-span: var\(--cloud-span-#{depth}\)/, rule, "#{name} 이 제 깊이의 빠르기를 쓰지 않는다")
     end

@@ -51,6 +51,9 @@ class ImagesTest < ActiveSupport::TestCase
     IMAGES.glob("*.avif").each do |avif|
       assert avif.sub_ext(".webp").exist?, "#{avif.basename} 에 WebP 받침이 없다 — iOS 16 미만이 그림을 못 받는다"
     end
+    IMAGES.glob("*.webp").each do |webp|
+      assert webp.sub_ext(".avif").exist?, "#{webp.basename} 에 AVIF 가 없다 — 받는 쪽이 받침을 받는다"
+    end
     %w[compound_src.png maitreya_src.png four_kings.png].each do |source|
       assert Rails.root.join("docs/sources", source).exist?, "#{source} 원본이 없다"
       assert_not IMAGES.join(source).exist?, "#{source} 이 파이프라인 안에 남아 있다"
