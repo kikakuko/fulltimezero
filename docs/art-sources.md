@@ -116,6 +116,6 @@
 | `tmp/art/gate-b-1.jpeg` | 일주문 — B(문 밖) | R22 · R03 · 시안 B | 2026-11-05 | 아니오 |
 | `tmp/art/gate-d2-1.jpeg` | 일주문 — D(문 안) | B-일주문(구도) · 시안 D(재료) · 앱의 그림(`mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/og-b-1.jpeg` | og — B | R03 · R30 · 시안 B | 2026-11-05 | 아니오 |
-| `tmp/art/gate-d3a-1.jpeg` | 일주문 — D3(문 안), 고름 | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
+| `tmp/art/gate-d3a-1.jpeg` | 일주문 — D3(문 안), 고름. D 의 결 기준 그림(`docs/sources/art/gate-d3a.jpg`) | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
 | `tmp/art/gate-d3b-1.jpeg` | 일주문 — D3(문 안) | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
 | `tmp/art/og-b-fixed-1.jpeg` | og — B, 마당의 차 둘을 지운 편집 | og-b(편집할 그림) | 2026-11-05 | 아니오 |

@@ -35,16 +35,23 @@
 
 ## 2. D — 한지 위 먹선과 옅은 담채
 
-결 문장:
+**기준 그림: D3a** — `docs/sources/art/gate-d3a.jpg`(2026-11-05, 일주문). D 의 그림은 이 한 장과 나란히 놓아 본다.
 
-> Style D: ink lines and pale washes of color on hanji paper, with the composition and light of a realistic painting.
-> Dancheong colors are subdued into pale washes. The ground at the bottom — the dirt path, moss and fallen leaves — is
-> also painted in pale washes, not rendered photographically.
+결 문장(D3a 를 만든 그대로):
 
+> Style: clear ink outlines on hanji paper, flat areas of pale wash, the fibers of the hanji visible throughout.
+> Even the shafts of morning light are rendered as soft bleeding of ink and wash. No photographic texture at all —
+> no photographic depth of field, no photographic grain, no realistic material rendering.
+
+- **결의 기준은 A 계열(먹선 · 한지)이고, B 는 자리만 맞추는 데 쓴다.** 참조의 첫 자리들에는 A 계열(D3a, 시안 A,
+  우리 그림 `elephant_field.webp` · `mireukdang.webp`)을 두고 「결은 이것들에서」라고 이른다. B 그림은 맨 끝에 넣고
+  「문 · 나무 · 길의 자리와 크기만 맞추고, 색과 재질은 따르지 말 것」이라고 이른다. B 를 결의 참조로 넣으면 B 를 옅게
+  씻은 회화(D2)가 나온다 — 2026-11-05 에 그랬다.
 - **단청은 옅게 눌러서** — 청록과 붉은 기둥이 옅은 물빛으로만 남는다. 원색이 서면 다시 그린다.
 - **아래 땅도 담채** — 흙길 · 이끼 · 낙엽까지. 위만 담채이고 아래가 사진처럼 남으면 D 가 아니다.
-- 같은 자리를 B 와 D 로 둘 다 그릴 때(일주문처럼 겹쳐 바뀌는 자리)는 B 를 먼저 그리고, 그 B 를 첫 참조로 넣어
-  「같은 문 · 같은 자리 · 같은 길, 재료만 D」로 다시 그린다. 문의 자리를 재어 맞는지 본다.
+- **빛줄기도 먹의 번짐으로** — 사진의 피사계 심도 · 입자 · 재질 표현은 쓰지 않는다.
+- 같은 자리를 B 와 D 로 둘 다 그릴 때(일주문처럼 겹쳐 바뀌는 자리)는 B 를 먼저 그리고, 위의 순서로 D 를 그린다.
+  두 그림의 문 기둥 자리를 재어 맞는지 본다(D3a 는 896 폭에서 B 와 5px 안).
 
 ## 3. 둘 다
 
