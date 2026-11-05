@@ -27,6 +27,7 @@
 | `elephant_parts_test` `elephant_flow_test` `elephant_form_test` `void_dispersal_test` | 코끼리의 결과 흩어짐 |
 | `maitreya_test` `maitreya_flow_test` `pagoda_test` `pagoda_layout_test` `moon_phase_test` | 미륵 · 탑 · 달의 값 |
 | `entry_test` | 전각에 드는 전환 — 2.4 배 · 1.6초, 축은 다음 방문에서 걷힘, 전환 중 손은 한 화면만, 그림은 첫 화면까지 |
+| `art_tool_test` | 그림 도구는 script/art/ 에만 — 앱이 싣는 자리에서 부르지 않고, 표준 라이브러리만, 열쇠는 .env.art 에서만 |
 | `hush_test` | 전각 화면에서 머리줄과 아래 문이 삼 초 뒤 물러나고 손길에 돌아온다 — 숨는 것과 inert 는 한 몸 |
 | `threshold_test` `compound_flow_test` `days_flow_test` `sitting_flow_test` `copying_flow_test` `rest_flow_test` `settings_flow_test` `abidings_form_test` | 각 화면의 짜임 |
 | `verse_form_test` | 경의 말을 어떤 색으로 세우는가 |
