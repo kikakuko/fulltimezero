@@ -1,10 +1,11 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# 세 결 시안 — 일주문 하나를 같은 구도, 같은 참조로 세 결에 그린다. 고르는 것은 사람이다.
-# 참조는 셋 다 같다: R22(부석사 일주문, CC0 — docs/art-sources.md)와 우리 그림 둘(산수 · 미륵당).
+# 결 시안 — 일주문 하나를 같은 참조로 여러 결에 그린다. 고르는 것은 사람이다.
+# 참조: R22(부석사 일주문, CC0 — docs/art-sources.md)와 우리 그림 둘(산수 · 미륵당).
+# A · B · C 는 같은 구도에 결만 셋. D 는 A 의 결에 B 의 구도 — B 시안을 구도 참조로 하나 더 넣는다.
 # 1K · 3:4 · 한 장씩. 원본은 tmp/art/ 에만.
-#   ruby script/art/realism_abc.rb          — 셋 다
-#   ruby script/art/realism_abc.rb a c      — 고른 것만
+#   ruby script/art/realism_abc.rb          — A · B · C
+#   ruby script/art/realism_abc.rb d        — 고른 것만
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -22,24 +23,36 @@ COMPOSITION = "Early morning at the end of a forest path. A Korean temple one-pi
 FORBIDDEN = "Do not include: moon, sun, people, animals, any writing or letters, signboard calligraphy (leave the " \
             "signboard blank or omit it), seals, modern objects (signs, fences, lamps, cars, wires), or any frame or border."
 
+INK = "Style: realistic ink-and-wash painting. Building proportions, perspective and light are " \
+      "accurate, but the medium is ink and light washes of color on hanji paper. Dancheong colors " \
+      "are subdued into pale washes."
+
+# D 의 구도 — B 시안(tmp/art/realism-b-painterly-1.jpeg)을 넷째 참조로 넣는다.
+FRAMED = "Seen straight on, the one-pillar gate (iljumun) frames a distant mountain peak inside its opening, like a " \
+         "picture in a frame. Early morning light slants in from beyond the mist at the end of the path. The path " \
+         "runs on beneath the gate and disappears into the distance. Use the first reference only for the gate's " \
+         "structure and proportions, the second and third only for the app's mood and palette, and the fourth only " \
+         "for the composition — not for its rendering."
+FRAMED_REFERENCE = File.join(ROOT, "tmp/art/realism-b-painterly-1.jpeg")
+
 STYLES = {
-  "a" => [ "realism-a-ink", "Style: realistic ink-and-wash painting. Building proportions, perspective and light are " \
-                            "accurate, but the medium is ink and light washes of color on hanji paper. Dancheong colors " \
-                            "are subdued into pale washes." ],
+  "a" => [ "realism-a-ink", INK ],
   "b" => [ "realism-b-painterly", "Style: photorealistic painting. Light and material feel real, with a few brush marks " \
                                   "left visible, like a painting rather than a photograph." ],
-  "c" => [ "realism-c-photo", "Style: realistic photograph, as if a real temple was photographed in morning mist." ]
+  "c" => [ "realism-c-photo", "Style: realistic photograph, as if a real temple was photographed in morning mist." ],
+  "d" => [ "realism-d-ink-framed", INK, FRAMED, [ FRAMED_REFERENCE ] ]
 }.freeze
 
-missing = REFERENCES.reject { |path| File.exist?(path) }
-abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
-
-chosen = ARGV.any? ? STYLES.slice(*ARGV) : STYLES
+chosen = ARGV.any? ? STYLES.slice(*ARGV) : STYLES.slice("a", "b", "c")
 abort "한 번에 #{MonoRouter::MOST_PER_RUN} 장까지" if chosen.size > MonoRouter::MOST_PER_RUN
 
-chosen.each_value do |name, style|
-  prompt = [ COMPOSITION, style, FORBIDDEN ].join("\n\n")
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt:, size: "1K", aspect: "3:4", references: REFERENCES)
+chosen.each_value do |name, style, composition = COMPOSITION, extra = []|
+  references = REFERENCES + extra
+  missing = references.reject { |path| File.exist?(path) }
+  abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
+
+  prompt = [ composition, style, FORBIDDEN ].join("\n\n")
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt:, size: "1K", aspect: "3:4", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"

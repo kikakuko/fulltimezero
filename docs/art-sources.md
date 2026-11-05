@@ -102,3 +102,8 @@
 | `tmp/art/realism-a-ink-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/realism-b-painterly-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/realism-c-photo-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
+| `tmp/art/realism-d-ink-framed-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · 시안 B(구도) | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-b-1.jpeg` | 선방 — 쓰지 않음: 산세가 한국 산이 아니고, 코끼리가 그림 안에 들어가 흰빛 · 걸음 · 뒤척임이 멈춘다. 앉은 자세만 코끼리 SVG 를 다시 그릴 때 참조 | R03 · 시안 B(결) · 앱의 그림(`elephant_field.webp`) · `docs/drawings/elephant_sitting.png`(자세) | 2026-11-05 | 아니오 |
+| `tmp/art/gate-b-1.jpeg` | 일주문 — B(문 밖) | R22 · R03 · 시안 B | 2026-11-05 | 아니오 |
+| `tmp/art/gate-d2-1.jpeg` | 일주문 — D(문 안) | B-일주문(구도) · 시안 D(재료) · 앱의 그림(`mireukdang.webp`) | 2026-11-05 | 아니오 |
+| `tmp/art/og-b-1.jpeg` | og — B | R03 · R30 · 시안 B | 2026-11-05 | 아니오 |
