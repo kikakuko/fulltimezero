@@ -1,6 +1,6 @@
 # This app is a raft. — 이 앱도 뗏목이다.
 #
-# WebP 의 크기와 알파를 젬 없이 읽는다(§6 — 재려고 젬을 더하지 않는다).
+# WebP 의 크기와 알파, AVIF 의 크기를 젬 없이 읽는다(§6 — 재려고 젬을 더하지 않는다).
 # RIFF 덩어리를 훑어 VP8X(확장) · VP8(손실) · VP8L(무손실) 머리만 본다.
 module WebpInfo
   def webp_info(path)
@@ -32,6 +32,16 @@ module WebpInfo
       at += 8 + length + (length.odd? ? 1 : 0)
     end
     info
+  end
+
+  # AVIF 의 크기를 젬 없이 읽는다 — ISOBMFF 의 ispe(그림 크기) 상자 하나만 본다.
+  def avif_info(path)
+    data = Pathname(path).binread
+    raise "AVIF 가 아니다: #{path}" unless data[4, 8] == "ftypavif" || data[4, 8] == "ftypavis"
+
+    at = data.index("ispe") or raise "AVIF 에 ispe 가 없다: #{path}"
+    width, height = data[at + 8, 8].unpack("NN")
+    { width:, height: }
   end
 
   private
