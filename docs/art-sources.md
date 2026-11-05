@@ -33,7 +33,7 @@
 | R08 | 장경각 | 판가에 꽂힌 경판(1915, 흑백) — 가로 옛 사진, 사람 없음 | 서울역사아카이브(조선총독부 연보) | https://commons.wikimedia.org/wiki/File:TripitakaKoreana1915.jpg | 퍼블릭 도메인 | 1650×1317 | 2026-11-05 | 씀 |
 | R09 | 장경각 | 판전 중정 | — | https://commons.wikimedia.org/wiki/File:20170812.해인사_장경판전(Haeinsa_Janggyeong_Panjeon).01.jpg | CC BY-SA 4.0 | 5312×2988 | 2026-11-05 | 미룸 |
 | R10 | 미륵당 | 산 아래 전각들, 왼쪽 멀리 작은 석미륵(관촉사, 1904년경 엽서) — 가로, 아래에 인쇄 글자 | Cornell University Library(Flickr Commons) | https://commons.wikimedia.org/wiki/File:White_Buddha_between_here_and_Peng_Yang.jpg | 퍼블릭 도메인(저작권 제한 없음) | 1536×1020 | 2026-11-05 | 씀 |
-| R11 | 미륵당 | 바위에 새긴 불상을 맞배지붕 불당이 덮은 모습, 앞은 흙길(홍은동, 1904년경) — 가로 옛 사진, 사람 없음 | Cornell University Library(Flickr Commons) | https://commons.wikimedia.org/wiki/File:Buddhist_wayside_shrine_(4096116854).jpg | 퍼블릭 도메인(저작권 제한 없음) | 1536×1131 | 2026-11-05 | 씀 |
+| R11 | 미륵당 | 관음(옥천암 보도각 백불) — 불당과 바위의 꼴만, 불상은 그리지 않는다. 맞배지붕 불당이 바위를 덮고 앞은 흙길(1904년경) — 가로 옛 사진 | Cornell University Library(Flickr Commons) | https://commons.wikimedia.org/wiki/File:Buddhist_wayside_shrine_(4096116854).jpg | 퍼블릭 도메인(저작권 제한 없음) | 1536×1131 | 2026-11-05 | 씀 |
 | R12 | 미륵당 | 보개(갓)를 쓴 석미륵의 얼굴과 어깨(안성 기솔리) — 세로 사진, 사람 없음 | 국가유산청 | https://commons.wikimedia.org/wiki/File:안성_기솔리_석조미륵보살입상.jpg | 공공누리 제1유형 | 536×784 | 2026-11-05 | 씀 |
 | R13 | 미륵당 | 앱이 인용하는 곳의 석불(수원 파장동 미륵당) | — | https://commons.wikimedia.org/wiki/File:Mireukdang_statue.jpg | CC BY-SA 4.0 | 1853×3248 | 2026-11-05 | 미룸 |
 | R14 | 미륵당 | 미륵전 건물(금산사 미륵전) | — | https://commons.wikimedia.org/wiki/File:금산사_미륵전.jpg | CC BY-SA 4.0 | 4032×3024 | 2026-11-05 | 미룸 |
@@ -43,9 +43,8 @@
 | R18 | 범종각 | 하얀 현대 종각에 매단 큰 종과 당목, 뒤로 숲(성덕대왕신종) — 가로 사진, 철제 난간 | 국립경주박물관(촬영 Bernard Gagnon) | https://commons.wikimedia.org/wiki/File:Bell_of_King_Seongdeok.jpg | CC0 | 3732×2488 | 2026-11-05 | 씀 |
 | R19 | 범종각 | 범종 — 비천 무늬와 당목이 보이는 종을 가까이, 위는 단청 천장, 뒤는 붉은 난간(부석사 범종각 안) — 세로 사진. 누각 바깥은 보이지 않는다 | — | https://commons.wikimedia.org/wiki/File:Bell_Pavilion_at_Buseoksa_01.jpg | CC0 | 3385×5114 | 2026-11-05 | 씀 |
 | R20 | 범종각 | 사방이 트인 종각(불국사 범종각) | — | https://commons.wikimedia.org/wiki/File:Beomjonggak_at_Bulguksa.jpg | CC BY-SA 4.0 | 2173×3008 | 2026-11-05 | 미룸 |
-| R21 | 불이문 | 문 안에서 본 마당과 전각, 사람 여럿 · 안내판 · 꽃 화분(통도사 불이문 안쪽) — 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Burimun_Gate_01.jpg | CC0 | 5056×3079 | 2026-11-05 | 씀 |
-| R22 | 불이문 | 숲길 위에 선 붉은 기둥의 문, 현판 「太白山浮石寺」(부석사 일주문) — 가로 사진, 멀리 사람 조금 | — | https://commons.wikimedia.org/wiki/File:Iljumun_at_Buseoksa.jpg | CC0 | 4658×3102 | 2026-11-05 | 씀 |
-| R23 | 불이문 | 사천왕 둘의 상반신, 원색 채색(통도사 천왕문 안) — 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_01.jpg | CC0 | 4000×2256 | 2026-11-05 | 씀 |
+| R22 | 일주문 | 숲길 위에 선 붉은 기둥의 문(부석사 일주문) — 현판 글씨 · 사람은 들이지 않는다. 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Iljumun_at_Buseoksa.jpg | CC0 | 4658×3102 | 2026-11-05 | 씀 |
+| R23 | 천왕문 | 사천왕 둘의 상반신, 원색 채색(통도사 천왕문 안) — 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_01.jpg | CC0 | 4000×2256 | 2026-11-05 | 씀 |
 | R24 | 불이문 | 소나무와 선 불이문(범어사) | — | https://commons.wikimedia.org/wiki/File:Burimun_gate_and_pine_under_blue_sky_at_Beomeosa_temple_in_Busan,_South_Korea.jpg | CC BY-SA 4.0 | 4717×3145 | 2026-11-05 | 미룸 |
 | R25 | 마당 | 흙 마당 가운데 선 법당과 둘레 회랑(불국사 대웅전) — 가로 사진, 사람 조금 | — | https://commons.wikimedia.org/wiki/File:Daeungjeon,_Bulguksa_01.jpg | CC0 | 4881×3254 | 2026-11-05 | 씀 |
 | R26 | 마당 | 석축 위 누각과 덤불(부석사 경내) — 가로 사진, 사람 없음 | — | https://commons.wikimedia.org/wiki/File:Buseoksa_Temple_03.jpg | CC0 | 4878×3252 | 2026-11-05 | 씀 |
@@ -53,7 +52,7 @@
 | R28 | 조감도 | 첩첩 산 가운데 작게 앉은 경내(김홍도 〈장안사〉) — 가로, 왼쪽 위 제목 · 낙관 | 개인 소장(공유마당 경유) | https://commons.wikimedia.org/wiki/File:김홍도_금강사군첩_-_장안사.jpg | 퍼블릭 도메인 | 3334×2284 | 2026-11-05 | 씀 |
 | R29 | 조감도 | 절벽 아래 왼쪽에 모인 전각들(김홍도 〈표훈사〉) — 가로, 위 제목 · 낙관 | 공유마당 경유 | https://commons.wikimedia.org/wiki/File:김홍도_금강사군첩_-_표훈사.jpg | 퍼블릭 도메인 | 3791×2664 | 2026-11-05 | 씀 |
 | R30 | 조감도 | 숲에 둘린 경내를 비스듬히 내려다본 전경, 기와지붕 여럿과 탑(해인사) — 가로 사진, 사람 · 글자 없음 | 한국학중앙연구원 | https://commons.wikimedia.org/wiki/File:Encykorea-합천_해인사_전경.jpg | 공공누리 제1유형 | 5530×3640 | 2026-11-05 | 씀 |
-| R31 | 범종각 | 산사의 2층 종루 바깥(부석사 범종루) — 아직 보지 않음 | — | https://commons.wikimedia.org/wiki/File:Beomjongnu_at_Buseoksa_01.jpg | CC0 | 3624×2210 | 2026-11-05 | 씀 |
+| R31 | 범종각 | 산사의 2층 종루를 정면에서 — 아래로 계단 통로, 현판 하나, 위층에 사람 몇(작게), 둘레 정원수(부석사 범종루) — 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Beomjongnu_at_Buseoksa_01.jpg | CC0 | 3624×2210 | 2026-11-05 | 씀 |
 | R32 | 선방 | 바위 벼랑에 매달린 산중 암자(정선 〈보덕굴〉, 《신묘년 풍악도첩》) — 아직 보지 않음 | 국립중앙박물관(덕수 903-12) | https://www.emuseum.go.kr/detail?relicId=PS0100100100500090300012 | 공공누리 제1유형 | 2669×3000 | 2026-11-05 | 씀 |
 | R33 | 선방 | 암자(유리건판) — 아직 보지 않음 | 국립중앙박물관(건판 35825) | https://www.emuseum.go.kr/detail?relicId=PS0100100102003582500000 | 공공누리 제1유형 | 2236×3000 | 2026-11-05 | 씀 |
 | R34 | 장경각 | 판전 안 판가의 대장경판(해인사, 대판 유리건판) — 아직 보지 않음 | 국립중앙박물관(건판 16318) | https://www.emuseum.go.kr/detail?relicId=PS0100100102001631800000 | 공공누리 제1유형 | 3000×2561 | 2026-11-05 | 씀 |
@@ -65,7 +64,7 @@
 | R40 | 범종각 | 종과 종각이 한 장에(경주 봉황대 성덕대왕신종 종각) — 아직 보지 않음 | 국립중앙박물관(건판 29906) | https://www.emuseum.go.kr/detail?relicId=PS0100100102002990600000 | 공공누리 제1유형 | 3000×2236 | 2026-11-05 | 씀 |
 | R41 | 범종각 | 범종(상원사 동종, 1935) — 아직 보지 않음 | 국립중앙박물관(건판 12431) | https://www.emuseum.go.kr/detail?relicId=PS0100100102001243100000 | 공공누리 제1유형 | 2270×3000 | 2026-11-05 | 씀 |
 | R42 | 불이문 | 셋째 문(통도사 불이문, 대한제국기) — 아직 보지 않음 | 국립중앙박물관(건판 323) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032300000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
-| R43 | 불이문 | 둘째 문(통도사 천왕문, 대한제국기) — 아직 보지 않음 | 국립중앙박물관(건판 322) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032200000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
+| R43 | 천왕문 | 둘째 문(통도사 천왕문, 대한제국기) — 아직 보지 않음 | 국립중앙박물관(건판 322) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032200000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
 | R44 | 조감도 | 절 넷의 전각 배치를 내려다본 사찰 전도(목판금강산사대사찰전도) — 아직 보지 않음 | 국립중앙박물관(건희 4234) | https://www.emuseum.go.kr/detail?relicId=PS0100100102400423400000 | 공공누리 제1유형 | 1571×3000 | 2026-11-05 | 씀 |
 | R45 | 조감도 | 산 속 절들의 자리(정선 〈금강내산총도〉, 《신묘년 풍악도첩》) — 아직 보지 않음 | 국립중앙박물관(덕수 903-11) | https://www.emuseum.go.kr/detail?relicId=PS0100100100500090300011 | 공공누리 제1유형 | 3000×2776 | 2026-11-05 | 씀 |
 | R46 | 마당 | 경내 전경(금강산 표훈사, 유리건판) — 아직 보지 않음 | 국립중앙박물관(건판 28522) | https://www.emuseum.go.kr/detail?relicId=PS0100100102002852200000 | 공공누리 제1유형 | 3000×2236 | 2026-11-05 | 씀 |
@@ -80,10 +79,12 @@
 |---|---|---|
 | 선방 | R03 | 세로 그림이라 선방의 산수 틀(864×1184)에 맞는다. 산마루의 절 · 아래로 흘러내리는 산 · 물이 길과 바위의 자리를 준다 |
 | 장경각 | R05 | 판전 바깥 모습 그대로이고 사람 · 글자가 없다. 판가의 결은 R06 으로 더한다 |
-| 미륵당 | R11 | 바위에 반쯤 묻힌 불상을 작은 불당이 덮은 꼴 — 「묻혀 있다가 드러남」과 마을 미륵당이 한 장에 있다. 사람 · 글자 없음 |
+| 미륵당 | R11 | 바위를 덮은 작은 불당의 꼴 — 마을 미륵당의 짜임. 관음(옥천암 보도각 백불)이라 불상은 그리지 않는다. 사람 · 글자 없음 |
 | 사경실 | R15 | 경상 하나로 방의 중심을 잡는다. 붉은 옻칠의 색은 들이지 않는다(꼴만) |
-| 범종각 | R17 | 가장 이른 범종의 유곽 · 유두가 또렷하고 현대 물건이 없다. 누각 바깥은 아직 없다 — R31 을 받아 보고 정한다 |
-| 불이문 | R22 | 문이 한가운데 서고 숲길이 이어진다. R21 은 사람 · 안내판 · 화분이 들어 뺐다 |
+| 범종각 | R31 · R17 | 누각은 R31(정면의 2층 종루, 현판 · 사람은 들이지 않는다), 종은 R17(가장 이른 범종의 유곽 · 유두) |
+| 일주문 | R22 | 문이 한가운데 서고 숲길이 이어진다. 현판 글씨 · 사람은 들이지 않는다 |
+| 천왕문 | — | R23 · R43 이 있다. 아직 고르지 않았다 |
+| 불이문 | 찾는 중 | 후보 R42(통도사 불이문, 공공누리 제1유형, 아직 보지 않음). R21 은 문이 아니라 문 안의 마당이라 장부에서 뺐다 |
 | 마당 | R25 | 흙 마당이 화면의 반을 차지하고 법당이 가운데 선다. 사람은 작다 |
 | 조감도 | R30 | 경내를 비스듬히 내려다본 구도가 지금 조감도(768×512)와 같고 사람 · 글자가 없다. 붓의 결은 R28 로 더한다 |
 
@@ -98,3 +99,6 @@
 | `tmp/art/check-a-none-1.jpeg` | 시험 | 없음 | 2026-11-04 | 아니오 |
 | `tmp/art/check-b-one-1.jpeg` | 시험 | 앱의 그림(`mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/check-c-four-1.jpeg` | 시험 | 앱의 그림 넷 | 2026-11-05 | 아니오 |
+| `tmp/art/realism-a-ink-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
+| `tmp/art/realism-b-painterly-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
+| `tmp/art/realism-c-photo-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
