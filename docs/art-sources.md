@@ -124,7 +124,7 @@
 | `tmp/art/seonbang-room-b-1.jpeg` | 선방 방 — D, 족자 꼴(장황에 옅은 금빛 — 다시 그릴 때 뺀다) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) · 앱의 그림(`mireukdang.webp`) — 결만 | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room2-a-1.jpeg` | 선방 방 — D, 둘째(족자 크게, 금빛 없이) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room2-b-1.jpeg` | 선방 방 — D, 둘째, 고름 | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
-| `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청). 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들임(원본 `docs/sources/art/seonbang-room.jpg`) | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 예 |
+| `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청). 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들였다가 2026-11-06 넷째로 갈음(원본 `docs/sources/art/seonbang-room.jpg`) | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 물러남 |
 | `tmp/art/cheonwang-left-a-1.jpeg` | 천왕문 — D, 왼쪽 벽(용과 여의주 · 탑과 당). 비스듬한 자리라 오른쪽 벽과 짝이 맞지 않는다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-left-b-1.jpeg` | 천왕문 — D, 왼쪽 벽, 고름(통로에서 정면, 옅은 단청, 얼굴이 고요하다) | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-right-a-1.jpeg` | 천왕문 — D, 오른쪽 벽(비파 · 칼). 눈이 통도사처럼 둥글고 세다, 단청이 조금 짙다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
@@ -134,7 +134,7 @@
 | `tmp/art/cheonwang-left-c-1.jpeg` | 천왕문 — D(새 톤), 왼쪽 벽. 수염 있는 두 얼굴이 서로 다르고, 벽이 짙은 나무빛 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 왼쪽 벽 b(`tmp/art/cheonwang-left-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-left-d-1.jpeg` | 천왕문 — D(새 톤), 왼쪽 벽. 얼굴은 다르나 뒷벽이 아직 희다 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 왼쪽 벽 b(`tmp/art/cheonwang-left-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-right-c-1.jpeg` | 천왕문 — D(새 톤), 오른쪽 벽(비파 · 칼). 뒷벽이 아직 희고, 칼의 천왕 옷이 옅은 황토빛 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 오른쪽 벽 b(`tmp/art/cheonwang-right-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
-| `tmp/art/seonbang-room4-1.jpeg` | 선방 방 — D(새 톤), 넷째. 나무가 따뜻하고 짙어졌다. 족자 빈 면은 셋째와 같은 자리(26.5% · 20.7% · 47.3% · 39.0%) | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 선방 방 셋째(`tmp/art/seonbang-room3-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
+| `tmp/art/seonbang-room4-1.jpeg` | 선방 방 — D(새 톤), 넷째, 고름. 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들임 — 셋째를 갈음(원본 `docs/sources/art/seonbang-room4.jpg`). 나무가 따뜻하고 짙어졌다. 족자 빈 면은 셋째와 같은 자리(26.5% · 20.7% · 47.3% · 39.0%) | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 선방 방 셋째(`tmp/art/seonbang-room3-1.jpeg` — 자리) | 2026-11-06 | 예 |
 | `tmp/art/cheonwang-right-c-robe-1.jpeg` | 천왕문 — 오른쪽 벽 c 고침, 고름. 편집 한 번으로 칼 든 천왕의 옷만 옅은 황토(금빛 쪽) → 옅은 청록 · 주황 담채. 뒷벽은 아직 희다 | 천왕문 오른쪽 벽 c(`tmp/art/cheonwang-right-c-1.jpeg` — 편집할 그림) | 2026-11-06 | 아니오 |
 | `tmp/art/far-a-1.jpeg` | 원경 — B. 겹겹의 능선과 숲길, 먼 지붕 하나. 가운데에 뾰족한 침엽수가 서서 쓰지 않음 | 일주문 B(`tmp/art/gate-b-1.jpeg` — 결과 빛) · R03(산) · R30(먼 절의 자리) | 2026-11-06 | 아니오 |
 | `tmp/art/far-b-1.jpeg` | 원경 — B, 고름. 안개 낀 능선 · 물길, 소나무 사이로 들어가는 흙길, 절은 보이지 않는다 | 일주문 B(`tmp/art/gate-b-1.jpeg` — 결과 빛) · R03(산) · R30(먼 절의 자리) | 2026-11-06 | 아니오 |
