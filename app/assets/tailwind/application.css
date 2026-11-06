@@ -22,6 +22,13 @@
 /* 한자는 해서 — LXGW WenKai TC(霞鶩文楷, OFL). 동해독도에는 한자가 없다. 전승 자형이라
    한국 자형과 같다(艹 네 획 · 辶 점 둘 · 者의 점 · 爲 · 眞 · 卽). 현판 · 전각 이름의 곁말 ·
    사경의 본보기 글자가 이 글꼴로 선다. 앱이 쓰는 한자만 추렸고, 빠진 글자는 없다. */
+/* 현판 — 본명조(Noto Serif KR, OFL) Bold 에서 현판에 쓰는 글자 열한 자만 잘라 들였다(無事山歇心庵 · 天王門 · 不二).
+   그림 속 빈 판 위에 앱이 얹는 글자다 — 그림 연장은 글자를 그리지 않는다(docs/M-landing-design.md 11절). */
+@font-face {
+  font-family: "Noto Serif KR Plaque";
+  src: url("NotoSerifKRPlaque.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
 @font-face {
   font-family: "LXGW WenKai TC";
   src: url("WenKaiTC.woff2") format("woff2");
@@ -198,9 +205,8 @@
   /* 밤에는 전체 밝기 0.85배 — 그림의 어둠을 그만큼 한 겹 얹는다. */
   --light-night-dim: 0.15;
 
-  /* 문의 현판 — 검은 목판, 금빛 테두리(--gilt), 금빛 한자. */
+  /* 문의 현판 — 검은 목판에 한지빛 한자. 금빛은 탑의 한 자에만(§2) — 테도 나무빛이다. */
   --plaque-wood: #241a14;
-  --plaque-gold: #d8c48a;
 
   /* 코끼리의 흰빛 — 밝기의 두 끝. 앉기의 코끼리와 장경각의 코끼리 아홉이 같이 쓴다. */
   --elephant-dark: 0.35;    /* 흰빛 0 — 검정 */
@@ -1243,7 +1249,9 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
    설명이 아니라 건축이다. 그림 속 문의 자리에 그림의 비율로 걸린다 —
    한 단위(--plaque-u)는 390 폭 그림의 1px 이다. 지금 선 문의 현판만 보이고,
    빛이 그 문에 닿을 때 0.6초에 걸쳐 떠오른다. 먼 문에는 걸지 않는다.
-   목판 위의 한자는 그림의 일부라 글꼴의 18px 하한(type_test) 밖에 있다. */
+   목판 위의 한자는 그림의 일부라 글꼴의 18px 하한(type_test) 밖에 있다.
+   글자는 본명조 Bold, 한지빛. 가로 편액의 전통대로 오른쪽에서 왼쪽으로 놓는다 — 카피에는 읽는 차례(無事山 歇心庵)
+   그대로 두고, 판이 거꾸로 놓는다(direction: rtl). 판은 글자 길이를 따라 넓어진다(첫째 문은 여섯 자). */
 .gate-plaque {
   position: absolute; left: 50%; top: calc(var(--plaque-y) / 844 * 100%);
   width: 0; height: 0; pointer-events: none; opacity: 0;
@@ -1256,10 +1264,11 @@ body:has(.doors) .sheet { padding-bottom: 8rem; }
   --k: calc(var(--plaque-u) * var(--plaque-scale));
   position: absolute; left: 0; top: 0; translate: -50% -50%;
   display: grid; place-items: center; box-sizing: border-box;
-  width: calc(104 * var(--k)); height: calc(34 * var(--k));
-  background: var(--plaque-wood); color: var(--plaque-gold);
-  border: calc(1.5 * var(--k)) solid var(--gilt); border-radius: calc(3 * var(--k));
-  font-family: var(--serif); font-weight: 700; font-size: calc(17 * var(--k)); line-height: 1;
+  min-width: calc(104 * var(--k)); height: calc(34 * var(--k)); padding: 0 calc(10 * var(--k));
+  background: var(--plaque-wood); color: var(--paper);
+  border: calc(1.5 * var(--k)) solid color-mix(in srgb, var(--plaque-wood) 70%, var(--paper)); border-radius: calc(3 * var(--k));
+  direction: rtl; unicode-bidi: bidi-override;
+  font-family: "Noto Serif KR Plaque", var(--serif); font-weight: 700; font-size: calc(17 * var(--k)); line-height: 1;
   letter-spacing: calc(3 * var(--k)); text-indent: calc(3 * var(--k)); white-space: nowrap;
 }
 /* 읽기 — 뜻풀이가 아니다. 그림 위에서도 읽히게 한지빛 테를 두른다. */

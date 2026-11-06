@@ -398,8 +398,8 @@ ko:
     # 한자는 언어와 무관하게 그대로, 아래의 읽기만 그 언어로. 뜻풀이는 쓰지 않는다.
     plaques:
       stop:
-        han: "一柱門"
-        reading: "일주문"
+        han: "無事山 歇心庵"
+        reading: "무사산 헐심암"
       naming:
         han: "天王門"
         reading: "천왕문"

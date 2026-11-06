@@ -393,8 +393,8 @@ en:
     # 한자는 언어와 무관하게 그대로, 아래의 읽기만 그 언어로. 뜻풀이는 쓰지 않는다.
     plaques:
       stop:
-        han: "一柱門"
-        reading: "One-Pillar Gate"
+        han: "無事山 歇心庵"
+        reading: "Musa-san Heolsim-am"
       naming:
         han: "天王門"
         reading: "Gate of the Four Kings"
