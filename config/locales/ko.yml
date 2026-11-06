@@ -265,6 +265,11 @@ ko:
       sit: "앉는다"
 
   sittings:
+    seonbang:
+      look: 탱화를 크게 본다
+      enter: 든다
+      back: 물러난다
+      out: 나온다
     new:
       title: 앉는다
       submit: 앉는다

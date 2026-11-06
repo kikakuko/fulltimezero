@@ -8,12 +8,16 @@
     앉은 그림(elephant_sitting.svg)이 선 그림과 같은 자리에 겹쳐 있다. 걸어와 바위에 닿으면
     선 그림이 앉은 그림으로 교차 페이드하고(3초 넘게), 앉는 중에는 처음부터 앉아 있다.
 
-    arriving: 선방에 들어설 때 가장자리에서 바위까지 걸어온다 — 자리의 변화가
-    아니라 문턱이다. 앉는 중에는 걸어오지 않는다. %>
+    arriving: 탱화 속(③)에 처음 들 때 가장자리에서 바위까지 걸어온다 — 자리의 변화가
+    아니라 문턱이다. 방(①)과 크게 보기(②)에서는 이미 앉아 있다(seonbang:within → elephant#arrive).
+    앉는 중에는 걸어오지 않는다.
+
+    이 틀은 선방 방 그림의 족자 안에 든다(_seonbang) — 먹틀도 전각 전환의 짝도 방 그림이 맡는다. %>
 <% night ||= false %>
 <% arriving ||= false %>
-<div class="<%= class_names("elephant-field", "ink-frame": !night, "hall-figure": !night) %>" data-controller="elephant"
+<div class="elephant-field" data-controller="elephant"
      data-elephant-arriving-value="<%= arriving %>"
+     <% if arriving %>data-action="seonbang:within@window->elephant#arrive"<% end %>
      style="--whiteness: <%= reading.whiteness.round(4) %>; --restless: <%= reading.restlessness.round(4) %>;">
   <%# 무대 — 그림과 같은 비율의 자리. 바위 · 코끼리 · 길의 안개가 그림의 좌표로 서 있다. 전각 화면에서는
       틀이 첫 화면까지 길어지고 무대가 틀보다 넓어진다(가로가 잘린다). %>
@@ -54,11 +58,11 @@
   <% end %>
 
   <%# 자리 틀 — 바위 위 한 자리. 그 안의 코끼리는 부위별로 뒤척인다. %>
-  <div class="<%= class_names("elephant-place", "elephant-place--arriving": arriving) %>" data-elephant-target="figure">
+  <div class="elephant-place" data-elephant-target="figure">
     <span class="elephant-place__shadow" aria-hidden="true"></span>
     <div class="elephant-place__turn">
       <%# 읽어 주는 말은 그림의 묘사다 — 검은 · 옅어진 · 거의 흰 코끼리. 숫자는 없다. %>
-      <%= elephant_figure ele: reading.whiteness, walking: arriving, restless: !arriving, seated: arriving ? :later : true, label: elephant_reading(reading.whiteness) %>
+      <%= elephant_figure ele: reading.whiteness, restless: true, seated: true, label: elephant_reading(reading.whiteness) %>
     </div>
   </div>
   </div>

@@ -261,6 +261,11 @@ en:
       sit: "Sit"
 
   sittings:
+    seonbang:
+      look: Look at the scroll painting
+      enter: Step in
+      back: Step back
+      out: Come out
     new:
       title: Sit
       submit: Sit

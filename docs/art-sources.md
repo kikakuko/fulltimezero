@@ -123,4 +123,4 @@
 | `tmp/art/seonbang-room-b-1.jpeg` | 선방 방 — D, 족자 꼴(장황에 옅은 금빛 — 다시 그릴 때 뺀다) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) · 앱의 그림(`mireukdang.webp`) — 결만 | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room2-a-1.jpeg` | 선방 방 — D, 둘째(족자 크게, 금빛 없이) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room2-b-1.jpeg` | 선방 방 — D, 둘째, 고름 | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
-| `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청), 기준 | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 아니오 |
+| `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청). 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들임(원본 `docs/sources/art/seonbang-room.jpg`) | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 예 |

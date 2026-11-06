@@ -263,6 +263,22 @@
   --img-cloud-scroll-webp: url("cloud-scroll.webp");
   --img-elephant_field-avif: url("elephant_field.avif");
   --img-elephant_field-webp: url("elephant_field.webp");
+  /* 선방의 방(docs/M-seonbang-room-design.md) — 족자 틀 안 빈 한지의 자리(방 그림 768×1029 에 대한 비율)와
+     세 걸음의 카메라. 걸음 ②(near)는 족자 전체가 화면에 들게, ③(within)은 족자 안의 산수가 화면 폭을 채우고
+     한 걸음 더 — 장황의 테가 화면 밖으로 나간다. 카메라는 (x, y) 를 가운데로 데려와 s 배. */
+  --seonbang-frame-x: 26.5%;
+  --seonbang-frame-y: 20.5%;
+  --seonbang-frame-w: 47.5%;
+  --seonbang-frame-h: 39.3%;
+  --seonbang-near-x: 0.509;
+  --seonbang-near-y: 0.355;
+  --seonbang-near-s: 1.4;
+  --seonbang-within-x: 0.5025;
+  --seonbang-within-y: 0.4015;
+  /* 테를 뺀 산수 폭이 카메라 폭의 0.3474 — 그 역수 2.879 보다 조금 큰 가장 작은 값. 위아래는 5.8% 씩 잘리고 바위 · 코끼리는 남는다. */
+  --seonbang-within-s: 2.88;
+  /* ③ 에서 앞쪽 구름 겹이 바탕보다 조금 더 커진다 — 안개를 헤치고 든다. */
+  --seonbang-within-cloud: 1.12;
   --hush-after: 3s;
   --hush-away: 0.6s;
   --hush-back: 0.4s;
@@ -1795,13 +1811,6 @@ input[type="text"].threshold__field {
   background: var(--img-elephant_field-webp) center / cover no-repeat;
   background-image: image-set(var(--img-elephant_field-avif) type("image/avif"), var(--img-elephant_field-webp) type("image/webp"));
 }
-/* 전각 화면 — 그림 높이만 첫 화면까지. 먹틀과 양옆 16px 은 그대로다. 걸어오는 코끼리는 틀의
-   가장자리에서 나타난다. */
-.elephant-field.hall-figure { aspect-ratio: auto; height: var(--hall-height); overflow: hidden; }
-.hall-figure .elephant-field__stage {
-  inset: auto; left: 50%; top: 50%; translate: -50% -50%;
-  width: max(100%, calc(var(--hall-height) * 864 / 1184)); aspect-ratio: 864 / 1184;
-}
 .elephant-field__map { position: absolute; inset: 0; width: 100%; height: 100%; }
 .elephant-field__path { fill: none; stroke: none; }
 /* 길의 안개 — 숨긴 길과 같은 모양으로 띠를 그어 마스크로 삼고, 그 안에 구름 겹 둘을 깐다.
@@ -1821,6 +1830,59 @@ input[type="text"].threshold__field {
 /* 정거장 이름을 누르면 그 자리를 읽는 곳으로. */
 .elephant-field__stop { cursor: pointer; }
 .elephant-field__stop:hover .elephant-field__station, .elephant-field__stop:focus .elephant-field__station { text-decoration: underline; }
+
+/* ── 선방의 방 ──────────────────────────────────────────────────────
+   몸이 앉는 자리. 마루 · 빈 좌복 · 정면의 족자 — 족자 안에 지금의 산수가 통째로(contain) 든다. 세 걸음은
+   카메라 한 겹의 transform 으로: 방(room) → 탱화 앞(near) → 탱화 속(within). 시간은 --entry-time, 곡선은
+   넘치지 않는다. 움직임을 줄이면 바로(.seonbang--instant). */
+.seonbang {
+  position: relative; width: calc(100% + 1rem); margin: 0 -0.5rem 1rem; aspect-ratio: 768 / 1029; overflow: hidden;
+  --seonbang-x: 0.5; --seonbang-y: 0.5; --seonbang-s: 1;
+}
+.seonbang[data-step="near"] { --seonbang-x: var(--seonbang-near-x); --seonbang-y: var(--seonbang-near-y); --seonbang-s: var(--seonbang-near-s); }
+.seonbang[data-step="within"] { --seonbang-x: var(--seonbang-within-x); --seonbang-y: var(--seonbang-within-y); --seonbang-s: var(--seonbang-within-s); }
+.seonbang__camera {
+  position: absolute; inset: 0; transform-origin: 0 0;
+  transform: translate(calc((0.5 - var(--seonbang-s) * var(--seonbang-x)) * 100%), calc((0.5 - var(--seonbang-s) * var(--seonbang-y)) * 100%)) scale(var(--seonbang-s));
+  transition: transform var(--entry-time) ease-in-out;
+}
+.seonbang__room { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+.seonbang__frame, .seonbang__scroll {
+  position: absolute; left: var(--seonbang-frame-x); top: var(--seonbang-frame-y);
+  width: var(--seonbang-frame-w); height: var(--seonbang-frame-h);
+}
+.seonbang__frame { display: flex; justify-content: center; }
+/* 족자 안의 산수 — 통째로. 높이에 맞추고 남는 가로는 한지 여백이다.
+   족자가 틀이다 — 산수 그림에 그려진 제 먹틀(양옆의 붉은 테, 원본 768 폭에서 37px 씩)은 족자 안에서 그리지 않는다.
+   틀은 테를 뺀 폭(694 × 1052)만 보이고, 무대는 그림 비율 그대로 테만큼 양옆으로 나가 잘린다 — 바위 · 코끼리의
+   자리 값은 무대의 좌표라 하나도 바뀌지 않는다. 흐르는 구름도 족자 밖으로 나오지 않는다. */
+.seonbang__frame .elephant-field { width: auto; height: 100%; aspect-ratio: 694 / 1052; margin: 0; flex: none; overflow: hidden; }
+.seonbang__frame .elephant-field__stage { left: calc(-37 / 694 * 100%); right: calc(-37 / 694 * 100%); }
+.seonbang__frame .elephant-field .cloud--drift { transition: scale var(--entry-time) ease-in-out; }
+.seonbang[data-step="within"] .elephant-field .cloud--drift { scale: var(--seonbang-within-cloud); }
+/* 족자를 누르는 자리 — 틀과 같이 커진다. 탱화 속에서는 누를 것이 없다. */
+.seonbang__scroll { border: 0; padding: 0; background: transparent; cursor: zoom-in; }
+.seonbang[data-step="within"] .seonbang__scroll { display: none; }
+/* 크게 볼 때 방이 둘레로 물러난다 — 한지빛이 둘레를 덮는다. */
+.seonbang__hush {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse 52% 58% at 50% 50%, transparent 62%, var(--paper) 100%);
+  transition: opacity var(--entry-time) ease-in-out;
+}
+.seonbang[data-step="near"] .seonbang__hush { opacity: 0.75; }
+/* 걸음의 손잡이 — 그 걸음에 맞는 것만. */
+.seonbang__steps { position: absolute; left: 0; right: 0; bottom: 0.75rem; margin: 0; display: flex; justify-content: center; gap: 0.75rem; }
+.seonbang__step { display: none; font: var(--type-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
+.seonbang[data-step="near"] .seonbang__step--back,
+.seonbang[data-step="near"] .seonbang__step--enter,
+.seonbang[data-step="within"] .seonbang__step--out { display: inline-block; }
+.seonbang--instant .seonbang__camera, .seonbang--instant .seonbang__hush,
+.seonbang--instant .elephant-field .cloud--drift { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .seonbang__camera, .seonbang__hush, .seonbang__frame .elephant-field .cloud--drift { transition: none; }
+}
+/* 탱화 속에 처음 들 때 코끼리를 가장자리로 옮기는 그 한 순간 — 앉은 그림에서 선 그림으로 바로. */
+.elephant--instant .elephant__art--standing, .elephant--instant .elephant__art--seated { transition: none; }
 
 /* 한 줄 — 코끼리가 어디 곁을 지나는지, 그 자리의 한 줄과 함께. */
 .quote { font: var(--type-body); color: var(--ink-soft); text-align: center; margin: 0 0 2rem; }

@@ -1,0 +1,32 @@
+<%# 선방의 방 — 몸이 앉는 자리(docs/M-seonbang-room-design.md). 마루와 빈 좌복, 정면의 족자. 족자 안에는 지금의
+    산수 · 길의 안개 · 코끼리가 그대로 든다(원본 하나 — 산수를 두 벌 받지 않는다).
+
+    세 걸음: ① 방(room) → ② 탱화 앞, 크게 보기(near) → ③ 탱화 속(within). 걸음은 보는 자리만 바꾼다 — 앉음은
+    한 줄이고, 걸음을 옮겨도 서버에 묻지 않는다(seonbang_steps_test). 손잡이는 모두 폼 밖의 type=button 이다.
+    방에는 달도 사람도 없다(§2 — 앉는 동안 달이 없다).
+
+    night: 앉는 중. 전각 전환의 짝(hall-figure)은 선방에 들어설 때만. %>
+<% night ||= false %>
+<% arriving ||= false %>
+<div class="<%= class_names("seonbang", "ink-frame": !night, "hall-figure": !night) %>"
+     data-controller="seonbang" data-step="room">
+  <div class="seonbang__camera">
+    <%= picture_image_tag "seonbang_room.webp", class: "seonbang__room", alt: "", draggable: false %>
+    <%# 앉는 중의 방도 산수와 같은 밤빛 한 겹 아래에 든다 — 족자 안만 어둡고 방이 밝으면 어긋난다. %>
+    <% if night %><span class="daylight seonbang__night" data-light="night" aria-hidden="true"></span><% end %>
+    <div class="seonbang__frame">
+      <%= render "elephant", reading: reading, night: night, arriving: arriving %>
+    </div>
+    <%# 족자 — 누르면 한 걸음 가까이. 틀과 같이 커지고 줄어든다. %>
+    <button type="button" class="seonbang__scroll" data-action="seonbang#forward"
+            aria-label="<%= t("sittings.seonbang.look") %>"></button>
+  </div>
+  <%# 크게 볼 때 방이 둘레로 물러난다 — 먹이 번지듯 한지빛이 둘레를 덮는다. %>
+  <span class="seonbang__hush" aria-hidden="true"></span>
+
+  <p class="seonbang__steps">
+    <button type="button" class="seonbang__step seonbang__step--back" data-action="seonbang#back"><%= t("sittings.seonbang.back") %></button>
+    <button type="button" class="seonbang__step seonbang__step--enter" data-action="seonbang#forward"><%= t("sittings.seonbang.enter") %></button>
+    <button type="button" class="seonbang__step seonbang__step--out" data-action="seonbang#back"><%= t("sittings.seonbang.out") %></button>
+  </p>
+</div>

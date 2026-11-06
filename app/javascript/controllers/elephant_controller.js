@@ -5,7 +5,9 @@
 // 그리고 선방에 들어설 때 가장자리에서 바위까지 한 번 걸어오게 하는 것.
 //
 // 걸어오는 것은 자리의 변화가 아니라 문턱이다 — 들어섬이라는 사건에 붙은 움직임이고
-// 경과 시간과 무관하다. 바위 앞에 서면 걸음이 그치고 뒤척임이 시작된다.
+// 경과 시간과 무관하다. 바위 앞에 서면 걸음이 그치고 뒤척임이 시작된다. 선방은 방에서 시작하므로
+// (docs/M-seonbang-room-design.md) 코끼리는 처음에 이미 앉아 있고, 탱화 속(③)에 처음 들 때
+// (seonbang:within) 한 번 가장자리로 물러났다가 걸어온다.
 //
 // 빛(--ele) · 뒤척임(--restless) · 길의 옅음(--whiteness)은 서버가 준 값이고 여기서
 // 건드리지 않는다. 아홉 자리와 잇지 않는다.
@@ -34,15 +36,30 @@ export default class extends Controller {
     this.pathTarget.setAttribute("d", d)
     this.roadTarget.setAttribute("d", d) // 길의 안개 띠 — 같은 모양이 마스크가 된다
 
-    if (!this.arrivingValue) return
+  }
 
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (reduced) return this.settle()
+  // 탱화 속에 처음 들었다 — 가장자리에서 바위까지 한 번 걸어온다. 움직임을 줄인 화면에서는 앉은 채로 둔다.
+  arrive() {
+    if (!this.arrivingValue || this.arrived) return
+    this.arrived = true
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const place = this.figureTarget
+    const elephant = place.querySelector(".elephant")
+    // 자리를 먼저 가장자리로 — 옮기는 것이 보이지 않게, 앉은 그림도 바로 선 그림으로.
+    place.style.transition = "none"
+    elephant?.classList.add("elephant--instant")
+    place.classList.add("elephant-place--arriving")
+    elephant?.classList.remove("elephant--seated", "elephant--restless")
+    elephant?.classList.add("elephant--walking-legs")
+    place.getBoundingClientRect()
+    place.style.transition = ""
 
     // 문턱 — 가장자리에서 바위까지. 다음 틀에서 자리를 풀면 전환이 걸린다.
     this.frame = requestAnimationFrame(() => requestAnimationFrame(() => {
-      this.figureTarget.addEventListener("transitionend", () => this.settle(), { once: true })
-      this.figureTarget.classList.remove("elephant-place--arriving")
+      elephant?.classList.remove("elephant--instant")
+      place.addEventListener("transitionend", () => this.settle(), { once: true })
+      place.classList.remove("elephant-place--arriving")
     }))
   }
 
