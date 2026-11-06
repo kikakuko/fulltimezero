@@ -7,6 +7,7 @@
 #   ruby script/art/two_moods.rb og        — og 그림(B, 16:9 로 뽑아 1200×630 으로 자른다)
 #   ruby script/art/two_moods.rb d3a d3b   — D3-일주문 두 장(결은 A 시안과 우리 그림, (가)는 자리만)
 #   ruby script/art/two_moods.rb ogfix     — og 고침(다시 뽑지 않고 편집 한 번: 마당의 차를 지운다)
+#   ruby script/art/two_moods.rb d3c       — D3c-일주문(2026-11-06 톤 고침: 재료는 A, 색과 명암은 D 시안, D3a 는 자리만)
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -31,6 +32,14 @@ D = "Style D: ink lines and pale washes of color on hanji paper, with the compos
 D3 = "Style: clear ink outlines on hanji paper, flat areas of pale wash, the fibers of the hanji visible throughout. " \
      "Even the shafts of morning light are rendered as soft bleeding of ink and wash. No photographic texture at all — " \
      "no photographic depth of field, no photographic grain, no realistic material rendering."
+# D3c — 새 결의 기준(art-style 2절, 2026-11-06). 재료는 A(먹선 · 한지 결 · 평평한 담채 면), 색과 명암은 D 시안.
+D3C = "Style: the materials are those of ink painting on hanji — clear ink outlines, the fibers of the hanji visible " \
+      "throughout, color laid in flat areas of wash. No photographic texture at all — no photographic depth of field, " \
+      "no photographic grain, no realistic material rendering. But the color and the light are full, not washed out: " \
+      "the pine needles are a deep, dark green; the pillars of the gate are clearly red; the tree trunks are dark; the " \
+      "morning light is warm; the shadows on the path, under the eaves and among the trees are distinct. The bare white " \
+      "of the paper shows only in the sky and the mist — everywhere else the paper is covered with wash. Dancheong is " \
+      "muted, not bright. No gold anywhere."
 GATE = "Early morning at the end of a forest path. A Korean temple one-pillar gate (iljumun) stands squarely in the " \
        "center, seen straight on, between tall pine trees; beyond the gate the path runs on beneath it and disappears " \
        "into the mist. Leave the upper third of the picture open with sky, mist and distant ridges."
@@ -59,6 +68,16 @@ RUNS = {
               GATE, D3, KOREAN_MOUNTAINS, FORBIDDEN ],
     references: [ File.join(ART, "realism-a-ink-1.jpeg"), File.join(ROOT, "app/assets/images/elephant_field.webp"),
                   File.join(ROOT, "app/assets/images/mireukdang.webp"), File.join(ART, "gate-b-1.jpeg") ]
+  },
+  "d3c" => {
+    name: "gate-d3c", aspect: "3:4",
+    prompt: [ "Use the references only for these roles: the first sets the color and the values — how dark, how warm, how " \
+              "much contrast and shadow, where the white of the paper is left; the second sets only the materials (ink " \
+              "outlines, hanji fibers, flat washes) — do not follow its pale washed-out color; the third sets only the " \
+              "placement and size of the gate, the trees and the path — match those positions and sizes exactly.",
+              GATE, D3C, KOREAN_MOUNTAINS, FORBIDDEN ],
+    references: [ File.join(ART, "realism-d-ink-framed-1.jpeg"), File.join(ART, "realism-a-ink-1.jpeg"),
+                  File.join(ART, "gate-d3a-1.jpeg") ]
   },
   "og" => {
     name: "og-b", aspect: "16:9",

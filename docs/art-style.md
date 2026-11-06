@@ -10,7 +10,7 @@
 
 | | B — 문 밖, 「속세」 | D — 문 안, 「경내」 |
 |---|---|---|
-| 결 | 사진 같은 회화 | 한지 위 먹선과 옅은 담채. 구도와 빛은 B 를 따른다 |
+| 결 | 사진 같은 회화 | 한지 위 먹선과 담채. 구도와 빛은 B 를 따른다 |
 | 자리 | `/about` 맨 위, 첫 화면의 일주문 앞까지, og 그림, 유튜브 · 인스타, 스토어 그림 | 일주문을 지난 뒤의 모든 화면 — 문 셋의 나머지, 마당, 전각 |
 | 넘어갈 때 | 일주문을 지날 때 B 에서 D 로 겹쳐 바뀐다. 문을 지나면 그림 속 절로 들어간다 | — |
 
@@ -33,25 +33,44 @@
   하나만 넣으면 산세가 바깥 산 쪽으로 치우친다(2026-11-05 선방 시험에서 그랬다).
 - 위쪽 3분의 1은 하늘 · 안개 · 먼 능선으로 비워 둔다.
 
-## 2. D — 한지 위 먹선과 옅은 담채
+## 2. D — 한지 위 먹선과 담채
 
-**기준 그림: D3a** — `docs/sources/art/gate-d3a.jpg`(2026-11-05, 일주문). D 의 그림은 이 한 장과 나란히 놓아 본다.
+**결의 기준(2026-11-06 에 고쳤다)** — **재료는 A, 색과 명암은 D 시안.**
 
-결 문장(D3a 를 만든 그대로):
+| | 기준 | 무엇을 따르나 |
+|---|---|---|
+| 재료 | A 계열 — 시안 A(`tmp/art/realism-a-ink-1.jpeg`) · D3a(`docs/sources/art/gate-d3a.jpg`) | 먹선 · 한지 결 · 평평한 담채 면. 사진의 피사계 심도 · 입자 · 재질 표현은 없다 |
+| 색과 명암 | D 시안(`tmp/art/realism-d-ink-framed-1.jpeg`) | 소나무는 짙은 초록, 기둥은 붉게, 아침 빛은 따뜻하게, 그늘은 분명하게. **여백(한지의 흰빛)은 하늘에만** |
 
-> Style: clear ink outlines on hanji paper, flat areas of pale wash, the fibers of the hanji visible throughout.
-> Even the shafts of morning light are rendered as soft bleeding of ink and wash. No photographic texture at all —
-> no photographic depth of field, no photographic grain, no realistic material rendering.
+까닭 — D3a · 천왕문 · 선방 방이 모두 바탕이 희고 색이 씻겼다(2026-11-06). D 시안을 재면 밝기 0.545 · 대비 0.235 ·
+흰 바탕(밝기 0.82 이상) 16.8% 인데, D3a 는 0.687 · 0.164 · 26.8%, 천왕문 벽은 0.73–0.76 · 0.13 · 31–40% 였다(재는 법과 값은
+`docs/M-landing-design.md` 10절). 이미지 처리로 흰 끝 내림 · 대비 · 채도를 올려 보면 어두워지기만 하고 그늘이 생기지 않는다 —
+벽처럼 넓은 평면은 거의 바뀌지 않는다.
 
-- **결의 기준은 A 계열(먹선 · 한지)이고, B 는 자리만 맞추는 데 쓴다.** 참조의 첫 자리들에는 A 계열(D3a, 시안 A,
-  우리 그림 `elephant_field.webp` · `mireukdang.webp`)을 두고 「결은 이것들에서」라고 이른다. B 그림은 맨 끝에 넣고
-  「문 · 나무 · 길의 자리와 크기만 맞추고, 색과 재질은 따르지 말 것」이라고 이른다. B 를 결의 참조로 넣으면 B 를 옅게
-  씻은 회화(D2)가 나온다 — 2026-11-05 에 그랬다.
-- **단청은 옅게 눌러서** — 청록과 붉은 기둥이 옅은 물빛으로만 남는다. 원색이 서면 다시 그린다.
-- **아래 땅도 담채** — 흙길 · 이끼 · 낙엽까지. 위만 담채이고 아래가 사진처럼 남으면 D 가 아니다.
+결 문장(D3c 를 만든 그대로 — `script/art/two_moods.rb d3c`):
+
+> Style: the materials are those of ink painting on hanji — clear ink outlines, the fibers of the hanji visible
+> throughout, color laid in flat areas of wash. No photographic texture at all — no photographic depth of field,
+> no photographic grain, no realistic material rendering. But the color and the light are full, not washed out:
+> the pine needles are a deep, dark green; the pillars of the gate are clearly red; the tree trunks are dark; the
+> morning light is warm; the shadows on the path, under the eaves and among the trees are distinct. The bare white
+> of the paper shows only in the sky and the mist — everywhere else the paper is covered with wash. Dancheong is
+> muted, not bright. No gold anywhere.
+
+- **참조의 차례와 역할** — 첫째에 D 시안(「색과 명암 — 얼마나 어둡고 따뜻한지, 대비와 그늘, 한지의 흰빛을 어디에
+  남기는지」), 둘째에 A 계열(「재료만 — 그 옅고 씻긴 색은 따르지 말 것」), 끝에 자리 그림(D3a 나 B, 「문 · 나무 · 길의
+  자리와 크기만」). B 를 결의 참조로 넣으면 B 를 옅게 씻은 회화(D2)가 나온다 — 2026-11-05 에 그랬다.
+- **단청은 눌러서, 그러나 씻지 않고** — 청록과 붉은 기둥이 원색은 아니되 또렷하게 선다. 원색이 서면 다시 그린다.
+- **아래 땅도 담채** — 흙길 · 이끼 · 낙엽까지. 위만 담채이고 아래가 사진처럼 남으면 D 가 아니다. 땅에는 그늘이 진다.
 - **빛줄기도 먹의 번짐으로** — 사진의 피사계 심도 · 입자 · 재질 표현은 쓰지 않는다.
+- **선방 방은 조금 옅어도 된다** — 탱화(족자 안의 산수)가 주인공이라 방은 한 걸음 물러선다. 그래도 지금(밝기 0.77 ·
+  흰 바탕 41%)보다는 짙게 — D 시안 쪽으로 6할을 목표로 한다.
+- **금빛은 없다**(§2) — 그대로다.
 - 같은 자리를 B 와 D 로 둘 다 그릴 때(일주문처럼 겹쳐 바뀌는 자리)는 B 를 먼저 그리고, 위의 순서로 D 를 그린다.
-  두 그림의 문 기둥 자리를 재어 맞는지 본다(D3a 는 896 폭에서 B 와 5px 안).
+  두 그림의 문 기둥 자리를 재어 맞는지 본다(D3a 는 896 폭에서 B 와 4px 안, D3c 는 2px 안). 겹침의 가운데(0.8초)는
+  「재료가 바뀐다」로 읽혀야 한다 — 밝기가 바뀌는 것으로 읽히면 D 가 너무 옅다.
+- 기준 그림 한 장은 톤을 고른 뒤에 정한다 — 지금 후보는 D3c(`tmp/art/gate-d3c-1.jpeg`). 그 전까지 D3a 는 재료와 자리의
+  기준으로만 쓴다.
 
 ## 3. 둘 다
 
