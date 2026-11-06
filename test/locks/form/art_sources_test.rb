@@ -65,7 +65,8 @@ class ArtSourcesTest < ActiveSupport::TestCase
     table.drop(2).each do |picture, _hall, used, made, taken|
       assert used.present?, "#{picture} 의 쓴 참조 칸이 비었다 — 참조 없이 만들었으면 「없음」"
       assert_match(/\A\d{4}-\d{2}-\d{2}\z/, made, "#{picture} 의 만든 날이 날짜가 아니다")
-      assert_includes %w[예 아니오], taken
+      # 물러남 — 한때 들였다가 다른 그림으로 갈음해 앱에서 뺀 것(2026-11-06). 들인 내력은 지우지 않는다.
+      assert_includes %w[예 아니오 물러남], taken
       used.scan(/R\d{2}/).each { |label| assert_includes usable, label, "#{picture} 이 장부에 없거나 미룸인 참조 #{label} 을 썼다" }
     end
   end
