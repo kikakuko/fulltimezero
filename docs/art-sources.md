@@ -44,7 +44,7 @@
 | R19 | 범종각 | 범종 — 비천 무늬와 당목이 보이는 종을 가까이, 위는 단청 천장, 뒤는 붉은 난간(부석사 범종각 안) — 세로 사진. 누각 바깥은 보이지 않는다 | — | https://commons.wikimedia.org/wiki/File:Bell_Pavilion_at_Buseoksa_01.jpg | CC0 | 3385×5114 | 2026-11-05 | 씀 |
 | R20 | 범종각 | 사방이 트인 종각(불국사 범종각) | — | https://commons.wikimedia.org/wiki/File:Beomjonggak_at_Bulguksa.jpg | CC BY-SA 4.0 | 2173×3008 | 2026-11-05 | 미룸 |
 | R22 | 일주문 | 숲길 위에 선 붉은 기둥의 문(부석사 일주문) — 현판 글씨 · 사람은 들이지 않는다. 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Iljumun_at_Buseoksa.jpg | CC0 | 4658×3102 | 2026-11-05 | 씀 |
-| R23 | 천왕문 | 사천왕 둘의 상반신, 원색 채색(통도사 천왕문 안) — 가로 사진 | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_01.jpg | CC0 | 4000×2256 | 2026-11-05 | 씀 |
+| R23 | 천왕문 | 사천왕 둘의 상반신 — 왼쪽은 용과 여의주, 오른쪽은 당과 탑. 원색 채색(통도사 천왕문 안, 들어서며 왼쪽 벽) — 가로 사진, 사람 · 글자 없음 | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_01.jpg | CC0 | 4000×2256 | 2026-11-05 | 씀 |
 | R24 | 불이문 | 소나무와 선 불이문(범어사) | — | https://commons.wikimedia.org/wiki/File:Burimun_gate_and_pine_under_blue_sky_at_Beomeosa_temple_in_Busan,_South_Korea.jpg | CC BY-SA 4.0 | 4717×3145 | 2026-11-05 | 미룸 |
 | R25 | 마당 | 흙 마당 가운데 선 법당과 둘레 회랑(불국사 대웅전) — 가로 사진, 사람 조금 | — | https://commons.wikimedia.org/wiki/File:Daeungjeon,_Bulguksa_01.jpg | CC0 | 4881×3254 | 2026-11-05 | 씀 |
 | R26 | 마당 | 석축 위 누각과 덤불(부석사 경내) — 가로 사진, 사람 없음 | — | https://commons.wikimedia.org/wiki/File:Buseoksa_Temple_03.jpg | CC0 | 4878×3252 | 2026-11-05 | 씀 |
@@ -64,10 +64,11 @@
 | R40 | 범종각 | 종과 종각이 한 장에(경주 봉황대 성덕대왕신종 종각) — 아직 보지 않음 | 국립중앙박물관(건판 29906) | https://www.emuseum.go.kr/detail?relicId=PS0100100102002990600000 | 공공누리 제1유형 | 3000×2236 | 2026-11-05 | 씀 |
 | R41 | 범종각 | 범종(상원사 동종, 1935) — 아직 보지 않음 | 국립중앙박물관(건판 12431) | https://www.emuseum.go.kr/detail?relicId=PS0100100102001243100000 | 공공누리 제1유형 | 2270×3000 | 2026-11-05 | 씀 |
 | R42 | 불이문 | 셋째 문(통도사 불이문, 대한제국기) — 아직 보지 않음 | 국립중앙박물관(건판 323) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032300000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
-| R43 | 천왕문 | 둘째 문(통도사 천왕문, 대한제국기) — 아직 보지 않음 | 국립중앙박물관(건판 322) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032200000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
+| R43 | 천왕문 | 둘째 문 바깥(통도사 천왕문, 대한제국기 유리건판) — 세 칸 문, 가운데 통로 너머로 경내, 앞벽에 신장 벽화. 현판 둘 · 사람 하나는 들이지 않는다 — 가로, 흑백 | 국립중앙박물관(건판 322) | https://www.emuseum.go.kr/detail?relicId=PS0100100102000032200000 | 공공누리 제1유형 | 7795×5811 | 2026-11-05 | 씀 |
 | R44 | 조감도 | 절 넷의 전각 배치를 내려다본 사찰 전도(목판금강산사대사찰전도) — 아직 보지 않음 | 국립중앙박물관(건희 4234) | https://www.emuseum.go.kr/detail?relicId=PS0100100102400423400000 | 공공누리 제1유형 | 1571×3000 | 2026-11-05 | 씀 |
 | R45 | 조감도 | 산 속 절들의 자리(정선 〈금강내산총도〉, 《신묘년 풍악도첩》) — 아직 보지 않음 | 국립중앙박물관(덕수 903-11) | https://www.emuseum.go.kr/detail?relicId=PS0100100100500090300011 | 공공누리 제1유형 | 3000×2776 | 2026-11-05 | 씀 |
 | R46 | 마당 | 경내 전경(금강산 표훈사, 유리건판) — 아직 보지 않음 | 국립중앙박물관(건판 28522) | https://www.emuseum.go.kr/detail?relicId=PS0100100102002852200000 | 공공누리 제1유형 | 3000×2236 | 2026-11-05 | 씀 |
+| R47 | 천왕문 | 사천왕 하나 — 칼을 가슴에 비껴 든 천왕(통도사 천왕문 안, 들어서며 오른쪽 벽 바깥쪽) — 세로 사진, 발밑에 짓밟힌 작은 형상(들이지 않는다) | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_02.jpg | CC0 | 2256×3158 | 2026-11-06 | 씀 |
 
 예경당 — 비워 둔다.
 
@@ -83,7 +84,7 @@
 | 사경실 | R15 | 경상 하나로 방의 중심을 잡는다. 붉은 옻칠의 색은 들이지 않는다(꼴만) |
 | 범종각 | R31 · R17 | 누각은 R31(정면의 2층 종루, 현판 · 사람은 들이지 않는다), 종은 R17(가장 이른 범종의 유곽 · 유두) |
 | 일주문 | R22 | 문이 한가운데 서고 숲길이 이어진다. 현판 글씨 · 사람은 들이지 않는다 |
-| 천왕문 | — | R23 · R43 이 있다. 아직 고르지 않았다 |
+| 천왕문 | R23 · R47 · R43 | 통도사 한 절의 짜임을 따른다(`docs/M-landing-design.md` 4절) — 왼쪽 벽은 용과 여의주 · 탑과 당(R23), 오른쪽 벽은 비파 · 칼(R47, 비파는 고증으로만). 문의 꼴은 R43. 원색과 부릅뜬 얼굴은 들이지 않는다 |
 | 불이문 | 찾는 중 | 후보 R42(통도사 불이문, 공공누리 제1유형, 아직 보지 않음). R21 은 문이 아니라 문 안의 마당이라 장부에서 뺐다 |
 | 마당 | R25 | 흙 마당이 화면의 반을 차지하고 법당이 가운데 선다. 사람은 작다 |
 | 조감도 | R30 | 경내를 비스듬히 내려다본 구도가 지금 조감도(768×512)와 같고 사람 · 글자가 없다. 붓의 결은 R28 로 더한다 |
@@ -124,3 +125,7 @@
 | `tmp/art/seonbang-room2-a-1.jpeg` | 선방 방 — D, 둘째(족자 크게, 금빛 없이) | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room2-b-1.jpeg` | 선방 방 — D, 둘째, 고름 | 시안 A · D3a(`docs/sources/art/gate-d3a.jpg`) — 결만 · 첫 시안 B(꼴만) | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-room3-1.jpeg` | 선방 방 — D, 셋째(장황 옅은 회청). 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들임(원본 `docs/sources/art/seonbang-room.jpg`) | 시안 B 둘째(`seonbang-room2-b-1.jpeg` — 구도와 방) · D3a(`docs/sources/art/gate-d3a.jpg` — 결) | 2026-11-05 | 예 |
+| `tmp/art/cheonwang-left-a-1.jpeg` | 천왕문 — D, 왼쪽 벽(용과 여의주 · 탑과 당). 비스듬한 자리라 오른쪽 벽과 짝이 맞지 않는다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
+| `tmp/art/cheonwang-left-b-1.jpeg` | 천왕문 — D, 왼쪽 벽, 고름(통로에서 정면, 옅은 단청, 얼굴이 고요하다) | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
+| `tmp/art/cheonwang-right-a-1.jpeg` | 천왕문 — D, 오른쪽 벽(비파 · 칼). 눈이 통도사처럼 둥글고 세다, 단청이 조금 짙다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
+| `tmp/art/cheonwang-right-b-1.jpeg` | 천왕문 — D, 오른쪽 벽, 고름(왼쪽 벽 b 와 같은 자리 · 같은 옅음) | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
