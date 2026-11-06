@@ -130,3 +130,4 @@
 | `tmp/art/cheonwang-right-a-1.jpeg` | 천왕문 — D, 오른쪽 벽(비파 · 칼). 눈이 통도사처럼 둥글고 세다, 단청이 조금 짙다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-right-b-1.jpeg` | 천왕문 — D, 오른쪽 벽, 고름(왼쪽 벽 b 와 같은 자리 · 같은 옅음) | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/gate-d3c-1.jpeg` | 일주문 — D3c(2026-11-06 톤 고침: 재료는 A, 색과 명암은 D 시안). B 와 기둥 2px 안. 문 뒤 안개 속 뾰족한 침엽수 몇 그루는 고칠 것 | 시안 D(색과 명암) · 시안 A(재료만) · D3a(`tmp/art/gate-d3a-1.jpeg` — 자리만) | 2026-11-06 | 아니오 |
+| `tmp/art/gate-d3c-fixed-1.jpeg` | 일주문 — D3c 고침, 고름. 편집 한 번으로 문 뒤 안개 속 뾰족한 침엽수를 둥근 소나무로. D 의 결 기준 그림(`docs/sources/art/gate-d3c.jpg`). 현판은 빈 판 그대로(앱이 글자를 얹는다) | D3c(`tmp/art/gate-d3c-1.jpeg` — 편집할 그림) | 2026-11-06 | 아니오 |

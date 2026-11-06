@@ -8,6 +8,7 @@
 #   ruby script/art/two_moods.rb d3a d3b   — D3-일주문 두 장(결은 A 시안과 우리 그림, (가)는 자리만)
 #   ruby script/art/two_moods.rb ogfix     — og 고침(다시 뽑지 않고 편집 한 번: 마당의 차를 지운다)
 #   ruby script/art/two_moods.rb d3c       — D3c-일주문(2026-11-06 톤 고침: 재료는 A, 색과 명암은 D 시안, D3a 는 자리만)
+#   ruby script/art/two_moods.rb d3cfix    — D3c 고침(편집 한 번: 문 뒤 안개 속 뾰족한 침엽수를 둥근 소나무와 안개로)
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -78,6 +79,15 @@ RUNS = {
               GATE, D3C, KOREAN_MOUNTAINS, FORBIDDEN ],
     references: [ File.join(ART, "realism-d-ink-framed-1.jpeg"), File.join(ART, "realism-a-ink-1.jpeg"),
                   File.join(ART, "gate-d3a-1.jpeg") ]
+  },
+  "d3cfix" => {
+    name: "gate-d3c-fixed", aspect: "3:4",
+    prompt: [ "Edit this image. In the misty forest behind the gate, between the two groups of tall pines and above the " \
+              "gate's roof, there are several small pointed, spire-shaped conifers (fir-like trees). Replace each of them " \
+              "with soft rounded Korean pine crowns or with plain mist, matching the surrounding ink lines, hanji texture " \
+              "and washes. Change nothing else: keep the gate, its blank signboard, every tall pine, the mountains, the " \
+              "path, the light, the colors and the framing exactly as they are.", FORBIDDEN ],
+    references: [ File.join(ART, "gate-d3c-1.jpeg") ]
   },
   "og" => {
     name: "og-b", aspect: "16:9",
