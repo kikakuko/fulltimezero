@@ -57,7 +57,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
   NAMED_EXCEPTIONS = {
     "--light-dawn" => "#eef2f5", "--light-day" => "#fbf7ec",      # 첫째 문의 빛 — 때의 색
     "--light-evening" => "#f7e6d6", "--light-night" => "#e8ecf2",
-    "--plaque-wood" => "#241a14", "--plaque-gold" => "#d8c48a",   # 문의 현판
+    "--plaque-wood" => "#241a14",                                 # 문의 현판 — 목판. 글씨는 한지빛(금빛 없음, 2026-11-06)
     "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
     "--obang-red" => "#7a3b30",                                   # 무위의 오방색 가운데 적
     "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
@@ -108,7 +108,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_no_match(/var\(--verdigris\)/, root, "찬 청록이 :root 의 다른 색에 섞였다 — 청록은 몰입 화면의 규칙에서만 쓴다")
     # 흰 쪽으로 미는 것은 카드 바탕 하나뿐이다.
     assert_equal [ "--paper-card" ], root.scan(/(--[\w-]+):[^;]*\bwhite\b/).flatten, "흰색으로 만든 색이 늘었다"
-    assert_equal 9, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
+    assert_equal 8, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
   end
 
   # 부품은 다섯뿐이다. 이 앱에 없는 것 — 태그, 대문자 영문 라벨, 아이콘 줄, 진행 막대,
@@ -310,7 +310,13 @@ class PaletteTest < ActionDispatch::IntegrationTest
         page.css(".gate-plaque").each do |plaque|
           parts = plaque.css(".gate-plaque__board, .gate-plaque__reading").map { |part| part.text.strip }
           assert_equal parts.join(" "), plaque.text.split.join(" "), "현판에 한자와 읽기 말고 다른 것이 있다"
-          assert_match(/\A\p{Han}{3}\z/, parts.first, "현판의 한자가 옛 이름 세 자가 아니다")
+          # 첫째 문(일주문)은 실제 일주문처럼 산문 이름 — 산 이름 세 자와 암자 이름 세 자(無事山 歇心庵, 2026-11-06).
+          # 둘째 · 셋째 문은 옛 문 이름 세 자.
+          if plaque["class"].include?("gate-plaque--stop")
+            assert_match(/\A\p{Han}{3} \p{Han}{3}\z/, parts.first, "첫째 문의 현판이 산 이름과 암자 이름이 아니다")
+          else
+            assert_match(/\A\p{Han}{3}\z/, parts.first, "현판의 한자가 옛 이름 세 자가 아니다")
+          end
           assert_no_match(/\d|제.문|첫째|둘째|셋째|first|second|third|\//i, plaque.text, "현판에 순서가 적혔다")
           assert_operator parts.last.split.size, :<=, 5, "읽기가 뜻풀이가 되었다: #{parts.last}"
         end
@@ -319,6 +325,19 @@ class PaletteTest < ActionDispatch::IntegrationTest
         assert_no_match names, page.css("body").text, "#{door} 의 현판 밖에 문의 이름이 있다"
       end
     end
+  end
+
+  # 현판은 한지빛 흰 글씨 — 금빛은 탑의 한 자에만(§2). 한자 현판은 오른쪽에서 왼쪽으로 읽는다(가로 편액의 전통).
+  # 글자는 본명조(Noto Serif KR) Bold 를 현판에 쓰는 글자만 잘라 들인 것이다.
+  test "현판은 한지빛 글씨로, 오른쪽에서 왼쪽으로 — 금빛이 없다" do
+    css = CSS.read
+    board = css[/\.gate-plaque__board \{[^}]*\}/]
+    assert board, "현판의 판이 없다"
+    assert_match(/color: var\(--paper\);/, board, "현판 글씨가 한지빛이 아니다")
+    assert_no_match(/gilt|gold/, board, "현판에 금빛이 있다")
+    assert_match(/direction: rtl; unicode-bidi: bidi-override;/, board, "현판이 오른쪽에서 왼쪽으로 읽히지 않는다")
+    assert_match(/font-family: "Noto Serif KR Plaque", var\(--serif\);/, board, "현판 글꼴이 본명조가 아니다")
+    assert_no_match(/--plaque-gold/, css, "현판의 금빛 값이 남았다")
   end
 
   test "현판은 지금 선 문의 것만 보인다" do
