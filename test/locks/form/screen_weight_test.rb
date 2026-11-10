@@ -11,12 +11,12 @@ require "test_helper"
 class ScreenWeightTest < ActionDispatch::IntegrationTest
   IMAGES = Rails.root.join("app/assets/images")
   FONTS = Rails.root.join("app/assets/fonts")
-  # 화면 · 그 화면의 CSS 배경 그림(받는 쪽) · 상한(2026-11-10 의 셈을 천 단위로 올린 값 — 마당 751,056 · 선방 1,171,196 ·
-  # 미륵당 714,106). 마당은 새 세션의 첫 화면이라 매일의 문(일주문 B · D3c, 130,349)이 함께 든다 — 가장 무거운 때로 잠근다.
+  # 화면 · 그 화면의 CSS 배경 그림(받는 쪽) · 상한(2026-11-10 의 셈을 천 단위로 올린 값 — 마당 743,204 · 선방 1,163,344 ·
+  # 미륵당 706,254 — 스타일은 원본에서 주석 · 빈칸을 걷은 크기). 마당은 새 세션의 첫 화면이라 매일의 문(일주문 B · D3c, 130,349)이 함께 든다 — 가장 무거운 때로 잠근다.
   SCREENS = {
-    today_path: { backgrounds: %w[cloud-mist.avif], most: 752_000 },
-    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_172_000 },
-    days_path: { backgrounds: %w[cloud-scroll.avif], most: 715_000 }
+    today_path: { backgrounds: %w[cloud-mist.avif], most: 744_000 },
+    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_164_000 },
+    days_path: { backgrounds: %w[cloud-scroll.avif], most: 707_000 }
   }.freeze
 
   setup { sign_in_as users(:one) }
@@ -34,8 +34,9 @@ class ScreenWeightTest < ActionDispatch::IntegrationTest
 
   private
     def common_bytes
-      css = Rails.root.join("app/assets/builds/tailwind.css")
-      css = css.exist? ? css.size : Rails.root.join("app/assets/tailwind/application.css").size
+      # 스타일은 원본에서 주석과 빈칸을 걷은 크기로 잰다 — 빌드 결과(builds/tailwind.css)는 손질하는 곳마다 조금씩 달라(로컬과
+      # CI 가 14,573 바이트 달랐다, 2026-11-10) 상한이 흔들린다.
+      css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "").gsub(/\s+/, " ").bytesize
       js = Rails.root.glob("app/javascript/**/*.js").sum(&:size) + Rails.root.glob("vendor/javascript/*.js").sum(&:size) +
            %w[turbo-rails stimulus-rails].sum do |gem|
              Gem.loaded_specs[gem] ? Pathname(Gem.loaded_specs[gem].full_gem_path).glob("app/assets/javascripts/*.min.js").sum(&:size) : 0

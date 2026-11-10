@@ -86,8 +86,8 @@ class LandingTest < ActionDispatch::IntegrationTest
 
   private
     def common_bytes
-      css = Rails.root.join("app/assets/builds/tailwind.css")
-      css = css.exist? ? css.size : Rails.root.join("app/assets/tailwind/application.css").size
+      # 스타일은 원본에서 주석과 빈칸을 걷은 크기 — 빌드 결과는 손질하는 곳마다 달라 상한이 흔들린다(screen_weight_test 와 같은 셈).
+      css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "").gsub(/\s+/, " ").bytesize
       js = Rails.root.glob("app/javascript/**/*.js").sum(&:size) +
            Rails.root.glob("vendor/javascript/*.js").sum(&:size) +
            %w[turbo-rails stimulus-rails].sum do |gem|
