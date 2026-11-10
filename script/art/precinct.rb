@@ -3,6 +3,7 @@
 # 경내 그림 새로 그리기(docs/M-art-renewal.md, 2026-11-10). 결은 첫 화면과 같은 톤 — 경내 기준 세 장(D3c · 선방 방 넷째 · 천왕문 왼쪽 벽 c)을
 # 첫째 참조로. 현판은 비운다(앱이 얹는다). 원본은 tmp/art/ 에만. 고른 뒤에 다음 그림으로 간다.
 #   ruby script/art/precinct.rb compound   — 조감도 두 장(1K, 4:3 으로 뽑아 위아래를 잘라 3:2 에 가깝게)
+#   ruby script/art/precinct.rb compound2  — 다시 두 장: b 의 가까움과 가운데 축에, 문 셋을 따로 세우고 일주문을 그림 아래 안에
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -38,10 +39,30 @@ COMPOUND = "A bird's-eye view, looking obliquely down from a moderate height at 
 KOREAN_MOUNTAINS = "The mountains are Korean: soft rounded ridges layered one behind another, pine trees, and mist between " \
                    "the ridges. No Alpine rock spires."
 
+COMPOUND2_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — " \
+                  "match their ink lines, hanji, washes and warm full color; the fourth sets the distance, the viewpoint and the " \
+                  "central axis of the composition — keep them, but fix what is missing in it; the fifth only shows how the halls " \
+                  "of a Korean mountain temple are arranged on a slope — do not copy its photographic look."
+COMPOUND2 = "A bird's-eye view, looking obliquely down at a Korean mountain temple on a forested slope in morning mist, as close " \
+            "as the fourth reference. One straight stone path runs up the central axis from the bottom of the picture to the " \
+            "main hall, and on it stand **three separate gates, one above another, each clearly apart**: near the bottom of " \
+            "the picture — fully inside the picture, not cut off by the bottom edge — a small one-pillar gate (iljumun: one " \
+            "roof on two pillars, no walls) at the edge of the pine forest; above it, after some steps, a gate hall with " \
+            "walls on both sides (cheonwangmun); above that, set in the courtyard wall, a third gate (burimun) opening onto " \
+            "the packed-earth courtyard. At the back of the courtyard, in the center, the main hall — the largest building, " \
+            "deep double-curved tiled roof. Around the courtyard: on the left a small worship hall and a meditation hall, a " \
+            "long sutra-storage hall lower on the left; on the right a scripture-copying hall, a small hall on a rock ledge, " \
+            "and a two-storey bell pavilion lower on the right. Rounded Korean ridges and mist behind; the upper fifth of the " \
+            "picture is sky and mist. All signboards blank."
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
               [ COMPOUND_ROLES, COMPOUND, KOREAN_MOUNTAINS, STYLE, FORBIDDEN ] ] ]
+  end,
+  "compound2" => %w[compound-c compound-d].to_h do |name|
+    [ name, [ STANDARD + [ File.join(ART, "compound-b-1.jpeg"), File.join(REFS, "R30.jpg") ],
+              [ COMPOUND2_ROLES, COMPOUND2, KOREAN_MOUNTAINS, STYLE, FORBIDDEN ] ] ]
   end
 }.freeze
 
