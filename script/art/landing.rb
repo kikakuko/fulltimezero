@@ -5,6 +5,8 @@
 # 현판은 비워 둔다(앱이 글자를 얹는다). 한 번에 넷까지라 둘로 나눠 부른다. 원본은 tmp/art/ 에만.
 #   ruby script/art/landing.rb walls     — 천왕문 왼쪽 벽 둘 · 오른쪽 벽 하나 · 선방 방 하나
 #   ruby script/art/landing.rb outer     — 원경(B) 둘 · 불이문(D) 둘
+#   ruby script/art/landing.rb fix       — 원경 far-b 편집 한 번(먼 산 중턱에 절) · 오른쪽 벽 다시 한 장(뒷벽 · 바닥을 ④ 처럼)
+#   ruby script/art/landing.rb aerial    — 원경 새로(B, 아주 높이서 비스듬히 내려다봄) 두 장 — 화면 아래 숲 가장자리에 작은 일주문
 #   ruby script/art/landing.rb robe      — 오른쪽 벽 c 의 칼 든 천왕 옷만 편집 한 번(옅은 황토 → 옅은 청록 · 주황 담채)
 require_relative "monorouter"
 
@@ -39,6 +41,19 @@ KOREAN_MOUNTAINS = "The mountains are Korean: soft rounded ridges layered one be
 B = "Style B: a photorealistic painting. Light and materials feel real — early morning light slanting in, mist — with only " \
     "a few brush marks left visible, so it reads as a painting rather than a photograph."
 
+# 원경 — 아주 높이서 비스듬히 내려다본 B. og 그림(og/ko.jpg 의 원본)이 결과 장면의 첫째 참조다.
+AERIAL_REFS = [ File.join(ART, "og-b-fixed-1.jpeg"), File.join(REFS, "R03.jpg"), File.join(ART, "gate-b-1.jpeg") ].freeze
+AERIAL_ROLES = "Use the references only for these roles: the first for the scene, the rendering, the light and the colors " \
+               "— this picture is the same world seen from much higher and farther away; the second for the shapes of the " \
+               "mountains; the third only for what the small one-pillar gate looks like."
+AERIAL = "A bird's-eye view from very high up and far away, looking obliquely down over layered soft rounded Korean " \
+         "mountain ranges in morning mist. Around the middle of the picture, a small Korean mountain temple — a cluster of " \
+         "dark tiled roofs — nestles small on a mountain slope. Below it, a forest path winds down through the trees, and " \
+         "near the bottom of the picture, at the edge of the forest, one small one-pillar temple gate (iljumun) stands on " \
+         "the path, tiny in the landscape. The upper third of the picture is open sky and mist. Much higher and farther " \
+         "away than an ordinary aerial view of a temple courtyard — the temple and the gate are small."
+AERIAL_FORBIDDEN = FORBIDDEN + " No spiky pointed conifer forests (fir or spruce), no people, no cars, no letters, no sun, no moon."
+
 def wall(previous) = [ D3C, A, File.join(ART, previous) ]
 
 RUNS = {
@@ -68,6 +83,29 @@ RUNS = {
         "darker and warmer than the third reference — wood in warm brown washes, soft shadows in the corners and under " \
         "the cushions — but keep it a little lighter and quieter than the first reference, because the scroll is the main " \
         "thing in this picture. The scroll's mounting stays a very pale grey-blue.", STYLE, FORBIDDEN ] ]
+  },
+  "fix" => {
+    "far-b-temple" => [ [ File.join(ART, "far-b-1.jpeg") ],
+      [ "Edit this image. On the slope of the middle-distance mountain, in the center of the picture, add a few small " \
+        "Korean temple roofs (dark grey tiled roofs, a small cluster of three or four buildings) half hidden in the mist, " \
+        "small and far away, so that the dirt path in the foreground seems to lead toward them through the forest. " \
+        "Change nothing else: keep every ridge, the mist, the river, the pine trees, the path, the light, the colors and " \
+        "the framing exactly as they are.", B, FORBIDDEN ] ],
+    "cheonwang-right-d" => [ [ D3C, A, File.join(ART, "cheonwang-right-c-robe-1.jpeg"), File.join(ART, "cheonwang-left-c-1.jpeg") ],
+      [ "Use the references only for these roles: the first sets the color and the values; the second sets only the " \
+        "materials (ink outlines, hanji fibers, flat washes); the third sets the composition, the two kings, what they " \
+        "hold and the colors of their robes — keep the sword-holding king's robes in the same pale blue-green and soft " \
+        "orange washes, no yellow or gold; the fourth is the opposite wall of the same gate hall — make the back wall, " \
+        "the rafters, the rail and the floor the same warm dark wood as in it, so the two walls match.",
+        KINGS, "The king on the left holds a bipa (a Korean pear-shaped four-string lute) across his body and plucks it. " \
+        "The king on the right holds a straight sword diagonally across his chest, the other hand on his hip. Both are " \
+        "mature bearded men with different faces. The back wall is warm dark wood, not white; the floor is dark wood.",
+        STYLE, FORBIDDEN ] ]
+  },
+  "aerial" => {
+    "aerial-a" => [ AERIAL_REFS, [ AERIAL_ROLES, AERIAL, KOREAN_MOUNTAINS, B, AERIAL_FORBIDDEN ] ],
+    "aerial-b" => [ AERIAL_REFS, [ AERIAL_ROLES, AERIAL + " Let the path make one or two wide bends so the eye follows it " \
+                                   "from the gate up to the temple.", KOREAN_MOUNTAINS, B, AERIAL_FORBIDDEN ] ]
   },
   "robe" => {
     "cheonwang-right-c-robe" => [ [ File.join(ART, "cheonwang-right-c-1.jpeg") ],

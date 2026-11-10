@@ -50,13 +50,15 @@
 
   <%# 전각 화면에서는 머리줄과 아래 문이 들어선 뒤 잠깐 물러난다(hush) — 그림이 화면을 채운다. %>
   <body <%= tag.attributes(data: { controller: "hush" }) if content_for?(:hall) %>>
-    <%# 매일 지나는 문. 첫째 문의 빛이 짧게 다가와 한 번 넘치고, 가라앉으면
-        그대로 마당이다. 글은 없다. 아무 곳이나 누르면 곧장 끝난다. %>
+    <%# 매일 지나는 문. 일주문 B 에 첫째 문의 빛이 짧게 다가와 한 번 넘치고, 그 사이 문을 지나며 D3c 로 겹쳐 바뀐다 —
+        돌아오는 사람은 한 걸음만(docs/M-landing-design.md). 가라앉으면 그대로 마당이다. 글은 없다. 아무 곳이나 누르면
+        곧장 끝난다. %>
     <% if daily_door_due? %>
       <div class="daily-door" data-controller="daily-door" data-light="<%= Current.user.gate_light %>"
            data-action="click->daily-door#pass animationend->daily-door#settled" aria-hidden="true">
         <div class="gates__frame">
-          <%= picture_image_tag "gates.webp", class: "gates__image", alt: "", draggable: false %>
+          <%= picture_image_tag "landing_gate_b.webp", class: "gates__shot gates__shot--gate-b is-here", alt: "", draggable: false %>
+          <%= picture_image_tag "landing_gate_d.webp", class: "gates__shot gates__shot--gate-d daily-door__within", alt: "", draggable: false %>
           <span class="gates__light"></span>
           <%= render "onboarding/plaque", door: "stop" %>
         </div>

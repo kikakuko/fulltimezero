@@ -6,8 +6,13 @@
 // 있고, 여기서는 때가 되면 장막을 다음 문으로 옮기고 마지막에 마당으로 가는 GET 폼을
 // 보낼 뿐이다. 잘했다는 말도, 손짓도 없다.
 import { Controller } from "@hotwired/stimulus"
+import { showStep } from "controllers/gates_steps"
 
-// 빛의 길 --light-pass(6.4초)의 때 — 천왕문에 닿는 때 · 불이문에 닿는 때 · 온통 밝은 때 · 마당.
+// 그림의 걸음(docs/M-landing-design.md) — 문을 지나며 D3c(0) · 천왕문 왼쪽 벽 · 오른쪽 벽 · 불이문. 한 걸음에 --entry-time(1.6초).
+const WALL_LEFT_AT = 1600
+const WALL_RIGHT_AT = 3000
+const BURIMUN_AT = 4400
+// 장막과 둘째 · 셋째 문의 한 줄의 때 — 천왕문에 닿는 때 · 불이문에 닿는 때 · 온통 밝은 때 · 마당.
 const NAMING_AT = 2200
 const BREATH_AT = 4200
 const OPEN_AT = 6000
@@ -28,9 +33,16 @@ export default class extends Controller {
     // 움직임을 줄인 화면에서는 빛의 길이 없다 — 곧장 마당이다.
     if (!this.gates || matchMedia("(prefers-reduced-motion: reduce)").matches) return this.gateTarget.requestSubmit()
 
+    // 같은 자리의 gates 손에 걸음을 옮겼다고 알린다 — 늦게 온 첫 걸음 설정이 지나는 그림을 되돌리지 않게.
+    const gates = this.application.getControllerForElementAndIdentifier(this.element, "gates")
+    if (gates) gates.moved = true
     this.element.classList.add("passing")
     this.gates.classList.add("gates--passing")
+    showStep("within")
     this.timers = [
+      setTimeout(() => showStep("wall-left"), WALL_LEFT_AT),
+      setTimeout(() => showStep("wall-right"), WALL_RIGHT_AT),
+      setTimeout(() => showStep("burimun"), BURIMUN_AT),
       setTimeout(() => this.shift("naming"), NAMING_AT),
       setTimeout(() => this.shift("breath"), BREATH_AT),
       setTimeout(() => this.shift("open"), OPEN_AT),

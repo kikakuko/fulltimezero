@@ -378,6 +378,12 @@ en:
 
   threshold:
     later: "Later"
+    # ① 원경에서 일주문으로 다가가는 손짓(docs/M-landing-design.md).
+    far:
+      # ① 원경 — 내려다보는 산의 이름과 이 앱의 이름. 산 이름은 옛 이름이라 인용 원문 예외(§5) 아래 있다.
+      mountain: "無事山"
+      name: "fulltimezero"
+      go: "Walk closer"
     stop:
       line: "I have stopped"
       # 경이 하는 말이다 — 인용 원문은 예외(§5). 출전과 늘 함께 보인다.
@@ -387,14 +393,16 @@ en:
     naming:
       question: "What is moving"
       go: "Pass through"
+      # ④ 천왕문 왼쪽 벽에서 오른쪽 벽으로.
+      walk: "Turn"
     breath:
       line: "It has never moved"
     # 현판 — 설명이 아니라 건축이다. 옛 이름이므로 인용 원문 예외(§5).
     # 한자는 언어와 무관하게 그대로, 아래의 읽기만 그 언어로. 뜻풀이는 쓰지 않는다.
     plaques:
       stop:
-        han: "無事山 歇心庵"
-        reading: "Musa-san Heolsim-am"
+        han: "歇心庵"
+        reading: "Heolsim-am"
       naming:
         han: "天王門"
         reading: "Gate of the Four Kings"

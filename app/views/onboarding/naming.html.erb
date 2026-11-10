@@ -5,7 +5,12 @@
 
 <%= render "gates", state: "naming" %>
 
-<div class="threshold threshold--naming" data-controller="gates" data-gates-state-value="naming">
+<%# ④ 천왕문 왼쪽 벽 — 손짓 하나로 ⑤ 오른쪽 벽. 한 줄을 적는 자리는 ⑤ 에 선다. %>
+<div class="threshold threshold--naming" data-step="wall-left" data-controller="gates" data-gates-state-value="naming">
+  <p class="threshold__walk">
+    <button type="button" class="button-primary" data-action="gates#walk"><%= t("threshold.naming.walk") %></button>
+  </p>
+
   <%# 계정이 있든 없든 같은 칸이다. 없으면 세션이 들고 있는다.
       손님은 여기 서지 않는다 — 첫째 문에서 한 자리로 지난다(onboarding#naming 이 돌려보낸다). %>
   <%= form_with scope: :user, url: threshold_naming_path, method: :patch, class: "threshold__form" do |f| %>

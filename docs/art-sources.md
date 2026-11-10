@@ -114,7 +114,7 @@
 | `tmp/art/realism-c-photo-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/realism-d-ink-framed-1.jpeg` | 일주문 | R22 · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · 시안 B(구도) | 2026-11-05 | 아니오 |
 | `tmp/art/seonbang-b-1.jpeg` | 선방 — 쓰지 않음: 산세가 한국 산이 아니고, 코끼리가 그림 안에 들어가 흰빛 · 걸음 · 뒤척임이 멈춘다. 앉은 자세만 코끼리 SVG 를 다시 그릴 때 참조 | R03 · 시안 B(결) · 앱의 그림(`elephant_field.webp`) · `docs/drawings/elephant_sitting.png`(자세) | 2026-11-05 | 아니오 |
-| `tmp/art/gate-b-1.jpeg` | 일주문 — B(문 밖) | R22 · R03 · 시안 B | 2026-11-05 | 아니오 |
+| `tmp/art/gate-b-1.jpeg` | 일주문 — B(문 밖). 768 폭으로 줄여 `app/assets/images/landing_gate_b.{avif,webp}` 로 들임 — 첫 화면 ② (원본 `docs/sources/art/landing-gate-b.jpg`) | R22 · R03 · 시안 B | 2026-11-05 | 예 |
 | `tmp/art/gate-d2-1.jpeg` | 일주문 — D(문 안) | B-일주문(구도) · 시안 D(재료) · 앱의 그림(`mireukdang.webp`) | 2026-11-05 | 아니오 |
 | `tmp/art/og-b-1.jpeg` | og — B | R03 · R30 · 시안 B | 2026-11-05 | 아니오 |
 | `tmp/art/gate-d3a-1.jpeg` | 일주문 — D3(문 안), 고름. D 의 결 기준 그림(`docs/sources/art/gate-d3a.jpg`) | 시안 A(결) · 앱의 그림 둘(`elephant_field.webp` · `mireukdang.webp`) · B-일주문(자리만) | 2026-11-05 | 아니오 |
@@ -130,13 +130,19 @@
 | `tmp/art/cheonwang-right-a-1.jpeg` | 천왕문 — D, 오른쪽 벽(비파 · 칼). 눈이 통도사처럼 둥글고 세다, 단청이 조금 짙다 | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-right-b-1.jpeg` | 천왕문 — D, 오른쪽 벽, 고름(왼쪽 벽 b 와 같은 자리 · 같은 옅음) | R23 · R47 · R43(짜임) · D3a(`docs/sources/art/gate-d3a.jpg`) · 선방 방(`docs/sources/art/seonbang-room.jpg`) — 결 | 2026-11-06 | 아니오 |
 | `tmp/art/gate-d3c-1.jpeg` | 일주문 — D3c(2026-11-06 톤 고침: 재료는 A, 색과 명암은 D 시안). B 와 기둥 2px 안. 문 뒤 안개 속 뾰족한 침엽수 몇 그루는 고칠 것 | 시안 D(색과 명암) · 시안 A(재료만) · D3a(`tmp/art/gate-d3a-1.jpeg` — 자리만) | 2026-11-06 | 아니오 |
-| `tmp/art/gate-d3c-fixed-1.jpeg` | 일주문 — D3c 고침, 고름. 편집 한 번으로 문 뒤 안개 속 뾰족한 침엽수를 둥근 소나무로. D 의 결 기준 그림(`docs/sources/art/gate-d3c.jpg`). 현판은 빈 판 그대로(앱이 글자를 얹는다) | D3c(`tmp/art/gate-d3c-1.jpeg` — 편집할 그림) | 2026-11-06 | 아니오 |
-| `tmp/art/cheonwang-left-c-1.jpeg` | 천왕문 — D(새 톤), 왼쪽 벽. 수염 있는 두 얼굴이 서로 다르고, 벽이 짙은 나무빛 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 왼쪽 벽 b(`tmp/art/cheonwang-left-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
+| `tmp/art/gate-d3c-fixed-1.jpeg` | 일주문 — D3c 고침, 고름. 편집 한 번으로 문 뒤 안개 속 뾰족한 침엽수를 둥근 소나무로. D 의 결 기준 그림(`docs/sources/art/gate-d3c.jpg`). 현판은 빈 판 그대로(앱이 글자를 얹는다). `app/assets/images/landing_gate_d.{avif,webp}` 로 들임 — 첫 화면 ③ · 매일의 문 | D3c(`tmp/art/gate-d3c-1.jpeg` — 편집할 그림) | 2026-11-06 | 예 |
+| `tmp/art/cheonwang-left-c-1.jpeg` | 천왕문 — D(새 톤), 왼쪽 벽. 수염 있는 두 얼굴이 서로 다르고, 벽이 짙은 나무빛. 고름. `app/assets/images/landing_wall_left.{avif,webp}` 로 들임 — 첫 화면 ④ | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 왼쪽 벽 b(`tmp/art/cheonwang-left-b-1.jpeg` — 자리) | 2026-11-06 | 예 |
 | `tmp/art/cheonwang-left-d-1.jpeg` | 천왕문 — D(새 톤), 왼쪽 벽. 얼굴은 다르나 뒷벽이 아직 희다 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 왼쪽 벽 b(`tmp/art/cheonwang-left-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
 | `tmp/art/cheonwang-right-c-1.jpeg` | 천왕문 — D(새 톤), 오른쪽 벽(비파 · 칼). 뒷벽이 아직 희고, 칼의 천왕 옷이 옅은 황토빛 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 천왕문 오른쪽 벽 b(`tmp/art/cheonwang-right-b-1.jpeg` — 자리) | 2026-11-06 | 아니오 |
 | `tmp/art/seonbang-room4-1.jpeg` | 선방 방 — D(새 톤), 넷째, 고름. 768 폭으로 줄여 `app/assets/images/seonbang_room.{avif,webp}` 로 들임 — 셋째를 갈음(원본 `docs/sources/art/seonbang-room4.jpg`). 나무가 따뜻하고 짙어졌다. 족자 빈 면은 셋째와 같은 자리(26.5% · 20.7% · 47.3% · 39.0%) | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 선방 방 셋째(`tmp/art/seonbang-room3-1.jpeg` — 자리) | 2026-11-06 | 예 |
 | `tmp/art/cheonwang-right-c-robe-1.jpeg` | 천왕문 — 오른쪽 벽 c 고침, 고름. 편집 한 번으로 칼 든 천왕의 옷만 옅은 황토(금빛 쪽) → 옅은 청록 · 주황 담채. 뒷벽은 아직 희다 | 천왕문 오른쪽 벽 c(`tmp/art/cheonwang-right-c-1.jpeg` — 편집할 그림) | 2026-11-06 | 아니오 |
 | `tmp/art/far-a-1.jpeg` | 원경 — B. 겹겹의 능선과 숲길, 먼 지붕 하나. 가운데에 뾰족한 침엽수가 서서 쓰지 않음 | 일주문 B(`tmp/art/gate-b-1.jpeg` — 결과 빛) · R03(산) · R30(먼 절의 자리) | 2026-11-06 | 아니오 |
-| `tmp/art/far-b-1.jpeg` | 원경 — B, 고름. 안개 낀 능선 · 물길, 소나무 사이로 들어가는 흙길, 절은 보이지 않는다 | 일주문 B(`tmp/art/gate-b-1.jpeg` — 결과 빛) · R03(산) · R30(먼 절의 자리) | 2026-11-06 | 아니오 |
-| `tmp/art/burimun-a-1.jpeg` | 불이문 — D(새 톤), 고름. 정면, 깊은 지붕 · 붉은 기둥, 통로 너머 경내. 현판은 빈 판 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · R42(문의 꼴) | 2026-11-06 | 아니오 |
+| `tmp/art/far-b-1.jpeg` | 원경 — B, 고름. 안개 낀 능선 · 물길, 소나무 사이로 들어가는 흙길, 절은 보이지 않는다. 2026-11-06 에 버드아이 원경(aerial)으로 갈음해 쓰지 않음 | 일주문 B(`tmp/art/gate-b-1.jpeg` — 결과 빛) · R03(산) · R30(먼 절의 자리) | 2026-11-06 | 아니오 |
+| `tmp/art/burimun-a-1.jpeg` | 불이문 — D(새 톤), 고름. 정면, 깊은 지붕 · 붉은 기둥, 통로 너머 경내. 현판은 빈 판. `app/assets/images/landing_burimun.{avif,webp}` 로 들임 — 첫 화면 ⑥, 빈 판에 앱이 不二門 을 얹는다 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · R42(문의 꼴) | 2026-11-06 | 예 |
 | `tmp/art/burimun-b-1.jpeg` | 불이문 — D(새 톤). 돌계단 위로 조금 올려다봄, 문이 작다 | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · R42(문의 꼴) | 2026-11-06 | 아니오 |
+| `tmp/art/far-b-temple-1.jpeg` | 원경 — far-b 편집(먼 산 중턱에 절). 버드아이 원경으로 방향을 틀어 쓰지 않음 | 원경 far-b(`tmp/art/far-b-1.jpeg` — 편집할 그림) | 2026-11-06 | 아니오 |
+| `tmp/art/aerial-a-1.jpeg` | 원경 — B, 아주 높이서 비스듬히 내려다봄, 고름. 산자락에 작게 안긴 절, 굽이진 숲길, 화면 아래 작은 일주문(56.2% · 91.9%). `app/assets/images/landing_far.{avif,webp}` 로 들임 — 첫 화면 ① (원본 `docs/sources/art/landing-far.jpg`) | og(`tmp/art/og-b-fixed-1.jpeg` — 장면 · 결) · R03(산) · 일주문 B(`tmp/art/gate-b-1.jpeg` — 작은 문의 꼴) | 2026-11-06 | 예 |
+| `tmp/art/aerial-b-1.jpeg` | 원경 — B, 버드아이. 절이 크고 가까워 「훨씬 높고 멀리서」가 덜하다 | og(`tmp/art/og-b-fixed-1.jpeg` — 장면 · 결) · R03(산) · 일주문 B(`tmp/art/gate-b-1.jpeg` — 작은 문의 꼴) | 2026-11-06 | 아니오 |
+| `tmp/art/cheonwang-right-d-1.jpeg` | 천왕문 — D(새 톤), 오른쪽 벽 다시, 고름. 뒷벽 · 바닥을 왼쪽 벽 c 처럼 따뜻한 나무빛으로, 옷은 편집한 담채 그대로. `app/assets/images/landing_wall_right.{avif,webp}` 로 들임 — 첫 화면 ⑤ | D3c(`docs/sources/art/gate-d3c.jpg` — 색과 명암) · 시안 A(재료) · 오른쪽 벽 c 고침(`tmp/art/cheonwang-right-c-robe-1.jpeg` — 자리 · 지물 · 옷) · 왼쪽 벽 c(`tmp/art/cheonwang-left-c-1.jpeg` — 벽과 바닥) | 2026-11-06 | 예 |
+| `app/assets/images/gates.{avif,webp}` | 문 셋 — 옛 그림 한 장(원본 `docs/sources/gates.png`). 2026-11-06 첫 화면의 걸음 그림 여섯으로 갈음해 앱에서 뺐다 | 없음(장부 이전) | 2026-09-18 | 물러남 |
+| `app/assets/images/four_king_{left,right}.{avif,webp}` | 둘째 문 담 위의 사천왕 둘 — 옛 그림(원본 `docs/sources/four_kings.png`, 책이 있어 사천왕의 지물이 아니다). 2026-11-06 천왕문 벽 그림 둘로 갈음해 앱에서 뺐다 | 없음(장부 이전) | 2026-09-18 | 물러남 |

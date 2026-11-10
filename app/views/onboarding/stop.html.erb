@@ -11,7 +11,20 @@
     일주문에서 천왕문을 지나 불이문으로 가며 작아지고 밝아지다가, 불이문에서 온통
     밝아져 마당이다(passage_controller). 둘째 · 셋째 문의 한 줄은 빛이 그 문에 닿을 때
     같은 자리에 떠오른다. 보내는 것은 없다 — 마당으로 가는 GET 하나뿐이다. %>
-<div class="threshold threshold--stop" data-controller="<%= guest? ? "gates passage" : "gates" %>" data-gates-state-value="stop">
+<%# ① 원경에서는 다가가는 손짓 하나(「나중에」는 늘 있다). 아무 곳이나 눌러도 다가간다. ② 일주문에 서면 빛이 다가오고
+    아래의 글이 떠오른다 — 글의 늦춤은 ② 에 들어선 때부터다(CSS). %>
+<div class="threshold threshold--stop" data-step="far"
+     data-controller="<%= guest? ? "gates passage" : "gates" %>" data-gates-state-value="stop"
+     data-action="click->gates#approach">
+  <%# ① 원경의 이름 — 산 이름(無事山)과 이 앱의 이름을 나란히. 일주문의 현판에는 절 이름(歇心庵)만 건다. %>
+  <p class="threshold__mountain" aria-hidden="true">
+    <span class="threshold__mountain-han" lang="zh-Hant"><%= t("threshold.far.mountain") %></span>
+    <span class="threshold__mountain-name"><%= t("threshold.far.name") %></span>
+  </p>
+  <p class="threshold__far">
+    <button type="button" class="button-primary" data-action="gates#approach"><%= t("threshold.far.go") %></button>
+  </p>
+
   <% if guest? %>
     <div class="passage__lines">
       <p class="gates__line passage__line--stop"><%= t("threshold.stop.line") %></p>
@@ -32,7 +45,7 @@
       <button type="button" class="button-primary" data-action="click->passage#enter"><%= t("threshold.stop.go") %></button>
       <%= form_with url: today_path, method: :get, data: { passage_target: "gate" } do %><% end %>
     <% else %>
-      <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "button-primary" %>
+      <%= link_to t("threshold.stop.go"), threshold_naming_path, class: "button-primary", data: { action: "gates#pass" } %>
     <% end %>
   </p>
 

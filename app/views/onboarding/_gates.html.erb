@@ -1,28 +1,28 @@
-<%# 그림 한 장과 그 위의 장막. 문을 옮겨 가는 동안 그림은 그대로 남고
-    (data-turbo-permanent), 장막만 다음 상태로 옮아간다.
-    그림은 꾸밈이 아니라 자리이지만, 이름을 붙이지 않으므로 대체 글도 없다.
+<%# 첫 화면의 그림 — 걸음마다 한 장(docs/M-landing-design.md). 원경(B) → 일주문 B → D3c → 천왕문 왼쪽 벽 → 오른쪽 벽 → 불이문.
+    여섯 장이 한 틀에 겹쳐 서 있고 지금 걸음의 한 장만 보인다. 지금 걸음의 그림만 처음에 받고(eager), 나머지는 보이지 않는
+    동안 받지 않는다(lazy) — 다음 걸음의 그림은 걸음이 멎은 뒤 미리 받는다(gates_steps). 그림은 꾸밈이 아니라 자리이지만,
+    이름을 붙이지 않으므로 대체 글도 없다. 문을 옮겨 가는 동안 틀은 그대로 남고(data-turbo-permanent), 장막과 걸음만 바뀐다.
 
-    첫째 문에는 장막 대신 빛이 다가온다 — 둥근 빛이 먼 문에서 앞의 문으로
-    내려오고, 흰빛이 한 번 넘쳤다가 가라앉는다. 그림은 움직이지 않는다.
-    빛의 색은 때를 따른다(GateLight). 계정이 없으면 브라우저가 정한다. %>
-<div id="gates" class="gates" data-turbo-permanent aria-hidden="true"
+    현판은 그림 속 빈 판 위에 앱이 얹는 글자다 — 첫째 문(일주문 B · D3c 의 판)과 셋째 문(불이문의 판). 천왕문 벽 그림에는
+    판이 없어 둘째 문의 현판은 걸지 않는다. 첫째 문의 현판은 절 이름(歇心庵)만 — 산 이름(無事山)과
+    이 앱의 이름 「fulltimezero」는 ① 원경의 하늘에 선다(stop.html.erb). %>
+<% first = { "stop" => "far", "naming" => "wall-left", "breath" => "burimun" }.fetch(state) %>
+<% shots = { "far" => "far", "gate-b" => "gate_b", "gate-d" => "gate_d", "wall-left" => "wall_left",
+             "wall-right" => "wall_right", "burimun" => "burimun" } %>
+<% here = { "far" => "far", "wall-left" => "wall-left", "burimun" => "burimun" }.fetch(first) %>
+<div id="gates" class="gates" data-turbo-permanent aria-hidden="true" data-step="<%= first %>"
      <% if authenticated? %>data-light="<%= Current.user.gate_light %>"<% end %>>
   <div class="gates__frame">
-    <%= picture_image_tag "gates.webp", class: "gates__image", alt: "", draggable: false %>
-    <%# 사천왕 둘 — 둘째 문(천왕문)을 사이에 두고 담 위에 마주 선다. 그림 안의
-        인물이지 앱의 도상이 아니다. 문 셋의 그림이라 움직이지 않고, 이름도
-        적지 않는다. %>
-    <div class="gates__kings">
-      <%= picture_image_tag "four_king_left.webp", class: "gates__king gates__king--left", alt: "", draggable: false %>
-      <%= picture_image_tag "four_king_right.webp", class: "gates__king gates__king--right", alt: "", draggable: false %>
-    </div>
+    <% shots.each do |shot, file| %>
+      <%= picture_image_tag "landing_#{file}.webp", alt: "", draggable: false,
+            class: class_names("gates__shot", "gates__shot--#{shot}", "is-here": shot == here),
+            loading: (shot == here ? "eager" : "lazy") %>
+    <% end %>
     <div class="gates__veil" data-state="<%= state %>"></div>
     <span class="gates__light"></span>
     <div class="gates__scrim"></div>
-    <%# 현판 셋. 지금 선 문의 것만 보이고, 빛이 그 문에 닿을 때 떠오른다.
-        그림은 문을 옮겨 가는 동안 남아 있으므로 셋을 모두 걸어 두고 장막의
-        상태로 고른다. 순서를 적지 않는다. %>
-    <% %w[stop naming breath].each do |door| %>
+    <%# 현판 둘. 지금 선 걸음의 것만 보이고, 빛이 그 문에 닿을 때 떠오른다. 순서를 적지 않는다. %>
+    <% %w[stop breath].each do |door| %>
       <%= render "plaque", door: door %>
     <% end %>
   </div>
