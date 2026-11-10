@@ -49,8 +49,11 @@ class ArtSourcesTest < ActiveSupport::TestCase
     assert_no_match(/공공누리 제?[234]유형|CC BY-(?:NC|ND)|NoDerivs|비영리/, section("참조"), "참조에 넣을 수 없는 조건이 있다")
   end
 
-  test "예경당은 비워 두고, 사경실은 방의 꼴로만 쓴다" do
-    assert_empty references.select { |row| row["전각"] == "예경당" }, "예경당의 참조가 골라졌다 — 무엇을 하는 전각인지 먼저 정한다"
+  # 예경당은 절의 전각이다(STATUS — 보현행원품 예경제불). 비어 있던 것은 그림의 참조뿐이다 — 참조는 아직 고르지 않았다.
+  test "예경당 = 절의 전각(참조는 아직 고르지 않았다), 사경실은 방의 꼴로만 쓴다" do
+    assert_match(/\*\*예경당 = 절의 전각\*\*/, LEDGER.read, "장부가 예경당을 절의 전각으로 적지 않는다")
+    assert_empty references.select { |row| row["전각"] == "예경당" },
+      "예경당의 참조가 골라졌다 — 절의 그림 참조를 고를 때는 이 줄을 먼저 고친다(그림의 결 · 이용 조건)"
     references.select { |row| row["전각"] == "사경실" }.each do |row|
       assert row["무엇"].start_with?("방의 꼴"), "#{row["번호"]} — 사경실 참조가 방의 꼴이 아니다"
       assert_no_match(/감지|금니|사경 유물|다라니/, row["무엇"], "#{row["번호"]} — 감지 · 금니의 색을 들인다(§2)")
