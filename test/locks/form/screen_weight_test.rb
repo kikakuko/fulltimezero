@@ -11,11 +11,12 @@ require "test_helper"
 class ScreenWeightTest < ActionDispatch::IntegrationTest
   IMAGES = Rails.root.join("app/assets/images")
   FONTS = Rails.root.join("app/assets/fonts")
-  # 화면 · 그 화면의 CSS 배경 그림(받는 쪽) · 상한(2026-11-10 의 셈을 천 단위로 올린 값 — 마당 743,204 · 선방 1,163,344 ·
-  # 미륵당 706,254 — 스타일은 원본에서 주석 · 빈칸을 걷은 크기). 마당은 새 세션의 첫 화면이라 매일의 문(일주문 B · D3c, 130,349)이 함께 든다 — 가장 무거운 때로 잠근다.
+  # 화면 · 그 화면의 CSS 배경 그림(받는 쪽) · 상한(셈을 천 단위로 올린 값). 2026-11-10 에 선방 · 마당의 구름 둘을 가로 1280 → 1024
+  # 로 다시 눌러 줄인 값으로 다시 잠갔다 — 선방 1,079,564 → 1,034,828 · 마당 743,204 → 735,412 · 미륵당 706,254(그대로). 마당은
+  # 새 세션의 첫 화면이라 매일의 문(일주문 B · D3c)이 함께 든다 — 가장 무거운 때로 잠근다.
   SCREENS = {
-    today_path: { backgrounds: %w[cloud-mist.avif], most: 744_000 },
-    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_164_000 },
+    today_path: { backgrounds: %w[cloud-mist.avif], most: 736_000 },
+    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_035_000 },
     days_path: { backgrounds: %w[cloud-scroll.avif], most: 707_000 }
   }.freeze
 
@@ -24,8 +25,7 @@ class ScreenWeightTest < ActionDispatch::IntegrationTest
   test "마당 · 선방 · 미륵당은 처음 받는 무게가 지금보다 늘지 않는다" do
     SCREENS.each do |path, screen|
       get send(path)
-      total = response.body.bytesize + common_bytes + images_bytes(response.body) +
-              screen[:backgrounds].sum { |name| IMAGES.join(name).size }
+      total = response.body.bytesize + common_bytes + images_bytes(response.body, screen[:backgrounds])
       puts "#{path}: #{total}" if ENV["SHOW_WEIGHT"]
       assert_operator total, :<=, screen[:most],
         "#{path} 가 처음에 #{total} 바이트를 받는다(상한 #{screen[:most]}) — 늘었다. 줄이거나 왜 늘어야 하는지 정하고 상한을 고친다"
@@ -46,14 +46,15 @@ class ScreenWeightTest < ActionDispatch::IntegrationTest
     end
 
     # 처음에 받는 그림 — <picture> 는 AVIF 를, 지연(lazy)인 그림은 빼고, SVG 의 <image> 는 그 파일을. 같은 그림은 한 번.
-    def images_bytes(html)
+    def images_bytes(html, backgrounds)
       page = Nokogiri::HTML(html)
       names = page.css("img:not([loading=lazy])").map do |img|
         avif = img.parent&.name == "picture" && img.parent.at_css("source[type='image/avif']")
         avif ? avif["srcset"] : img["src"]
       end
       names += page.css("image").map { |image| image["href"] || image["xlink:href"] }
-      names.compact.map { |url| File.basename(url.split("?").first).sub(/-\h{8,}(?=\.)/, "") }.uniq
+      # CSS 배경과 SVG 의 <image> 가 같은 그림이면 한 번만 받는다(선방의 cloud-drift).
+      (names.compact.map { |url| File.basename(url.split("?").first).sub(/-\h{8,}(?=\.)/, "") } + backgrounds).uniq
            .sum { |name| IMAGES.join(name).exist? ? IMAGES.join(name).size : 0 }
     end
 end
