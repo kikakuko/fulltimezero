@@ -30,7 +30,8 @@ class PaletteTest < ActionDispatch::IntegrationTest
 
   # 어두운 바탕 — 문 셋 · 매일의 문의 틀 밖(첫째 문과 매일의 문은 이 어둠에서 빛이 다가와
   # 밝아진다) · 앉는 중 · 무위.
-  DARK_PLACES = %w[.gates .daily-door .night .void].freeze
+  # 첫 화면(문 셋 · 매일의 문)은 2026-11-06 부터 한지 위다 — 그림이 화면 위에 서고 그 아래 한지에 글이 선다.
+  DARK_PLACES = %w[.night .void].freeze
 
   test "색 값은 :root 한 곳에만 있다" do
     root, rest = palette_and_rest
@@ -57,7 +58,6 @@ class PaletteTest < ActionDispatch::IntegrationTest
   NAMED_EXCEPTIONS = {
     "--light-dawn" => "#eef2f5", "--light-day" => "#fbf7ec",      # 첫째 문의 빛 — 때의 색
     "--light-evening" => "#f7e6d6", "--light-night" => "#e8ecf2",
-    "--plaque-wood" => "#241a14",                                 # 문의 현판 — 목판. 글씨는 한지빛(금빛 없음, 2026-11-06)
     "--maitreya-gold" => "#f3e2b8",                               # 미륵이 솟을 때 하늘의 금빛
     "--obang-red" => "#7a3b30",                                   # 무위의 오방색 가운데 적
     "--ocher-ink" => "#7f6634"                                    # 글씨의 황토 — 경의 인용문
@@ -108,7 +108,7 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_no_match(/var\(--verdigris\)/, root, "찬 청록이 :root 의 다른 색에 섞였다 — 청록은 몰입 화면의 규칙에서만 쓴다")
     # 흰 쪽으로 미는 것은 카드 바탕 하나뿐이다.
     assert_equal [ "--paper-card" ], root.scan(/(--[\w-]+):[^;]*\bwhite\b/).flatten, "흰색으로 만든 색이 늘었다"
-    assert_equal 8, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
+    assert_equal 7, NAMED_EXCEPTIONS.size, "이름 붙은 예외가 늘었다 — 섞어 만들 수 있는지 먼저 따진다"
   end
 
   # 부품은 다섯뿐이다. 이 앱에 없는 것 — 태그, 대문자 영문 라벨, 아이콘 줄, 진행 막대,
@@ -310,13 +310,9 @@ class PaletteTest < ActionDispatch::IntegrationTest
         page.css(".gate-plaque").each do |plaque|
           parts = plaque.css(".gate-plaque__board, .gate-plaque__reading").map { |part| part.text.strip }
           assert_equal parts.join(" "), plaque.text.split.join(" "), "현판에 한자와 읽기 말고 다른 것이 있다"
-          # 첫째 문(일주문)은 실제 일주문처럼 산문 이름 — 산 이름 세 자와 암자 이름 세 자(無事山 歇心庵, 2026-11-06).
-          # 둘째 · 셋째 문은 옛 문 이름 세 자.
-          if plaque["class"].include?("gate-plaque--stop")
-            assert_match(/\A\p{Han}{3} \p{Han}{3}\z/, parts.first, "첫째 문의 현판이 산 이름과 암자 이름이 아니다")
-          else
-            assert_match(/\A\p{Han}{3}\z/, parts.first, "현판의 한자가 옛 이름 세 자가 아니다")
-          end
+          # 첫째 문(일주문)은 절 이름 세 자(歇心庵), 셋째 문은 옛 문 이름 세 자(不二門). 산 이름(無事山)은 ① 원경에 선다
+          # (2026-11-06 — 산 이름과 절 이름을 나누었다).
+          assert_match(/\A\p{Han}{3}\z/, parts.first, "현판의 한자가 세 자가 아니다")
           assert_no_match(/\d|제.문|첫째|둘째|셋째|first|second|third|\//i, plaque.text, "현판에 순서가 적혔다")
           assert_operator parts.last.split.size, :<=, 5, "읽기가 뜻풀이가 되었다: #{parts.last}"
         end
@@ -340,66 +336,42 @@ class PaletteTest < ActionDispatch::IntegrationTest
     assert_no_match(/--plaque-gold/, css, "현판의 금빛 값이 남았다")
   end
 
-  test "현판은 지금 선 문의 것만 보인다" do
+  test "현판은 지금 선 걸음의 것만 보인다 — 그림 속 빈 판의 자리에" do
     css = CSS.read
 
-    %w[stop naming breath].each do |door|
-      assert_match(/\.gates__veil\[data-state="#{door}"\] ~ \.gate-plaque--#{door}/, css)
-    end
+    # 첫째 문의 현판은 ② 일주문 B 와 ③ D3c 에, 셋째 문의 현판은 ⑥ 불이문에. 천왕문 벽 그림에는 판이 없어 걸지 않는다.
+    assert_match(/\.gates\[data-step="gate"\] \.gate-plaque--stop,\s*\.gates\[data-step="within"\] \.gate-plaque--stop,\s*\.gates\[data-step="burimun"\] \.gate-plaque--breath,\s*\.daily-door \.gate-plaque--stop \{ opacity: 1; \}/, css)
     assert_match(/\.gate-plaque \{[^}]*opacity: 0;/, css, "현판이 처음부터 모두 보인다")
-    assert_no_match(/\.gates__veil\[data-state="(\w+)"\] ~ \.gate-plaque--(?!\1)\w+/, css, "먼 문에 현판이 걸린다")
-
+    assert_no_match(/gate-plaque--naming/, css, "판이 없는 천왕문에 현판이 걸린다")
+    # 자리는 그림의 백분율(docs/M-landing-design.md 11 · 12절).
+    assert_match(/\.gate-plaque--stop \{ --plaque-x: 50\.3%; --plaque-y: 56\.4%; --plaque-w: 16\.7cqw; --plaque-h: 3\.46cqw; \}/, css)
+    assert_match(/\.gate-plaque--breath \{ --plaque-x: 50\.2%; --plaque-y: 46\.1%; --plaque-w: 21\.2cqw; --plaque-h: 5\.69cqw; \}/, css)
     # 빛이 그 문에 닿을 때 0.6초에 걸쳐 — 첫째 문은 빛이 발밑에 닿는 2.6초(3.8초의 0.6842).
-    assert_match(/\.gate-plaque--stop \{ animation: plaque-rise 0\.6s ease-out calc\(var\(--light-arrive\) \* 0\.6842\) both; \}/, css)
+    assert_match(/\.gates\[data-step="gate"\] \.gate-plaque--stop \{ animation: plaque-rise 0\.6s ease-out calc\(var\(--light-arrive\) \* 0\.6842\) both; \}/, css)
     assert_match(/\.daily-door \.gate-plaque--stop \{ animation: plaque-rise 0\.6s ease-out calc\(var\(--light-daily\) \* 0\.6842\) both; \}/, css)
-    { "stop" => [ 566, 1 ], "naming" => [ 300, 0.62 ], "breath" => [ 126, 0.42 ] }.each do |door, (y, scale)|
-      assert_match(/\.gate-plaque--#{door} \{ --plaque-y: #{y}; --plaque-scale: #{scale}; \}/, css)
-    end
+
+    sign_in_as users(:one)
+    get threshold_naming_path
+    assert_select ".gate-plaque--naming", false
   end
 
-  # 둘째 문(천왕문)의 사천왕 둘 — 그림 안의 인물이지 앱의 도상이 아니다.
-  # 이름을 적지 않고, 둘째 문에서만 장막이 걷히는 대로 드러난다. 문 셋의 그림이라
-  # 움직이지 않는다 — 도상의 규칙(말하지 않는다)이 아니라 문의 규칙이다.
-  test "사천왕은 둘째 문을 사이에 두고 서고, 이름도 움직임도 없다" do
+  # 천왕문의 사천왕 넷 — 왼쪽 벽 둘(용과 여의주 · 탑과 당)과 오른쪽 벽 둘(비파 · 칼), 통도사의 짜임(docs/M-landing-design.md
+  # 4절). 그림 안의 인물이지 앱의 도상이 아니다. 이름을 적지 않고, 걸음 안에서 움직이지 않는다.
+  test "천왕문의 사천왕은 벽 그림 둘이고, 이름도 움직임도 없다" do
     sign_in_as users(:one)
 
     [ threshold_path, threshold_naming_path, threshold_breath_path ].each do |door|
       get door
 
-      assert_select "#gates .gates__frame .gates__kings img.gates__king[alt='']", count: 2
-      assert_select "#gates .gates__king--left[src*=four_king_left]", count: 1
-      assert_select "#gates .gates__king--right[src*=four_king_right]", count: 1
+      assert_select "#gates img.gates__shot--wall-left[src*=landing_wall_left]", count: 1
+      assert_select "#gates img.gates__shot--wall-right[src*=landing_wall_right]", count: 1
+      assert_select ".gates__kings, .gates__king", false
       assert_no_match(/사천왕|증장|다문|광목|지국|천왕(?!문)|Four Kings(?! ?\z)|Virūḍhaka|Vaiśravaṇa/,
                       Nokogiri::HTML(response.body).tap { |page| page.css(".gate-plaque").each(&:remove) }.css("body").text,
                       "#{door} 에 사천왕의 이름이 적혔다")
     end
-    assert_select ".threshold__flank", false
-
-    css = CSS.read
-    kings = css[/\.gates__kings \{[^}]*\}/m]
-    assert_match(/--kings-height: 116;/, kings)
-    assert_match(/--kings-feet: 300;/, kings)
-    assert_match(/--kings-apart: 52;/, kings)
-    assert_match(/opacity: 0; transition: opacity 1\.2s ease-out;/, kings, "장막이 걷히는 것과 같은 때가 아니다")
-    assert_match(/\.gates__frame:has\(\.gates__veil\[data-state="naming"\]\) \.gates__kings \{ opacity: 1; \}/, css)
-    assert_no_match(/\.gates__veil\[data-state="(?:stop|breath|open)"\]\) \.gates__kings/, css, "둘째 문 밖에서 드러난다")
-
-    css.scan(/([^{}]*\.gates__king[^{}]*)\{([^{}]*)\}/).each do |selector, body|
-      assert_no_match(/animation|filter|drop-shadow|box-shadow|rotate|scale/, body, "사천왕이 움직이거나 빛난다: #{selector.strip}")
-    end
-  end
-
-  test "사천왕은 한 장에서 나눠 자르고, 가장자리에서 이어진 바탕만 걷는다" do
-    %w[left right].each do |side|
-      king = webp_info(Rails.root.join("app/assets/images/four_king_#{side}.webp"))
-
-      assert king[:alpha], "#{side} 에 투명이 없다"
-      assert_in_delta 0.492, king[:width] / king[:height].to_f, 0.01
-    end
-
-    knockout = Rails.root.join("bin/knockout").read
-    assert_match(/--region=0\.163,0\.283,0\.192,0\.585 --connected/, knockout, "자르는 값이 기록되어 있지 않다")
-    assert Rails.root.join("docs/sources/four_kings.png").exist?
+    assert_not Rails.root.join("app/assets/images/four_king_left.webp").exist?, "옛 사천왕 그림이 남아 있다"
+    assert Rails.root.join("docs/sources/four_kings.png").exist?, "옛 사천왕의 원본이 없다 — 지우지 않고 둔다"
   end
 
   private

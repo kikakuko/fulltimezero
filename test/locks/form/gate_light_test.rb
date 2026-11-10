@@ -102,12 +102,15 @@ class GateLightTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "매일의 문은 같은 그림과 같은 빛이고, 글이 없다" do
+  # 매일의 문 — 돌아오는 사람은 한 걸음만: 일주문 B 에 같은 빛이 다가오는 사이 D3c 로 겹쳐 바뀐다(2026-11-06).
+  test "매일의 문은 일주문 B 에서 D3c 로 한 걸음, 같은 빛이고, 글이 없다" do
     user = users(:one)
     sign_in_as user
     get today_path
 
-    assert_select ".daily-door[data-light] .gates__frame img.gates__image[alt='']", count: 1
+    assert_select ".daily-door[data-light] .gates__frame img.gates__shot[alt='']", count: 2
+    assert_select ".daily-door img.gates__shot--gate-b[src*=landing_gate_b]", count: 1
+    assert_select ".daily-door img.gates__shot--gate-d.daily-door__within[src*=landing_gate_d]", count: 1
     assert_select ".daily-door .gates__light", count: 1
     assert_select ".daily-door .gates__flood", count: 1
     # 글은 없다 — 첫째 문의 현판(옛 이름)만 빛과 함께 떠오른다.

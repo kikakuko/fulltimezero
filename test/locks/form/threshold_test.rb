@@ -50,29 +50,33 @@ class ThresholdTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # 그림은 절대 움직이지 않는다. 사용자가 다가가는 것이 아니라 보이지
-  # 않던 것이 드러날 뿐이다 — 한 번도 움직인 적 없다는 것이 화면의
-  # 동작으로도 지켜져야 한다. 바뀌는 것은 장막뿐이다.
-  test "그림은 움직이지 않는다 — 스크롤도 확대도 카메라 이동도 없다" do
+  # 걸음 안에서는 그림이 움직이지 않는다(2026-11-06 에 「그림은 움직이지 않는다」에서 고쳤다 — 첫 화면이 걸음마다 그림
+  # 한 장이 되었다). 한 걸음에 서 있는 동안 스크롤도 확대도 카메라 이동도 없다. 옮아감은 걸음 사이의 겹침(불투명도)과
+  # ① → ② 의 다가감(원경의 작은 일주문을 가운데로 데려와 키운다) 하나뿐이고, 그 다가감은 ② 에 서면 멎는다.
+  test "걸음 안에서는 움직이지 않는다 — 옮아감은 걸음 사이의 겹침과 ① → ② 의 다가감뿐이다" do
     css = Rails.root.join("app/assets/tailwind/application.css").read.gsub(%r{/\*.*?\*/}m, "")
-    # 선택자가 가리키는 것(마지막 대상)이 그림 · 그 틀 · 문 전체일 때만 본다.
-    # 그 위에 얹히는 빛과 넘침은 그림이 아니다.
     still = css.scan(/([^{}]+)\{([^{}]*)\}/).select do |selector, _|
-      selector.split(",").any? { |one| one.strip.split(/\s+/).last.to_s.match?(/\A\.gates(?:__image|__frame)?(?![\w-])/) }
+      selector.split(",").any? { |one| one.strip.split(/\s+/).last.to_s.match?(/\A\.gates(?:__shot[\w-]*|__frame)?(?![\w-])/) }
     end
 
     assert_not_empty still
     still.each do |selector, body|
-      assert_no_match(/transform|translate|scale|rotate|zoom|animation|background-position|object-position|overflow:\s*(?:auto|scroll)/,
-                      body, "그림이 움직인다: #{selector.strip}")
-      # 옅어지는 것은 움직임이 아니다. 옮아감은 불투명도 하나뿐이다.
+      assert_no_match(/animation|background-position|object-position|overflow:\s*(?:auto|scroll)/, body, "그림이 움직인다: #{selector.strip}")
+      # 확대 · 이동은 ① → ② 의 다가감(원경 한 장)에만, 그 걸음 사이에만.
+      if body.match?(/transform:\s*(?!none)|translate|scale\(|rotate|zoom/)
+        selector.split(",").each do |one|
+          assert_match(/\.gates\[data-step="(?:approach|gate)"\] \.gates__shot--far\z/, one.strip, "걸음 안에서 그림이 움직인다: #{one.strip}")
+        end
+      end
       body.scan(/transition:\s*([^;]+)/).flatten.each do |transition|
-        assert_match(/\A(?:none|opacity\b[^,]*)\z/, transition.strip, "그림이 움직인다: #{selector.strip}")
+        # 옅어짐은 움직임이 아니다(불투명도 하나). 확대가 함께 가는 것은 원경의 다가감 하나뿐이다.
+        assert_match(/\A(?:none|opacity\b[^,]*|opacity var\(--entry-time\) ease-in-out, transform var\(--entry-time\) ease-in)\z/, transition.strip,
+                     "옮아감이 겹침 · 다가감 밖이다: #{selector.strip}")
       end
     end
 
-    scripts = Rails.root.glob("app/javascript/**/*.js").select { |path| path.read.include?("gates__image") }
-    assert_empty scripts, "스크립트가 그림에 손을 댄다"
+    scripts = Rails.root.glob("app/javascript/**/*.js").select { |path| path.read.match?(/gates__shot|gates__image/) }
+    scripts.each { |path| assert_no_match(/\.style\.(?:transform|translate|scale)|scrollTo|scrollBy/, path.read, "스크립트가 그림을 움직인다: #{path.basename}") }
   end
 
   # 아이폰의 사파리는 글자가 16px 보다 작은 입력칸을 누르면 화면을 확대한다.
@@ -104,22 +108,22 @@ class ThresholdTest < ActionDispatch::IntegrationTest
   end
 
   test "그림은 자르지 않고 통째로 — 틀이 그림의 비율 그대로다" do
-    image = Rails.root.join("app/assets/images/gates.webp")
-    assert image.exist?, "그림(gates.webp)이 아직 없다"
-
-    width, height = webp_info(image).values_at(:width, :height)
     css = Rails.root.join("app/assets/tailwind/application.css").read
-    frame = css[/--gates-w: min\(100vw, calc\(100svh \* (\d+) \/ (\d+)\)\)/] && [ $1.to_i, $2.to_i ]
+    frame = css[/--gates-w: calc\(var\(--gates-h\) \* (\d+) \/ (\d+)\)/] && [ $1.to_i, $2.to_i ]
+    assert frame, "틀의 비율이 적혀 있지 않다"
 
-    assert_equal Rational(width, height), Rational(*frame), "틀의 비율이 그림과 다르다"
-    assert_match(/\.gates__image \{[^}]*object-fit: contain/, css, "그림을 잘라 채운다")
+    %w[far gate_b gate_d wall_left wall_right burimun].each do |name|
+      width, height = avif_info(Rails.root.join("app/assets/images/landing_#{name}.avif")).values_at(:width, :height)
+      assert_equal Rational(width, height), Rational(*frame), "landing_#{name} 의 비율이 틀과 다르다"
+    end
+    assert_match(/\.gates__shot \{[^}]*object-fit: contain/, css, "그림을 잘라 채운다")
   end
 
   test "그림과 장막은 문을 옮겨 가는 동안 그대로 남고, 장막만 상태를 바꾼다" do
     { threshold_path => "stop", threshold_naming_path => "naming", threshold_breath_path => "breath" }.each do |door, state|
       get door
 
-      assert_select "#gates[data-turbo-permanent] .gates__frame img.gates__image[alt='']"
+      assert_select "#gates[data-turbo-permanent] .gates__frame img.gates__shot[alt='']", count: 6
       assert_select "#gates .gates__veil[data-state=?]", state
       assert_select "#gates .gates__scrim"
       assert_select ".threshold[data-controller~=gates][data-gates-state-value=?]", state

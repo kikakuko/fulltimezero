@@ -20,7 +20,10 @@ class ImagesTest < ActiveSupport::TestCase
   # 이 상한은 느린 망의 사용자를 지키던 값이다. 올린 만큼 되돌릴 자리를 적어 둔다:
   # 띄운 뒤 구름을 가로 1024 로 줄여 보고 눈에 차이가 없으면 그때 이 값도 함께 내린다
   # (NEXT.md 의 「그림 무게」).
-  MOST = 960_000
+  # 2026-11-06 에 1,110,000 으로 올렸다 — 첫 화면의 걸음 그림 여섯(원경 · 일주문 B · D3c · 천왕문 두 벽 · 불이문, AVIF q50
+  # 합 388,262)이 옛 문 그림(gates · four_king_*, 140,299)을 갈음한다. 한 화면은 그 가운데 한 장만 처음 받으므로(걸음마다
+  # 나눠 받는다) 화면의 무게는 따로 「화면마다 처음 받는 무게 ≤ 700,000」(landing_test)이 지킨다(docs/M-landing-design.md 8절).
+  MOST = 1_110_000
   # WebP 받침의 합계. iOS 16 미만과 SVG 안의 <image> 가 받는다. 2026-11-05 에 792,078 이다.
   FALLBACK_MOST = 800_000
 
@@ -62,12 +65,22 @@ class ImagesTest < ActiveSupport::TestCase
 
   # 화면에서 뜨는 크기(폭 390 · 배율 2)의 두 배를 넘지 않는다.
   test "그림이 화면에서 뜨는 크기보다 크지 않다" do
-    { "gates.webp" => 780, "mireukdang.webp" => 780, "elephant_field.webp" => 768,
-      "compound.webp" => 768, "maitreya.webp" => 680, "four_king_left.webp" => 300,
-      "four_king_right.webp" => 300 }.each do |name, most|
+    landing = %w[far gate_b gate_d wall_left wall_right burimun].to_h { |name| [ "landing_#{name}.webp", 768 ] }
+    { "mireukdang.webp" => 780, "elephant_field.webp" => 768,
+      "compound.webp" => 768, "maitreya.webp" => 680 }.merge(landing).each do |name, most|
       webp = IMAGES.join(name)
-      assert_operator webp_info(webp)[:width], :<=, most, "#{name} 이 화면에서 뜨는 크기보다 크다"
+      assert webp.exist?, "#{name} 이 없다"
       avif = webp.sub_ext(".avif")
+      # 첫 화면의 받침은 480 폭(q60)이다 — AVIF 를 못 받는 브라우저만 받으므로 받침만 줄여 받침 상한 안에 든다
+      # (docs/M-landing-design.md 8절). 그래도 같은 그림이어야 하니 비율은 같다.
+      if landing.key?(name)
+        assert_operator avif_info(avif)[:width], :<=, most, "#{avif.basename} 이 화면에서 뜨는 크기보다 크다"
+        assert_operator webp_info(webp)[:width], :<=, 480, "#{name} 받침이 480 폭보다 크다"
+        a, w = avif_info(avif), webp_info(webp)
+        assert_in_delta a[:width] / a[:height].to_f, w[:width] / w[:height].to_f, 0.005, "#{name} 받침의 비율이 그림과 다르다"
+        next
+      end
+      assert_operator webp_info(webp)[:width], :<=, most, "#{name} 이 화면에서 뜨는 크기보다 크다"
       next unless avif.exist?
 
       assert_equal webp_info(webp).values_at(:width, :height), avif_info(avif).values_at(:width, :height),

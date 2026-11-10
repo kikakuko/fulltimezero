@@ -38,14 +38,17 @@ class TypeTest < ActiveSupport::TestCase
   # 붓 셋은 저장소 안의 파일이다. 글꼴 서비스를 부르지 않는다(제6조) — 바깥을 부르지
   # 않는다는 약속은 spirit_promise_test 가 지키고, 여기서는 파일이 제자리에 있는지를 본다.
   # 알파벳 붓은 라틴 자리에만, 한자 붓은 한자 자리에만 선다 — 한글은 동해독도의 것이다.
-  # 넷째는 붓이 아니라 현판의 글자 — 본명조 Bold 를 현판 글자만 잘라 들였고(2026-11-06), 현판의 판에만 쓴다.
+  # 넷째는 붓이 아니라 현판의 글자 — 본명조 Bold 를 현판 글자만 잘라 들였고(2026-11-06), 현판의 판과 ① 원경의 산
+  # 이름(無事山)에만 쓴다.
   test "붓 셋은 저장소 안의 파일이고, 저마다 제 글자 자리에만 선다" do
     faces = css.scan(/@font-face \{([^}]*)\}/m).flatten
     assert_equal 4, faces.size, "글꼴이 붓 셋과 현판 하나가 아니다"
     plaque = faces.find { |body| body.include?(%(font-family: "Noto Serif KR Plaque")) }
     assert plaque, "현판 글꼴의 @font-face 가 없다"
     assert_match(/src: url\("NotoSerifKRPlaque\.woff2"\) format\("woff2"\);/, plaque)
-    assert_equal 1, css.scan(/"Noto Serif KR Plaque"/).size - 1, "현판 글꼴이 현판의 판 밖에서 쓰인다"
+    assert_equal 2, css.scan(/"Noto Serif KR Plaque"/).size - 1, "현판 글꼴이 현판의 판과 산 이름 밖에서 쓰인다"
+    places = css.scan(/([^{}]+)\{[^{}]*"Noto Serif KR Plaque", var\(--serif\)/).flatten.map(&:strip)
+    assert_equal %w[.gate-plaque__board .threshold__mountain-han], places.map { |one| one.split.last }.sort
 
     # 알파벳 붓은 글자(A–Z · a–z)에만 — 마침표 하나로 한국어 화면에 실리지 않게.
     { "Caveat Brush" => /unicode-range: U\+0041-005A, U\+0061-007A;/, "LXGW WenKai TC" => /U\+4E00-9FFF/, "East Sea Dokdo" => nil }.each do |family, range|
