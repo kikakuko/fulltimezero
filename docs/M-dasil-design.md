@@ -32,28 +32,25 @@
 
 ## 3. 논(論) — 티베트 법담 마당의 형식을 손님으로서 빌린다
 
-**빌리는 것과 그 이름을 바로**(확인, 2026-11-10):
+**빌리는 것과 그 이름을 바로**(확인, 2026-11-10 — 바로잡아 다시):
 
 - 티베트 사원의 법담은 **법담 마당(chos ra)** 에서 한다 — 앉은 사람이 주장을 세우고 선 사람이 묻는다. **「뒤다(bsdus grwa, 집성 —
-  Collected Topics)」는 법담 마당이 아니라 교과 과정**이다: 겔룩 사원의 교육에서 처음 배우는 논리 · 인식론 교재들의 갈래(Onoda,
-  *Monastic Debate in Tibet: A Study on the History and Structures of bsDus grwa Logic*, 1992 · Encyclopedia of Buddhism 「Bsdus grwa」).
-  `chos ra` 라는 낱말 자체는 이번 검색으로 학술 자료에서 확인하지 못했다 — Dreyfus, *The Sound of Two Hands Clapping*(2003) ·
-  Lempert, *Discipline and Debate*(2012)로 확인한다.
-- **역할**: 주장을 세우고 지키는 이 **dam bca' ba**(앉는다), 묻는 이 **rigs lam pa**(선다). 묻는 이는 질문의 참에 책임지지 않고, 지키는
-  이의 주장에서 따라 나오는 것을 이끌어 낸다.
-- **지키는 이의 대답**: 확인한 셋 — **「받아들인다」('dod)** · **「까닭이 서지 않는다」(rtags ma grub — 작은 전제를 부정)** ·
-  **「두루하지 않는다」(khyab pa ma byung — 큰 전제를 부정)**. **「왜?」(ci'i phyir)** 는 까닭 없이 주어와 술어만 세운 진술에 하는 대답으로
-  나온다 — 대답 넷으로 묶을 때 넷째. 다르마키르티 전통에서는 까닭이 반대(gal ba)인지 불확정(ma nges pa)인지까지 밝혀야 해 대답을 넷으로
-  센다는 설명도 있다(Tibetan Buddhist Encyclopedia, 「Procedures and Rules of Debate」 — Perdue, *Debate in Tibetan Buddhism* ·
-  Dreyfus 를 인용). **Perdue 1992 의 원문은 아직 직접 읽지 않았다** — 대답 넷의 낱말과 역할 이름을 그 책(과 2014 년의 *The Course in
-  Buddhist Reasoning and Debate*)으로 맞춘 뒤에 화면에 쓴다.
+  Collected Topics)」는 법담 마당이 아니라 교과 과정**이다: 겔룩 사원의 교육에서 처음 배우는 논리 · 인식론 교재들의 갈래.
+- **역할**: 주장을 세우고 지키는 이 **dam bca' ba**(Defender, 앉는다), 묻는 이 **rigs lam pa**(Challenger, 선다). 묻는 이는 질문의 참에
+  책임지지 않고, 지키는 이의 주장에서 따라 나오는 것을 이끌어 낸다.
+- **이름의 출처**: Rangjung Yeshe Wiki 「Glossary from Debate in Tibetan Buddhism」(Perdue, *Debate in Tibetan Buddhism*, 1992 의
+  용어집) — 「debating courtyard: chos ra」 · 「Challenger: rigs lam pa」 · 「Defender: dam bca' ba」 · 「Collected Topics: bsdus grva」.
+  bsdus grwa 의 교과로서의 자리는 Onoda, *Monastic Debate in Tibet*(1992) · Encyclopedia of Buddhism 「Bsdus grwa」.
+- **지키는 이의 대답은 셋**: **「받아들인다」('dod)** · **「까닭이 서지 않는다」(rtags ma grub — 작은 전제를 부정)** · **「두루하지 않는다」
+  (khyab pa ma byung — 큰 전제를 부정)**. 출처: Tibetan Buddhist Encyclopedia, 「Procedures and Rules of Debate」(Perdue, *Debate in
+  Tibetan Buddhism* · Dreyfus 를 인용). 「왜?」는 두지 않는다.
 - **그 전통의 스승께 자문** — 형식을 빌리는 것이 결례가 되지 않는지, 이름 · 대답을 어떻게 옮길지. 행각(NEXT 17)의 「(자문 뒤) 티베트」와
   같은 차례에 둔다. 자문 전에는 「논」을 열지 않는다.
 
 **앱에서의 모양**:
 
 1. 세우는 이가 **주장 · 까닭 · 경전 출처**를 적는다. 출처는 장경각의 인용 규칙 그대로(CBETA · SuttaCentral 원문 대조, `citation_test`).
-2. 법우가 **정해진 대답 가운데 하나**를 고르고 **자기 까닭**을 적는다. 대답은 사람이 아니라 **주장을 짚는다.**
+2. 법우가 **정해진 대답 셋 가운데 하나**를 고르고 **자기 까닭**을 적는다. 대답은 사람이 아니라 **주장을 짚는다.**
 3. 승패 · 점수 · 「옳음」 표시가 없다(제3조). 누가 이겼는지 앱이 말하지 않는다.
 4. **남기는 것은 그 틀(주장 · 까닭 · 출처 · 대답 · 까닭)뿐**이고, **함께한 사람 모두가 동의할 때만** 남긴다. 한 사람이라도 동의하지 않으면
    차담처럼 지워진다.
