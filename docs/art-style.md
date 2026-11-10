@@ -51,6 +51,10 @@
 `docs/M-landing-design.md` 10절). 이미지 처리로 흰 끝 내림 · 대비 · 채도를 올려 보면 어두워지기만 하고 그늘이 생기지 않는다 —
 벽처럼 넓은 평면은 거의 바뀌지 않는다.
 
+**경내 기준 세 장**(2026-11-10, `docs/M-art-renewal.md`) — 경내의 그림은 모두 이 세 장을 첫째 참조로 넣는다:
+바깥은 D3c(`docs/sources/art/gate-d3c.jpg`), 전각 안 · 방은 선방 방 넷째(`docs/sources/art/seonbang-room4.jpg`), 불교 조상 · 단청은
+천왕문 왼쪽 벽 c(`docs/sources/art/landing-wall-left.jpg`). 그 뒤에 시안 A(재료만), 장부 「씀」의 짜임 참조, 지난 그림(자리).
+
 결 문장(D3c 를 만든 그대로 — `script/art/two_moods.rb d3c`):
 
 > Style: the materials are those of ink painting on hanji — clear ink outlines, the fibers of the hanji visible
