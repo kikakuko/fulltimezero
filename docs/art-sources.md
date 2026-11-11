@@ -12,7 +12,7 @@
 - 공공누리 제2·3·4유형(상업 금지 · 변경 금지)과 조건이 불분명한 것은 장부에 올리지 않는다 — 변경금지는 참조에도 넣지 않는다.
 - **사경실은 「방의 꼴」로만** 쓴다. 감지 · 금니의 색은 들이지 않는다(§2 — 주사와 금빛은 탑의 한 자에만).
 - **예경당 = 절의 전각**(STATUS — 보현행원품 예경제불). 비어 있던 것은 그림의 참조뿐이다 — 참조는 아직 고르지 않았다.
-- **대적광전**(새 전각 — 염불 · 향 · 발원 · 영가등, `docs/M-beopdang-design.md`)의 참조는 후보만 적어 두었다(7절, 이용 조건만 읽고 내려받지 않음).
+- **묘적광전**(새 전각 — 염불 · 향 · 발원 · 영가등, `docs/M-beopdang-design.md`)의 참조는 후보만 적어 두었다(7절, 이용 조건만 읽고 내려받지 않음).
 - 「씀」 R01–R30 은 2026-11-05 에 공용의 1600px 축소본을 `tmp/art/refs/` 에 받았다(저장소 밖). 「무엇」 칸은 그 그림을 눈으로 본 대로 적었다. R31 은 아직 받지 않았다.
 - 확인한 날 — 위키미디어 공용 몫(R01–R31)은 공용 API(imageinfo · extmetadata)로, 국립중앙박물관 몫(R32–R46)은 e뮤지엄
   상세 페이지의 「제 N유형」 제목과 표시 그림으로 이용 조건을 읽은 날. 해상도는 e뮤지엄의 「원본 해상도」. 유리건판 사이트의
@@ -148,7 +148,7 @@
 | `app/assets/images/gates.{avif,webp}` | 문 셋 — 옛 그림 한 장(원본 `docs/sources/gates.png`). 2026-11-06 첫 화면의 걸음 그림 여섯으로 갈음해 앱에서 뺐다 | 없음(장부 이전) | 2026-09-18 | 물러남 |
 | `app/assets/images/four_king_{left,right}.{avif,webp}` | 둘째 문 담 위의 사천왕 둘 — 옛 그림(원본 `docs/sources/four_kings.png`, 책이 있어 사천왕의 지물이 아니다). 2026-11-06 천왕문 벽 그림 둘로 갈음해 앱에서 뺐다 | 없음(장부 이전) | 2026-09-18 | 물러남 |
 | `tmp/art/compound-a-1.jpeg` | 조감도 — 새 톤, 시안 a. 높이서 넓게, 마당이 넓고 둘레에 전각, 문은 일주문과 가운데 문 하나(천왕문 · 불이문이 한 채) | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 원경(`tmp/art/aerial-a-1.jpeg` — 장면) · R30(경내 배치) | 2026-11-10 | 아니오 |
-| `tmp/art/compound-b-1.jpeg` | 조감도 — 새 톤, 시안 b. 가까이, 가운데 축에 천왕문 · 불이문 · 대적광전, 일주문은 그림 아래 밖 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 원경(`tmp/art/aerial-a-1.jpeg` — 장면) · R30(경내 배치) | 2026-11-10 | 아니오 |
+| `tmp/art/compound-b-1.jpeg` | 조감도 — 새 톤, 시안 b. 가까이, 가운데 축에 천왕문 · 불이문 · 묘적광전, 일주문은 그림 아래 밖 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 원경(`tmp/art/aerial-a-1.jpeg` — 장면) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-c-1.jpeg` | 조감도 — 새 톤, 시안 c(다시). 가운데 축에 일주문 · 천왕문 · 불이문이 따로 한 줄, 일주문은 그림 아래 안. 범종각이 오른쪽 바위 위, 장경각이 왼쪽 앞에 길게 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 시안 b(`tmp/art/compound-b-1.jpeg` — 거리 · 가운데 축) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-d-1.jpeg` | 조감도 — 새 톤, 시안 d(다시). 가운데 축에 일주문 · 천왕문 · 불이문이 따로 한 줄, 일주문은 그림 아래 안. 미륵당이 오른쪽 바위 위, 범종각(종이 보인다)이 오른쪽 앞 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 시안 b(`tmp/art/compound-b-1.jpeg` — 거리 · 가운데 축) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-d-fix-1.jpeg` | 조감도 d 고침 한 번(셋을 한 번에) — 미륵 터(낮은 돌담의 빈 흙뜰과 뜰로 열린 작은 당)와 일주문(두 기둥에 지붕 하나, 빈 현판)은 섰고, 범종각은 바뀌지 않았다 | 시안 d(`tmp/art/compound-d-1.jpeg` — 고칠 그림) · 시안 a 의 범종각 · 일주문을 잘라 세 배로(`tmp/art/refs/a-bell-pavilion.jpg` · `tmp/art/refs/a-iljumun.jpg` — 꼴) | 2026-11-11 | 아니오 |
