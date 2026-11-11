@@ -13,8 +13,8 @@
 # 필요한 것
 #   BACKUP_CERT   공개키 인증서의 자리(기본 /rails/backup/backup-cert.pem)
 #   BACKUP_DIR    뜬 것을 두는 자리(기본 /rails/backup)
-#   BACKUP_REPO   백업을 올릴 사설 깃허브 저장소(git@github.com:…/fulltimezero-backup.git)
-#   BACKUP_REMOTE 또는 rclone 의 이름. 둘 다 비어 있으면 서버에만 둔다(아래 「보내기」).
+#   BACKUP_REMOTE rclone 의 이름 — 서버와 다른 한국 회사의 오브젝트 스토리지(DEPLOY.md §9, 2026-11-11 정함)
+#   BACKUP_REPO   (물린 길) 사설 깃허브 저장소. 둘 다 비어 있으면 서버에만 둔다(아래 「보내기」).
 set -euo pipefail
 
 DB="${DATABASE_PATH:-/rails/storage/production.sqlite3}"
@@ -39,10 +39,9 @@ echo "떴다: $DIR/$NAME.cms ($(du -h "$DIR/$NAME.cms" | cut -f1))"
 
 # 3. 보내기 — 서버 밖으로.
 #
-#    첫째 길: 사설 깃허브 저장소(BACKUP_REPO). 계정을 더 만들지 않아도 되고, 판이
-#    쌓이는 것은 깃이 알아서 한다. 늘 같은 이름으로 덮어쓰므로 저장소에는 파일 하나뿐이고,
-#    지난 판은 역사에 남는다. 서버에는 쓰기 열쇠(배포 키) 하나만 둔다.
-#    둘째 길: rclone(BACKUP_REMOTE).
+#    쓰는 길: rclone(BACKUP_REMOTE) — 서버와 다른 한국 회사의 오브젝트 스토리지. 서버의 키는
+#    그 버킷에 쓰기만 한다. 지난 판을 지우는 것은 그 회사 쪽 수명 주기가 한다(DEPLOY.md §9).
+#    물린 길: 사설 깃허브 저장소(BACKUP_REPO) — 나라 밖이고 깃 역사가 무거워진다. 남겨만 둔다.
 #    아무것도 없으면 서버에 둔 채로 둔다 — 서버가 사라지면 백업도 사라진다는 뜻이다.
 if [ -n "${BACKUP_REPO:-}" ]; then
   CLONE="${BACKUP_CLONE:-$DIR/repo}"

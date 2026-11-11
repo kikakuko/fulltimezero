@@ -8,6 +8,21 @@ Kamal 로 한 대의 서버에 올린다(`config/deploy.yml`). 데이터베이�
 **비밀값은 이 문서에 적지 않는다.** 무엇이 필요한지만 적는다. 값은 `.kamal/secrets`(추적하지
 않는다)와 서버의 환경변수로 들어간다.
 
+## 0. 준비 목록 — 카카오클라우드 서울, Kamal
+
+가입 · 결제 · 키 만들기는 직접 한다. 비밀값은 여기에 적지 않는다.
+
+1. **계정** — 카카오클라우드 가입과 본인 인증. 개인으로 되는지, 개인정보 처리 위탁 계약서를 주는지(처리방침의 수탁자).
+2. **결제** — 카드와 예산 알림.
+3. **서버** — 예전 조사 값 `t1i.small`(2코어 · 2GB, 월 약 1.6만 원, VAT 별도, 디스크 · 공인 IP 따로). 스왑 2GB(§3),
+   Intel 이라 `DEPLOY_ARCH=amd64`, Ubuntu 24.04, 부트 디스크 30–50GB, 공인 IP, 맥의 SSH 공개키, 보안 그룹 22(집 IP) · 80 · 443.
+4. **도메인** — Porkbun 의 `@` · `www` · `app` A 레코드를 서버 IP 로(§4).
+5. **이미지 저장소** — `ghcr.io` 의 `write:packages` 토큰(§6).
+6. **백업 — 확정(2026-11-11)**: 서버와 다른 한국 회사의 오브젝트 스토리지(추천 네이버클라우드). 버킷 하나, 그 버킷에
+   쓰기만 하는 좁은 접근 키, 암호화한 덩어리만, 여는 열쇠는 맥에만(§8 · §9).
+7. **메일 발송사** — 가입을 열 때(§5). 첫 서버는 `SIGNUPS=false`.
+8. **맥** — 도커 CLI(`docker` · `docker-buildx`), `RAILS_MASTER_KEY` 가 있는지.
+
 ## 1. 내가 정해서 넣어야 하는 값
 
 | 이름 | 무엇 | 어디에 |
@@ -22,7 +37,7 @@ Kamal 로 한 대의 서버에 올린다(`config/deploy.yml`). 데이터베이�
 | `<메일계정>` `<메일비밀번호>` | 메일 회사가 준 것 | `.kamal/secrets` 의 `SMTP_USER_NAME` · `SMTP_PASSWORD` |
 | — | 가입을 받는가. **기본은 받지 않음** | `SIGNUPS`(여는 말은 `true` 하나) |
 | — | 검색에 보이는가. **기본은 막음** | `SEARCHABLE` |
-| `<백업저장소>` | 백업을 올릴 사설 깃허브 저장소 | 서버의 `BACKUP_REPO` |
+| `<백업저장소>` | 백업을 올릴 버킷(서버와 다른 한국 회사의 오브젝트 스토리지, §9) | 서버의 `BACKUP_REMOTE`(rclone 설정 이름:버킷) |
 
 환경변수는 배포하는 맥의 셸에 둔다. 예(비밀값은 여기 두지 않는다):
 
@@ -173,37 +188,43 @@ scp ~/.secrets/fulltimezero-backup-cert.pem root@<서버IP>:/rails/backup/backup
 - 여는 열쇠를 잃으면 백업도 잃는다. 맥 밖에 한 벌 더 둔다(종이에 적거나, 다른 기기에).
 - 여는 열쇠를 서버에 두지 않는다. 그 순간 이 구조의 뜻이 사라진다.
 
-## 9. 백업을 둘 곳 — 사설 깃허브 저장소
+## 9. 백업을 둘 곳 — 서버와 다른 한국 회사의 오브젝트 스토리지
 
-계정을 더 만들지 않는다. 사설 저장소 하나에 암호화된 덩어리를 올린다. 판이 쌓이는 것은
-깃이 알아서 하고, 저장소에는 늘 같은 이름의 파일 하나만 있다 — 지난 판은 역사에 남는다.
+**정했다(2026-11-11).** 서버(카카오클라우드)와 **다른 회사**의 오브젝트 스토리지에 둔다. 회사가 달라
+계정 정지 · 결제 끊김 · 리전 장애에 서버와 백업이 **함께 사라지지 않고**, 데이터는 **나라 안에** 머문다.
+서버에는 **그 버킷 하나에 쓰기만 하는 좁은 접근 키**를 둔다. 올라가는 것은 **암호화한 덩어리뿐**이고
+여는 열쇠는 맥에만 있다(§8). (전에 적었던 사설 깃허브 저장소 길은 물린다 — 나라 밖이고, 덩어리가 깃
+역사에 쌓여 무거워진다. `bin/backup` 에는 `BACKUP_REPO` 길이 남아 있지만 쓰지 않는다.)
 
-1. 깃허브에서 **사설(Private) 저장소**를 하나 만든다. 이름은 `fulltimezero-backup`.
-   설명 · README · 라이선스 없이 빈 채로 만든다.
-2. 서버에서 그 저장소에만 쓰는 열쇠를 만든다. **배포 키(deploy key)라 이 저장소 하나에만
-   닿는다** — 다른 저장소에는 손대지 못한다.
+### 후보 둘(2026-11-11 각 회사의 요금 소개에서 읽음, VAT 별도)
 
-```
-ssh root@<서버IP>
-ssh-keygen -t ed25519 -f /root/.ssh/backup -N "" -C "fulltimezero backup"
-cat /root/.ssh/backup.pub
-printf 'Host github-backup\n  HostName github.com\n  User git\n  IdentityFile /root/.ssh/backup\n' >> /root/.ssh/config
-```
+| | 네이버클라우드 Object Storage | NHN Cloud Object Storage |
+|---|---|---|
+| 국내 리전 | 한국(KR) | 한국(판교) · 한국(평촌) · 한국(광주) |
+| 저장 | 월평균 저장량 GB 당 **28원**(1PB 이하) | Standard: 10GB 당 한 시간 **0.4원**(GB-월 약 28.8원) · Economy: 0.2원(약 14.4원)에 요청 요금 따로 |
+| 요청 | PUT · COPY · POST · LIST 한 건 0.0045원 | Economy 는 쓰기 요청 1,000건 13원 · 읽기 0.7원 · 지우기 무료. Standard 는 표에 요청 요금이 없다 |
+| 내보내기 전송 | 복구 때 내려받는 몫 — 요율은 따로 확인할 것(한 달 한 번 연습, 몇 MB) | 같다 |
+| 우리 몫 어림 | 하루 한 덩어리, 아흔 날 남기고, 덩어리 1MB 로 잡으면 약 90MB → **한 달 몇 원** | 같다 |
+| 키 좁히기 | Sub Account 를 **API 접근만**으로 만들고, 사용자 정의 정책에 `Change/writeObject`(객체 생성 · 변경, 리소스 유형 Bucket)만 준다 — **지우기는 주지 않는다.** 문서는 「사용자가 할당한 액션 조합으로만 이용」이라 적지만, **리소스를 그 버킷 하나로 묶는 칸은 문서에서 확인하지 못했다** — 콘솔에서 확인할 것. 안 되면 버킷 정책(NRN 으로 그 Sub Account 만)으로 | **백업만 담는 프로젝트를 따로** 만들고 그 프로젝트의 S3 자격 증명을 쓴다 — 다른 버킷이 없으니 닿을 곳이 그것뿐(자격 증명이 프로젝트에 묶이는지 콘솔에서 확인할 것). 지우기를 막는 칸이 있는지도 확인할 것 |
+| 아흔 날 지나면 | Lifecycle Management(따로 요금 없음) | 수명 주기 설정이 있는지 확인할 것 |
+| S3 호환 | 예 — `rclone` 의 `s3` | 예 |
 
-3. 그 공개키를 저장소의 **Settings → Deploy keys → Add deploy key** 에 붙이고
-   **「Allow write access」를 켠다.**
-4. 백업이 그리로 가게 한다 — `BACKUP_REPO=git@github-backup:<계정>/fulltimezero-backup.git`.
+**추천은 네이버클라우드** — 요금이 한 줄이고, Sub Account 의 쓰기 액션이 문서에 이름으로 있고, 아흔 날
+지우기를 따로 요금 없이 건다. 어느 쪽이든 **처리방침의 처리 위탁(수탁자)** 에 그 회사를 한 줄 넣는다
+(암호화한 덩어리라도 보관을 맡기는 것이다). 국외 이전 줄은 필요 없다.
 
-**암호화된 덩어리만 올라간다.** 저장소가 새어도 여는 열쇠가 없으면 열리지 않는다 —
-개인키는 맥에만 있다(§8).
+### 세우는 차례 — 가입 · 결제 · 키 만들기는 직접 한다
 
-**언젠가 무거워진다.** 암호화한 덩어리는 압축도 델타도 먹지 않아서, 날마다 **파일 전체
-크기가 깃 역사에 그대로 쌓인다.** 기록이 몇십 KB 인 지금은 한 해에 백여 메가지만, 사람이
-늘면 달라진다. 저장소가 몇백 메가에 가까워지면 둘 중 하나를 한다 — ㉮ **해마다 저장소를
-새로 만든다**(`fulltimezero-backup-2027`. 가장 단순하고, 지난해 것이 그대로 남는다),
-㉯ **역사를 자른다**(서버의 사본을 지우고 `git checkout --orphan` 으로 한 판만 남겨 다시
-올린다. 지난 판을 잃는다). **㉮ 를 권한다** — 백업의 값은 지난 판에 있다.
-나중에 발견하면 이미 무겁다. 해가 바뀔 때 한 번 본다.
+1. 그 회사에 가입하고 **버킷 하나**를 만든다 — 이름 `fulltimezero-backup`, 공개 접근 막음, 한국 리전.
+2. 아흔 날 지난 객체를 지우는 수명 주기를 건다(서버의 키로는 지우지 못하게 하므로, 지우기는 회사 쪽 규칙이 한다).
+3. **좁은 접근 키** 하나 — 위 표의 「키 좁히기」. 그 버킷에 쓰기만, 지우기 · 다른 버킷 없음.
+4. 서버에 `rclone` 을 깔고(`apt install rclone`), 그 키를 **서버의 rclone 설정에만** 넣는다
+   (`rclone config` → 이름 `backup`, 종류 `s3`, 회사의 엔드포인트, 리전). 설정 파일은 `chmod 600`.
+   **키를 이 문서 · 저장소 · `.kamal/secrets` 어디에도 적지 않는다.**
+5. 백업이 그리로 가게 한다 — `BACKUP_REMOTE=backup:fulltimezero-backup`(§11.6). `BACKUP_REPO` 는 비워 둔다.
+6. 맥에서 복구 연습(§12)을 할 때는 **콘솔에서 내려받거나**, 맥에만 두는 **읽기 전용 키**를 따로 만든다.
+
+**암호화된 덩어리만 올라간다.** 버킷이 새어도 여는 열쇠가 없으면 열리지 않는다 — 개인키는 맥에만 있다(§8).
 
 ## 10. 첫 배포
 
@@ -280,7 +301,7 @@ export BACKUP_DIR=/root/backup
 /usr/local/bin/fulltimezero-backup
 
 cat > /etc/cron.d/fulltimezero-backup <<'EOF'
-15 19 * * * root DATABASE_PATH=/var/lib/docker/volumes/fulltimezero_storage/_data/production.sqlite3 BACKUP_DIR=/root/backup BACKUP_REPO=git@github-backup:<계정>/fulltimezero-backup.git /usr/local/bin/fulltimezero-backup >> /var/log/fulltimezero-backup.log 2>&1
+15 19 * * * root DATABASE_PATH=/var/lib/docker/volumes/fulltimezero_storage/_data/production.sqlite3 BACKUP_DIR=/root/backup BACKUP_REMOTE=backup:fulltimezero-backup /usr/local/bin/fulltimezero-backup >> /var/log/fulltimezero-backup.log 2>&1
 EOF
 ```
 
@@ -320,7 +341,7 @@ bin/kamal app start
 8. **씨앗.** `bin/kamal app exec 'bin/rails db:seed'` — 경전과 아홉 자리, 그리고 구경하는
    자리의 씨앗이 다시 선다.
 9. **확인.** §11 의 목록을 그대로 한 번. 그리고 백업을 다시 세운다(§11.6 · §9) — 새 서버에는
-   배포 키도 cron 도 없다. **이것을 잊으면 다음 사라짐은 되돌릴 수 없다.**
+   rclone 설정(좁은 접근 키)도 cron 도 없다. **이것을 잊으면 다음 사라짐은 되돌릴 수 없다.**
 
 ## 11.8 임시 — Cloudflare 터널로 맥을 보이게 하기 (조사만, 아직 세우지 않았다)
 
@@ -403,7 +424,8 @@ cloudflared tunnel delete fulltimezero        # 터널을 지운다
 
 ```
 # 1. 최신 백업을 맥으로 받는다
-rclone copy backup:fulltimezero <최신파일>.cms .      # 또는 scp root@<서버IP>:/rails/backup/... .
+# 콘솔에서 내려받거나, 맥의 읽기 전용 키로: rclone copy backup-read:fulltimezero-backup/<최신파일>.cms .
+# 또는 scp root@<서버IP>:/root/backup/<최신파일>.cms .
 
 # 2. 맥에서 연다 — 여는 열쇠는 맥에만 있다
 openssl cms -decrypt -binary -inform DER -in <최신파일>.cms \
