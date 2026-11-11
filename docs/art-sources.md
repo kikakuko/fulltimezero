@@ -83,7 +83,7 @@
 | 장경각 | R05 | 판전 바깥 모습 그대로이고 사람 · 글자가 없다. 판가의 결은 R06 으로 더한다 |
 | 미륵당 | R11 | 바위를 덮은 작은 불당의 꼴 — 마을 미륵당의 짜임. 관음(옥천암 보도각 백불)이라 불상은 그리지 않는다. 사람 · 글자 없음 |
 | 사경실 | R15 | 경상 하나로 방의 중심을 잡는다. 붉은 옻칠의 색은 들이지 않는다(꼴만) |
-| 범종각 | R31 · R17 | 누각은 R31(정면의 2층 종루, 현판 · 사람은 들이지 않는다), 종은 R17(가장 이른 범종의 유곽 · 유두) |
+| 범종각 | 시안 a 의 종각 꼴(`tmp/art/refs/a-bell-pavilion.jpg`) · R17 | 짜임은 시안 a 의 종각 — 겹처마 지붕 아래 사방이 트이고 낮게 걸린 종 하나가 기둥 사이로 보인다(2026-11-11, 조감도 d 고침에서 정함). 종은 R17(가장 이른 범종의 유곽 · 유두). R31(부석사 2층 범종루)은 물린다 — 장부의 「씀」은 그대로 두되 범종각의 짜임 참조로는 쓰지 않는다 |
 | 일주문 | R22 | 문이 한가운데 서고 숲길이 이어진다. 현판 글씨 · 사람은 들이지 않는다 |
 | 천왕문 | R23 · R47 · R43 | 통도사 한 절의 짜임을 따른다(`docs/M-landing-design.md` 4절) — 왼쪽 벽은 용과 여의주 · 탑과 당(R23), 오른쪽 벽은 비파 · 칼(R47, 비파는 고증으로만). 문의 꼴은 R43. 원색과 부릅뜬 얼굴은 들이지 않는다 |
 | 불이문 | R42 | 통도사 불이문 — 문의 꼴(깊은 지붕 · 둥근 기둥 · 가운데 통로)만. 사람 · 글자 · 안내판 · 등 기둥은 들이지 않는다. R21 은 문이 아니라 문 안의 마당이라 장부에서 뺐다 |
@@ -151,3 +151,5 @@
 | `tmp/art/compound-b-1.jpeg` | 조감도 — 새 톤, 시안 b. 가까이, 가운데 축에 천왕문 · 불이문 · 대적광전, 일주문은 그림 아래 밖 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 원경(`tmp/art/aerial-a-1.jpeg` — 장면) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-c-1.jpeg` | 조감도 — 새 톤, 시안 c(다시). 가운데 축에 일주문 · 천왕문 · 불이문이 따로 한 줄, 일주문은 그림 아래 안. 범종각이 오른쪽 바위 위, 장경각이 왼쪽 앞에 길게 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 시안 b(`tmp/art/compound-b-1.jpeg` — 거리 · 가운데 축) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-d-1.jpeg` | 조감도 — 새 톤, 시안 d(다시). 가운데 축에 일주문 · 천왕문 · 불이문이 따로 한 줄, 일주문은 그림 아래 안. 미륵당이 오른쪽 바위 위, 범종각(종이 보인다)이 오른쪽 앞 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 시안 b(`tmp/art/compound-b-1.jpeg` — 거리 · 가운데 축) · R30(경내 배치) | 2026-11-10 | 아니오 |
+| `tmp/art/compound-d-fix-1.jpeg` | 조감도 d 고침 한 번(셋을 한 번에) — 미륵 터(낮은 돌담의 빈 흙뜰과 뜰로 열린 작은 당)와 일주문(두 기둥에 지붕 하나, 빈 현판)은 섰고, 범종각은 바뀌지 않았다 | 시안 d(`tmp/art/compound-d-1.jpeg` — 고칠 그림) · 시안 a 의 범종각 · 일주문을 잘라 세 배로(`tmp/art/refs/a-bell-pavilion.jpg` · `tmp/art/refs/a-iljumun.jpg` — 꼴) | 2026-11-11 | 아니오 |
+| `tmp/art/compound-d-fix2-1.jpeg` · `docs/sources/art/compound-d.jpg` | 조감도 — **고른 것**. d 고침 뒤 범종각 하나만 다시 고침: 사방이 트인 겹처마 종각, 종이 낮게 걸려 기둥 사이로 보인다. 다른 칸은 바뀌지 않았다(칸별 차이 0–1%). 원본은 q88 로 보관. 앱에 들이는 것은 HALLS 를 다시 잰 뒤 | `tmp/art/compound-d-fix-1.jpeg`(고칠 그림) · `tmp/art/refs/a-bell-pavilion.jpg`(꼴) | 2026-11-11 | 아니오 |
