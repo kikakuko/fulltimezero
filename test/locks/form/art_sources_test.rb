@@ -11,7 +11,7 @@ class ArtSourcesTest < ActiveSupport::TestCase
   COLUMNS = %w[번호 전각 무엇 소장처 주소 이용\ 조건 해상도 확인한\ 날 씀].freeze
   USABLE = /\A(?:퍼블릭 도메인(?:\(저작권 제한 없음\))?|CC0|CC BY \d\.\d|공공누리 제1유형)\z/
   DEFERRED = /\ACC BY-SA \d\.\d\z/
-  HALLS = %w[선방 장경각 미륵당 사경실 범종각 일주문 천왕문 불이문 마당 조감도].freeze
+  HALLS = %w[선방 장경각 미륵당 사경실 범종각 일주문 천왕문 불이문 마당 조감도 묘적광전].freeze
 
   def section(title) = LEDGER.read[/^## #{title}\n(.*?)(?=^## |\z)/m, 1].to_s
 
