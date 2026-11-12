@@ -19,6 +19,8 @@
 #   ruby script/art/precinct.rb three-fix2 — three-fix 의 탱화에 둥근 광배 선과 작은 낙관이 들어왔다. 그 둘만 지운다
 #   ruby script/art/precinct.rb yegyeong   — 예경당 안 두 장(1K, 3:4): 절하는 빈 자리. 절 화면의 자리(자세 그림 16–42% · 염주 52–78% ·
 #                                            단추 81–87%)를 가리지 않게 가운데를 비우고, 불단은 위 띠 · 좌복은 아래 띠에
+#   ruby script/art/precinct.rb sagyeong   — 사경실 안 두 장(1K, 3:4): 낮은 책상 · 벼루 · 붓 · 빈 한지 · 창호의 빛. 머리 그림으로 —
+#                                            낮은 띠(약 2:1)로 잘라도 서게 책상의 것을 가로 가운데 띠(40–70%)에 모은다
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -238,6 +240,30 @@ YEGYEONG_VIEWS = {
                   "visible at the very top."
 }.freeze
 
+# 사경실(寫經室) — 방의 꼴만(장부: 사경실 참조는 「방의 꼴」, 감지 · 금니의 색 없음, §2). 사경 화면(390 × 844)을 2026-11-12 재었다:
+# 글을 쓰는 칸 34–75% · 단추 77–82% — 화면 한가운데를 따라 쓸 옅은 글자가 차지한다. 그래서 바탕이 아니라 머리 그림이다.
+SAGYEONG_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+                 "their ink lines, hanji, washes and warm full color (the second for the wooden room, the floor and the light " \
+                 "through paper windows); the fourth only for the shape of a low Korean writing desk (gyeongsang) — nothing else " \
+                 "from it."
+SAGYEONG = "Inside a small quiet Korean temple room for copying sutras. One low wooden writing desk stands in the middle of " \
+           "the room, and **everything on and around it sits in the horizontal middle band of the picture (from 40% to 70% of " \
+           "the height)** so that the picture can be cropped to a low wide strip: on the desk, a few sheets of blank white " \
+           "hanji paper with nothing written on them, a dark stone inkstone with a little ink, one brush resting on a small " \
+           "brush rest, a small water dropper. A flat sitting cushion in front of the desk, nobody on it. Warm morning light " \
+           "from paper lattice windows falls across the desk. Above and below the middle band: only the plain wall, the " \
+           "window frames, and the polished wooden floor — quiet and low in contrast. No writing anywhere, no characters on " \
+           "any paper, no scrolls on the walls, no bookshelves full of books."
+SAGYEONG_VIEWS = {
+  "sagyeong-a" => "Seen from the front at the height of a seated person, the desk straight ahead, the window on the left.",
+  "sagyeong-b" => "Seen a little from above and from the side, three-quarter view, the window on the right, the light falling " \
+                  "diagonally over the blank paper."
+}.freeze
+SAGYEONG_FORBIDDEN = "Do not include: gold or gilded color, deep indigo or dark blue paper (no indigo sutra paper), gold ink, any " \
+                     "writing, letters, characters or calligraphy on any paper or wall, seals, people, hands, animals, " \
+                     "elephants, pagodas, the sun, the moon, any circle, modern objects (lamps, pens, glasses, phones), or any " \
+                     "outer frame or border around the picture."
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -278,6 +304,9 @@ RUNS = {
   "yegyeong" => YEGYEONG_VIEWS.to_h do |name, view|
     [ name, [ STANDARD + [ File.join(SOURCES, "myojeok.jpg") ], [ YEGYEONG_ROLES, YEGYEONG, view, STYLE, MYOJEOK_FORBIDDEN ] ] ]
   end,
+  "sagyeong" => SAGYEONG_VIEWS.to_h do |name, view|
+    [ name, [ STANDARD + [ File.join(REFS, "R15.jpg") ], [ SAGYEONG_ROLES, SAGYEONG, view, STYLE, SAGYEONG_FORBIDDEN ] ] ]
+  end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
@@ -293,7 +322,7 @@ chosen.each do |name, (references, prompt)|
   missing = references.reject { |path| File.exist?(path) }
   abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
 
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong") ? "3:4" : "4:3", references:)
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong", "sagyeong") ? "3:4" : "4:3", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"
