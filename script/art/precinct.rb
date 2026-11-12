@@ -9,6 +9,8 @@
 #   ruby script/art/precinct.rb dfix-bell2 — dfix 에서 범종각만 바뀌지 않았다(2층 난간 누각 그대로). 고친 그림 위에서 범종각 하나만
 #   ruby script/art/precinct.rb myojeok    — 묘적광전 안 두 장(1K, 3:4): 빈 연화좌와 빛 · 석조 아미타 · 석조 관세음 · 영가등 · 향
 #                                            a 는 영가등이 오른쪽 벽, b 는 왼쪽 벽
+#   ruby script/art/precinct.rb myojeok2   — 해인사 대적광전의 짜임(R55 · R54 · R53)을 더 들여 다시 두 장. c 는 영가등이 오른쪽
+#                                            격자 장(R54), d 는 왼쪽 천장 아래 줄(R53). b 의 흠(관세음 손의 연기 · 놋쇠빛 향로)을 막는다
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -122,6 +124,41 @@ MYOJEOK_FORBIDDEN = "Do not include: gold or gilded color anywhere, any circle, 
                     "cables, signs, donation boxes, plastic), or any outer frame or border around the picture."
 MYOJEOK_REFS = STANDARD + %w[R48 R49 R50].map { |label| File.join(REFS, "#{label}.jpg") }
 
+# 해인사 대적광전(R55 · R54 · R53, 2026-11-12) — 짜임만. 그곳은 금빛 삼존 · 큰 탱화 · 원색 단청이라 색은 하나도 들이지 않는다.
+MYOJEOK2_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — " \
+                 "match their ink lines, hanji, washes and warm full color (the second for the wooden interior, the floor and " \
+                 "the light through paper windows; the third for carved figures and muted dancheong). The fourth (the main hall " \
+                 "of Haeinsa) sets the arrangement of the altar only: one long carved altar platform (sumidan) across the back, " \
+                 "a carved wooden canopy above it, three seats in a row with the center one raised highest, a low offering " \
+                 "table in front and the open wooden floor. Take none of its colors: no gold statues, no hanging paintings, no " \
+                 "bright paint. The fifth sets only the form of the lamps on the side — take neither its colors nor any " \
+                 "writing. The sixth is only the stone and the face of a granite Amitabha (seat him); the seventh only the " \
+                 "crown and the posture of a bodhisattva — it is gilded, ours is plain granite. Do not copy any halo from any " \
+                 "reference."
+MYOJEOK2 = "Inside a Korean Buddhist main hall, seen from the front and the center, from the height of a seated person, like " \
+           "the fourth reference but calm and plain. Polished wooden floor, warm morning light through paper lattice doors. In " \
+           "the foreground, a few empty square sitting cushions, no one on them. Across the back, one long low altar platform " \
+           "of dark wood with softly carved panels, and above its center a carved wooden canopy, unpainted or faintly painted. " \
+           "**In the center of the altar, raised one step higher than the two sides: a single lotus pedestal of pale granite, " \
+           "carefully made and clean, with nothing on it** — a seat kept empty on purpose, the most honored place in the " \
+           "hall, not a missing statue. A shaft of soft light falls slanting from a high window straight onto the empty lotus " \
+           "pedestal — a slanting shaft, not a circle, not a halo, not a ring, not a disc. In front of the altar, on a low " \
+           "offering table: one small incense burner of dark iron (black, not brass, not gold) with a thin line of smoke " \
+           "rising from it, and one white bowl of clear water. **On the left seat: a seated granite Amitabha Buddha**, grey " \
+           "stone, calm face, hands in meditation. **On the right seat: a seated granite Avalokitesvara bodhisattva**, grey " \
+           "stone, a crown with one tiny seated Buddha carved in its front, **holding a slender water bottle (kundika) in one " \
+           "hand** — nothing burning, no smoke from the hands. Both figures are plain carved stone — no gold, no gilding, no " \
+           "paint, no halo behind them. The wall behind the altar is plain wood and plaster, left empty — no hanging painting. " \
+           "The dancheong on the beams is faint and muted."
+MYOJEOK2_SIDES = {
+  "myojeok-c" => [ File.join(REFS, "R54.jpg"), "On the right side wall, a tall wooden cabinet of small square niches in a grid, " \
+                   "like the fifth reference, and in each niche a small white paper lamp softly glowing — no labels, no " \
+                   "tablets, no writing." ],
+  "myojeok-d" => [ File.join(REFS, "R53.jpg"), "On the left side, under the ceiling beams, several rows of small white paper " \
+                   "lanterns hang close together, like the rows in the fifth reference but all white and softly glowing — no " \
+                   "labels, no tags, no writing." ]
+}.freeze
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -138,6 +175,10 @@ RUNS = {
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL2, DFIX_KEEP, FORBIDDEN ] ] },
   "myojeok" => MYOJEOK_SIDES.to_h do |name, side|
     [ name, [ MYOJEOK_REFS, [ MYOJEOK_ROLES, MYOJEOK, side, STYLE, MYOJEOK_FORBIDDEN ] ] ]
+  end,
+  "myojeok2" => MYOJEOK2_SIDES.to_h do |name, (lamp_ref, side)|
+    [ name, [ STANDARD + [ File.join(REFS, "R55.jpg"), lamp_ref, File.join(REFS, "R48.jpg"), File.join(REFS, "R49.jpg") ],
+              [ MYOJEOK2_ROLES, MYOJEOK2, side, STYLE, MYOJEOK_FORBIDDEN ] ] ]
   end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],

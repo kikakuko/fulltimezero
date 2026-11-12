@@ -73,6 +73,11 @@
 | R48 | 묘적광전 | 석조 아미타불 — 돌의 결 · 얼굴 · 옷주름만(서 있는 상, 앉힌다). 뒤의 뾰족한 광배는 들이지 않는다(경주 감산사 석조아미타여래입상, 국립중앙박물관 전시) — 세로 사진 | adam(Flickr) 사진, CC BY 2.0 — 출처 표시: 「Stone Standing Amitabha Buddha of Gamsansa Temple, Gyeongju」 by adam, https://www.flickr.com/photos/adamsribs/5163629484/ | https://commons.wikimedia.org/wiki/File:Stone_Standing_Amitabha_Buddha_of_Gamsansa_Temple,_Gyeongju_경주_감산사_석조아미타여래입상.jpg | CC BY 2.0 | 2736×3648 | 2026-11-12 | 씀 |
 | R49 | 묘적광전 | 관세음보살 좌상(조선) — 보관과 앉은 자세의 꼴만. **금박을 입힌 상이다 — 색은 들이지 않는다(§2)** — 세로 사진 | Gary Todd(Flickr) 사진 | https://commons.wikimedia.org/wiki/File:Stone_Avalokitesvara_Bodhisattva,_Joseon_(17754834205).jpg | CC0 | 3456×5184 | 2026-11-12 | 씀 |
 | R50 | 묘적광전 | 석굴암 본존과 둘레 부조 — 화강암의 결과 연화좌만. 둥근 광배는 들이지 않는다(달과 겹친다, §2) — 가로, 흑백에 가까움 | 문화재청(한석홍 사진) | https://commons.wikimedia.org/wiki/File:Front_view_of_Seokguram_from_front_chamber.jpg | 공공누리 제1유형 | 3804×2781 | 2026-11-12 | 씀 |
+| R51 | 묘적광전 | 해인사 대적광전 바깥 — 돌계단 위 큰법당(다포 팔작지붕), 앞마당의 석탑 · 석등. 현판 · 사람 · 화분은 들이지 않는다 — 가로 사진(묘적광전 바깥을 그릴 때) | Bernard Gagnon(공용 사용자 Bgag) 사진 | https://commons.wikimedia.org/wiki/File:Daejeokgwangjeon_01.jpg | CC0 | 4742×3114 | 2026-11-12 | 씀 |
+| R52 | 묘적광전 | 해인사 대적광전 안 — 긴 수미단을 비스듬히: 조각한 단의 앞면 · 촛대 · 공양구의 짜임만. 금빛 상 · 탱화 · 원색 단청은 들이지 않는다 — 가로 사진 | Bernard Gagnon(공용 사용자 Bgag) 사진 | https://commons.wikimedia.org/wiki/File:Daejeokgwangjeon_02.jpg | CC0 | 3873×2225 | 2026-11-12 | 씀 |
+| R53 | 묘적광전 | 해인사 대적광전 안 — 천장 아래 줄지어 걸린 등의 짜임만(등의 색 · 이름표 · 글자는 들이지 않는다 — 우리 등은 희다) — 가로 사진 | Bernard Gagnon(공용 사용자 Bgag) 사진 | https://commons.wikimedia.org/wiki/File:Daejeokgwangjeon_03.jpg | CC0 | 3637×2147 | 2026-11-12 | 씀 |
+| R54 | 묘적광전 | 해인사 대적광전 안 — 옆벽의 영단: 작은 칸이 격자로 짜인 장(영가등을 거는 벽의 꼴). 위패의 글자 · 현판 · 냉방기는 들이지 않는다 — 가로 사진 | Bernard Gagnon(공용 사용자 Bgag) 사진 | https://commons.wikimedia.org/wiki/File:Daejeokgwangjeon_04.jpg | CC0 | 3795×2194 | 2026-11-12 | 씀 |
+| R55 | 묘적광전 | 해인사 대적광전 비로자나 삼존불 — 정면: 긴 수미단, 위의 닫집 장식, 가운데가 높은 세 자리, 앞의 낮은 예단과 마루. 짜임만 — 금빛 상 · 뒤의 탱화 · 원색 단청은 들이지 않는다 — 가로 사진 | 문화재청 | https://commons.wikimedia.org/wiki/File:해인사대적광전비로자나삼존불.jpg | 공공누리 제1유형 | 3504×2336 | 2026-11-12 | 씀 |
 
 예경당 — 절의 전각. 그림의 참조는 아직 고르지 않았다.
 
@@ -89,7 +94,7 @@
 | 범종각 | 시안 a 의 종각 꼴(`tmp/art/refs/a-bell-pavilion.jpg`) · R17 | 짜임은 시안 a 의 종각 — 겹처마 지붕 아래 사방이 트이고 낮게 걸린 종 하나가 기둥 사이로 보인다(2026-11-11, 조감도 d 고침에서 정함). 종은 R17(가장 이른 범종의 유곽 · 유두). R31(부석사 2층 범종루)은 물린다 — 장부의 「씀」은 그대로 두되 범종각의 짜임 참조로는 쓰지 않는다 |
 | 일주문 | R22 | 문이 한가운데 서고 숲길이 이어진다. 현판 글씨 · 사람은 들이지 않는다 |
 | 천왕문 | R23 · R47 · R43 | 통도사 한 절의 짜임을 따른다(`docs/M-landing-design.md` 4절) — 왼쪽 벽은 용과 여의주 · 탑과 당(R23), 오른쪽 벽은 비파 · 칼(R47, 비파는 고증으로만). 문의 꼴은 R43. 원색과 부릅뜬 얼굴은 들이지 않는다 |
-| 묘적광전 | R48 · R49 · R50 | 좌 석조 아미타(R48 의 돌 · 얼굴), 우 석조 관세음(R49 의 보관 · 자세, 금빛 없이), 가운데 빈 연화좌(R50 의 화강암 연화좌). 셋 다 광배는 들이지 않는다. 불상 없는 불단은 글로만(통도사 적멸보궁) |
+| 묘적광전 | R55 · R54 · R53 · R48 · R49 · R50 | 불단의 짜임은 해인사 대적광전(R55 — 긴 수미단, 닫집, 가운데가 높은 세 자리, 앞의 예단). 영가등의 벽은 R54(격자 장) 또는 R53(천장 아래 줄). 좌 석조 아미타(R48 의 돌 · 얼굴), 우 석조 관세음(R49 의 보관 · 자세, 금빛 없이), 가운데 빈 연화좌(R50 의 화강암). 해인사의 금빛 · 탱화 · 원색은 들이지 않는다. 광배도. 불상 없는 불단은 글로만(통도사 적멸보궁) |
 | 불이문 | R42 | 통도사 불이문 — 문의 꼴(깊은 지붕 · 둥근 기둥 · 가운데 통로)만. 사람 · 글자 · 안내판 · 등 기둥은 들이지 않는다. R21 은 문이 아니라 문 안의 마당이라 장부에서 뺐다 |
 | 마당 | R25 | 흙 마당이 화면의 반을 차지하고 법당이 가운데 선다. 사람은 작다 |
 | 조감도 | R30 | 경내를 비스듬히 내려다본 구도가 지금 조감도(768×512)와 같고 사람 · 글자가 없다. 붓의 결은 R28 로 더한다 |
@@ -159,3 +164,5 @@
 | `tmp/art/compound-d-fix2-1.jpeg` · `docs/sources/art/compound-d.jpg` | 조감도 — **고른 것**. d 고침 뒤 범종각 하나만 다시 고침: 사방이 트인 겹처마 종각, 종이 낮게 걸려 기둥 사이로 보인다. 다른 칸은 바뀌지 않았다(칸별 차이 0–1%). 원본은 q88 로 보관. 앱에 들이는 것은 HALLS 를 다시 잰 뒤 | `tmp/art/compound-d-fix-1.jpeg`(고칠 그림) · `tmp/art/refs/a-bell-pavilion.jpg`(꼴) | 2026-11-11 | 아니오 |
 | `tmp/art/myojeok-a-1.jpeg` | 묘적광전 안 — 시안 a. 정면, 가운데 빈 연화좌(두 상과 같은 높이 — 큰 그릇처럼도 읽힌다), 왼쪽 창으로 비스듬한 빛이 벽과 연화좌에, 좌 아미타 · 우 관세음(보관에 화불, 정병), 오른쪽 벽 장에 흰 등, 왼쪽에 선 향의 연기, 앞에 빈 좌복. 향로가 놋쇠빛 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R48 · R49 · R50(꼴) | 2026-11-12 | 아니오 |
 | `tmp/art/myojeok-b-1.jpeg` | 묘적광전 안 — 시안 b. 연화좌가 한 단 높고, 높은 창의 빛줄기가 바로 그 위로 — 비운 자리로 읽힌다. 왼쪽 벽에 흰 등, 앞에 빈 좌복. 흠: 관세음이 정병 대신 연기 나는 것을 들었다(향 연기가 손에서), 향로가 놋쇠빛 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R48 · R49 · R50(꼴) | 2026-11-12 | 아니오 |
+| `tmp/art/myojeok-c-1.jpeg` | 묘적광전 안 — 시안 c(해인사 대적광전의 짜임을 더 들임). 불단 위로 넓은 닫집, 긴 조각 수미단, 가운데 빈 연화좌가 단 위에 한 층 더, 높은 창의 빛이 벽을 가로질러 연화좌 쪽으로. 좌 아미타 · 우 관세음(화불 보관, 정병), 오른쪽 벽 격자 장에 흰 등, 무쇠 향로에서 연기, 맑은 물, 왼쪽 열린 문 밖에 소나무 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R55(불단 짜임) · R54(등의 벽) · R48 · R49(꼴) | 2026-11-12 | 아니오 |
+| `tmp/art/myojeok-d-1.jpeg` | 묘적광전 안 — 시안 d(해인사 대적광전의 짜임을 더 들임). 빈 연화좌 바로 위에 작은 닫집, 연화좌는 한 단 높은 받침 위, 높은 창의 빛줄기는 닫집 왼쪽 벽에. 왼쪽 천장 아래 흰 등이 여러 줄, 좌 아미타 · 우 관세음(화불 보관, 정병), 무쇠 향로 · 맑은 물 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R55(불단 짜임) · R53(등의 줄) · R48 · R49(꼴) | 2026-11-12 | 아니오 |
