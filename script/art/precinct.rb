@@ -17,6 +17,8 @@
 #                                            오른쪽 벽 영가등 곁에 세로로 긴 아미타내영도 한 폭(먹선 담채). 지권인은 앱이 SVG 로 얹는다
 #   ruby script/art/precinct.rb three-fix-1 … — 다른 곳이 많이 바뀌면 하나씩(three-fix-manjushri · three-fix-base · three-fix-amita)
 #   ruby script/art/precinct.rb three-fix2 — three-fix 의 탱화에 둥근 광배 선과 작은 낙관이 들어왔다. 그 둘만 지운다
+#   ruby script/art/precinct.rb yegyeong   — 예경당 안 두 장(1K, 3:4): 절하는 빈 자리. 절 화면의 자리(자세 그림 16–42% · 염주 52–78% ·
+#                                            단추 81–87%)를 가리지 않게 가운데를 비우고, 불단은 위 띠 · 좌복은 아래 띠에
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -214,6 +216,28 @@ THREE_AMITA = "On the right wall, beside the grid of white lamps (above it or ne
               "light washes, almost a line drawing on pale silk — no deep red, no green, no gold, no halo or circle " \
               "behind the head, no writing, no seals, no other figures. A simple wooden roller at top and bottom."
 
+# 예경당(禮敬堂) — 절의 전각(보현행원 예경제불). 바깥 꼴은 조감도 d 의 5번(작은 전각). 안은 낮고 고요한 방.
+# 절 화면(390 × 844)의 자리를 2026-11-12 재었다: 자세 그림 16–42%(전폭) · 자세 말 46–49% · 염주 52–78%(가로 22–78%) · 「한 배」 81–87%.
+# 이 그림이 그 화면의 바탕이나 머리가 되어도 가리지 않게 — 가운데 띠는 비우고 대비를 낮춘다.
+YEGYEONG_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+                 "their ink lines, hanji, washes and warm full color (the second for the wooden interior, the floor and the " \
+                 "light through paper windows); the fourth is the main hall of the same temple — match its wood, its stone " \
+                 "and its muted dancheong, but this is a much smaller, lower and plainer room."
+YEGYEONG = "Inside a small, low, quiet Korean temple hall for bowing, seen from the front and the center, at the far end a " \
+           "plain wall. The picture is divided strictly into three horizontal bands: **the top band (from 6% to 15% of the " \
+           "height)** holds one small low stone altar against the far wall, with one small seated granite Buddha on it, " \
+           "plain grey stone, no gold, no halo, small in the picture; **the middle band (from 16% to 80% of the height) is " \
+           "almost empty and quiet** — only the plain far wall, the plain polished wooden floor stretching toward the viewer " \
+           "and soft, even light from paper lattice windows on the sides, low contrast, no objects, no strong shadows, no " \
+           "patterns, nothing in the middle; **the bottom band (from 85% to 96% of the height)** holds one single empty square " \
+           "bowing cushion in the center of the floor, nobody on it. No other cushions. Very faint dancheong on the low " \
+           "ceiling beams, if any. Nothing on the walls."
+YEGYEONG_VIEWS = {
+  "yegyeong-a" => "Seen from standing height at the doorway, looking slightly down the length of the floor.",
+  "yegyeong-b" => "Seen from the height of a person kneeling on the floor, close to the cushion, the low ceiling beams just " \
+                  "visible at the very top."
+}.freeze
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -251,6 +275,9 @@ RUNS = {
       "drawn behind the Buddha's head, and a small square seal mark in the lower right corner of the painting. Remove " \
       "both: no circle behind the head, no seal — only plain pale silk there. Keep the Buddha's figure, its ink lines and " \
       "everything else in the whole image exactly as it is.", MYOJEOK_FORBIDDEN ] ] },
+  "yegyeong" => YEGYEONG_VIEWS.to_h do |name, view|
+    [ name, [ STANDARD + [ File.join(SOURCES, "myojeok.jpg") ], [ YEGYEONG_ROLES, YEGYEONG, view, STYLE, MYOJEOK_FORBIDDEN ] ] ]
+  end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
@@ -266,7 +293,7 @@ chosen.each do |name, (references, prompt)|
   missing = references.reject { |path| File.exist?(path) }
   abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
 
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok") ? "3:4" : "4:3", references:)
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong") ? "3:4" : "4:3", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"
