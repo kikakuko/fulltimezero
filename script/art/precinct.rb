@@ -7,6 +7,8 @@
 #   ruby script/art/precinct.rb dfix       — d 를 고른 뒤 편집 한 번(다시 뽑지 않음): 미륵 터 · 범종각(a 의 꼴) · 일주문(두 기둥)
 #   ruby script/art/precinct.rb dfix-1 …   — 한 번에 셋이 다른 곳까지 많이 바꾸면 하나씩(dfix-maitreya · dfix-bell · dfix-gate)
 #   ruby script/art/precinct.rb dfix-bell2 — dfix 에서 범종각만 바뀌지 않았다(2층 난간 누각 그대로). 고친 그림 위에서 범종각 하나만
+#   ruby script/art/precinct.rb myojeok    — 묘적광전 안 두 장(1K, 3:4): 빈 연화좌와 빛 · 석조 아미타 · 석조 관세음 · 영가등 · 향
+#                                            a 는 영가등이 오른쪽 벽, b 는 왼쪽 벽
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -86,6 +88,40 @@ DFIX_BELL2 = "On the right side of the courtyard, lower than the walled yard on 
              "bronze bell hanging low under the roof, between the pillars, its bottom close to the platform, clearly seen " \
              "through the open sides."
 
+# 묘적광전 안(docs/M-beopdang-design.md 3 · 7절). 참조는 장부의 R48(감산사 석조아미타, CC BY 2.0) · R49(조선 관음, CC0 —
+# 금박을 입힌 상이라 꼴만) · R50(석굴암, 공공누리 1유형 — 돌의 결만). 셋 다 둥근 광배가 있다 — 광배는 들이지 않는다.
+# 통도사 적멸보궁의 「불상 없는 불단」은 「씀」 조건의 안쪽 사진이 없어 글로만 넣는다.
+MYOJEOK_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+                "their ink lines, hanji, washes and warm full color (the second for the wooden interior, the floor and the light " \
+                "through paper windows; the third for carved figures and muted dancheong); the fourth only for the stone, the " \
+                "face and the robe of a carved granite Amitabha (seat him instead of standing); the fifth only for the crown and " \
+                "the seated posture of a bodhisattva — it is gilded, but ours is plain granite, take no gold from it; the sixth " \
+                "only for the grain and the grey of granite and a carved lotus pedestal. The fourth, fifth and sixth all have a " \
+                "round or pointed halo behind the figure — do not copy any halo."
+MYOJEOK = "Inside a Korean Buddhist hall, seen from the front, from the height of a seated person. Polished wooden floor, " \
+          "warm morning light coming in through paper lattice doors. In the foreground, a few empty square sitting cushions " \
+          "on the floor, no one on them. At the back, one long low altar platform. **In the center of the altar: a single " \
+          "lotus pedestal of pale granite, carefully made and clean, with nothing on it** — an empty seat kept empty on " \
+          "purpose, not a missing statue. From high on one side, soft light falls slanting onto the empty lotus pedestal, " \
+          "like light from a high window — a slanting shaft of light, not a circle, not a halo, not a ring, not a disc. In " \
+          "front of the pedestal, on the altar: one small incense burner and one bowl of clear water. **On the left of the " \
+          "altar: a seated granite Amitabha Buddha**, grey stone, calm face, hands in meditation. **On the right: a seated " \
+          "granite Avalokitesvara bodhisattva**, grey stone, wearing a crown with one tiny seated Buddha carved in its " \
+          "front, holding a slender water bottle (kundika) or a lotus bud. Both figures are plain carved stone, the same " \
+          "grey as the pedestal — no gold, no gilding, no paint, no halo or mandorla behind them. The wall behind the altar " \
+          "is plain wood and plaster, left empty — no hanging painting. The dancheong on the beams is faint and muted."
+MYOJEOK_SIDES = {
+  "myojeok-a" => "On the right wall, a few rows of small white paper lanterns hang, softly glowing — no labels, no " \
+                 "writing on them. On the left side, a thin line of incense smoke rises faintly.",
+  "myojeok-b" => "On the left wall, a few rows of small white paper lanterns hang, softly glowing — no labels, no " \
+                 "writing on them. On the right side, a thin line of incense smoke rises faintly."
+}.freeze
+MYOJEOK_FORBIDDEN = "Do not include: gold or gilded color anywhere, any circle, ring, disc, round halo or mandorla, the sun, " \
+                    "the moon, any writing, letters, name tags or signboard calligraphy, seals, people, animals, elephants, " \
+                    "pagodas, a hanging Buddhist painting (taenghwa) behind the altar, modern objects (electric lights, " \
+                    "cables, signs, donation boxes, plastic), or any outer frame or border around the picture."
+MYOJEOK_REFS = STANDARD + %w[R48 R49 R50].map { |label| File.join(REFS, "#{label}.jpg") }
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -100,6 +136,9 @@ RUNS = {
       "1. #{DFIX_MAITREYA}", "2. #{DFIX_BELL}", "3. #{DFIX_GATE}", DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell2" => { "compound-d-fix2" => [ [ D_FIXED, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL2, DFIX_KEEP, FORBIDDEN ] ] },
+  "myojeok" => MYOJEOK_SIDES.to_h do |name, side|
+    [ name, [ MYOJEOK_REFS, [ MYOJEOK_ROLES, MYOJEOK, side, STYLE, MYOJEOK_FORBIDDEN ] ] ]
+  end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
@@ -115,7 +154,7 @@ chosen.each do |name, (references, prompt)|
   missing = references.reject { |path| File.exist?(path) }
   abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
 
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: "4:3", references:)
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok") ? "3:4" : "4:3", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"

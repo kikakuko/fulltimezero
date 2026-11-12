@@ -12,7 +12,7 @@
 - 공공누리 제2·3·4유형(상업 금지 · 변경 금지)과 조건이 불분명한 것은 장부에 올리지 않는다 — 변경금지는 참조에도 넣지 않는다.
 - **사경실은 「방의 꼴」로만** 쓴다. 감지 · 금니의 색은 들이지 않는다(§2 — 주사와 금빛은 탑의 한 자에만).
 - **예경당 = 절의 전각**(STATUS — 보현행원품 예경제불). 비어 있던 것은 그림의 참조뿐이다 — 참조는 아직 고르지 않았다.
-- **묘적광전**(새 전각 — 염불 · 향 · 발원 · 영가등, `docs/M-beopdang-design.md`)의 참조는 후보만 적어 두었다(7절, 이용 조건만 읽고 내려받지 않음).
+- **묘적광전**(새 전각 — 염불 · 향 · 발원 · 영가등, `docs/M-beopdang-design.md`)의 참조는 R48–R50 으로 올렸다(2026-11-12, 공용의 1920px 축소본을 `tmp/art/refs/` 에 받음). 통도사 적멸보궁의 「불상 없는 불단」은 공용에서 찾은 통도사 대웅전 사진 넷(`통도사 대웅전.jpg` · `통도사 대웅전2.jpg` · `Korea-Tongdosa-01.jpg` · `Korea-Tongdosa-02.jpg`)이 모두 CC BY-SA 이고 안쪽 불단 사진이 아니어서 올리지 않았다 — 글로만 넣는다.
 - 「씀」 R01–R30 은 2026-11-05 에 공용의 1600px 축소본을 `tmp/art/refs/` 에 받았다(저장소 밖). 「무엇」 칸은 그 그림을 눈으로 본 대로 적었다. R31 은 아직 받지 않았다.
 - 확인한 날 — 위키미디어 공용 몫(R01–R31)은 공용 API(imageinfo · extmetadata)로, 국립중앙박물관 몫(R32–R46)은 e뮤지엄
   상세 페이지의 「제 N유형」 제목과 표시 그림으로 이용 조건을 읽은 날. 해상도는 e뮤지엄의 「원본 해상도」. 유리건판 사이트의
@@ -70,6 +70,9 @@
 | R45 | 조감도 | 산 속 절들의 자리(정선 〈금강내산총도〉, 《신묘년 풍악도첩》) — 아직 보지 않음 | 국립중앙박물관(덕수 903-11) | https://www.emuseum.go.kr/detail?relicId=PS0100100100500090300011 | 공공누리 제1유형 | 3000×2776 | 2026-11-05 | 씀 |
 | R46 | 마당 | 경내 전경(금강산 표훈사, 유리건판) — 아직 보지 않음 | 국립중앙박물관(건판 28522) | https://www.emuseum.go.kr/detail?relicId=PS0100100102002852200000 | 공공누리 제1유형 | 3000×2236 | 2026-11-05 | 씀 |
 | R47 | 천왕문 | 사천왕 하나 — 칼을 가슴에 비껴 든 천왕(통도사 천왕문 안, 들어서며 오른쪽 벽 바깥쪽) — 세로 사진, 발밑에 짓밟힌 작은 형상(들이지 않는다) | — | https://commons.wikimedia.org/wiki/File:Cheonwangmun_Gate_02.jpg | CC0 | 2256×3158 | 2026-11-06 | 씀 |
+| R48 | 묘적광전 | 석조 아미타불 — 돌의 결 · 얼굴 · 옷주름만(서 있는 상, 앉힌다). 뒤의 뾰족한 광배는 들이지 않는다(경주 감산사 석조아미타여래입상, 국립중앙박물관 전시) — 세로 사진 | adam(Flickr) 사진, CC BY 2.0 — 출처 표시: 「Stone Standing Amitabha Buddha of Gamsansa Temple, Gyeongju」 by adam, https://www.flickr.com/photos/adamsribs/5163629484/ | https://commons.wikimedia.org/wiki/File:Stone_Standing_Amitabha_Buddha_of_Gamsansa_Temple,_Gyeongju_경주_감산사_석조아미타여래입상.jpg | CC BY 2.0 | 2736×3648 | 2026-11-12 | 씀 |
+| R49 | 묘적광전 | 관세음보살 좌상(조선) — 보관과 앉은 자세의 꼴만. **금박을 입힌 상이다 — 색은 들이지 않는다(§2)** — 세로 사진 | Gary Todd(Flickr) 사진 | https://commons.wikimedia.org/wiki/File:Stone_Avalokitesvara_Bodhisattva,_Joseon_(17754834205).jpg | CC0 | 3456×5184 | 2026-11-12 | 씀 |
+| R50 | 묘적광전 | 석굴암 본존과 둘레 부조 — 화강암의 결과 연화좌만. 둥근 광배는 들이지 않는다(달과 겹친다, §2) — 가로, 흑백에 가까움 | 문화재청(한석홍 사진) | https://commons.wikimedia.org/wiki/File:Front_view_of_Seokguram_from_front_chamber.jpg | 공공누리 제1유형 | 3804×2781 | 2026-11-12 | 씀 |
 
 예경당 — 절의 전각. 그림의 참조는 아직 고르지 않았다.
 
@@ -86,6 +89,7 @@
 | 범종각 | 시안 a 의 종각 꼴(`tmp/art/refs/a-bell-pavilion.jpg`) · R17 | 짜임은 시안 a 의 종각 — 겹처마 지붕 아래 사방이 트이고 낮게 걸린 종 하나가 기둥 사이로 보인다(2026-11-11, 조감도 d 고침에서 정함). 종은 R17(가장 이른 범종의 유곽 · 유두). R31(부석사 2층 범종루)은 물린다 — 장부의 「씀」은 그대로 두되 범종각의 짜임 참조로는 쓰지 않는다 |
 | 일주문 | R22 | 문이 한가운데 서고 숲길이 이어진다. 현판 글씨 · 사람은 들이지 않는다 |
 | 천왕문 | R23 · R47 · R43 | 통도사 한 절의 짜임을 따른다(`docs/M-landing-design.md` 4절) — 왼쪽 벽은 용과 여의주 · 탑과 당(R23), 오른쪽 벽은 비파 · 칼(R47, 비파는 고증으로만). 문의 꼴은 R43. 원색과 부릅뜬 얼굴은 들이지 않는다 |
+| 묘적광전 | R48 · R49 · R50 | 좌 석조 아미타(R48 의 돌 · 얼굴), 우 석조 관세음(R49 의 보관 · 자세, 금빛 없이), 가운데 빈 연화좌(R50 의 화강암 연화좌). 셋 다 광배는 들이지 않는다. 불상 없는 불단은 글로만(통도사 적멸보궁) |
 | 불이문 | R42 | 통도사 불이문 — 문의 꼴(깊은 지붕 · 둥근 기둥 · 가운데 통로)만. 사람 · 글자 · 안내판 · 등 기둥은 들이지 않는다. R21 은 문이 아니라 문 안의 마당이라 장부에서 뺐다 |
 | 마당 | R25 | 흙 마당이 화면의 반을 차지하고 법당이 가운데 선다. 사람은 작다 |
 | 조감도 | R30 | 경내를 비스듬히 내려다본 구도가 지금 조감도(768×512)와 같고 사람 · 글자가 없다. 붓의 결은 R28 로 더한다 |
@@ -153,3 +157,5 @@
 | `tmp/art/compound-d-1.jpeg` | 조감도 — 새 톤, 시안 d(다시). 가운데 축에 일주문 · 천왕문 · 불이문이 따로 한 줄, 일주문은 그림 아래 안. 미륵당이 오른쪽 바위 위, 범종각(종이 보인다)이 오른쪽 앞 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · 시안 b(`tmp/art/compound-b-1.jpeg` — 거리 · 가운데 축) · R30(경내 배치) | 2026-11-10 | 아니오 |
 | `tmp/art/compound-d-fix-1.jpeg` | 조감도 d 고침 한 번(셋을 한 번에) — 미륵 터(낮은 돌담의 빈 흙뜰과 뜰로 열린 작은 당)와 일주문(두 기둥에 지붕 하나, 빈 현판)은 섰고, 범종각은 바뀌지 않았다 | 시안 d(`tmp/art/compound-d-1.jpeg` — 고칠 그림) · 시안 a 의 범종각 · 일주문을 잘라 세 배로(`tmp/art/refs/a-bell-pavilion.jpg` · `tmp/art/refs/a-iljumun.jpg` — 꼴) | 2026-11-11 | 아니오 |
 | `tmp/art/compound-d-fix2-1.jpeg` · `docs/sources/art/compound-d.jpg` | 조감도 — **고른 것**. d 고침 뒤 범종각 하나만 다시 고침: 사방이 트인 겹처마 종각, 종이 낮게 걸려 기둥 사이로 보인다. 다른 칸은 바뀌지 않았다(칸별 차이 0–1%). 원본은 q88 로 보관. 앱에 들이는 것은 HALLS 를 다시 잰 뒤 | `tmp/art/compound-d-fix-1.jpeg`(고칠 그림) · `tmp/art/refs/a-bell-pavilion.jpg`(꼴) | 2026-11-11 | 아니오 |
+| `tmp/art/myojeok-a-1.jpeg` | 묘적광전 안 — 시안 a. 정면, 가운데 빈 연화좌(두 상과 같은 높이 — 큰 그릇처럼도 읽힌다), 왼쪽 창으로 비스듬한 빛이 벽과 연화좌에, 좌 아미타 · 우 관세음(보관에 화불, 정병), 오른쪽 벽 장에 흰 등, 왼쪽에 선 향의 연기, 앞에 빈 좌복. 향로가 놋쇠빛 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R48 · R49 · R50(꼴) | 2026-11-12 | 아니오 |
+| `tmp/art/myojeok-b-1.jpeg` | 묘적광전 안 — 시안 b. 연화좌가 한 단 높고, 높은 창의 빛줄기가 바로 그 위로 — 비운 자리로 읽힌다. 왼쪽 벽에 흰 등, 앞에 빈 좌복. 흠: 관세음이 정병 대신 연기 나는 것을 들었다(향 연기가 손에서), 향로가 놋쇠빛 | 경내 기준 세 장(`docs/sources/art/gate-d3c.jpg` · `docs/sources/art/seonbang-room4.jpg` · `docs/sources/art/landing-wall-left.jpg` — 결) · R48 · R49 · R50(꼴) | 2026-11-12 | 아니오 |
