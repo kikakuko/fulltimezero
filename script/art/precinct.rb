@@ -13,6 +13,10 @@
 #                                            격자 장(R54), d 는 왼쪽 천장 아래 줄(R53). b 의 흠(관세음 손의 연기 · 놋쇠빛 향로)을 막는다
 #   ruby script/art/precinct.rb cvar       — c 를 고른 뒤 편집 두 판(다시 뽑지 않음): (가) 셋 — 빈 연화좌 · 문수 · 보현,
 #                                            (나) 다섯 — 안쪽 문수 · 보현, 바깥 아미타 · 관세음. 둘 다 받침 앞면에 작은 지권인 돋을새김
+#   ruby script/art/precinct.rb three-fix  — 셋으로 정한 뒤 (가) 위 편집 한 번: 왼쪽을 문수(보관)로, 받침 돋을새김을 지움,
+#                                            오른쪽 벽 영가등 곁에 세로로 긴 아미타내영도 한 폭(먹선 담채). 지권인은 앱이 SVG 로 얹는다
+#   ruby script/art/precinct.rb three-fix-1 … — 다른 곳이 많이 바뀌면 하나씩(three-fix-manjushri · three-fix-base · three-fix-amita)
+#   ruby script/art/precinct.rb three-fix2 — three-fix 의 탱화에 둥근 광배 선과 작은 낙관이 들어왔다. 그 둘만 지운다
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -190,6 +194,26 @@ CVAR = {
                       "altar without crowding."
 }.freeze
 
+# 셋으로 정함(2026-11-12) — 다섯은 접었다. 아미타불은 불단이 아니라 오른쪽 벽의 탱화(아미타내영도 — 『관무량수경』 상품중생
+# 「是故我今來迎接汝」 T12n0365 p0345a08–a11). 꼴의 참조는 R61(기메 소장 고려 아미타여래도, 퍼블릭 도메인) — 광배 · 적색 · 금빛은 들이지 않는다.
+THREE_IMAGE = File.join(ART, "myojeok-c-three-1.jpeg")
+AMITA_REF = File.join(REFS, "R61.jpg")
+THREE_KEEP = "Change nothing else: keep the right bodhisattva, the empty lotus pedestal and the slanting shaft of light, the " \
+             "carved canopy, the long altar, the grid of white lamps, the incense burner and its smoke, the bowl of water, " \
+             "the floor, the cushions, the open door and the pine, the colors, the ink lines and the hanji texture exactly " \
+             "as they are. The wall panel behind the empty lotus pedestal stays empty. No circles, halos or mandorlas. No gold."
+THREE_MANJUSHRI = "The seated stone figure on the left of the altar has the head of a Buddha (a bun of curls on the head). " \
+                  "Change it into the bodhisattva Manjushri: a seated granite bodhisattva wearing a carved crown like the one " \
+                  "on the right figure, holding one long lotus branch, a mirror image of the right figure so the two make a " \
+                  "pair — plain grey stone, no gold, no animal."
+THREE_BASE = "On the front of the stone base under the empty lotus pedestal there is a small carved mark. Remove it: the " \
+             "front of the base is smooth plain granite, as it was before."
+THREE_AMITA = "On the right wall, beside the grid of white lamps (above it or next to it, without covering any lamp), hang " \
+              "one tall narrow hanging scroll painting of Amitabha Buddha coming to welcome: Amitabha standing, turned a " \
+              "little, one hand reaching down, in the posture of the second image. Paint it in fine ink lines with very " \
+              "light washes, almost a line drawing on pale silk — no deep red, no green, no gold, no halo or circle " \
+              "behind the head, no writing, no seals, no other figures. A simple wooden roller at top and bottom."
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -214,6 +238,19 @@ RUNS = {
   "cvar" => CVAR.to_h do |name, change|
     [ name, [ [ C_IMAGE, JIGWON, ATTENDANT ], [ CVAR_REFS, change, JIGWON_RELIEF, CVAR_KEEP, MYOJEOK_FORBIDDEN ] ] ]
   end,
+  "three-fix" => { "myojeok-three-fix" => [ [ THREE_IMAGE, AMITA_REF ],
+    [ "Edit the first image. The second image is only the posture of a figure to paint on a scroll — take none of its " \
+      "colors, its halo or its gold. Make exactly these three changes:",
+      "1. #{THREE_MANJUSHRI}", "2. #{THREE_BASE}", "3. #{THREE_AMITA}", THREE_KEEP, MYOJEOK_FORBIDDEN ] ] },
+  "three-fix-manjushri" => { "myojeok-three-fix-m" => [ [ THREE_IMAGE ], [ "Edit this image.", THREE_MANJUSHRI, THREE_KEEP, MYOJEOK_FORBIDDEN ] ] },
+  "three-fix-base" => { "myojeok-three-fix-b" => [ [ THREE_IMAGE ], [ "Edit this image.", THREE_BASE, THREE_KEEP, MYOJEOK_FORBIDDEN ] ] },
+  "three-fix-amita" => { "myojeok-three-fix-a" => [ [ THREE_IMAGE, AMITA_REF ],
+    [ "Edit the first image. The second is only a posture to copy.", THREE_AMITA, THREE_KEEP, MYOJEOK_FORBIDDEN ] ] },
+  "three-fix2" => { "myojeok-three-fix2" => [ [ File.join(ART, "myojeok-three-fix-1.jpeg") ],
+    [ "Edit this image. On the right wall, in the tall hanging scroll of the standing Buddha, there is a thin round circle " \
+      "drawn behind the Buddha's head, and a small square seal mark in the lower right corner of the painting. Remove " \
+      "both: no circle behind the head, no seal — only plain pale silk there. Keep the Buddha's figure, its ink lines and " \
+      "everything else in the whole image exactly as it is.", MYOJEOK_FORBIDDEN ] ] },
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
