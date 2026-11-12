@@ -11,6 +11,8 @@
 #                                            a 는 영가등이 오른쪽 벽, b 는 왼쪽 벽
 #   ruby script/art/precinct.rb myojeok2   — 해인사 대적광전의 짜임(R55 · R54 · R53)을 더 들여 다시 두 장. c 는 영가등이 오른쪽
 #                                            격자 장(R54), d 는 왼쪽 천장 아래 줄(R53). b 의 흠(관세음 손의 연기 · 놋쇠빛 향로)을 막는다
+#   ruby script/art/precinct.rb cvar       — c 를 고른 뒤 편집 두 판(다시 뽑지 않음): (가) 셋 — 빈 연화좌 · 문수 · 보현,
+#                                            (나) 다섯 — 안쪽 문수 · 보현, 바깥 아미타 · 관세음. 둘 다 받침 앞면에 작은 지권인 돋을새김
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -159,6 +161,35 @@ MYOJEOK2_SIDES = {
                    "labels, no tags, no writing." ]
 }.freeze
 
+# c 고침(2026-11-12) — 해인사 대적광전 비로자나삼존(문수 · 보현이 연꽃 가지)의 짜임. 지권인은 R57(통일신라 석조, CC0)의 손:
+# 세운 왼손 검지를 오른손이 감싸 쥔다(『한국민족문화대백과』 「비로자나불화」). 보현의 코끼리 · 문수의 사자는 그리지 않는다.
+C_IMAGE = File.join(ART, "myojeok-c-1.jpeg")
+JIGWON = File.join(REFS, "R57-hands.jpg")      # R57 의 손을 잘라 두 배로
+ATTENDANT = File.join(REFS, "R55-attendant.jpg") # R55 의 왼쪽 협시를 잘라 두 배로 — 꼴만
+CVAR_REFS = "Edit the first image. The second image is only the shape of a hand gesture to carve; the third is only the " \
+            "seated posture and the long lotus branch of a bodhisattva — take none of its gold, red or bright colors."
+BODHISATTVAS = "a seated granite bodhisattva Manjushri and a seated granite bodhisattva Samantabhadra, each wearing a " \
+               "simple carved crown and holding one long lotus branch with a bud, like the third image, the two mirror " \
+               "each other; no animal mounts — no lion, no elephant"
+JIGWON_RELIEF = "On the front face of the stone base under the empty lotus pedestal, carve one small low relief, about the " \
+                "size of a palm, of two hands in this gesture, like the second image: the left index finger raised and " \
+                "the right hand wrapped around it — the same grey granite as the base, no paint, no gold, no circle around it."
+CVAR_KEEP = "Keep exactly as they are: the empty lotus pedestal in the center and the slanting shaft of light, the carved " \
+            "wooden canopy, the long carved altar, the right wall with its grid of white lamps, the dark iron incense burner " \
+            "with its thin smoke and the bowl of clear water, the floor, the cushions, the open door and the pine outside, the " \
+            "colors, the ink lines and the hanji texture. The wall behind the altar stays empty — nothing painted or hung on " \
+            "it. No circles, halos or mandorlas anywhere. No gold anywhere."
+CVAR = {
+  "myojeok-c-three" => "Replace the two seated figures on the altar — the Amitabha on the left and the Avalokitesvara on the " \
+                       "right — with #{BODHISATTVAS}: Manjushri on the left seat, Samantabhadra on the right seat. Three seats " \
+                       "in all: the empty lotus pedestal in the middle and the two bodhisattvas.",
+  "myojeok-c-five" => "Make five seats on the same altar. Keep the empty lotus pedestal in the middle. Right beside it, on the " \
+                      "inner seats, place #{BODHISATTVAS}: Manjushri on the inner left, Samantabhadra on the inner right. On " \
+                      "the outer ends, keep the seated granite Amitabha Buddha (far left) and the seated granite " \
+                      "Avalokitesvara with the water bottle (far right), made a little smaller so that all five fit on the " \
+                      "altar without crowding."
+}.freeze
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -179,6 +210,9 @@ RUNS = {
   "myojeok2" => MYOJEOK2_SIDES.to_h do |name, (lamp_ref, side)|
     [ name, [ STANDARD + [ File.join(REFS, "R55.jpg"), lamp_ref, File.join(REFS, "R48.jpg"), File.join(REFS, "R49.jpg") ],
               [ MYOJEOK2_ROLES, MYOJEOK2, side, STYLE, MYOJEOK_FORBIDDEN ] ] ]
+  end,
+  "cvar" => CVAR.to_h do |name, change|
+    [ name, [ [ C_IMAGE, JIGWON, ATTENDANT ], [ CVAR_REFS, change, JIGWON_RELIEF, CVAR_KEEP, MYOJEOK_FORBIDDEN ] ] ]
   end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
