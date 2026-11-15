@@ -6,6 +6,10 @@
 <%# 사경 — 오늘의 한 자. 쓰면 그걸로 한 자다. 채점도 인식도 없다.
     몇 번째 자인지, 이 자가 경에 몇 번 나오는지는 쓰지 않는다 — 세는 일이므로. %>
 <%= render "compound/hall_header", key: :copying %>
+<%# 사경실 안 — 낮은 경상 · 벼루 · 붓 · 빈 한지. 쓰는 칸과 다투지 않게 바탕이 아니라 낮은 띠로만(방의 꼴, 감지 · 금니 없음). %>
+<div class="hall-strip ink-frame hall-figure">
+  <%= picture_image_tag "sagyeong.webp", class: "hall-strip__image", alt: "", draggable: false %>
+</div>
 <%= render "compound/hall_words", key: :copying %>
 
 <% if @char.nil? %>

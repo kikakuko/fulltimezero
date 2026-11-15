@@ -71,7 +71,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
       assert_select "a.compound__hall--#{hall.key}[style=?]",
         "left:#{hall.left}%; top:#{hall.top}%; width:#{hall.w}%; height:#{hall.h}%"
     end
-    assert_equal 8, Compound::HALLS.size
+    assert_equal 9, Compound::HALLS.size
     Compound::HALLS.each { |hall| assert hall.left >= 0 && hall.top >= 0 && hall.left + hall.w <= 100 && hall.top + hall.h <= 100 }
   end
 
@@ -82,8 +82,8 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     assert_select "nav.doors a[href=?]", guide_path, false
   end
 
-  # 전각에 드는 흐름 — 마당을 뺀 일곱(전각 여섯 · 문)을 누르면 카드가 뜬다.
-  test "일곱 자리에 카드로 드는 손짓이 있고, 마당은 곧장 아래로 간다" do
+  # 전각에 드는 흐름 — 마당을 뺀 여덟(전각 일곱 · 문)을 누르면 카드가 뜬다. 묘적광전이 여덟째 전각으로 들었다(2026-11-15).
+  test "여덟 자리에 카드로 드는 손짓이 있고, 마당은 곧장 아래로 간다" do
     get today_path
 
     Compound::CARD_HALLS.each do |hall|
@@ -92,7 +92,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
       assert_select "a.compound__hall--#{hall.key}[data-compound-line-param]", count: 1
     end
     assert_select "a.compound__hall--courtyard[data-action]", false, "마당이 카드를 연다"
-    assert_equal 7, Compound::CARD_HALLS.size
+    assert_equal 8, Compound::CARD_HALLS.size
   end
 
   # 카드의 글 — 이름 · 한 줄 · 「드는」 말은 데이터 속성으로, 숫자가 없다. 경구와 출전은
@@ -118,7 +118,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     get days_path
     assert_select ".hall-words[data-entry-source-value]", count: 1
     assert_no_match(/\d/, css_select(".hall-words").first["data-entry-source-value"], "미륵당의 출전에 숫자가 있다")
-    [ new_sitting_path, new_copying_path, guide_path, bows_path, bells_path ].each do |path|
+    [ new_sitting_path, new_copying_path, guide_path, bows_path, bells_path, offering_path ].each do |path|
       get path
       assert_select ".hall-words[data-entry-source-value]", false, "#{path} 의 출전이 서버 응답에 있다 — 숫자를 담을 수 있는 자리다"
       assert_select ".hall-words__source", text: ""
@@ -181,7 +181,7 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
   # 방 머리 — 전각 이름. 한 줄은 글 자리(hall-words)에 있고, 둘 다 카드의 것과 같다(같은 로케일 키).
   test "방 머리에 전각 이름이, 글 자리에 한 줄이 있고, 카드의 것과 같다" do
     { new_sitting_path => :sitting, new_copying_path => :copying,
-      days_path => :maitreya, guide_path => :lecture }.each do |path, key|
+      days_path => :maitreya, guide_path => :lecture, offering_path => :offering }.each do |path, key|
       get path
 
       assert_select ".hall-header__name", text: I18n.t("compound.halls.#{key}")

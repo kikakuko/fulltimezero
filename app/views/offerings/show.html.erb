@@ -1,0 +1,13 @@
+<%# 묘적광전. 가운데 빈 연화좌 위로 빛줄기만 지나간다 — 비로자나는 형상 없이. 좌우에 석조 문수 · 보현,
+    오른쪽 벽에 영가등과 아미타내영도(docs/M-beopdang-design.md 3 · 11절). 지권인은 화면에 두지 않는다 —
+    뜻은 장경각에 적어 두었다(그리로 가는 한 줄). %>
+<%= render "compound/hall_header", key: :offering %>
+
+<div class="hall-picture ink-frame hall-figure">
+  <%= picture_image_tag "myojeok.webp", class: "hall-picture__image", alt: "", draggable: false %>
+</div>
+<%= render "compound/hall_words", key: :offering %>
+
+<p class="tiny hall-picture__onward">
+  <%= t("offering.about") %> <%= link_to t("offering.go"), guide_path(anchor: "hands"), class: "soft" %>
+</p>

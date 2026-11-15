@@ -60,6 +60,9 @@ Rails.application.routes.draw do
     # 속도는 사람이 정한다. 앱이 세는 길은 없다.
     # 범종각 — 치고 듣는다. 쌓는 것이 없으므로 쓰는 길도 없다.
     get "bells" => "bells#show", as: :bells
+    # 묘적광전 — 공양하는 곳(설계 docs/M-beopdang-design.md). 지금은 그림과 글뿐이다 — 염불 · 향 · 등과 함께 있음은
+    # NEXT 18 에서(서버 → 가입 → 13 → 18). 쓰는 길이 없다.
+    get "offering" => "offerings#show", as: :offering
 
     get  "bows" => "bows#show", as: :bows
     get  "bows/:kind" => "bows#bow", as: :bow

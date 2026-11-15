@@ -32,6 +32,19 @@ module Citation
   OURS = "이 앱"
 
   CHECKED = {
+    # 묘적광전(2026-11-15) — 보현행원품 셋째 원(광수공양)의 끝. 이 전각은 염불 · 향 · 등으로 공양하는 곳이다.
+    offering: {
+      ko: "모든 공양 가운데 법공양이 으뜸이다",
+      en: "Of all offerings, the offering of the Dharma is foremost",
+      source_ko: "『화엄경』 보현행원품",
+      source_en: "Avataṃsaka Sūtra, Samantabhadra's Vows",
+      original: "諸供養中，法供養最。",
+      edition: "대정장 T10n0293 권40, 0845a04–05(반야 역 『대방광불화엄경』 입부사의해탈경계보현행원품) — CBETA",
+      seen: "https://cbdata.dila.edu.tw/stable/lines?linehead_start=T10n0293_p0845a03&linehead_end=T10n0293_p0845a06",
+      rendered_by: "이 앱 — 원문을 보고 옮긴 자체 산문",
+      license: "own",
+      checked_on: "2026-11-15"
+    },
     sitting: {
       ko: "길들여진 마음이 즐거움을 가져온다",
       en: "A tamed mind brings happiness",

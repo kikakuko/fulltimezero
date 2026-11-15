@@ -26,6 +26,7 @@ en:
       lecture: Scripture hall
       bowing: Reverence hall
       bell: Bell hall
+      offering: Still-light hall
       courtyard: Courtyard
       gate: Non-Duality Gate
     # The card's words when a hall is tapped. The line is used again as the
@@ -57,6 +58,10 @@ en:
         line: Where one listens. Sounding and ceasing are both here.
         verse: A sound arises, and it ceases
         enter: Enter the bell hall
+      offering:
+        line: Where offerings are made. The centre seat is empty, and light passes through.
+        verse: Of all offerings, the offering of the Dharma is foremost
+        enter: Enter the still-light hall
       gate:
         line: Where you came in. It can be crossed again.
         verse: I have stopped
@@ -64,6 +69,20 @@ en:
 
   gate:
     line: Rest is not learned. It is remembered.
+
+  offering:
+    about: Why the centre is left empty, and the hands of Vairocana, are written in the scripture hall.
+    go: Read it there
+
+  hands:
+    title: The hands of Vairocana
+    alt: The two hands of a stone Buddha before the chest, the right hand closed around the raised left forefinger
+    meaning: The wisdom fist. The right hand is the realm of buddhas, the left the realm of beings — beings and buddhas are not two, but one.
+    meaning_source: Encyclopedia of Korean Culture, Vairocana
+    why: The centre seat of the still-light hall is empty because the Dharma body has no form. Only the shape of these hands is kept here.
+    plate: Seated stone Vairocana, Unified Silla · National Museum of Korea. Photograph by Gary Todd, dedicated to the public domain.
+    old_alt: The wisdom fist drawn in an old woodblock book of icons
+    old: The wisdom fist in an old book of icons — the Butsuzō zui, a copy in Japan's National Diet Library, public domain. The figure in it is Dainichi of Japanese esoteric Buddhism, who forms the same wisdom fist as Korea's Vairocana.
 
   users:
     email: Email

@@ -1,5 +1,9 @@
 <%# 다섯 장. 번호는 글자로 적는다 — 숫자는 화면에 두지 않는다. %>
 <%= render "compound/hall_header", key: :lecture %>
+<%# 장경각 안 — 해인사 판전처럼 경판 꽂힌 서가와 살창의 빛. 목록이 화면 대부분이라 바탕이 아니라 낮은 띠로만. %>
+<div class="hall-strip ink-frame hall-figure">
+  <%= picture_image_tag "janggyeong.webp", class: "hall-strip__image", alt: "", draggable: false %>
+</div>
 <%= render "compound/hall_words", key: :lecture %>
 
 <h1 class="title"><%= t("guide.title") %></h1>
@@ -12,6 +16,22 @@
     </li>
   <% end %>
 </ul>
+
+<%# 비로자나의 손 — 묘적광전의 빈 자리에서 이리로 온다(#hands). 사진을 다시 그리지 않고 원본 그대로 흑백으로 둔다
+    (docs/M-beopdang-design.md 12절). 뜻은 백과의 풀이라 인용 부품(.verse)이 아니다. 곁에 옛 도상집의 지권인을 작게. %>
+<section class="hands" id="hands">
+  <h2 class="section"><%= t("hands.title") %></h2>
+  <figure class="hands__plate">
+    <%= picture_image_tag "jigwon_plate.webp", class: "hands__image", alt: t("hands.alt") %>
+    <figcaption class="tiny soft"><%= t("hands.plate") %></figcaption>
+  </figure>
+  <p><%= t("hands.meaning") %> <span class="soft">(<%= t("hands.meaning_source") %>)</span></p>
+  <p><%= t("hands.why") %></p>
+  <figure class="hands__old">
+    <%= picture_image_tag "jigwon_butsuzo.webp", class: "hands__old-image", alt: t("hands.old_alt") %>
+    <figcaption class="tiny soft"><%= t("hands.old") %></figcaption>
+  </figure>
+</section>
 
 <%# 사경은 여기서 스스로 찾게 둔다. 알림도 배지도 없이, 그냥 거기 있다. %>
 <p class="tiny" style="margin-top:3rem">

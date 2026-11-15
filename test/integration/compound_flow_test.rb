@@ -15,9 +15,9 @@ class CompoundFlowTest < ActionDispatch::IntegrationTest
   # 마당은 같은 화면 아래로 내려가는 자리라 주소가 아니라 닻이다.
   WAYS = { sitting: :new_sitting_path, maitreya: :days_path, copying: :new_copying_path,
            lecture: :guide_path, bowing: :bows_path, bell: :bells_path,
-           gate: :threshold_path }.freeze
+           offering: :offering_path, gate: :threshold_path }.freeze
 
-  test "여덟 자리 모두에 가는 길이 있고, 그 길이 열린다" do
+  test "아홉 자리 모두에 가는 길이 있고, 그 길이 열린다" do
     get today_path
 
     WAYS.each do |key, way|
