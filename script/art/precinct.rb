@@ -21,6 +21,10 @@
 #                                            단추 81–87%)를 가리지 않게 가운데를 비우고, 불단은 위 띠 · 좌복은 아래 띠에
 #   ruby script/art/precinct.rb sagyeong   — 사경실 안 두 장(1K, 3:4): 낮은 책상 · 벼루 · 붓 · 빈 한지 · 창호의 빛. 머리 그림으로 —
 #                                            낮은 띠(약 2:1)로 잘라도 서게 책상의 것을 가로 가운데 띠(40–70%)에 모은다
+#   ruby script/art/precinct.rb janggyeong — 장경각 안 두 장(1K, 3:4): 해인사 장경판전처럼 긴 판전, 경판 꽂힌 서가의 줄, 살창의 빛 · 바람.
+#                                            머리 그림(2:1 로 자름) — 서가와 빛을 그림 가운데에. 자리는 말로만(퍼센트 · 띠를 적지 않는다)
+#   ruby script/art/precinct.rb beomjong   — 범종각 안 두 장(1K, 3:4): 시안 a 의 종각 꼴을 안에서, 종 하나가 가운데 · 당목은 오른쪽.
+#                                            bells/show 의 bell.webp 자리(단추 위, 폭 260 까지)에 선다
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -264,6 +268,49 @@ SAGYEONG_FORBIDDEN = "Do not include: gold or gilded color, deep indigo or dark 
                      "elephants, pagodas, the sun, the moon, any circle, modern objects (lamps, pens, glasses, phones), or any " \
                      "outer frame or border around the picture."
 
+# 장경각(藏經閣) — 해인사 장경판전 안(장부 R06 판전 안 · R05 판전 바깥, 「씀」). 장경각 화면(390 × 844, 2026-11-15)은 전각의 말과 경의 한 줄 ·
+# 「쉼의 안내」 여섯 장의 목록이 화면 대부분이라 바탕이 아니라 머리 그림이다. 경판의 글씨는 읽히지 않게.
+JANGGYEONG_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+                   "their ink lines, hanji, washes and warm full color; the fourth shows the inside of the hall that keeps the " \
+                   "Tripitaka Koreana woodblocks — copy the arrangement of the long wooden racks, the woodblocks standing in " \
+                   "rows and the slatted windows, not its photographic look; the fifth only shows the long low building from " \
+                   "outside."
+JANGGYEONG = "Inside a long, narrow wooden storage hall for sutra woodblocks, like the hall at Haeinsa. Long wooden racks " \
+             "stand in parallel rows down the length of the hall, each rack holding many dark wooden printing blocks set " \
+             "upright side by side, edge outward; the rows recede into the distance toward the far end. Light and air come " \
+             "in through tall vertical wooden slatted windows (salchang) along the wall, laying soft stripes of morning light " \
+             "across the packed-earth floor and the racks. Bare wooden beams and rafters above, no paint or only very faint " \
+             "dancheong. The racks, the light and the depth sit together in the middle of the picture; the ceiling above " \
+             "and the floor below stay quiet. **The woodblocks show no readable writing — only their dark wood edges.**"
+JANGGYEONG_VIEWS = {
+  "janggyeong-a" => "Seen down the central aisle between two rows of racks, the far end small and bright.",
+  "janggyeong-b" => "Seen from the side, the slatted windows on the right, the stripes of light falling across the racks."
+}.freeze
+JANGGYEONG_FORBIDDEN = "Do not include: gold or gilded color, any readable writing, letters or characters on the woodblocks, " \
+                       "signboards, labels, seals, people, animals, elephants, pagodas, the sun, the moon, any circle, modern " \
+                       "objects (lamps, wires, signs, fire extinguishers, glass), or any outer frame or border around the picture."
+
+# 범종각(梵鐘閣) — 조감도 d 편집본의 범종각(시안 a 의 꼴 — 겹처마, 사방 트임, 낮게 걸린 종)을 안에서. bells/show 의 bell.webp 자리
+# (`.bell-hall__figure`, 폭 260 까지, 「듣는다」 단추 위)에 선다 — 뷰 주석 「들보에 매달린 정면, 당목은 오른쪽」. 종은 청동의 어두운 녹빛.
+BEOMJONG_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+                 "their ink lines, hanji, washes and warm full color; the fourth is the bell pavilion of this temple seen from " \
+                 "outside — a double-eaved roof over open sides on all four sides, the bell hanging low; the fifth only for the " \
+                 "shape and the relief of one Korean bronze bell (its lip, its nipple panels, its flying figures in low relief) — " \
+                 "take its dark bronze, not any gold."
+BEOMJONG = "Inside an open Korean temple bell pavilion: one large Korean bronze bell hangs in the center from a heavy wooden " \
+           "beam, seen straight from the front, hanging low, its lip a little above a shallow hollow in the stone floor. The " \
+           "bell is dark bronze with a deep green patina, quiet and heavy, its relief soft. To the right of the bell, one long " \
+           "wooden striking log (dangmok) hangs horizontally from two ropes, pointing at the bell, still. Through the open " \
+           "sides between the red wooden pillars: misty mountain ridges and pines far away. Under the double eaves, faint " \
+           "muted dancheong on the beams. The bell is the center of the picture, with calm space around it."
+BEOMJONG_VIEWS = {
+  "beomjong-a" => "Seen from the height of a standing person just inside the pavilion, the whole bell and the striking log in view.",
+  "beomjong-b" => "Seen from a little lower and closer, looking slightly up at the bell, the beam and the eaves above."
+}.freeze
+BEOMJONG_FORBIDDEN = "Do not include: gold or gilded color (the bell is dark green bronze, not gold), any writing, letters or " \
+                     "signboard calligraphy, seals, people, hands, animals, elephants, pagodas, the sun, the moon, a full round " \
+                     "circle or halo, modern objects (lamps, wires, signs, railings of metal), or any outer frame or border."
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -307,6 +354,13 @@ RUNS = {
   "sagyeong" => SAGYEONG_VIEWS.to_h do |name, view|
     [ name, [ STANDARD + [ File.join(REFS, "R15.jpg") ], [ SAGYEONG_ROLES, SAGYEONG, view, STYLE, SAGYEONG_FORBIDDEN ] ] ]
   end,
+  "janggyeong" => JANGGYEONG_VIEWS.to_h do |name, view|
+    [ name, [ STANDARD + [ File.join(REFS, "R06.jpg"), File.join(REFS, "R05.jpg") ],
+              [ JANGGYEONG_ROLES, JANGGYEONG, view, STYLE, JANGGYEONG_FORBIDDEN ] ] ]
+  end,
+  "beomjong" => BEOMJONG_VIEWS.to_h do |name, view|
+    [ name, [ STANDARD + [ A_BELL, File.join(REFS, "R17.jpg") ], [ BEOMJONG_ROLES, BEOMJONG, view, STYLE, BEOMJONG_FORBIDDEN ] ] ]
+  end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
@@ -322,7 +376,7 @@ chosen.each do |name, (references, prompt)|
   missing = references.reject { |path| File.exist?(path) }
   abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
 
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong", "sagyeong") ? "3:4" : "4:3", references:)
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong", "sagyeong", "janggyeong", "beomjong") ? "3:4" : "4:3", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"
