@@ -25,6 +25,8 @@
 #                                            머리 그림(2:1 로 자름) — 서가와 빛을 그림 가운데에. 자리는 말로만(퍼센트 · 띠를 적지 않는다)
 #   ruby script/art/precinct.rb beomjong   — 범종각 안 두 장(1K, 3:4): 시안 a 의 종각 꼴을 안에서, 종 하나가 가운데 · 당목은 오른쪽.
 #                                            bells/show 의 bell.webp 자리(단추 위, 폭 260 까지)에 선다
+#   ruby script/art/precinct.rb mireuk     — 미륵당 바탕 두 장(1K, 3:4): 조감도 d 의 미륵 터를 뜰 안에서. 뜰 가운데는 비운다(미륵은 앱이).
+#                                            M-art-renewal 7절의 값은 프롬프트에 숫자로 적지 않고 말로 — 뽑은 뒤 재어 맞춘다
 require_relative "monorouter"
 
 MODEL = "gemini-3-pro-image"
@@ -311,6 +313,27 @@ BEOMJONG_FORBIDDEN = "Do not include: gold or gilded color (the bell is dark gre
                      "signboard calligraphy, seals, people, hands, animals, elephants, pagodas, the sun, the moon, a full round " \
                      "circle or halo, modern objects (lamps, wires, signs, railings of metal), or any outer frame or border."
 
+# 미륵당 바탕(mireukdang) — 미륵 터(조감도 d 편집본, 관촉사 미륵전의 짜임). 지켜야 할 값은 M-art-renewal 7절(땅선 · 미륵 자리 · 비워 둘 곳 ·
+# 흙 둔덕 · 지용의 지평선). 지금 바탕(app/assets/images/mireukdang.webp)은 자리만 참조 — 그 그림의 옛 결은 따르지 않는다.
+MIREUK_ROLES = "Use the references only for these roles: the first three set the color, the values and the materials — match " \
+               "their ink lines, hanji, washes and warm full color (the first for the outdoor light, sky and mountains); the " \
+               "fourth is the walled yard on the rocky hill of this temple seen from above — the low stone wall, the open " \
+               "packed-earth yard and the small hall open toward it; the fifth only shows where things sit in the picture — " \
+               "a wide bare yard in front, a low wall and a small hall further back, mountains and a wide sky above — not its " \
+               "old pale look."
+MIREUK = "Standing inside an open packed-earth yard on a rocky hilltop, looking across it. A low stone wall encloses the " \
+         "yard further back, low in the picture, and beyond it misty Korean mountain ridges and a wide, open morning sky. " \
+         "The yard is completely empty in the middle: nothing stands in it — no statue, no stone, no tree, no lantern, no " \
+         "pagoda. The lower part of the picture is bare earth only — no stones, no grass, no steps, just smooth warm packed " \
+         "earth. The middle of the picture is empty, with no tree, roof or wall in front of it, and above it the sky opens " \
+         "wide. A few low pines stand only at the far left and far right edges, outside the wall, not in the middle."
+MIREUK_HALLS = {
+  "mireuk-a" => "One small hall stands behind the far wall at the back center, low and small, its front open toward the yard " \
+                "and nothing inside it — no statue.",
+  "mireuk-b" => "One small hall stands at the back on the left, beside the far wall, low and small, turned toward the empty " \
+                "middle of the yard, its front open and nothing inside it — no statue."
+}.freeze
+
 RUNS = {
   "compound" => %w[compound-a compound-b].to_h do |name|
     [ name, [ STANDARD + [ File.join(ART, "aerial-a-1.jpeg"), File.join(REFS, "R30.jpg") ],
@@ -361,6 +384,10 @@ RUNS = {
   "beomjong" => BEOMJONG_VIEWS.to_h do |name, view|
     [ name, [ STANDARD + [ A_BELL, File.join(REFS, "R17.jpg") ], [ BEOMJONG_ROLES, BEOMJONG, view, STYLE, BEOMJONG_FORBIDDEN ] ] ]
   end,
+  "mireuk" => MIREUK_HALLS.to_h do |name, hall|
+    [ name, [ STANDARD + [ File.join(REFS, "compound-d-yard.jpg"), File.join(ROOT, "app/assets/images/mireukdang.webp") ],
+              [ MIREUK_ROLES, MIREUK, hall, STYLE, FORBIDDEN ] ] ]
+  end,
   "dfix-maitreya" => { "compound-d-fix-maitreya" => [ [ D_IMAGE ], [ "Edit this image.", DFIX_MAITREYA, DFIX_KEEP, FORBIDDEN ] ] },
   "dfix-bell" => { "compound-d-fix-bell" => [ [ D_IMAGE, A_BELL ],
     [ "Edit the first image. The second is only a shape to copy.", DFIX_BELL, DFIX_KEEP, FORBIDDEN ] ] },
@@ -376,7 +403,7 @@ chosen.each do |name, (references, prompt)|
   missing = references.reject { |path| File.exist?(path) }
   abort "참조가 없다: #{missing.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}" if missing.any?
 
-  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong", "sagyeong", "janggyeong", "beomjong") ? "3:4" : "4:3", references:)
+  paths, spent = MonoRouter.draw(name:, model: MODEL, prompt: prompt.join("\n\n"), size: "1K", aspect: name.start_with?("myojeok", "yegyeong", "sagyeong", "janggyeong", "beomjong", "mireuk") ? "3:4" : "4:3", references:)
   puts "#{name}: #{spent} 크레딧 · #{paths.map { |p| p.delete_prefix("#{ROOT}/") }.join(", ")}"
 rescue MonoRouter::Error => e
   puts "#{name}: 실패 — #{e.message}"
