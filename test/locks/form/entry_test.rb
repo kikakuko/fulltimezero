@@ -162,11 +162,14 @@ class EntryTest < ActionDispatch::IntegrationTest
     assert_select ".compound__card button.button-primary", count: 1
     %w[han verse source].each { |part| assert_select ".compound__card-#{part}", false, "카드에 #{part} 가 남아 있다" }
 
-    # 전각 그림은 둘뿐이다. 주소만 실리고, 받는 것은 카드를 여는 손짓이다 — 첫 화면에 한 바이트도 더하지 않는다.
-    assert_select "a.compound__hall--sitting[data-compound-picture-param*=elephant_field]", count: 1
-    assert_select "a.compound__hall--maitreya[data-compound-picture-param*=mireukdang]", count: 1
-    assert_select "a.compound__hall[data-compound-picture-param]", count: 2
-    assert_select "main img[src*=elephant_field], main img[src*=mireukdang], link[rel=preload][as=image]", false, "마당이 전각 그림을 미리 받는다"
+    # 전각 그림은 CompoundHelper::PICTURES 의 것뿐이다(2026-11-15 둘에서 일곱으로 — 경내 그림 새로 그리기). 주소만 실리고,
+    # 받는 것은 카드를 여는 손짓이다 — 첫 화면에 한 바이트도 더하지 않는다.
+    CompoundHelper::PICTURES.each do |key, picture|
+      assert_select "a.compound__hall--#{key}[data-compound-picture-param*=?]", File.basename(picture, ".webp"), count: 1
+    end
+    assert_select "a.compound__hall[data-compound-picture-param]", count: CompoundHelper::PICTURES.size
+    pictures = CompoundHelper::PICTURES.values.map { |picture| "main img[src*=#{File.basename(picture, ".webp")}]" }.join(", ")
+    assert_select "#{pictures}, link[rel=preload][as=image]", false, "마당이 전각 그림을 미리 받는다"
     assert_match(/if \(picture\) new Image\(\)\.src = picture/, COMPOUND.read)
   end
 end

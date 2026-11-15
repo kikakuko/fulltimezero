@@ -79,23 +79,26 @@ class DaylightTest < ActionDispatch::IntegrationTest
     assert_empty css_select(".daylight").map { |span| span.text.strip }.reject(&:empty?), "빛의 겹에 글이 있다"
   end
 
-  # 이름이 땅 위에 놓이는 전각 넷 — 흙빛 바탕이라 글자 둘레의 한지빛 테를 빼고 재도 읽힌다.
-  # 장경각(담)과 사경실(나무)은 바탕이 어두워 테가 읽힘을 맡는다(아래 주석).
-  ON_GROUND = %w[sitting maitreya courtyard gate].freeze
   # 13px 고딕이므로 본문의 잣대를 쓴다. 테를 바탕으로 잡으면 15.15:1 로 높게 잡히는데,
   # 테는 바탕이 아니라 글자 둘레라 그 값으로는 밤을 더 어둡게 할 때 안전선이 걸리지 않는다.
   FLOOR = 4.5
 
-  test "밤에도 전각 이름이 읽힌다 — 글자 둘레의 테를 빼고 잰다" do
+  # 2026-11-15 새 톤의 조감도는 짙은 채색이라 그림 바탕만으로는 한낮에도 4.5:1 에 못 미쳤다(선방 2.50 · 불이문 2.49).
+  # 그래서 이름 뒤에 테두리 없는 한지 번짐(--name-veil)을 두었다 — 이름은 때의 빛 겹 위에 놓이므로, 때의 빛을 입은 그림
+  # 바탕 위에 번짐의 가운데 옅기를 얹은 뒤의 바탕을 잰다. 글자 둘레의 테(text-shadow)는 여전히 빼고 잰다.
+  test "밤에도 전각 이름이 읽힌다 — 글자 둘레의 테를 빼고, 이름 밑의 한지 번짐을 얹어 잰다" do
     ink = resolve("--ink")
+    veil = root[/--name-veil: (\d+)%;/, 1].to_f / 100
+    paper = resolve("--paper")
+    assert_operator veil, :>, 0, "이름 밑의 한지 번짐이 없다"
 
     TIMES.each do |time|
-      ON_GROUND.each do |hall|
-        ground = washed(hall_ground(hall), time)
+      Compound::HALLS.map { |hall| hall.key.to_s }.each do |hall|
+        ground = washed(hall_ground(hall), time).each_with_index.map { |value, channel| (paper[channel] * veil + value * (1 - veil)).round }
 
         assert_operator contrast(ground, ink), :>=, FLOOR,
           "#{time} 에 #{hall} 의 이름이 읽히지 않는다 — 바탕 #{format('#%02x%02x%02x', *ground)}, " \
-          "대비 #{contrast(ground, ink)}:1(테 없이 잰 값)"
+          "대비 #{contrast(ground, ink)}:1(테 없이, 번짐을 얹어 잰 값)"
       end
     end
   end

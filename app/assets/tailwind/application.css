@@ -113,6 +113,9 @@
   --compound-sepia: 0.10;
   --compound-brightness: 1.04;
   --compound-contrast: 0.96;
+  /* 전각 이름 밑의 한지 번짐 — 새 조감도는 짙은 채색이라 그림 바탕만으로는 한낮에도 먹 글씨가 4.5:1 에 못 미친다
+     (2026-11-15). 이름 뒤 가운데의 한지빛 옅기. 테두리 없이 가장자리는 그림으로 풀린다. daylight_test 가 이 값으로 잰다. */
+  --name-veil: 86%;
 
   /* 몰입 어둠 — 앉는 중 · 무위, 둘째 · 셋째 문의 장막, 문의 틀 밖. 첫째 문과 매일의
      문에서는 빛이 오기 전의 어둠이다. 아홉째 밑색. */
@@ -145,7 +148,7 @@
      아래 두어 함께 물들게 한다. 값은 결이고, 「먼 것이 느리다」는 성질은 기능이다. */
   --cloud-far: 0.38;        /* 안개띠 — 마당의 산 밑. 가장 멀다 */
   --cloud-mid: 0.46;        /* 가장자리 흐름 — 산수화의 가장자리 */
-  --cloud-near: 0.54;       /* 구름무리 — 미륵당 위. 가장 가깝다 */
+  --cloud-near: 0.70;       /* 구름무리 — 미륵당 위. 가장 가깝다. 밝게 섞어(screen) 짙은 산 앞에서 탁해지지 않는다(2026-11-15) */
   --cloud-span-far: 310s;
   --cloud-span-mid: 240s;
   --cloud-span-near: 180s;
@@ -869,6 +872,9 @@ input[type="text"] {
   background-image: var(--img-cloud-scroll-webp);
   background-image: image-set(var(--img-cloud-scroll-avif) type("image/avif"), var(--img-cloud-scroll-webp) type("image/webp"));
   opacity: var(--cloud-near); --cloud-span: var(--cloud-span-near);
+  /* 새 미륵당 바탕(2026-11-15)의 짙은 산 앞에서 구름의 회색 먹선이 탁하게 얹혔다 — 밝게 섞으면 산 앞에서는 옅은 안개로,
+     하늘에서는 흰 구름의 꼴로 남는다(docs/M-art-renewal.md 10절). */
+  mix-blend-mode: screen;
 }
 
 /* ── 네 개의 문 ─────────────────────────────────────────────────────
@@ -1439,11 +1445,14 @@ input[type="text"].threshold__field {
   --name-y: 66%;
 }
 .compound__hall--gate { --name-y: 38%; }
-/* 이름은 붓 한글, 전각의 앞면에. 먹선 위에서도 읽히게 한지빛 테를 두른다. */
+/* 이름은 붓 한글, 전각의 앞면에. 먹선 위에서도 읽히게 한지빛 테를 두르고, 그 뒤에 테두리 없는 한지 번짐을 둔다 —
+   가운데는 --name-veil 만큼 한지빛, 가장자리는 그림으로 풀린다(상자가 아니다). */
 .compound__name {
-  position: absolute; top: var(--name-y); left: -2rem; right: -2rem; translate: 0 -50%; text-align: center;
-  font-family: var(--serif); font-size: 18px; line-height: 1;
+  position: absolute; top: var(--name-y); left: 50%; translate: -50% -50%; width: max-content; text-align: center;
+  font-family: var(--serif); font-size: 18px; line-height: 1; padding: 0.45em 0.7em;
   text-shadow: 0 0 6px var(--paper), 0 0 3px var(--paper), 0 0 1px var(--paper);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--paper) var(--name-veil), transparent) 40%,
+                              color-mix(in srgb, var(--paper) calc(var(--name-veil) / 2), transparent) 70%, transparent 100%);
 }
 /* 그 아래 작은 한자 — 그림 위의 곁말이라 읽는 글의 하한 밖에 있다(type_test 의 DRAWN). */
 .compound__han { display: block; margin-top: 2px; font-size: 10px; letter-spacing: 0.1em; color: var(--ink-soft); }

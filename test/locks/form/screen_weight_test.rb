@@ -14,9 +14,11 @@ class ScreenWeightTest < ActionDispatch::IntegrationTest
   # 화면 · 그 화면의 CSS 배경 그림(받는 쪽) · 상한(셈을 천 단위로 올린 값). 2026-11-10 에 선방 · 마당의 구름 둘을 가로 1280 → 1024
   # 로 다시 눌러 줄인 값으로 다시 잠갔다 — 선방 1,079,564 → 1,034,828 · 마당 743,204 → 735,412 · 미륵당 706,254(그대로). 마당은
   # 새 세션의 첫 화면이라 매일의 문(일주문 B · D3c)이 함께 든다 — 가장 무거운 때로 잠근다.
+  # 2026-11-15 경내 그림을 들이기 앞서: 공통 CSS 가 늘어(이름 밑 한지 번짐 · 전각 그림 · 띠 · 비로자나의 손의 규칙) 선방이
+  # 1,034,828 → 1,036,202 — 상한 1,037,000(푸는 쪽, 따로 커밋). 마당 · 미륵당은 줄어 들이기 커밋에서 내린다.
   SCREENS = {
     today_path: { backgrounds: %w[cloud-mist.avif], most: 736_000 },
-    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_035_000 },
+    new_sitting_path: { backgrounds: %w[elephant_field.avif cloud-drift.webp], most: 1_037_000 },
     days_path: { backgrounds: %w[cloud-scroll.avif], most: 707_000 }
   }.freeze
 

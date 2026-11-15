@@ -11,7 +11,7 @@ class CloudFormTest < ActiveSupport::TestCase
   test "짙기와 빠르기는 :root 의 여섯 값이다" do
     root = css[/:root \{.*?\n\}/m]
 
-    { "far" => "0.38", "mid" => "0.46", "near" => "0.54" }.each do |depth, value|
+    { "far" => "0.38", "mid" => "0.46", "near" => "0.70" }.each do |depth, value|
       assert_match(/--cloud-#{depth}: #{Regexp.escape(value)};/, root, "구름의 짙기(#{depth})가 바뀌었다")
     end
     { "far" => "310s", "mid" => "240s", "near" => "180s" }.each do |depth, value|
