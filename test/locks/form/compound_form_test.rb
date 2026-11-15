@@ -204,14 +204,14 @@ class CompoundFormTest < ActionDispatch::IntegrationTest
     assert_no_match(/\.compound(--zooming)? (\.compound__scene )?\{[^}]*filter/, css, "톤이 그림 밖에 걸렸다")
   end
 
-  test "조감도는 배경이 투명하다 — 어떤 바탕에도 얹힌다" do
+  # 옛 조감도는 투명 바탕이라 어떤 바탕에도 얹혔다(bin/knockout). 2026-11-15 새 톤의 조감도는 하늘과 산이 있는 그림이다 —
+  # 투명을 지키지 않는다(docs/M-art-renewal.md 3절). 대신 원본은 파이프라인 밖에 있고, 그림은 그 원본에서 낸 것이다.
+  test "조감도의 원본은 파이프라인 밖에 있고, 그림은 그 원본에서 낸다" do
     image = Rails.root.join("app/assets/images/compound.webp")
 
-    assert webp_info(image)[:alpha], "조감도에 투명이 없다"
-
-    # 처리본은 원본과 다르고, 처리하는 손이 저장소에 있다. 원본은 파이프라인 밖(docs/sources)에 둔다.
-    assert Rails.root.join("docs/sources/compound_src.png").exist?
-    assert Rails.root.join("bin/knockout").executable?
-    assert_not_equal image.binread, Rails.root.join("docs/sources/compound_src.png").binread
+    assert image.exist?
+    sources = [ Rails.root.join("docs/sources/compound_src.png"), Rails.root.join("docs/sources/art/compound-d.jpg") ]
+    assert sources.any?(&:exist?), "조감도의 원본이 docs/sources 에 없다"
+    sources.select(&:exist?).each { |source| assert_not_equal image.binread, source.binread }
   end
 end

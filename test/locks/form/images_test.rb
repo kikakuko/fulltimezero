@@ -66,17 +66,25 @@ class ImagesTest < ActiveSupport::TestCase
     end
   end
 
+  # 받침을 480 폭으로 줄인 그림 — 첫 화면 여섯(2026-11-06)과 경내 그림 새로 그리기(2026-11-15, docs/M-art-renewal.md).
+  # AVIF 는 화면에서 뜨는 크기의 두 배, 받침은 480 — AVIF 를 못 받는 브라우저만 받으므로 줄여서 받침 상한 안에 든다.
+  # 낸 손은 script/art/publish.py(경내) · 첫 화면은 그때의 손. 「쓰이는가」가 아니라 「있으면 이 크기」를 잰다.
+  SMALL_FALLBACK = %w[far gate_b gate_d wall_left wall_right burimun].to_h { |name| [ "landing_#{name}.webp", 768 ] }
+    .merge("compound.webp" => 768, "mireukdang.webp" => 780, "myojeok.webp" => 768, "yegyeong.webp" => 768,
+           "sagyeong.webp" => 768, "janggyeong.webp" => 768, "bell.webp" => 520, "jigwon_plate.webp" => 768,
+           "jigwon_butsuzo.webp" => 480).freeze
+
   # 화면에서 뜨는 크기(폭 390 · 배율 2)의 두 배를 넘지 않는다.
   test "그림이 화면에서 뜨는 크기보다 크지 않다" do
-    landing = %w[far gate_b gate_d wall_left wall_right burimun].to_h { |name| [ "landing_#{name}.webp", 768 ] }
+    landing = SMALL_FALLBACK.select { |name, _| IMAGES.join(name).exist? }
     { "mireukdang.webp" => 780, "elephant_field.webp" => 768,
       "compound.webp" => 768, "maitreya.webp" => 680 }.merge(landing).each do |name, most|
       webp = IMAGES.join(name)
       assert webp.exist?, "#{name} 이 없다"
       avif = webp.sub_ext(".avif")
-      # 첫 화면의 받침은 480 폭(q60)이다 — AVIF 를 못 받는 브라우저만 받으므로 받침만 줄여 받침 상한 안에 든다
-      # (docs/M-landing-design.md 8절). 그래도 같은 그림이어야 하니 비율은 같다.
-      if landing.key?(name)
+      # 받침을 줄인 그림은 받침이 480 폭(q60 안팎)이다 — AVIF 를 못 받는 브라우저만 받으므로 받침만 줄여 받침 상한 안에
+      # 든다(docs/M-landing-design.md 8절). 그래도 같은 그림이어야 하니 비율은 같다. 받침이 480 보다 크면 옛 결(같은 크기)로 잰다.
+      if landing.key?(name) && webp_info(webp)[:width] < avif_info(avif)[:width]
         assert_operator avif_info(avif)[:width], :<=, most, "#{avif.basename} 이 화면에서 뜨는 크기보다 크다"
         assert_operator webp_info(webp)[:width], :<=, 480, "#{name} 받침이 480 폭보다 크다"
         a, w = avif_info(avif), webp_info(webp)
